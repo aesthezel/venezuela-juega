@@ -1,5 +1,3 @@
-
-import React from 'react';
 import { Game, GameStatus } from '../types';
 
 interface GameCardProps {
@@ -14,9 +12,9 @@ const statusColorMap: Record<GameStatus, string> = {
     [GameStatus.CANCELED]: "bg-red-600",
 };
 
-const GameCard: React.FC<GameCardProps> = ({ game, onClick }) => {
+const GameCard = ({ game, onClick }: GameCardProps) => {
     return (
-        <div 
+        <div
             onClick={onClick}
             className="bg-slate-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group"
         >
@@ -25,7 +23,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, onClick }) => {
                 <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
                     {game.status}
                 </div>
-                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-bg-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-bg-opacity duration-300"></div>
             </div>
             <div className="p-5">
                 <h3 className="text-xl font-bold text-white truncate">{game.title}</h3>

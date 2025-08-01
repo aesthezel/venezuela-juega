@@ -1,5 +1,3 @@
-
-import React from 'react';
 import { GameStatus } from '../types';
 
 interface FilterPanelProps {
@@ -9,13 +7,15 @@ interface FilterPanelProps {
     onFilterChange: (category: string, value: string) => void;
 }
 
-const FilterSection: React.FC<{
+interface FilterSectionProps {
     title: string;
     items: string[];
     category: string;
     activeItems: string[];
     onFilterChange: (category: string, value: string) => void;
-}> = ({ title, items, category, activeItems, onFilterChange }) => (
+}
+
+const FilterSection = ({ title, items, category, activeItems, onFilterChange }: FilterSectionProps) => (
     <div>
         <h3 className="text-lg font-semibold mb-3 text-gray-300">{title}</h3>
         <div className="flex flex-wrap gap-2">
@@ -37,7 +37,7 @@ const FilterSection: React.FC<{
 );
 
 
-const FilterPanel: React.FC<FilterPanelProps> = ({ genres, platforms, activeFilters, onFilterChange }) => {
+const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange }: FilterPanelProps) => {
     return (
         <div className="space-y-6">
             <FilterSection

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'preact/hooks';
+import { ComponentChildren } from 'preact';
 import { Game, GameStatus } from '../types';
 import ArrowLeftIcon from './icons/ArrowLeftIcon';
 
@@ -31,25 +32,30 @@ const countStatuses = (data: Game[]) => {
     return Object.fromEntries(counts);
 }
 
-const ChartCard: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
+interface ChartCardProps {
+    title: string;
+    children: ComponentChildren;
+}
+
+const ChartCard = ({ title, children }: ChartCardProps) => (
     <div className="bg-slate-800 p-6 rounded-lg shadow-lg">
         <h3 className="text-xl font-bold text-white mb-4 text-center">{title}</h3>
         {children}
     </div>
 );
 
-const ChartsPage: React.FC<ChartsPageProps> = ({ games, onNavigateToCatalog }) => {
+const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
     const platformChartRef = useRef<HTMLCanvasElement>(null);
     const genreChartRef = useRef<HTMLCanvasElement>(null);
     const statusChartRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
         const chartInstances: any[] = [];
-        
+
         const platformData = countItems(games, 'platform');
         const genreData = countItems(games, 'genre');
         const statusData = countStatuses(games);
-        
+
         const chartColors = ['#22d3ee', '#67e8f9', '#a5f3fc', '#cffafe', '#0e7490', '#155e75', '#164e63'];
         const statusColors = {
             [GameStatus.RELEASED]: '#22c55e', // green-500
@@ -61,72 +67,78 @@ const ChartsPage: React.FC<ChartsPageProps> = ({ games, onNavigateToCatalog }) =
 
         if (platformChartRef.current) {
             const ctx = platformChartRef.current.getContext('2d');
-            chartInstances.push(new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(platformData),
-                    datasets: [{
-                        label: 'Nº de Juegos',
-                        data: Object.values(platformData),
-                        backgroundColor: chartColors,
-                        borderColor: '#0f172a',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, title: { display: false } },
-                    scales: {
-                      x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-                      y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } }
+            if (ctx) {
+                chartInstances.push(new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(platformData),
+                        datasets: [{
+                            label: 'Nº de Juegos',
+                            data: Object.values(platformData),
+                            backgroundColor: chartColors,
+                            borderColor: '#0f172a',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, title: { display: false } },
+                        scales: {
+                            x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+                            y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } }
+                        }
                     }
-                }
-            }));
+                }));
+            }
         }
 
         if (genreChartRef.current) {
             const ctx = genreChartRef.current.getContext('2d');
-            chartInstances.push(new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(genreData),
-                    datasets: [{
-                        data: Object.values(genreData),
-                        backgroundColor: chartColors,
-                        borderColor: '#1e293b',
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
-                }
-            }));
+            if (ctx) {
+                chartInstances.push(new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(genreData),
+                        datasets: [{
+                            data: Object.values(genreData),
+                            backgroundColor: chartColors,
+                            borderColor: '#1e293b',
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
+                    }
+                }));
+            }
         }
 
         if (statusChartRef.current) {
             const ctx = statusChartRef.current.getContext('2d');
             const sortedStatusLabels = Object.keys(statusData).sort((a,b) => Object.values(GameStatus).indexOf(a as GameStatus) - Object.values(GameStatus).indexOf(b as GameStatus));
-            chartInstances.push(new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: sortedStatusLabels,
-                    datasets: [{
-                        data: sortedStatusLabels.map(label => statusData[label]),
-                        backgroundColor: sortedStatusLabels.map(label => statusColors[label as GameStatus]),
-                        borderColor: '#1e293b',
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
-                }
-            }));
+            if (ctx) {
+                chartInstances.push(new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: sortedStatusLabels,
+                        datasets: [{
+                            data: sortedStatusLabels.map(label => statusData[label]),
+                            backgroundColor: sortedStatusLabels.map(label => statusColors[label as GameStatus]),
+                            borderColor: '#1e293b',
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
+                    }
+                }));
+            }
         }
 
         return () => {
@@ -144,22 +156,22 @@ const ChartsPage: React.FC<ChartsPageProps> = ({ games, onNavigateToCatalog }) =
                 <div className="lg:col-span-2">
                     <ChartCard title="Juegos por Plataforma">
                         <div className="relative h-96">
-                          <canvas ref={platformChartRef}></canvas>
+                            <canvas ref={platformChartRef}></canvas>
                         </div>
                     </ChartCard>
                 </div>
                 <ChartCard title="Juegos por Género">
                     <div className="relative h-80">
-                      <canvas ref={genreChartRef}></canvas>
+                        <canvas ref={genreChartRef}></canvas>
                     </div>
                 </ChartCard>
                 <ChartCard title="Juegos por Estado">
                     <div className="relative h-80">
-                      <canvas ref={statusChartRef}></canvas>
+                        <canvas ref={statusChartRef}></canvas>
                     </div>
                 </ChartCard>
             </div>
-             <style>{`
+            <style>{`
                 @keyframes fade-in {
                     from { opacity: 0; }
                     to { opacity: 1; }

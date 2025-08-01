@@ -1,5 +1,5 @@
-
-import React, { useEffect } from 'react';
+import { useEffect } from 'preact/hooks';
+import { ComponentChildren } from 'preact';
 import { Game } from '../types';
 import CloseIcon from './icons/CloseIcon';
 import LinkIcon from './icons/LinkIcon';
@@ -9,14 +9,19 @@ interface ModalProps {
     onClose: () => void;
 }
 
-const DetailItem: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
+interface DetailItemProps {
+    label: string;
+    children: ComponentChildren;
+}
+
+const DetailItem = ({ label, children }: DetailItemProps) => (
     <div>
         <dt className="text-sm font-medium text-cyan-400">{label}</dt>
         <dd className="mt-1 text-md text-gray-300">{children}</dd>
     </div>
 );
 
-const Modal: React.FC<ModalProps> = ({ game, onClose }) => {
+const Modal = ({ game, onClose }: ModalProps) => {
     useEffect(() => {
         const handleEsc = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
@@ -28,11 +33,11 @@ const Modal: React.FC<ModalProps> = ({ game, onClose }) => {
     }, [onClose]);
 
     return (
-        <div 
+        <div
             className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 p-4 animate-fade-in"
             onClick={onClose}
         >
-            <div 
+            <div
                 className="bg-slate-800 rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden animate-slide-up"
                 onClick={e => e.stopPropagation()}
             >
@@ -59,7 +64,7 @@ const Modal: React.FC<ModalProps> = ({ game, onClose }) => {
                         <DetailItem label="Idiomas">{game.languages.join(', ')}</DetailItem>
                         {game.funding && <DetailItem label="Financiamiento">{game.funding}</DetailItem>}
                         {game.pitch && <div className="sm:col-span-2"><DetailItem label="Pitch">{game.pitch}</DetailItem></div>}
-                        
+
                         {game.stores.length > 0 && (
                             <div className="sm:col-span-2">
                                 <DetailItem label="Tiendas">
@@ -74,12 +79,12 @@ const Modal: React.FC<ModalProps> = ({ game, onClose }) => {
                             </div>
                         )}
                         {game.links.length > 0 && (
-                             <div className="sm:col-span-2">
+                            <div className="sm:col-span-2">
                                 <DetailItem label="Enlaces y Redes">
                                     <div className="flex flex-wrap gap-2 mt-1">
                                         {game.links.map(link => (
                                             <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 bg-slate-700 hover:bg-cyan-600 text-white font-bold py-1 px-3 rounded-lg text-sm transition-colors">
-                                               {link.name} <LinkIcon />
+                                                {link.name} <LinkIcon />
                                             </a>
                                         ))}
                                     </div>

@@ -1,19 +1,23 @@
-
-import React from 'react';
+import { JSX } from "preact/jsx-runtime";
 
 interface SearchBarProps {
     searchTerm: string;
     onSearchChange: (term: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSearchChange }) => {
+const SearchBar = ({ searchTerm, onSearchChange }: SearchBarProps) => {
+
+    const handleInput = (e: JSX.TargetedEvent<HTMLInputElement>) => {
+        onSearchChange(e.currentTarget.value);
+    }
+
     return (
         <div className="relative">
             <input
                 type="text"
                 placeholder="Buscar por título..."
                 value={searchTerm}
-                onChange={(e) => onSearchChange(e.target.value)}
+                onInput={handleInput}
                 className="w-full bg-slate-700 border-2 border-slate-600 text-white rounded-lg p-3 pl-10 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition-colors duration-300"
             />
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Game } from '../types';
 
 interface HighlightCardProps {
@@ -7,7 +6,7 @@ interface HighlightCardProps {
     fullWidth?: boolean;
 }
 
-const HighlightCard: React.FC<HighlightCardProps> = ({ game, onClick, fullWidth = false }) => {
+const HighlightCard = ({ game, onClick, fullWidth = false }) => {
     return (
         <div
             onClick={() => onClick(game)}

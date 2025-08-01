@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'preact/hooks';
 import { highlightedGameIds } from '../data/games';
 import { Game } from '../types';
 import HighlightCard from './HighlightCard';
@@ -10,9 +10,9 @@ interface HighlightsProps {
     onGameClick: (game: Game) => void;
 }
 
-const Highlights: React.FC<HighlightsProps> = ({ games, onGameClick }) => {
-    const highlightedGames = useMemo(() => 
-        games.filter(game => highlightedGameIds.includes(game.id)), 
+const Highlights = ({ games, onGameClick }: HighlightsProps) => {
+    const highlightedGames = useMemo(() =>
+            games.filter(game => highlightedGameIds.includes(game.id)),
         [games]
     );
 
@@ -44,21 +44,21 @@ const Highlights: React.FC<HighlightsProps> = ({ games, onGameClick }) => {
             <h2 id="highlights-title" className="text-3xl font-bold mb-6 text-cyan-400 border-l-4 border-cyan-400 pl-4">Destacados</h2>
             <div className="relative group">
                 <div className="w-full h-56 overflow-hidden rounded-lg">
-                    <div 
+                    <div
                         className="flex h-full transition-transform duration-700 ease-in-out"
                         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                     >
                         {highlightedGames.map(game => (
-                             <div key={game.id} className="w-full h-full flex-shrink-0">
-                                <HighlightCard game={game} onClick={onGameClick} fullWidth />
-                             </div>
+                            <div key={game.id} className="w-full h-full flex-shrink-0">
+                                <HighlightCard game={game} onClick={() => onGameClick(game)} fullWidth />
+                            </div>
                         ))}
                     </div>
                 </div>
 
                 {hasMultipleGames && (
                     <>
-                        <button 
+                        <button
                             onClick={goToPrevious}
                             className="absolute top-1/2 left-0 md:-left-4 transform -translate-y-1/2 z-10 bg-slate-800/60 hover:bg-slate-800/90 rounded-full p-2 transition-all text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
                             aria-label="Juego anterior"
@@ -66,7 +66,7 @@ const Highlights: React.FC<HighlightsProps> = ({ games, onGameClick }) => {
                             <ChevronLeftIcon />
                         </button>
 
-                        <button 
+                        <button
                             onClick={goToNext}
                             className="absolute top-1/2 right-0 md:-right-4 transform -translate-y-1/2 z-10 bg-slate-800/60 hover:bg-slate-800/90 rounded-full p-2 transition-all text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
                             aria-label="Siguiente juego"

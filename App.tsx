@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'preact/hooks';
 import { Game } from './types';
 import { gamesData } from './data/games';
 import Header from './components/Header';
@@ -12,7 +12,7 @@ import AddGamePage from './components/AddGamePage';
 
 type Page = 'catalog' | 'charts' | 'add-game';
 
-const App: React.FC = () => {
+const App = () => {
     const [currentPage, setCurrentPage] = useState<Page>('catalog');
     const [games, setGames] = useState<Game[]>(gamesData);
     const [searchTerm, setSearchTerm] = useState('');
@@ -29,9 +29,9 @@ const App: React.FC = () => {
     const filteredGames = useMemo(() => {
         return games.filter(game => {
             const searchMatch = game.title.toLowerCase().includes(searchTerm.toLowerCase());
-            
+
             const statusMatch = activeFilters.status.length === 0 || activeFilters.status.includes(game.status);
-            
+
             const genreMatch = activeFilters.genre.length === 0 || activeFilters.genre.some(f => game.genre.includes(f));
 
             const platformMatch = activeFilters.platform.length === 0 || activeFilters.platform.some(f => game.platform.includes(f));
@@ -65,7 +65,7 @@ const App: React.FC = () => {
     const navigateTo = (page: Page) => {
         setCurrentPage(page);
     };
-    
+
     const handleAddNewGame = (newGameData: Omit<Game, 'id'>) => {
         const newGame: Game = {
             ...newGameData,
@@ -93,7 +93,7 @@ const App: React.FC = () => {
                                     <h2 className="text-2xl font-bold mb-4 text-cyan-400">Filtros</h2>
                                     <div className="space-y-6 bg-slate-800 p-6 rounded-lg shadow-lg">
                                         <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-                                        <FilterPanel 
+                                        <FilterPanel
                                             genres={allGenres}
                                             platforms={allPlatforms}
                                             activeFilters={activeFilters}
