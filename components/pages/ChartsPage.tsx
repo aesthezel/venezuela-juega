@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
-import { Game, GameStatus } from '../types';
-import ArrowLeftIcon from './icons/ArrowLeftIcon';
+import { Game, GameStatus } from '@/types.ts';
+import ArrowLeftIcon from '../icons/ArrowLeftIcon.tsx';
 
 declare var Chart: any;
 
@@ -58,12 +58,17 @@ const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
 
         const chartColors = ['#22d3ee', '#67e8f9', '#a5f3fc', '#cffafe', '#0e7490', '#155e75', '#164e63'];
         const statusColors = {
-            [GameStatus.RELEASED]: '#22c55e', // green-500
-            [GameStatus.IN_DEVELOPMENT]: '#eab308', // yellow-500
-            [GameStatus.ON_HOLD]: '#6b7280', // gray-500
-            [GameStatus.CANCELED]: '#ef4444', // red-600
+            [GameStatus.RELEASED]: '#22c55e',
+            [GameStatus.IN_DEVELOPMENT]: '#eab308',
+            [GameStatus.ON_HOLD]: '#6b7280',
+            [GameStatus.CANCELED]: '#ef4444',
+            [GameStatus.RELEASED_DEMO]: '#bbf7d0',
+            [GameStatus.PROTOTYPE]: '#e5e7eb',
+            [GameStatus.LOST_MEDIA]: '#fecaca',
+            [GameStatus.EARLY_ACCESS]: '#06b6d4',
+            [GameStatus.RECOVERED]: '#3b82f6',
+            [GameStatus.UNKNOWN]: '#111827'
         };
-
 
         if (platformChartRef.current) {
             const ctx = platformChartRef.current.getContext('2d');

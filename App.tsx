@@ -7,7 +7,7 @@ import FilterPanel from './components/FilterPanel';
 import GameGrid from './components/GameGrid';
 import Modal from './components/Modal';
 import Highlights from './components/Highlights';
-import ChartsPage from './components/ChartsPage';
+import ChartsPage from './components/pages/ChartsPage.tsx';
 import AddGamePage from './components/pages/AddGamePage.tsx';
 import GameCounter from './components/GameCounter';
 import LoadingSpinner from './components/LoadingSpinner';
