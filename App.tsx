@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'preact/hooks';
-import { Game } from './types';
-import { gamesData } from './data/games';
+import { useState, useMemo, useEffect } from 'preact/hooks';
+import Papa from 'papaparse';
+import { Game, GameStatus } from './types';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
 import FilterPanel from './components/FilterPanel';
@@ -10,11 +10,32 @@ import Highlights from './components/Highlights';
 import ChartsPage from './components/ChartsPage';
 import AddGamePage from './components/AddGamePage';
 
+/// HELPER FUNCTIONS
+const parseStringToArray = (str: string | undefined): string[] => {
+    if (!str) return [];
+    return str.split(',').map(item => item.trim()).filter(Boolean);
+};
+
+const mapStatus = (statusStr: string | undefined): GameStatus => {
+    const statusMap: { [key: string]: GameStatus } = {
+        'publicado': GameStatus.RELEASED,
+        'en desarrollo': GameStatus.IN_DEVELOPMENT,
+        'pausado': GameStatus.ON_HOLD,
+        'cancelado': GameStatus.CANCELED,
+    };
+    // Fallback GameStatus
+    return statusMap[statusStr?.toLowerCase() || ''] || GameStatus.IN_DEVELOPMENT;
+};
+/// HELPER FUNCTIONS
+
+
 type Page = 'catalog' | 'charts' | 'add-game';
 
 const App = () => {
     const [currentPage, setCurrentPage] = useState<Page>('catalog');
-    const [games, setGames] = useState<Game[]>(gamesData);
+    const [games, setGames] = useState<Game[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({
         status: [],
@@ -23,19 +44,82 @@ const App = () => {
     });
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
 
+    useEffect(() => {
+        const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1tVBCGdGaTSTTikMKWFVT4Lzmq71TRikWSzIjiIR15FA/pub?gid=0&single=true&output=csv';
+
+        Papa.parse(SPREADSHEET_URL, {
+            download: true,
+            header: false,
+            skipEmptyLines: true,
+            complete: (results) => {
+                const data = results.data as string[][];
+
+                const headerIndex = data.findIndex(row => row[0] === 'Título del videojuego'); // Found row header
+
+                if (headerIndex === -1) {
+                    setError('Error: No se encontró la fila de encabezado "Título del videojuego" en el CSV.');
+                    setLoading(false);
+                    return;
+                }
+
+                const headers = data[headerIndex];
+                const gameRows = data.slice(headerIndex + 1);
+
+                const parsedGames = gameRows.map((row: string[], index: number): Game | null => {
+                    const rowObject = headers.reduce((obj, header, i) => {
+                        if (header) {
+                            obj[header] = row[i];
+                        }
+                        return obj;
+                    }, {} as { [key: string]: string });
+
+                    if (!rowObject['Título del videojuego']) {
+                        return null;
+                    }
+
+                    return {
+                        id: index + 1,
+                        title: rowObject['Título del videojuego'],
+                        platform: parseStringToArray(rowObject['Plataforma(s)']),
+                        genre: parseStringToArray(rowObject['Género(s)']),
+                        developers: parseStringToArray(rowObject['Desarrollador(es)']),
+                        publishers: parseStringToArray(rowObject['Distribuidor']),
+                        releaseDate: rowObject['Lanzamiento'] || 'No especificada',
+                        lastUpdateDate: rowObject['Última actualización'] || undefined,
+                        status: mapStatus(rowObject['Estado actual']),
+                        stores: [],
+                        links: [],
+                        presskitUrl: rowObject['Presskit'] || undefined,
+                        pitch: rowObject['Pitch'] || '',
+                        funding: rowObject['Financiamiento'] || undefined,
+                        engine: rowObject['Motor'] || 'No especificado',
+                        languages: parseStringToArray(rowObject['Idioma(s) disponible(s)']),
+                        imageUrl: `https://picsum.photos/seed/${encodeURIComponent(rowObject['Título del videojuego'] || index)}/500/300`,
+                        description: rowObject['Pitch'] || 'Sin descripción.',
+                    };
+                }).filter((game): game is Game => game !== null);
+
+                setGames(parsedGames);
+                setLoading(false);
+            },
+            error: (err) => {
+                setError('Unable to read or retrieve the data, something going wrong...');
+                console.error(err);
+                setLoading(false);
+            }
+        });
+    }, []);
+
+
     const allGenres = useMemo(() => Array.from(new Set(games.flatMap(g => g.genre))), [games]);
     const allPlatforms = useMemo(() => Array.from(new Set(games.flatMap(g => g.platform))), [games]);
 
     const filteredGames = useMemo(() => {
         return games.filter(game => {
             const searchMatch = game.title.toLowerCase().includes(searchTerm.toLowerCase());
-
             const statusMatch = activeFilters.status.length === 0 || activeFilters.status.includes(game.status);
-
             const genreMatch = activeFilters.genre.length === 0 || activeFilters.genre.some(f => game.genre.includes(f));
-
             const platformMatch = activeFilters.platform.length === 0 || activeFilters.platform.some(f => game.platform.includes(f));
-
             return searchMatch && statusMatch && genreMatch && platformMatch;
         });
     }, [searchTerm, activeFilters, games]);
@@ -50,21 +134,10 @@ const App = () => {
         });
     };
 
-    const handleOpenModal = (game: Game) => {
-        setSelectedGame(game);
-    };
-
-    const handleCloseModal = () => {
-        setSelectedGame(null);
-    };
-
-    const clearFilters = () => {
-        setActiveFilters({ status: [], genre: [], platform: [] });
-    };
-
-    const navigateTo = (page: Page) => {
-        setCurrentPage(page);
-    };
+    const handleOpenModal = (game: Game) => setSelectedGame(game);
+    const handleCloseModal = () => setSelectedGame(null);
+    const clearFilters = () => setActiveFilters({ status: [], genre: [], platform: [] });
+    const navigateTo = (page: Page) => setCurrentPage(page);
 
     const handleAddNewGame = (newGameData: Omit<Game, 'id'>) => {
         const newGame: Game = {
@@ -76,6 +149,13 @@ const App = () => {
     };
 
     const renderPage = () => {
+        if (loading) {
+            return <div className="text-center text-white text-2xl p-10">Cargando juegos... ⏳</div>;
+        }
+        if (error) {
+            return <div className="text-center text-red-500 text-2xl p-10">{error}</div>;
+        }
+
         switch(currentPage) {
             case 'charts':
                 return <ChartsPage games={games} onNavigateToCatalog={() => navigateTo('catalog')} />;
@@ -86,7 +166,6 @@ const App = () => {
                 return (
                     <main className="container mx-auto px-4 py-8">
                         <Highlights games={games} onGameClick={handleOpenModal} />
-
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                             <aside className="md:col-span-1">
                                 <div className="sticky top-8">

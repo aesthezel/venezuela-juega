@@ -9,11 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "papaparse": "^5.5.3",
     "preact": "^10.22.1"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.2",
     "@types/node": "^22.14.0",
+    "@types/papaparse": "^5.3.16",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
