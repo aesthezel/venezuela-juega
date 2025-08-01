@@ -6,7 +6,7 @@ interface HighlightCardProps {
     fullWidth?: boolean;
 }
 
-const HighlightCard = ({ game, onClick, fullWidth = false }) => {
+const HighlightCard = ({ game, onClick, fullWidth = false } : HighlightCardProps) => {
     return (
         <div
             onClick={() => onClick(game)}
