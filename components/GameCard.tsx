@@ -45,7 +45,7 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
             className="bg-slate-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col"
         >
             <div className="relative">
-                <img src={game.imageUrl} alt={game.title} className="w-full h-48 object-cover" />
+                <img src={game.imageUrl} alt={game.title} className="w-full h-full object-cover" />
                 <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
                     {game.status}
                 </div>

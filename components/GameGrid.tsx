@@ -45,9 +45,11 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
 
     return (
         <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+            <div className="columns-1 sm:columns-2 xl:columns-3 gap-6">
                 {gamesToShow.map(game => (
-                    <GameCard key={game.id} game={game} onClick={() => onGameClick(game)} />
+                    <div key={game.id} className="break-inside-avoid mb-6">
+                        <GameCard game={game} onClick={() => onGameClick(game)} />
+                    </div>
                 ))}
             </div>
 
