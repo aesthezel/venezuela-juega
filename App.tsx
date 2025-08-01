@@ -9,6 +9,7 @@ import Modal from './components/Modal';
 import Highlights from './components/Highlights';
 import ChartsPage from './components/ChartsPage';
 import AddGamePage from './components/AddGamePage';
+import GameCounter from './components/GameCounter';
 
 /// HELPER FUNCTIONS
 const parseStringToArray = (str: string | undefined): string[] => {
@@ -135,6 +136,13 @@ const App = () => {
         });
     };
 
+    const clearFilterCategory = (category: string) => {
+        setActiveFilters(prev => ({
+            ...prev,
+            [category]: [],
+        }));
+    };
+
     const handleOpenModal = (game: Game) => setSelectedGame(game);
     const handleCloseModal = () => setSelectedGame(null);
     const clearFilters = () => setActiveFilters({ status: [], genre: [], platform: [] });
@@ -167,6 +175,9 @@ const App = () => {
                 return (
                     <main className="container mx-auto px-4 py-8">
                         <Highlights games={games} onGameClick={handleOpenModal} />
+
+                        <GameCounter filteredCount={filteredGames.length} totalCount={games.length} />
+
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                             <aside className="md:col-span-1">
                                 <div className="sticky top-8">
@@ -178,12 +189,13 @@ const App = () => {
                                             platforms={allPlatforms}
                                             activeFilters={activeFilters}
                                             onFilterChange={handleFilterChange}
+                                            onClearCategory={clearFilterCategory}
                                         />
                                         <button
                                             onClick={clearFilters}
                                             className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300"
                                         >
-                                            Limpiar Filtros
+                                            Limpiar todos los filtros
                                         </button>
                                     </div>
                                 </div>

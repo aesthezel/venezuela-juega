@@ -6,6 +6,7 @@ interface FilterPanelProps {
     platforms: string[];
     activeFilters: Record<string, string[]>;
     onFilterChange: (category: string, value: string) => void;
+    onClearCategory: (category: string) => void;
 }
 
 interface FilterSectionProps {
@@ -22,6 +23,7 @@ interface MultiSelectDropdownProps {
     items: string[];
     selectedItems: string[];
     onToggleItem: (category: string, item: string) => void;
+    onClearCategory: (category:string) => void;
 }
 
 const FilterButtons = ({ title, items, category, activeItems, onFilterChange }: FilterSectionProps) => (
@@ -45,11 +47,10 @@ const FilterButtons = ({ title, items, category, activeItems, onFilterChange }: 
     </div>
 );
 
-const MultiSelectDropdown = ({ title, category, items, selectedItems, onToggleItem }: MultiSelectDropdownProps) => {
+const MultiSelectDropdown = ({ title, category, items, selectedItems, onToggleItem, onClearCategory }: MultiSelectDropdownProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Hook para cerrar el dropdown si se hace clic fuera de él
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -62,9 +63,24 @@ const MultiSelectDropdown = ({ title, category, items, selectedItems, onToggleIt
 
     const selectedCount = selectedItems.length;
 
+    const handleClearClick = (e: MouseEvent) => {
+        e.stopPropagation();
+        onClearCategory(category);
+    };
+
     return (
         <div className="relative" ref={dropdownRef}>
-            <h3 className="text-lg font-semibold mb-3 text-gray-300">{title}</h3>
+            <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-semibold text-gray-300">{title}</h3>
+                {selectedCount > 0 && (
+                    <button
+                        onClick={handleClearClick}
+                        className="text-xs text-cyan-400 hover:text-cyan-300 hover:underline focus:outline-none"
+                    >
+                        Limpiar
+                    </button>
+                )}
+            </div>
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg flex justify-between items-center transition-colors"
@@ -98,7 +114,7 @@ const MultiSelectDropdown = ({ title, category, items, selectedItems, onToggleIt
     );
 };
 
-const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange }: FilterPanelProps) => {
+const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange, onClearCategory }: FilterPanelProps) => {
     return (
         <div className="space-y-6">
             <FilterButtons
@@ -114,6 +130,7 @@ const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange }: Filte
                 items={genres}
                 selectedItems={activeFilters.genre || []}
                 onToggleItem={onFilterChange}
+                onClearCategory={onClearCategory}
             />
             <MultiSelectDropdown
                 title="Plataforma"
@@ -121,6 +138,7 @@ const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange }: Filte
                 items={platforms}
                 selectedItems={activeFilters.platform || []}
                 onToggleItem={onFilterChange}
+                onClearCategory={onClearCategory}
             />
         </div>
     );
