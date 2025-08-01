@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faChartBar, faPlus, faInfoCircle, faCalendarTimes, faCalendarAlt} from '@fortawesome/free-solid-svg-icons';
+import {faChartBar, faInfoCircle, faCalendarAlt} from '@fortawesome/free-solid-svg-icons';
 import {Page} from './../types';
 
 interface HeaderProps {
@@ -29,7 +29,7 @@ const Header = ({ onNavigate, currentPage }: HeaderProps) => {
                     <button
                         onClick={() => onNavigate('add-game')}
                         className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
-                            currentPage === 'add-game' ? 'bg-cyan-500 text-white' : 'bg-slate-700 hover:bg-cyan-600 text-white'
+                            currentPage === 'add-game' ? 'bg-cyan-500 text-white': 'bg-slate-700 hover:bg-cyan-600 text-white'
                         }`}
                         aria-label="Añadir nuevo juego"
                     >
@@ -41,9 +41,9 @@ const Header = ({ onNavigate, currentPage }: HeaderProps) => {
                     <button
                         onClick={() => onNavigate('calendar')}
                         className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
-                            currentPage === 'charts' ? 'bg-cyan-500 text-white' : 'bg-slate-700 hover:bg-cyan-600 text-white'
+                            currentPage === 'calendar' ? 'bg-cyan-500 text-white' : 'bg-slate-700 hover:bg-cyan-600 text-white'
                         }`}
-                        aria-label="Ver estadísticas"
+                        aria-label="Ver calendario de juegos"
                     >
                         <FontAwesomeIcon icon={faCalendarAlt} />
                         <span className="hidden sm:inline">Calendario</span>

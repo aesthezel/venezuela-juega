@@ -228,9 +228,9 @@ const App = () => {
                 {renderPage()}
             </div>
 
-            {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
-
             <Footer />
+
+            {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
         </div>
     );
 };

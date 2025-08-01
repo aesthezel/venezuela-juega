@@ -7,7 +7,7 @@ declare var FullCalendar: any;
 interface CalendarPageProps {
     games: Game[];
     onNavigateToCatalog: () => void;
-    onEventClick: (game: Game) => void; // <-- Nueva prop para manejar el clic
+    onEventClick: (game: Game) => void;
 }
 
 const parseDate = (dateString: string): string | null => {
@@ -79,21 +79,21 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,listWeek'
+                right: 'dayGridMonth,timeGridWeek,multiMonthYear,listWeek'
             },
             buttonText: {
                 today: 'Hoy',
                 month: 'Mes',
                 week: 'Semana',
+                year: 'Años',
                 list: 'Lista'
             },
             eventColor: '#0e7490',
             eventBackgroundColor: '#0e7490',
             eventBorderColor: '#22d3ee',
 
-            // --- Evento para abrir el modal al hacer clic ---
             eventClick: (info: any) => {
-                info.jsEvent.preventDefault(); // Previene la navegación si el evento es un enlace
+                info.jsEvent.preventDefault();
                 const game = info.event.extendedProps.game;
                 if (game) {
                     onEventClick(game);
