@@ -1,9 +1,17 @@
 export enum GameStatus {
   RELEASED = "Lanzado",
-  IN_DEVELOPMENT = "En Desarrollo",
-  ON_HOLD = "En Pausa",
+  RELEASED_DEMO = "Demo",
+  PROTOTYPE = "Prototipo",
+  IN_DEVELOPMENT = "En desarrollo",
+  ON_HOLD = "Pausado",
   CANCELED = "Cancelado",
+  LOST_MEDIA = "Perdido",
+  EARLY_ACCESS = "Acceso anticipado",
+  RECOVERED = "Recuperado",
+  UNKNOWN = "Desconocido",
 }
+
+export type Page = 'catalog' | 'charts' | 'add-game' | 'about' | 'calendar';
 
 export interface Game {
   id: number;
@@ -17,7 +25,7 @@ export interface Game {
   status: GameStatus;
   stores: { name: string; url: string }[];
   links: { name: string; url: string }[];
-  presskitUrl?: string;
+  pressKitUrl?: string;
   pitch?: string;
   funding?: string;
   engine: string;

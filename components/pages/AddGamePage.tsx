@@ -25,7 +25,7 @@ const initialGameState: Omit<Game, 'id'> = {
     description: '',
     pitch: '',
     funding: '',
-    presskitUrl: '',
+    pressKitUrl: '',
 };
 
 interface FormCardProps {
@@ -160,7 +160,7 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
 
                 <FormCard title="Enlaces y Multimedia">
                     <FormInput label="URL de la Imagen Principal" name="imageUrl" value={game.imageUrl} onInput={handleChange} required />
-                    <FormInput label="URL del Presskit" name="presskitUrl" value={game.presskitUrl || ''} onInput={handleChange} />
+                    <FormInput label="URL del Presskit" name="presskitUrl" value={game.pressKitUrl || ''} onInput={handleChange} />
 
                     <div>
                         <h4 className="text-lg font-semibold text-gray-300 mb-2">Tiendas</h4>

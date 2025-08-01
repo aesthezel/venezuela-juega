@@ -1,6 +1,6 @@
-import { useState, useMemo, useEffect } from 'preact/hooks';
+import {useEffect, useMemo, useState} from 'preact/hooks';
 import Papa from 'papaparse';
-import { Game, GameStatus } from './types';
+import {Game, GameStatus, Page} from './types';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
 import FilterPanel from './components/FilterPanel';
@@ -13,6 +13,7 @@ import GameCounter from './components/GameCounter';
 import LoadingSpinner from './components/LoadingSpinner';
 import Footer from "./components/Footer.tsx";
 import AboutPage from "./components/pages/AboutPage.tsx";
+import CalendarPage from "./components/pages/CalendarPage.tsx";
 
 /// HELPER FUNCTIONS
 const parseStringToArray = (str: string | undefined): string[] => {
@@ -26,13 +27,18 @@ const mapStatus = (statusStr: string | undefined): GameStatus => {
         'en desarrollo': GameStatus.IN_DEVELOPMENT,
         'pausado': GameStatus.ON_HOLD,
         'cancelado': GameStatus.CANCELED,
+        'lost media': GameStatus.LOST_MEDIA,
+        'acceso anticipado': GameStatus.EARLY_ACCESS,
+        'descontinuado': GameStatus.CANCELED,
+        'desconocido': GameStatus.UNKNOWN,
+        'prototipo': GameStatus.PROTOTYPE,
+        'publicado (demo)': GameStatus.RELEASED_DEMO,
+        'recuperado': GameStatus.RECOVERED,
     };
     // Fallback GameStatus
     return statusMap[statusStr?.toLowerCase() || ''] || GameStatus.IN_DEVELOPMENT;
 };
 /// HELPER FUNCTIONS
-
-type Page = 'catalog' | 'charts' | 'add-game' | 'about';
 
 const App = () => {
     const [currentPage, setCurrentPage] = useState<Page>('catalog');
@@ -92,7 +98,7 @@ const App = () => {
                         status: mapStatus(rowObject['Estado actual']),
                         stores: [],
                         links: [],
-                        presskitUrl: rowObject['Presskit'] || undefined,
+                        pressKitUrl: rowObject['Presskit'] || undefined,
                         pitch: rowObject['Pitch'] || '',
                         funding: rowObject['Financiamiento'] || undefined,
                         engine: rowObject['Motor'] || 'No especificado',
@@ -168,6 +174,8 @@ const App = () => {
         }
 
         switch(currentPage) {
+            case 'calendar':
+                return <CalendarPage games={games} onNavigateToCatalog={() => navigateTo('catalog')} onEventClick={handleOpenModal} />;
             case 'charts':
                 return <ChartsPage games={games} onNavigateToCatalog={() => navigateTo('catalog')} />;
             case 'add-game':

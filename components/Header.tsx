@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faPlus, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-
-export type Page = 'catalog' | 'charts' | 'add-game' | 'about';
+import {faChartBar, faPlus, faInfoCircle, faCalendarTimes, faCalendarAlt} from '@fortawesome/free-solid-svg-icons';
+import {Page} from './../types';
 
 interface HeaderProps {
     onNavigate: (page: Page) => void;
@@ -38,6 +37,17 @@ const Header = ({ onNavigate, currentPage }: HeaderProps) => {
                         <span className="hidden sm:inline">Añadir Juego</span>
                     </button>
                     */}
+
+                    <button
+                        onClick={() => onNavigate('calendar')}
+                        className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
+                            currentPage === 'charts' ? 'bg-cyan-500 text-white' : 'bg-slate-700 hover:bg-cyan-600 text-white'
+                        }`}
+                        aria-label="Ver estadísticas"
+                    >
+                        <FontAwesomeIcon icon={faCalendarAlt} />
+                        <span className="hidden sm:inline">Calendario</span>
+                    </button>
                     <button
                         onClick={() => onNavigate('charts')}
                         className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${

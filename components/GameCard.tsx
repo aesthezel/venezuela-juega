@@ -12,6 +12,12 @@ const statusColorMap: Record<GameStatus, string> = {
     [GameStatus.IN_DEVELOPMENT]: "bg-yellow-500",
     [GameStatus.ON_HOLD]: "bg-gray-500",
     [GameStatus.CANCELED]: "bg-red-600",
+    [GameStatus.RELEASED_DEMO]: 'bg-green-200',
+    [GameStatus.PROTOTYPE]: 'bg-gray-200',
+    [GameStatus.LOST_MEDIA]: 'bg-red-200',
+    [GameStatus.EARLY_ACCESS]: 'bg-cyan-500',
+    [GameStatus.RECOVERED]: 'bg-blue-500',
+    [GameStatus.UNKNOWN]: 'bg-gray-900'
 };
 
 const GameCard = ({ game, onClick }: GameCardProps) => {
@@ -19,11 +25,8 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
     const [needsExpansion, setNeedsExpansion] = useState(false);
     const descriptionRef = useRef<HTMLParagraphElement>(null);
 
-    // Este efecto comprueba si el texto de la descripción se desborda.
-    // Se ejecuta solo una vez cuando el componente se monta.
     useEffect(() => {
         const element = descriptionRef.current;
-        // Usamos un pequeño retraso para asegurar que el DOM se haya renderizado completamente.
         setTimeout(() => {
             if (element && element.scrollHeight > element.clientHeight) {
                 setNeedsExpansion(true);

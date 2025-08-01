@@ -3,7 +3,7 @@ import { Game } from '../types';
 import GameCard from './GameCard';
 
 interface GameGridProps {
-    games: Game[]; // Recibe la lista COMPLETA de juegos filtrados
+    games: Game[];
     onGameClick: (game: Game) => void;
 }
 
@@ -45,7 +45,6 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
 
     return (
         <>
-            {/* ▼▼▼ SE AÑADIÓ "items-start" A ESTA LÍNEA ▼▼▼ */}
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
                 {gamesToShow.map(game => (
                     <GameCard key={game.id} game={game} onClick={() => onGameClick(game)} />

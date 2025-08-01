@@ -27,7 +27,7 @@ const Footer = () => {
                         Desarrollado con ❤️ por <a href="https://github.com/aesthezel" target="_blank" rel="noopener noreferrer" className="font-semibold text-cyan-400 hover:underline">David Pino</a>
                     </p>
                     <p className="text-xs mt-2">
-                        Venezuela Juega, documenta la industria de Venezuela desde el año 2020
+                        Venezuela Juega, documenta la industria de videojuegos en Venezuela desde el año 2020
                     </p>
                 </div>
             </div>
