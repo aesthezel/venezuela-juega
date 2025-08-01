@@ -10,6 +10,7 @@ import Highlights from './components/Highlights';
 import ChartsPage from './components/ChartsPage';
 import AddGamePage from './components/AddGamePage';
 import GameCounter from './components/GameCounter';
+import LoadingSpinner from './components/LoadingSpinner';
 
 /// HELPER FUNCTIONS
 const parseStringToArray = (str: string | undefined): string[] => {
@@ -159,7 +160,7 @@ const App = () => {
 
     const renderPage = () => {
         if (loading) {
-            return <div className="text-center text-white text-2xl p-10">Cargando juegos... ⏳</div>;
+            return <LoadingSpinner />;
         }
         if (error) {
             return <div className="text-center text-red-500 text-2xl p-10">{error}</div>;
