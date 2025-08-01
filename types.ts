@@ -1,4 +1,3 @@
-
 export enum GameStatus {
   RELEASED = "Lanzado",
   IN_DEVELOPMENT = "En Desarrollo",
@@ -25,4 +24,5 @@ export interface Game {
   languages: string[];
   imageUrl: string;
   description: string;
+  isHighlighted?: boolean;
 }

@@ -96,6 +96,7 @@ const App = () => {
                         languages: parseStringToArray(rowObject['Idioma(s) disponible(s)']),
                         imageUrl: `https://picsum.photos/seed/${encodeURIComponent(rowObject['Título del videojuego'] || index)}/500/300`,
                         description: rowObject['Pitch'] || 'Sin descripción.',
+                        isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
                     };
                 }).filter((game): game is Game => game !== null);
 

@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from 'preact/hooks';
-import { highlightedGameIds } from '../data/games';
 import { Game } from '../types';
 import HighlightCard from './HighlightCard';
-import ChevronLeftIcon from './icons/ChevronLeftIcon';
-import ChevronRightIcon from './icons/ChevronRightIcon';
+import IndicatorLeftIcon from './icons/IndicatorLeftIcon.tsx';
+import IndicatorRightIcon from './icons/IndicatorRightIcon.tsx';
 
 interface HighlightsProps {
     games: Game[];
@@ -11,8 +10,9 @@ interface HighlightsProps {
 }
 
 const Highlights = ({ games, onGameClick }: HighlightsProps) => {
+    // ▼▼▼ LÓGICA DE FILTRADO ACTUALIZADA ▼▼▼
     const highlightedGames = useMemo(() =>
-            games.filter(game => highlightedGameIds.includes(game.id)),
+            games.filter(game => game.isHighlighted === true),
         [games]
     );
 
@@ -36,7 +36,7 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
     }, [currentIndex, hasMultipleGames, goToNext]);
 
     if (highlightedGames.length === 0) {
-        return null;
+        return null; // No muestra nada si no hay juegos destacados
     }
 
     return (
@@ -63,7 +63,7 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
                             className="absolute top-1/2 left-0 md:-left-4 transform -translate-y-1/2 z-10 bg-slate-800/60 hover:bg-slate-800/90 rounded-full p-2 transition-all text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
                             aria-label="Juego anterior"
                         >
-                            <ChevronLeftIcon />
+                            <IndicatorLeftIcon />
                         </button>
 
                         <button
@@ -71,7 +71,7 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
                             className="absolute top-1/2 right-0 md:-right-4 transform -translate-y-1/2 z-10 bg-slate-800/60 hover:bg-slate-800/90 rounded-full p-2 transition-all text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
                             aria-label="Siguiente juego"
                         >
-                            <ChevronRightIcon />
+                            <IndicatorRightIcon />
                         </button>
 
                         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
