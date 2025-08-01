@@ -185,7 +185,6 @@ const App = () => {
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                             <aside className="md:col-span-1">
                                 <div className="sticky top-8">
-                                    <h2 className="text-2xl font-bold mb-4 text-cyan-400">Filtros</h2>
                                     <div className="space-y-6 bg-slate-800 p-6 rounded-lg shadow-lg">
                                         <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
                                         <FilterPanel
