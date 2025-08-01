@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 
 export default defineConfig({
-    base: '/venezuela-juega/',
+    base: '.',
     plugins: [preact()],
     resolve: {
         alias: {
