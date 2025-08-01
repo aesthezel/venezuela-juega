@@ -10,7 +10,6 @@ interface HighlightsProps {
 }
 
 const Highlights = ({ games, onGameClick }: HighlightsProps) => {
-    // ▼▼▼ LÓGICA DE FILTRADO ACTUALIZADA ▼▼▼
     const highlightedGames = useMemo(() =>
             games.filter(game => game.isHighlighted === true),
         [games]
@@ -36,12 +35,12 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
     }, [currentIndex, hasMultipleGames, goToNext]);
 
     if (highlightedGames.length === 0) {
-        return null; // No muestra nada si no hay juegos destacados
+        return null;
     }
 
     return (
         <section className="mb-12" aria-labelledby="highlights-title">
-            <h2 id="highlights-title" className="text-3xl font-bold mb-6 text-cyan-400 border-l-4 border-cyan-400 pl-4">Destacados</h2>
+            <h2 id="highlights-title" className="text-3xl font-bold mb-6 text-cyan-400 pl-4">Destacados</h2>
             <div className="relative group">
                 <div className="w-full h-56 overflow-hidden rounded-lg">
                     <div

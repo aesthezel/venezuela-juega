@@ -4,12 +4,10 @@ interface GameCounterProps {
 }
 
 const GameCounter = ({ filteredCount, totalCount }: GameCounterProps) => {
-    // Mensaje dinámico dependiendo de si se están aplicando filtros o no.
     const message = filteredCount === totalCount
         ? `¡Mostrando los ${totalCount} juegos encontrados!`
         : `Mostrando ${filteredCount} de ${totalCount} juegos`;
 
-    // No renderizar nada si no hay juegos en total.
     if (totalCount === 0) {
         return null;
     }

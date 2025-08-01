@@ -11,6 +11,7 @@ import ChartsPage from './components/ChartsPage';
 import AddGamePage from './components/AddGamePage';
 import GameCounter from './components/GameCounter';
 import LoadingSpinner from './components/LoadingSpinner';
+import Footer from "./components/Footer.tsx";
 
 /// HELPER FUNCTIONS
 const parseStringToArray = (str: string | undefined): string[] => {
@@ -96,8 +97,8 @@ const App = () => {
                         funding: rowObject['Financiamiento'] || undefined,
                         engine: rowObject['Motor'] || 'No especificado',
                         languages: parseStringToArray(rowObject['Idioma(s) disponible(s)']),
-                        imageUrl: `https://picsum.photos/seed/${encodeURIComponent(rowObject['Título del videojuego'] || index)}/500/300`,
-                        description: rowObject['Pitch'] || 'Sin descripción.',
+                        imageUrl: rowObject['Portada'] || `https://picsum.photos/seed/${encodeURIComponent(rowObject['Título del videojuego'] || index)}/500/300`, // `https://picsum.photos/seed/${encodeURIComponent(rowObject['Título del videojuego'] || index)}/500/300`
+                        description: rowObject['Descripción'] || 'Sin descripción.',
                         isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
                     };
                 }).filter((game): game is Game => game !== null);
@@ -106,7 +107,7 @@ const App = () => {
                 setLoading(false);
             },
             error: (err) => {
-                setError('Unable to read or retrieve the data, something going wrong...');
+                setError('Ha habido un error al cargar la lista de juegos');
                 console.error(err);
                 setLoading(false);
             }
@@ -211,10 +212,16 @@ const App = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-900 text-gray-200 font-sans">
+        <div className="min-h-screen bg-slate-900 text-gray-200 font-sans flex flex-col">
             <Header onNavigate={navigateTo} currentPage={currentPage} />
-            {renderPage()}
+
+            <div className="flex-grow">
+                {renderPage()}
+            </div>
+
             {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
+
+            <Footer />
         </div>
     );
 };
