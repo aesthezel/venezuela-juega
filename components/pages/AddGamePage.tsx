@@ -1,8 +1,8 @@
 import { useState } from 'preact/hooks';
 import { ComponentChildren, ComponentProps } from 'preact';
 import { JSX } from 'preact/jsx-runtime';
-import { Game, GameStatus } from '../types';
-import CloseIcon from './icons/CloseIcon';
+import { Game, GameStatus } from '../../types.ts';
+import CloseIcon from '../icons/CloseIcon.tsx';
 
 interface AddGamePageProps {
     onAddNewGame: (game: Omit<Game, 'id'>) => void;

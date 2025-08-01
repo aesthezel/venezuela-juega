@@ -8,10 +8,11 @@ import GameGrid from './components/GameGrid';
 import Modal from './components/Modal';
 import Highlights from './components/Highlights';
 import ChartsPage from './components/ChartsPage';
-import AddGamePage from './components/AddGamePage';
+import AddGamePage from './components/pages/AddGamePage.tsx';
 import GameCounter from './components/GameCounter';
 import LoadingSpinner from './components/LoadingSpinner';
 import Footer from "./components/Footer.tsx";
+import AboutPage from "./components/pages/AboutPage.tsx";
 
 /// HELPER FUNCTIONS
 const parseStringToArray = (str: string | undefined): string[] => {
@@ -31,8 +32,7 @@ const mapStatus = (statusStr: string | undefined): GameStatus => {
 };
 /// HELPER FUNCTIONS
 
-
-type Page = 'catalog' | 'charts' | 'add-game';
+type Page = 'catalog' | 'charts' | 'add-game' | 'about';
 
 const App = () => {
     const [currentPage, setCurrentPage] = useState<Page>('catalog');
@@ -172,6 +172,8 @@ const App = () => {
                 return <ChartsPage games={games} onNavigateToCatalog={() => navigateTo('catalog')} />;
             case 'add-game':
                 return <AddGamePage onAddNewGame={handleAddNewGame} onNavigateToCatalog={() => navigateTo('catalog')} />;
+            case 'about':
+                return <AboutPage onNavigateToCatalog={() => navigateTo('catalog')} />;
             case 'catalog':
             default:
                 return (

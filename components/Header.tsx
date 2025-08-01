@@ -1,9 +1,11 @@
-import ChartBarIcon from './icons/ChartBarIcon';
-import PlusIcon from './icons/PlusIcon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartBar, faPlus, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
+export type Page = 'catalog' | 'charts' | 'add-game' | 'about';
 
 interface HeaderProps {
-    onNavigate: (page: 'catalog' | 'charts' | 'add-game') => void;
-    currentPage: 'catalog' | 'charts' | 'add-game';
+    onNavigate: (page: Page) => void;
+    currentPage: Page;
 }
 
 const Header = ({ onNavigate, currentPage }: HeaderProps) => {
@@ -14,7 +16,7 @@ const Header = ({ onNavigate, currentPage }: HeaderProps) => {
                     <button onClick={() => onNavigate('catalog')} className="flex items-center space-x-4">
                         {/*
                         <div className="w-12 h-12 bg-cyan-500 rounded-lg flex items-center justify-center text-slate-900 font-bold text-2xl">
-                            ISOTIPO
+                            -
                         </div>
                         */}
                         <div>
@@ -32,9 +34,10 @@ const Header = ({ onNavigate, currentPage }: HeaderProps) => {
                         }`}
                         aria-label="Añadir nuevo juego"
                     >
-                        <PlusIcon />
+                        <FontAwesomeIcon icon={faPlus} />
                         <span className="hidden sm:inline">Añadir Juego</span>
-                    </button> */}
+                    </button>
+                    */}
                     <button
                         onClick={() => onNavigate('charts')}
                         className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
@@ -42,8 +45,18 @@ const Header = ({ onNavigate, currentPage }: HeaderProps) => {
                         }`}
                         aria-label="Ver estadísticas"
                     >
-                        <ChartBarIcon />
+                        <FontAwesomeIcon icon={faChartBar} />
                         <span className="hidden sm:inline">Estadísticas</span>
+                    </button>
+                    <button
+                        onClick={() => onNavigate('about')}
+                        className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
+                            currentPage === 'about' ? 'bg-cyan-500 text-white' : 'bg-slate-700 hover:bg-cyan-600 text-white'
+                        }`}
+                        aria-label="Acerca de Venezuela Juega"
+                    >
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                        <span className="hidden sm:inline">Acerca de</span>
                     </button>
                 </div>
             </div>
