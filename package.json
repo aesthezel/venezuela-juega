@@ -18,9 +18,12 @@
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.2",
+    "@testing-library/preact": "^3.2.4",
     "@types/node": "^22.14.0",
     "@types/papaparse": "^5.3.16",
+    "happy-dom": "^18.0.1",
     "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vitest": "^3.2.4"
   }
 }
