@@ -76,6 +76,9 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
             initialView: 'dayGridMonth',
             events: events,
             locale: 'es',
+            height: 'auto', // compact height
+            dayHeaderFormat: { weekday: 'short' }, // shorten days
+            eventDisplay: 'list-item',
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
@@ -152,7 +155,14 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
                     --fc-list-day-text-color: #ffffff;
                     --fc-list-day-side-text-color: #ffffff;
                 }
-                .fc .fc-toolbar-title { color: #ffffff; }
+                .fc .fc-toolbar-title { 
+                    color: #ffffff;
+                    font-size: 1.25rem;
+                }
+                .fc .fc-button {
+                    font-size: 0.875rem;
+                    padding: 0.4em 0.8em;
+                }
                 .fc .fc-daygrid-day-number { color: #94a3b8; }
                 .fc .fc-col-header-cell-cushion { color: #cbd5e1; }
                 .fc .fc-button-primary {

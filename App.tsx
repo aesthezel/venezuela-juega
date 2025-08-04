@@ -14,6 +14,8 @@ import LoadingSpinner from './components/LoadingSpinner';
 import Footer from "./components/Footer.tsx";
 import AboutPage from "./components/pages/AboutPage.tsx";
 import CalendarPage from "./components/pages/CalendarPage.tsx";
+import {faTrash} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 /// HELPER FUNCTIONS
 const parseStringToArray = (str: string | undefined): string[] => {
@@ -104,7 +106,7 @@ const App = () => {
                         engine: rowObject['Motor'] || 'No especificado',
                         languages: parseStringToArray(rowObject['Idioma(s) disponible(s)']),
                         imageUrl: rowObject['Portada'] || `https://picsum.photos/seed/${encodeURIComponent(rowObject['Título del videojuego'] || index)}/500/300`, // `https://picsum.photos/seed/${encodeURIComponent(rowObject['Título del videojuego'] || index)}/500/300`
-                        description: rowObject['Descripción'] || 'Sin descripción.',
+                        description: rowObject['Descripción'] || '',
                         isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
                     };
                 }).filter((game): game is Game => game !== null);
@@ -195,6 +197,9 @@ const App = () => {
                                 <div className="sticky top-8">
                                     <div className="space-y-6 bg-slate-800 p-6 rounded-lg shadow-lg">
                                         <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+
+                                        <hr className="border-t border-slate-700" />
+
                                         <FilterPanel
                                             genres={allGenres}
                                             platforms={allPlatforms}
@@ -202,11 +207,15 @@ const App = () => {
                                             onFilterChange={handleFilterChange}
                                             onClearCategory={clearFilterCategory}
                                         />
+
+                                        <hr className="border-t border-slate-700" />
+
                                         <button
                                             onClick={clearFilters}
-                                            className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300"
+                                            className="w-full mt-4 bg-red-400 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2"
                                         >
-                                            Limpiar todos los filtros
+                                            <span>Limpiar todos los filtros</span>
+                                            <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
                                         </button>
                                     </div>
                                 </div>
