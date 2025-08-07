@@ -6,6 +6,7 @@ import ArrowLeftIcon from '../icons/ArrowLeftIcon.tsx';
 declare var Chart: any;
 
 interface ChartsPageProps {
+    path?: string;
     games: Game[];
     onNavigateToCatalog: () => void;
 }

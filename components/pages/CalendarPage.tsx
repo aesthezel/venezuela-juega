@@ -5,6 +5,7 @@ import ArrowLeftIcon from './../icons/ArrowLeftIcon';
 declare var FullCalendar: any;
 
 interface CalendarPageProps {
+    path?: string;
     games: Game[];
     onNavigateToCatalog: () => void;
     onEventClick: (game: Game) => void;

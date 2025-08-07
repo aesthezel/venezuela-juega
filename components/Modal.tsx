@@ -1,8 +1,11 @@
 import { useEffect } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
-import { Game } from '../types';
+import { route } from 'preact-router';
+import { Game } from '../interfaces/Game.ts';
 import CloseIcon from './icons/CloseIcon';
 import LinkIcon from './icons/LinkIcon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 interface ModalProps {
     game: Game;
@@ -32,6 +35,11 @@ const Modal = ({ game, onClose }: ModalProps) => {
         return () => window.removeEventListener('keydown', handleEsc);
     }, [onClose]);
 
+    const handleViewFullInfo = () => {
+        onClose();
+        route(`/game/${game.slug}`);
+    };
+
     return (
         <div
             className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 p-4 animate-fade-in"
@@ -44,13 +52,23 @@ const Modal = ({ game, onClose }: ModalProps) => {
                 <img src={game.imageUrl} alt={game.title} className="w-full md:w-1/3 h-64 md:h-auto object-cover"/>
                 <div className="p-8 flex-1 overflow-y-auto">
                     <div className="flex justify-between items-start">
-                        <div>
+                        <div className="flex-1 pr-4">
                             <h2 className="text-3xl font-bold text-white">{game.title}</h2>
                             <p className="text-cyan-400">{game.developers.join(', ')}</p>
                         </div>
-                        <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
-                            <CloseIcon />
-                        </button>
+                        <div className="flex gap-2">
+                            <button 
+                                onClick={handleViewFullInfo}
+                                className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors flex items-center gap-2"
+                                title="Ver información completa"
+                            >
+                                <span className="hidden sm:inline">Ver más</span>
+                                <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+                            </button>
+                            <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+                                <CloseIcon />
+                            </button>
+                        </div>
                     </div>
 
                     <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">

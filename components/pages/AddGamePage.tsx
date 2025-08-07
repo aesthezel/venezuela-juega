@@ -5,6 +5,7 @@ import { Game, GameStatus } from '../../types.ts';
 import CloseIcon from '../icons/CloseIcon.tsx';
 
 interface AddGamePageProps {
+    path?: string;
     onAddNewGame: (game: Omit<Game, 'id'>) => void;
     onNavigateToCatalog: () => void;
 }

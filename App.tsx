@@ -1,21 +1,24 @@
-import {useEffect, useMemo, useState} from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
+import { Router, route } from 'preact-router';
 import Papa from 'papaparse';
-import {Game, GameStatus, Page} from './types';
+import { Game } from './interfaces/Game.ts';
+import { GameStatus } from './types';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
 import FilterPanel from './components/FilterPanel';
 import GameGrid from './components/GameGrid';
 import Modal from './components/Modal';
 import Highlights from './components/Highlights';
-import ChartsPage from './components/pages/ChartsPage.tsx';
-import AddGamePage from './components/pages/AddGamePage.tsx';
+import ChartsPage from './components/pages/ChartsPage';
+import AddGamePage from './components/pages/AddGamePage';
 import GameCounter from './components/GameCounter';
 import LoadingSpinner from './components/LoadingSpinner';
-import Footer from "./components/Footer.tsx";
-import AboutPage from "./components/pages/AboutPage.tsx";
-import CalendarPage from "./components/pages/CalendarPage.tsx";
-import {faTrash} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Footer from "./components/Footer";
+import AboutPage from "./components/pages/AboutPage";
+import CalendarPage from "./components/pages/CalendarPage";
+import GameDetailPage from "./components/pages/GameDetailPage";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 /// HELPER FUNCTIONS
 const parseStringToArray = (str: string | undefined): string[] => {
@@ -37,13 +40,44 @@ const mapStatus = (statusStr: string | undefined): GameStatus => {
         'publicado (demo)': GameStatus.RELEASED_DEMO,
         'recuperado': GameStatus.RECOVERED,
     };
-    // Fallback GameStatus
     return statusMap[statusStr?.toLowerCase() || ''] || GameStatus.IN_DEVELOPMENT;
+};
+
+const generateSlug = (title: string): string => {
+    return title
+        .toLowerCase()
+        .replace(/[áàâäã]/g, 'a')
+        .replace(/[éèêë]/g, 'e')
+        .replace(/[íìîï]/g, 'i')
+        .replace(/[óòôöõ]/g, 'o')
+        .replace(/[úùûü]/g, 'u')
+        .replace(/[ñ]/g, 'n')
+        .replace(/[ç]/g, 'c')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
+};
+
+const ensureUniqueSlug = (baseSlug: string, existingSlugs: Set<string>): string => {
+    let slug = baseSlug;
+    let counter = 1;
+    
+    while (existingSlugs.has(slug)) {
+        slug = `${baseSlug}-${counter}`;
+        counter++;
+    }
+    
+    existingSlugs.add(slug);
+    return slug;
 };
 /// HELPER FUNCTIONS
 
+interface CatalogPageProps {
+    path?: string;
+}
+
 const App = () => {
-    const [currentPage, setCurrentPage] = useState<Page>('catalog');
     const [games, setGames] = useState<Game[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -54,6 +88,7 @@ const App = () => {
         platform: [],
     });
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+    const [currentPath, setCurrentPath] = useState('/');
 
     useEffect(() => {
         const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1tVBCGdGaTSTTikMKWFVT4Lzmq71TRikWSzIjiIR15FA/pub?gid=0&single=true&output=csv';
@@ -64,8 +99,7 @@ const App = () => {
             skipEmptyLines: true,
             complete: (results) => {
                 const data = results.data as string[][];
-
-                const headerIndex = data.findIndex(row => row[0] === 'Título del videojuego'); // Found row header
+                const headerIndex = data.findIndex(row => row[0] === 'Título del videojuego');
 
                 if (headerIndex === -1) {
                     setError('Error: No se encontró la fila de encabezado "Título del videojuego" en el CSV.');
@@ -75,6 +109,7 @@ const App = () => {
 
                 const headers = data[headerIndex];
                 const gameRows = data.slice(headerIndex + 1);
+                const existingSlugs = new Set<string>();
 
                 const parsedGames = gameRows.map((row: string[], index: number): Game | null => {
                     const rowObject = headers.reduce((obj, header, i) => {
@@ -88,9 +123,14 @@ const App = () => {
                         return null;
                     }
 
+                    const title = rowObject['Título del videojuego'];
+                    const baseSlug = generateSlug(title);
+                    const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
+
                     return {
                         id: index + 1,
-                        title: rowObject['Título del videojuego'],
+                        slug: uniqueSlug,
+                        title: title,
                         platform: parseStringToArray(rowObject['Plataforma(s)']),
                         genre: parseStringToArray(rowObject['Género(s)']),
                         developers: parseStringToArray(rowObject['Desarrollador(es)']),
@@ -105,7 +145,7 @@ const App = () => {
                         funding: rowObject['Financiamiento'] || undefined,
                         engine: rowObject['Motor'] || 'No especificado',
                         languages: parseStringToArray(rowObject['Idioma(s) disponible(s)']),
-                        imageUrl: rowObject['Portada'] || `https://picsum.photos/seed/${encodeURIComponent(rowObject['Título del videojuego'] || index)}/500/300`, // `https://picsum.photos/seed/${encodeURIComponent(rowObject['Título del videojuego'] || index)}/500/300`
+                        imageUrl: rowObject['Portada'] || `https://picsum.photos/seed/${encodeURIComponent(title || index)}/500/300`,
                         description: rowObject['Descripción'] || '',
                         isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
                     };
@@ -121,7 +161,6 @@ const App = () => {
             }
         });
     }, []);
-
 
     const allGenres = useMemo(() => Array.from(new Set(games.flatMap(g => g.genre))), [games]);
     const allPlatforms = useMemo(() => Array.from(new Set(games.flatMap(g => g.platform))), [games]);
@@ -156,89 +195,107 @@ const App = () => {
     const handleOpenModal = (game: Game) => setSelectedGame(game);
     const handleCloseModal = () => setSelectedGame(null);
     const clearFilters = () => setActiveFilters({ status: [], genre: [], platform: [] });
-    const navigateTo = (page: Page) => setCurrentPage(page);
 
-    const handleAddNewGame = (newGameData: Omit<Game, 'id'>) => {
+    const handleAddNewGame = (newGameData: Omit<Game, 'id' | 'slug'>) => {
+        const existingSlugs = new Set(games.map(g => g.slug));
+        const baseSlug = generateSlug(newGameData.title);
+        const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
+        
         const newGame: Game = {
             ...newGameData,
             id: games.length > 0 ? Math.max(...games.map(g => g.id)) + 1 : 1,
+            slug: uniqueSlug,
         };
         setGames(prevGames => [newGame, ...prevGames]);
-        navigateTo('catalog');
     };
 
-    const renderPage = () => {
-        if (loading) {
-            return <LoadingSpinner />;
-        }
-        if (error) {
-            return <div className="text-center text-red-500 text-2xl p-10">{error}</div>;
-        }
+    const handleRouteChange = (e: any) => {
+        setCurrentPath(e.url);
+    };
 
-        switch(currentPage) {
-            case 'calendar':
-                return <CalendarPage games={games} onNavigateToCatalog={() => navigateTo('catalog')} onEventClick={handleOpenModal} />;
-            case 'charts':
-                return <ChartsPage games={games} onNavigateToCatalog={() => navigateTo('catalog')} />;
-            case 'add-game':
-                return <AddGamePage onAddNewGame={handleAddNewGame} onNavigateToCatalog={() => navigateTo('catalog')} />;
-            case 'about':
-                return <AboutPage onNavigateToCatalog={() => navigateTo('catalog')} />;
-            case 'catalog':
-            default:
-                return (
-                    <main className="container mx-auto px-4 py-8">
-                        <Highlights games={games} onGameClick={handleOpenModal} />
+    // Función helper para navegar al catálogo
+    const navigateToCatalog = () => {
+        route('/');
+    };
 
-                        <GameCounter filteredCount={filteredGames.length} totalCount={games.length} />
+    if (loading) {
+        return <LoadingSpinner />;
+    }
 
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                            <aside className="md:col-span-1">
-                                <div className="sticky top-8">
-                                    <div className="space-y-6 bg-slate-800 p-6 rounded-lg shadow-lg">
-                                        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+    if (error) {
+        return <div className="text-center text-red-500 text-2xl p-10">{error}</div>;
+    }
 
-                                        <hr className="border-t border-slate-700" />
-
-                                        <FilterPanel
-                                            genres={allGenres}
-                                            platforms={allPlatforms}
-                                            activeFilters={activeFilters}
-                                            onFilterChange={handleFilterChange}
-                                            onClearCategory={clearFilterCategory}
-                                        />
-
-                                        <hr className="border-t border-slate-700" />
-
-                                        <button
-                                            onClick={clearFilters}
-                                            className="w-full mt-4 bg-red-400 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2"
-                                        >
-                                            <span>Limpiar todos los filtros</span>
-                                            <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </aside>
-                            <section className="md:col-span-3">
-                                <GameGrid games={filteredGames} onGameClick={handleOpenModal} />
-                            </section>
+    const CatalogPage = ({}: CatalogPageProps) => (
+        <main className="container mx-auto px-4 py-8">
+            <Highlights games={games} onGameClick={handleOpenModal} />
+            <GameCounter filteredCount={filteredGames.length} totalCount={games.length} />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <aside className="md:col-span-1">
+                    <div className="sticky top-8">
+                        <div className="space-y-6 bg-slate-800 p-6 rounded-lg shadow-lg">
+                            <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+                            <hr className="border-t border-slate-700" />
+                            <FilterPanel
+                                genres={allGenres}
+                                platforms={allPlatforms}
+                                activeFilters={activeFilters}
+                                onFilterChange={handleFilterChange}
+                                onClearCategory={clearFilterCategory}
+                            />
+                            <hr className="border-t border-slate-700" />
+                            <button
+                                onClick={clearFilters}
+                                className="w-full mt-4 bg-red-400 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2"
+                            >
+                                <span>Limpiar todos los filtros</span>
+                                <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
+                            </button>
                         </div>
-                    </main>
-                );
-        }
-    };
+                    </div>
+                </aside>
+                <section className="md:col-span-3">
+                    <GameGrid games={filteredGames} onGameClick={handleOpenModal} />
+                </section>
+            </div>
+        </main>
+    );
 
     return (
         <div className="min-h-screen bg-slate-900 text-gray-200 font-sans flex flex-col">
-            <Header onNavigate={navigateTo} currentPage={currentPage} />
+            <Header currentPath={currentPath} />
 
             <div className="flex-grow">
-                {renderPage()}
+                <Router onChange={handleRouteChange}>
+                    <CatalogPage path="/" />
+                    <CalendarPage
+                        path="/calendar"
+                        games={games}
+                        onNavigateToCatalog={navigateToCatalog}
+                        onEventClick={handleOpenModal}
+                    />
+                    <ChartsPage
+                        path="/charts"
+                        games={games}
+                        onNavigateToCatalog={navigateToCatalog}
+                    />
+                    <AboutPage
+                        path="/about"
+                        onNavigateToCatalog={navigateToCatalog}
+                    />
+                    <GameDetailPage
+                        path="/game/:gameSlug"
+                        games={games}
+                    />
+                    <AddGamePage
+                        path="/add-game"
+                        onAddNewGame={handleAddNewGame}
+                        onNavigateToCatalog={navigateToCatalog}
+                    />
+                </Router>
             </div>
 
             <Footer />
-
             {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
         </div>
     );

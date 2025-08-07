@@ -4,6 +4,7 @@ import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import preact from "@preact/preset-vite";
 
 interface AboutPageProps {
+    path?: string;
     onNavigateToCatalog: () => void;
 }
 
