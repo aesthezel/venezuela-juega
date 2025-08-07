@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { Game } from '@/types';
+import { Game } from './../../interfaces/Game';
 import ArrowLeftIcon from './../icons/ArrowLeftIcon';
 
 declare var FullCalendar: any;
@@ -77,8 +77,8 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
             initialView: 'dayGridMonth',
             events: events,
             locale: 'es',
-            height: 'auto', // compact height
-            dayHeaderFormat: { weekday: 'short' }, // shorten days
+            height: 'auto',
+            dayHeaderFormat: { weekday: 'short' },
             eventDisplay: 'list-item',
             headerToolbar: {
                 left: 'prev,next today',

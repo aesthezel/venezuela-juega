@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
-import { Game } from '../types';
+import { Game } from './../interfaces/Game';
 import GameCard from './GameCard';
 
-// Declaración para que TypeScript reconozca la librería global de GSAP
 declare var gsap: any;
 
 interface GameGridProps {
@@ -19,27 +18,24 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
     const gridRef = useRef<HTMLDivElement | null>(null);
     const prevGamesRef = useRef<Game[]>([]);
 
-    // Resetea la vista cuando los filtros cambian
     useEffect(() => {
         setDisplayedCount(INITIAL_GAMES_TO_SHOW);
     }, [games]);
 
     const gamesToShow = games.slice(0, displayedCount);
 
-    // Hook para animar las tarjetas cuando la lista visible cambia
     useEffect(() => {
         if (!gridRef.current) return;
 
         const cards = Array.from(gridRef.current.querySelectorAll('.game-card-wrapper'));
 
-        // Si la lista de juegos base ha cambiado (por un filtro), anima todo
         if (prevGamesRef.current !== games) {
             gsap.fromTo(cards,
                 { opacity: 0, y: 20 },
                 { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out' }
             );
         }
-        // Si solo se han añadido más juegos (lazy load), anima solo los nuevos
+        // Lazyload
         else if (cards.length > prevGamesRef.current.length) {
             const newCards = cards.slice(prevGamesRef.current.length);
             gsap.fromTo(newCards,

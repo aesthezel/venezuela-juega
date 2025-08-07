@@ -1,7 +1,8 @@
 import { useState } from 'preact/hooks';
 import { ComponentChildren, ComponentProps } from 'preact';
 import { JSX } from 'preact/jsx-runtime';
-import { Game, GameStatus } from '../../types.ts';
+import { Game } from './../../interfaces/Game';
+import { GameStatus } from '../../types.ts';
 import CloseIcon from '../icons/CloseIcon.tsx';
 
 interface AddGamePageProps {
@@ -13,6 +14,7 @@ interface AddGamePageProps {
 const initialGameState: Omit<Game, 'id'> = {
     title: '',
     platform: [],
+    slug: '',
     genre: [],
     developers: [],
     publishers: [],

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'preact/hooks';
-import { Game, GameStatus } from '../types';
+import { Game } from './../interfaces/Game';
+import { GameStatus } from '../types';
 import { JSX } from 'preact/jsx-runtime';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -35,7 +36,6 @@ const statusColorMap: Record<GameStatus, string> = {
     [GameStatus.UNKNOWN]: 'bg-gray-900'
 };
 
-// Mapeo de plataformas a iconos
 const platformIconMap: Record<string, any> = {
     'Windows': faWindows,
     'PC': faWindows,
@@ -72,22 +72,18 @@ const platformIconMap: Record<string, any> = {
     'Móvil': faMobile,
 };
 
-// Función para obtener el icono de una plataforma
 const getPlatformIcon = (platform: string) => {
-    // Buscar coincidencia exacta primero
     if (platformIconMap[platform]) {
         return platformIconMap[platform];
     }
-    
-    // Buscar coincidencia parcial (case insensitive)
+
     const platformLower = platform.toLowerCase();
     for (const [key, icon] of Object.entries(platformIconMap)) {
         if (key.toLowerCase().includes(platformLower) || platformLower.includes(key.toLowerCase())) {
             return icon;
         }
     }
-    
-    // Icono por defecto
+
     return faDesktop;
 };
 
@@ -106,7 +102,7 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
     }, [game.description]);
 
     const handleReadMoreClick = (e: JSX.TargetedEvent<HTMLButtonElement>) => {
-        e.stopPropagation(); // Previene que el clic en el botón abra el modal.
+        e.stopPropagation();
         setIsExpanded(!isExpanded);
     };
 
@@ -117,13 +113,11 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
         >
             <div className="relative">
                 <img src={game.imageUrl} alt={game.title} className="w-full h-full object-cover" />
-                
-                {/* Status badge - top right */}
+
                 <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
                     {game.status}
                 </div>
-                
-                {/* Platform icons - bottom left */}
+
                 <div className="absolute bottom-2 left-2 flex gap-1">
                     {game.platform.slice(0, 4).map((platform, index) => (
                         <div
@@ -151,8 +145,6 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
             </div>
             <div className="p-5 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold text-white truncate">{game.title}</h3>
-
-                {/* La descripción ahora usa line-clamp para un corte de texto limpio */}
                 <p
                     ref={descriptionRef}
                     className={`text-gray-400 mt-2 text-sm transition-all duration-300 ease-in-out ${isExpanded ? '' : 'line-clamp-2'}`}
@@ -160,7 +152,6 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
                     {game.description}
                 </p>
 
-                {/* El botón "Leer más" solo aparece si el texto se desborda */}
                 {needsExpansion && (
                     <button
                         onClick={handleReadMoreClick}
@@ -170,7 +161,6 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
                     </button>
                 )}
 
-                {/* El div de géneros ahora está correctamente espaciado */}
                 <div className="mt-auto pt-4 flex flex-wrap gap-2">
                     {game.genre.slice(0, 2).map(g => (
                         <span key={g} className="bg-slate-700 text-cyan-400 text-xs font-semibold px-2.5 py-1 rounded-full">{g}</span>

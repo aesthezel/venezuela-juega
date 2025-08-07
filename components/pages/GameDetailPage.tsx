@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
-import { Game } from '../../interfaces/Game.ts';
+import { Game } from '../../interfaces/Game';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faGamepad, faGlobe, faCog } from '@fortawesome/free-solid-svg-icons';
 import LinkIcon from '../icons/LinkIcon';
 
 interface GameDetailPageProps {
     path?: string;
-    gameSlug?: string; // Cambiar de gameId a gameSlug
+    gameSlug?: string;
     games: Game[];
 }
 

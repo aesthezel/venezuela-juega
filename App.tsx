@@ -1,6 +1,6 @@
+import Papa from 'papaparse';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Router, route } from 'preact-router';
-import Papa from 'papaparse';
 import { Game } from './interfaces/Game.ts';
 import { GameStatus } from './types';
 import Header from './components/Header';
@@ -71,6 +71,22 @@ const ensureUniqueSlug = (baseSlug: string, existingSlugs: Set<string>): string 
     existingSlugs.add(slug);
     return slug;
 };
+
+const useDebounce = (value: string, delay: number) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+
+    return debouncedValue;
+};
 /// HELPER FUNCTIONS
 
 interface CatalogPageProps {
@@ -89,6 +105,8 @@ const App = () => {
     });
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState('/');
+
+    const debouncedSearchTerm = useDebounce(searchTerm, 300); // 300ms de retraso
 
     useEffect(() => {
         const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1tVBCGdGaTSTTikMKWFVT4Lzmq71TRikWSzIjiIR15FA/pub?gid=0&single=true&output=csv';
@@ -167,13 +185,17 @@ const App = () => {
 
     const filteredGames = useMemo(() => {
         return games.filter(game => {
-            const searchMatch = game.title.toLowerCase().includes(searchTerm.toLowerCase());
+            const searchMatch = debouncedSearchTerm === '' || 
+                game.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+                game.developers.some(dev => dev.toLowerCase().includes(debouncedSearchTerm.toLowerCase())) ||
+                game.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+            
             const statusMatch = activeFilters.status.length === 0 || activeFilters.status.includes(game.status);
             const genreMatch = activeFilters.genre.length === 0 || activeFilters.genre.some(f => game.genre.includes(f));
             const platformMatch = activeFilters.platform.length === 0 || activeFilters.platform.some(f => game.platform.includes(f));
             return searchMatch && statusMatch && genreMatch && platformMatch;
         });
-    }, [searchTerm, activeFilters, games]);
+    }, [debouncedSearchTerm, activeFilters, games]);
 
     const handleFilterChange = (category: string, value: string) => {
         setActiveFilters(prev => {
@@ -213,7 +235,6 @@ const App = () => {
         setCurrentPath(e.url);
     };
 
-    // Función helper para navegar al catálogo
     const navigateToCatalog = () => {
         route('/');
     };
@@ -234,7 +255,7 @@ const App = () => {
                 <aside className="md:col-span-1">
                     <div className="sticky top-8">
                         <div className="space-y-6 bg-slate-800 p-6 rounded-lg shadow-lg">
-                            <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+                            <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} games={games} />
                             <hr className="border-t border-slate-700" />
                             <FilterPanel
                                 genres={allGenres}

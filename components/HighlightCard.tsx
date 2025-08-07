@@ -1,4 +1,4 @@
-import { Game } from '../types';
+import { Game } from '../interfaces/Game.ts';
 
 interface HighlightCardProps {
     game: Game;
