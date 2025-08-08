@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { route } from 'preact-router';
 import { Game } from '@/src/types';
 import { useDebounce } from '@/src/hooks';
 
@@ -8,14 +9,15 @@ interface SearchBarProps {
     searchTerm: string;
     onSearchChange: (term: string) => void;
     games: Game[];
+    onSelectGame?: (game: Game) => void;
 }
 
-const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
+const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame }: SearchBarProps) => {
     const [suggestions, setSuggestions] = useState<Game[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [activeSuggestion, setActiveSuggestion] = useState(-1);
     const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
-    
+
     const searchRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -23,7 +25,8 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
     const debouncedGlobalTerm = useDebounce(localSearchTerm, 300);
 
     useEffect(() => {
-        if (searchTerm !== localSearchTerm) {
+        const isFocused = document.activeElement === searchRef.current;
+        if (!isFocused && searchTerm !== localSearchTerm) {
             setLocalSearchTerm(searchTerm);
         }
     }, [searchTerm]);
@@ -37,17 +40,14 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
     const searchIndex = useMemo(() => {
         return games.map(game => ({
             ...game,
-            searchText: `${game.title} ${game.developers.join(' ')}`.toLowerCase()
+            searchText: `${game.title} ${game.developers.join(' ')}`.toLowerCase(),
         }));
     }, [games]);
 
     const filteredSuggestions = useMemo(() => {
-        if (debouncedLocalTerm.length < 2) {
-            return [];
-        }
-        
+        if (debouncedLocalTerm.length < 2) return [];
         const searchLower = debouncedLocalTerm.toLowerCase();
-        const results = [];
+        const results: Game[] = [];
 
         for (let i = 0; i < searchIndex.length && results.length < 5; i++) {
             const game = searchIndex[i];
@@ -55,18 +55,18 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
                 results.push(game);
             }
         }
-        
         return results;
     }, [debouncedLocalTerm, searchIndex]);
 
     useEffect(() => {
-        const shouldShow = filteredSuggestions.length > 0 && 
-                          debouncedLocalTerm.length >= 2 && 
-                          document.activeElement === searchRef.current;
-        
+        const shouldShow =
+            filteredSuggestions.length > 0 &&
+            debouncedLocalTerm.length >= 2 &&
+            document.activeElement === searchRef.current;
+
         setSuggestions(filteredSuggestions);
         setShowSuggestions(shouldShow);
-        
+
         if (!shouldShow) {
             setActiveSuggestion(-1);
         }
@@ -94,10 +94,34 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
         const target = e.target as HTMLInputElement;
         const value = target.value;
         setLocalSearchTerm(value);
-
         if (value === '') {
             onSearchChange('');
         }
+    }, [onSearchChange]);
+
+    const navigateToGame = useCallback((game: Game) => {
+        if (onSelectGame) {
+            onSelectGame(game);
+        } else {
+            route(`/game/${game.slug}`);
+        }
+    }, [onSelectGame]);
+
+    const selectSuggestion = useCallback((game: Game) => {
+        setLocalSearchTerm('');
+        onSearchChange('');
+        setShowSuggestions(false);
+        setActiveSuggestion(-1);
+        navigateToGame(game);
+    }, [navigateToGame, onSearchChange]);
+
+    const clearSearch = useCallback((e?: MouseEvent) => {
+        e?.preventDefault();
+        setLocalSearchTerm('');
+        onSearchChange('');
+        setShowSuggestions(false);
+        setActiveSuggestion(-1);
+        searchRef.current?.focus();
     }, [onSearchChange]);
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -106,13 +130,13 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
         switch (e.key) {
             case 'ArrowDown':
                 e.preventDefault();
-                setActiveSuggestion(prev => 
+                setActiveSuggestion(prev =>
                     prev < suggestions.length - 1 ? prev + 1 : 0
                 );
                 break;
             case 'ArrowUp':
                 e.preventDefault();
-                setActiveSuggestion(prev => 
+                setActiveSuggestion(prev =>
                     prev > 0 ? prev - 1 : suggestions.length - 1
                 );
                 break;
@@ -120,6 +144,8 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
                 e.preventDefault();
                 if (activeSuggestion >= 0 && suggestions[activeSuggestion]) {
                     selectSuggestion(suggestions[activeSuggestion]);
+                } else if (suggestions[0]) {
+                    selectSuggestion(suggestions[0]);
                 }
                 break;
             case 'Escape':
@@ -129,29 +155,13 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
                 searchRef.current?.blur();
                 break;
         }
-    }, [showSuggestions, suggestions, activeSuggestion]);
-
-    const selectSuggestion = useCallback((game: Game) => {
-        setLocalSearchTerm(game.title);
-        onSearchChange(game.title);
-        setShowSuggestions(false);
-        setActiveSuggestion(-1);
-        searchRef.current?.blur();
-    }, [onSearchChange]);
-
-    const clearSearch = useCallback(() => {
-        setLocalSearchTerm('');
-        onSearchChange('');
-        setShowSuggestions(false);
-        setActiveSuggestion(-1);
-        searchRef.current?.focus();
-    }, [onSearchChange]);
+    }, [showSuggestions, suggestions, activeSuggestion, selectSuggestion]);
 
     const handleFocus = useCallback(() => {
         if (localSearchTerm.length >= 2) {
-            setShowSuggestions(filteredSuggestions.length > 0);
+            setShowSuggestions(suggestions.length > 0);
         }
-    }, [localSearchTerm.length, filteredSuggestions.length]);
+    }, [localSearchTerm.length, suggestions.length]);
 
     const handleBlur = useCallback(() => {
         setTimeout(() => {
@@ -160,13 +170,12 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
         }, 150);
     }, []);
 
-    const highlightMatch = useCallback((text: string, searchTerm: string) => {
-        if (!searchTerm || searchTerm.length < 2) return text;
-        
-        const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const highlightMatch = useCallback((text: string, term: string) => {
+        if (!term || term.length < 2) return text;
+        const safe = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${safe})`, 'gi');
         const parts = text.split(regex);
-        
-        return parts.map((part, index) => 
+        return parts.map((part, index) =>
             regex.test(part) ? (
                 <mark key={index} className="bg-cyan-400 text-slate-900 px-1 rounded">
                     {part}
@@ -178,8 +187,8 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
     return (
         <div className="relative">
             <div className="relative">
-                <FontAwesomeIcon 
-                    icon={faSearch} 
+                <FontAwesomeIcon
+                    icon={faSearch}
                     className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm pointer-events-none"
                 />
                 <input
@@ -196,9 +205,10 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
                 />
                 {localSearchTerm && (
                     <button
-                        onClick={clearSearch}
+                        onClick={(e) => clearSearch(e as any)}
                         type="button"
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors z-10"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors z-20"
+                        aria-label="Limpiar búsqueda"
                     >
                         <FontAwesomeIcon icon={faTimes} className="text-sm" />
                     </button>
@@ -206,7 +216,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
             </div>
 
             {showSuggestions && suggestions.length > 0 && (
-                <div 
+                <div
                     ref={dropdownRef}
                     className="absolute top-full left-0 right-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto"
                 >
@@ -215,14 +225,14 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
                             key={`${game.id}-${index}`}
                             onClick={() => selectSuggestion(game)}
                             className={`px-4 py-3 cursor-pointer transition-colors border-b border-slate-700 last:border-b-0 ${
-                                index === activeSuggestion 
-                                    ? 'bg-cyan-500 bg-opacity-20 border-cyan-400' 
+                                index === activeSuggestion
+                                    ? 'bg-cyan-500 bg-opacity-20 border-cyan-400'
                                     : 'hover:bg-slate-700'
                             }`}
                         >
                             <div className="flex items-center gap-3">
-                                <img 
-                                    src={game.imageUrl} 
+                                <img
+                                    src={game.imageUrl}
                                     alt={game.title}
                                     className="w-12 h-12 object-cover rounded flex-shrink-0"
                                     loading="lazy"
@@ -237,7 +247,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
                                     {game.genre.length > 0 && (
                                         <div className="flex gap-1 mt-1">
                                             {game.genre.slice(0, 2).map(genre => (
-                                                <span 
+                                                <span
                                                     key={genre}
                                                     className="bg-slate-600 text-gray-300 text-xs px-1.5 py-0.5 rounded"
                                                 >
