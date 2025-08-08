@@ -3,7 +3,7 @@
 import Papa from 'papaparse';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Router, route } from 'preact-router';
-import { Game, CatalogPageProps } from "@/src/types";
+import { Game } from "@/src/types";
 import { useDebounce } from '@/src/hooks';
 import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug } from '@/src/utils';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';

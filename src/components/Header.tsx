@@ -89,7 +89,6 @@ const Header = ({ currentPath }: HeaderProps) => {
             },
         });
 
-        // Asegurar estado inicial visible y variable inicial
         setHeaderHeightVar();
         showHeader(true);
 
@@ -98,7 +97,7 @@ const Header = ({ currentPath }: HeaderProps) => {
             st.kill();
             gsap.killTweensOf(el);
             el.style.willChange = '';
-            // limpiar observadores
+
             try {
                 if (resizeObserver) resizeObserver.disconnect();
                 else window.removeEventListener('resize', setHeaderHeightVar);

@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'preact/hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { GameStatus } from "@/src/types";
 
 interface FilterPanelProps {
@@ -7,6 +9,8 @@ interface FilterPanelProps {
     activeFilters: Record<string, string[]>;
     onFilterChange: (category: string, value: string) => void;
     onClearCategory: (category: string) => void;
+    onClearAll?: () => void;
+    clearAllEnabled?: boolean;
 }
 
 interface FilterSectionProps {
@@ -114,7 +118,15 @@ const MultiSelectDropdown = ({ title, category, items, selectedItems, onToggleIt
     );
 };
 
-const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange, onClearCategory }: FilterPanelProps) => {
+const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange, onClearCategory, onClearAll, clearAllEnabled }: FilterPanelProps) => {
+    const hasActiveFilters = clearAllEnabled ?? Object.values(activeFilters || {}).some(arr => arr && arr.length > 0);
+
+    const handleClearAllClick = (e: MouseEvent) => {
+        e.preventDefault();
+        if (!hasActiveFilters) return;
+        onClearAll?.();
+    };
+
     return (
         <div className="space-y-6">
             <FilterButtons
@@ -140,6 +152,21 @@ const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange, onClear
                 onToggleItem={onFilterChange}
                 onClearCategory={onClearCategory}
             />
+
+            <div>
+                <button
+                    onClick={handleClearAllClick}
+                    disabled={!hasActiveFilters}
+                    aria-disabled={!hasActiveFilters}
+                    title="Limpiar todos los filtros"
+                    className={`w-full mt-2 py-2 px-4 rounded-lg font-bold text-white transition-colors duration-200 inline-flex items-center justify-center gap-2 ${
+                        hasActiveFilters ? 'bg-red-400 hover:bg-red-700 cursor-pointer' : 'bg-slate-700 opacity-60 cursor-not-allowed'
+                    }`}
+                >
+                    <span>Limpiar todos los filtros</span>
+                    <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
+                </button>
+            </div>
         </div>
     );
 };
