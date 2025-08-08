@@ -1,15 +1,10 @@
 import { useEffect, useRef } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { Game, GameStatus } from "@/src/types";
-import ArrowLeftIcon from '../components/icons/ArrowLeftIcon.tsx';
+import {BackButton} from "@/src/components";
+import { ChartsPageProps } from "@/src/types";
 
 declare var Chart: any;
-
-interface ChartsPageProps {
-    path?: string;
-    games: Game[];
-    onNavigateToCatalog: () => void;
-}
 
 const countItems = (data: Game[], key: 'platform' | 'genre') => {
     const counts = new Map<string, number>();
@@ -154,10 +149,7 @@ const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
 
     return (
         <main className="container mx-auto px-4 py-8 animate-fade-in">
-            <button onClick={onNavigateToCatalog} className="flex items-center gap-2 mb-8 bg-slate-800 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300">
-                <ArrowLeftIcon />
-                Volver al Catálogo
-            </button>
+            <BackButton onClick={onNavigateToCatalog} className="mb-8" />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="lg:col-span-2">
                     <ChartCard title="Juegos por Plataforma">

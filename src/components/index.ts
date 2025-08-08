@@ -12,3 +12,4 @@ export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as Modal } from './Modal';
 export { default as SearchBar } from './SearchBar';
 export { default as ScrollToTop } from './ScrollToTop';
+export { default as BackButton } from './BackButton';

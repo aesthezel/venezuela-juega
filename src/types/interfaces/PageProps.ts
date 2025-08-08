@@ -1,20 +1,10 @@
 import { Game } from './Game';
 
-/**
- * Props for the Catalog Page component.
- * 
- * This interface defines the properties that can be passed to the Catalog Page component.
- */
 export interface CatalogPageProps {
     /** The path for routing purposes */
     path?: string;
 }
 
-/**
- * Props for the Calendar Page component.
- * 
- * This interface defines the properties that can be passed to the Calendar Page component.
- */
 export interface CalendarPageProps {
     /** The path for routing purposes */
     path?: string;
@@ -26,11 +16,6 @@ export interface CalendarPageProps {
     onEventClick: (game: Game) => void;
 }
 
-/**
- * Props for the Charts Page component.
- * 
- * This interface defines the properties that can be passed to the Charts Page component.
- */
 export interface ChartsPageProps {
     /** The path for routing purposes */
     path?: string;
@@ -40,11 +25,6 @@ export interface ChartsPageProps {
     onNavigateToCatalog: () => void;
 }
 
-/**
- * Props for the About Page component.
- * 
- * This interface defines the properties that can be passed to the About Page component.
- */
 export interface AboutPageProps {
     /** The path for routing purposes */
     path?: string;
@@ -52,11 +32,6 @@ export interface AboutPageProps {
     onNavigateToCatalog: () => void;
 }
 
-/**
- * Props for the Game Detail Page component.
- * 
- * This interface defines the properties that can be passed to the Game Detail Page component.
- */
 export interface GameDetailPageProps {
     /** The path for routing purposes */
     path?: string;
@@ -66,11 +41,6 @@ export interface GameDetailPageProps {
     gameSlug?: string;
 }
 
-/**
- * Props for the Add Game Page component.
- * 
- * This interface defines the properties that can be passed to the Add Game Page component.
- */
 export interface AddGamePageProps {
     /** The path for routing purposes */
     path?: string;
@@ -78,4 +48,19 @@ export interface AddGamePageProps {
     onAddNewGame: (newGameData: Omit<Game, 'id' | 'slug'>) => void;
     /** Function to handle navigation back to the catalog */
     onNavigateToCatalog: () => void;
+}
+
+export interface CatalogPageProps {
+    path?: string;
+    games: Game[];
+    filteredGames: Game[];
+    allGenres: string[];
+    allPlatforms: string[];
+    searchTerm: string;
+    onSearchChange: (value: string) => void;
+    activeFilters: Record<string, string[]>;
+    onFilterChange: (category: string, value: string) => void;
+    onClearCategory: (category: string) => void;
+    onClearAllFilters: () => void;
+    onGameClick: (game: Game) => void;
 }

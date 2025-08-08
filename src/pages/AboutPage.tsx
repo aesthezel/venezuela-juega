@@ -1,12 +1,8 @@
 import ArrowLeftIcon from '../components/icons/ArrowLeftIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import preact from "@preact/preset-vite";
-
-interface AboutPageProps {
-    path?: string;
-    onNavigateToCatalog: () => void;
-}
+import { BackButton } from "@/src/components";
+import { AboutPageProps } from "@/src/types";
 
 const Card = ({ children }: { children: preact.ComponentChildren }) => (
     <div className="bg-slate-800 p-6 rounded-lg shadow-lg">{children}</div>
@@ -15,13 +11,7 @@ const Card = ({ children }: { children: preact.ComponentChildren }) => (
 const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
     return (
         <main className="container mx-auto px-4 py-8 animate-fade-in text-gray-300">
-            <button
-                onClick={onNavigateToCatalog}
-                className="flex items-center gap-2 mb-8 bg-slate-800 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300"
-            >
-                <ArrowLeftIcon />
-                Volver al catálogo
-            </button>
+            <BackButton onClick={onNavigateToCatalog} className="mb-8" />
 
             <div className="space-y-12">
                 <section>

@@ -1,5 +1,4 @@
 // noinspection JSNonASCIINames
-
 import Papa from 'papaparse';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Router, route } from 'preact-router';
@@ -22,7 +21,7 @@ const App = () => {
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState('/');
 
-    const debouncedSearchTerm = useDebounce(searchTerm, 300); // 300ms de retraso
+    const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
     useEffect(() => {
         const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1tVBCGdGaTSTTikMKWFVT4Lzmq71TRikWSzIjiIR15FA/pub?gid=0&single=true&output=csv';
@@ -133,6 +132,12 @@ const App = () => {
 
     const handleOpenModal = (game: Game) => setSelectedGame(game);
     const handleCloseModal = () => setSelectedGame(null);
+
+    const handleGameClick = (game: Game) => {
+        route(`/game/${encodeURIComponent(game.slug)}`);
+    };
+
+
     const clearFilters = () => setActiveFilters({ status: [], genre: [], platform: [] });
 
     const handleAddNewGame = (newGameData: Omit<Game, 'id' | 'slug'>) => {

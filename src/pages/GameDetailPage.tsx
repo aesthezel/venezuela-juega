@@ -4,13 +4,8 @@ import { route } from 'preact-router';
 import { Game } from "@/src/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faGamepad, faGlobe, faCog } from '@fortawesome/free-solid-svg-icons';
-import LinkIcon from '../components/icons/LinkIcon';
-
-interface GameDetailPageProps {
-    path?: string;
-    gameSlug?: string;
-    games: Game[];
-}
+import { BackButton } from "@/src/components";
+import { GameDetailPageProps } from "@/src/types";
 
 interface DetailSectionProps {
     title: string;
@@ -33,8 +28,11 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
 
     useEffect(() => {
         if (gameSlug) {
-            const foundGame = games.find(g => g.slug === gameSlug); // Buscar por slug en lugar de ID
+            const normalizedSlug = decodeURIComponent(gameSlug).trim().toLowerCase();
+            const foundGame = games.find(g => g.slug.toLowerCase() === normalizedSlug);
             setGame(foundGame || null);
+        } else {
+            setGame(null);
         }
     }, [gameSlug, games]);
 
@@ -80,15 +78,8 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
 
     return (
         <main className="container mx-auto px-4 py-8">
-            <button 
-                onClick={handleGoBack}
-                className="mb-6 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
-            >
-                <FontAwesomeIcon icon={faArrowLeft} />
-                Volver al catálogo
-            </button>
+            <BackButton onClick={handleGoBack} className="mb-8" />
 
-            {/* Hero section */}
             <div className="bg-slate-800 rounded-lg overflow-hidden shadow-2xl mb-8">
                 <div className="md:flex">
                     <div className="md:w-1/2">
@@ -123,7 +114,6 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                 </div>
             </div>
 
-            {/* Details grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <DetailSection title="Información General" icon={faGamepad}>
                     <div className="space-y-4">
@@ -193,11 +183,11 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     <DetailSection title="Disponible en Tiendas" icon={faGlobe}>
                         <div className="flex flex-wrap gap-3">
                             {game.stores.map(store => (
-                                <a 
-                                    key={store.name} 
-                                    href={store.url} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
+                                <a
+                                    key={store.name}
+                                    href={store.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors"
                                 >
                                     {store.name}
@@ -212,11 +202,11 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     <DetailSection title="Enlaces y Redes Sociales" icon={faGlobe}>
                         <div className="flex flex-wrap gap-3">
                             {game.links.map(link => (
-                                <a 
-                                    key={link.name} 
-                                    href={link.url} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
+                                <a
+                                    key={link.name}
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors"
                                 >
                                     {link.name}

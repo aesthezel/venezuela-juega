@@ -1,5 +1,4 @@
 import { h } from 'preact';
-import { Game } from '@/src/types';
 import {
   Highlights,
   GameCounter,
@@ -7,21 +6,7 @@ import {
   FilterPanel,
   GameGrid
 } from '@/src/components';
-
-export interface CatalogPageProps {
-  path?: string;
-  games: Game[];
-  filteredGames: Game[];
-  allGenres: string[];
-  allPlatforms: string[];
-  searchTerm: string;
-  onSearchChange: (value: string) => void;
-  activeFilters: Record<string, string[]>;
-  onFilterChange: (category: string, value: string) => void;
-  onClearCategory: (category: string) => void;
-  onClearAllFilters: () => void;
-  onGameClick: (game: Game) => void;
-}
+import { CatalogPageProps } from "@/src/types";
 
 const CatalogPage = ({
   games,

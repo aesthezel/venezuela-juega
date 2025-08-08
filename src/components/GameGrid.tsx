@@ -18,7 +18,7 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
     const prevCountRef = useRef(0);
     const prevGamesSignatureRef = useRef<string>('');
     const observer = useRef<IntersectionObserver | null>(null);
-    const loadingMoreRef = useRef(false);
+    const loadingMoreRef = useRef<Boolean>(false);
 
     useEffect(() => {
         const signature = games.map(g => g.id).join('|');

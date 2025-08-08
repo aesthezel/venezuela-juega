@@ -3,12 +3,7 @@ import { ComponentChildren, ComponentProps } from 'preact';
 import { JSX } from 'preact/jsx-runtime';
 import { Game, GameStatus } from "@/src/types";
 import CloseIcon from '../components/icons/CloseIcon.tsx';
-
-interface AddGamePageProps {
-    path?: string;
-    onAddNewGame: (game: Omit<Game, 'id'>) => void;
-    onNavigateToCatalog: () => void;
-}
+import { AddGamePageProps } from "@/src/types";
 
 const initialGameState: Omit<Game, 'id'> = {
     title: '',

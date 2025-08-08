@@ -1,15 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Game } from "@/src/types";
-import { ArrowLeftIcon } from '@/src/components/icons';
+import {BackButton} from "@/src/components";
+import { CalendarPageProps } from "@/src/types";
 
 declare var FullCalendar: any;
-
-interface CalendarPageProps {
-    path?: string;
-    games: Game[];
-    onNavigateToCatalog: () => void;
-    onEventClick: (game: Game) => void;
-}
 
 const parseDate = (dateString: string): string | null => {
     const dateRegex = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
@@ -132,13 +126,8 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
         <main className="container mx-auto px-4 py-8 animate-fade-in">
             {previewGame && <CalendarTooltip game={previewGame} position={previewPosition} />}
 
-            <button
-                onClick={onNavigateToCatalog}
-                className="flex items-center gap-2 mb-8 bg-slate-800 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300"
-            >
-                <ArrowLeftIcon />
-                Volver al Catálogo
-            </button>
+            <BackButton onClick={onNavigateToCatalog} className="mb-8" />
+
             <div className="bg-slate-800 p-4 sm:p-6 rounded-lg shadow-lg">
                 <div ref={calendarRef} id="calendar"></div>
             </div>

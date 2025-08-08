@@ -1,5 +1,4 @@
 // noinspection JSNonASCIINames
-
 import { useState, useRef, useEffect } from 'preact/hooks';
 import { Game, GameStatus } from '@/src/types';
 import { JSX } from 'preact/jsx-runtime';
