@@ -4,17 +4,17 @@ import { useState, useRef, useEffect } from 'preact/hooks';
 import { Game, GameStatus } from '@/src/types';
 import { JSX } from 'preact/jsx-runtime';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-    faWindows, 
-    faLinux, 
-    faAndroid, 
-    faApple, 
-    faPlaystation, 
-    faXbox 
+import {
+    faWindows,
+    faLinux,
+    faAndroid,
+    faApple,
+    faPlaystation,
+    faXbox
 } from '@fortawesome/free-brands-svg-icons';
-import { 
-    faDesktop, 
-    faGamepad, 
+import {
+    faDesktop,
+    faGamepad,
     faMobile,
     faGlobe
 } from '@fortawesome/free-solid-svg-icons';
@@ -77,14 +77,12 @@ const getPlatformIcon = (platform: string) => {
     if (platformIconMap[platform]) {
         return platformIconMap[platform];
     }
-
     const platformLower = platform.toLowerCase();
     for (const [key, icon] of Object.entries(platformIconMap)) {
         if (key.toLowerCase().includes(platformLower) || platformLower.includes(key.toLowerCase())) {
             return icon;
         }
     }
-
     return faDesktop;
 };
 
@@ -95,25 +93,40 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
 
     useEffect(() => {
         const element = descriptionRef.current;
-        setTimeout(() => {
+        // Medición tras layout estable
+        const id = requestAnimationFrame(() => {
             if (element && element.scrollHeight > element.clientHeight) {
                 setNeedsExpansion(true);
+            } else {
+                setNeedsExpansion(false);
             }
-        }, 100);
+        });
+        return () => cancelAnimationFrame(id);
     }, [game.description]);
 
     const handleReadMoreClick = (e: JSX.TargetedEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        setIsExpanded(!isExpanded);
+        setIsExpanded(prev => !prev);
     };
 
     return (
         <div
             onClick={onClick}
             className="bg-slate-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col"
+            style={{
+                contain: 'layout paint',
+                contentVisibility: 'auto',
+                containIntrinsicSize: '600px'
+            }}
         >
-            <div className="relative">
-                <img src={game.imageUrl} alt={game.title} className="w-full h-full object-cover" />
+            <div className="relative aspect-[16/9]">
+                <img
+                    src={game.imageUrl}
+                    alt={game.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                />
 
                 <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
                     {game.status}
@@ -126,14 +139,14 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
                             className="w-6 h-6 bg-black bg-opacity-70 rounded-full backdrop-blur-sm flex items-center justify-center"
                             title={platform}
                         >
-                            <FontAwesomeIcon 
-                                icon={getPlatformIcon(platform)} 
+                            <FontAwesomeIcon
+                                icon={getPlatformIcon(platform)}
                                 className="text-white text-xs"
                             />
                         </div>
                     ))}
                     {game.platform.length > 4 && (
-                        <div 
+                        <div
                             className="w-6 h-6 bg-black bg-opacity-70 rounded-full backdrop-blur-sm flex items-center justify-center"
                             title={`+${game.platform.length - 4} más`}
                         >
@@ -141,9 +154,10 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
                         </div>
                     )}
                 </div>
-                
+
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300"></div>
             </div>
+
             <div className="p-5 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold text-white truncate">{game.title}</h3>
                 <p
@@ -153,14 +167,17 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
                     {game.description}
                 </p>
 
-                {needsExpansion && (
-                    <button
-                        onClick={handleReadMoreClick}
-                        className="text-cyan-400 hover:underline text-sm mt-2 self-start focus:outline-none"
-                    >
-                        {isExpanded ? 'Leer menos' : 'Leer más'}
-                    </button>
-                )}
+                {/* Reservar altura para evitar saltos del layout cuando aparece el botón */}
+                <div className="mt-2 min-h-6">
+                    {needsExpansion && (
+                        <button
+                            onClick={handleReadMoreClick}
+                            className="text-cyan-400 hover:underline text-sm self-start focus:outline-none"
+                        >
+                            {isExpanded ? 'Leer menos' : 'Leer más'}
+                        </button>
+                    )}
+                </div>
 
                 <div className="mt-auto pt-4 flex flex-wrap gap-2">
                     {game.genre.slice(0, 2).map(g => (

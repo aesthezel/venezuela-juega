@@ -63,7 +63,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [ ] Añadir un preview animado de los screenshots cuando haces clic en una GameCard
 - [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
 - [ ] Mejorar el responsive del calendario en mobile
-- [ ] Burger menu en versión mobile
+- [ ] Burger menu en versión móvil
+- [ ] Mansory grid view (Intentar nuevamente a ver si se logra)
 
 ## 🤝 Colaboración
 Proyecto libre para colaboraciones, puedes hacer un fork y posteriormente solicitar Pull Request con los cambios, se tomará una revisión de dichos cambios y un chequeo respectivo antes de ser aceptados y mezclados.

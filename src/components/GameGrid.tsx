@@ -13,74 +13,92 @@ const GAMES_TO_LOAD_ON_SCROLL = 8;
 
 const GameGrid = ({ games, onGameClick }: GameGridProps) => {
     const [displayedCount, setDisplayedCount] = useState(INITIAL_GAMES_TO_SHOW);
-    const observer = useRef<IntersectionObserver | null>(null);
+
     const gridRef = useRef<HTMLDivElement | null>(null);
-    const prevGamesRef = useRef<Game[]>([]);
+    const prevCountRef = useRef(0);
+    const prevGamesSignatureRef = useRef<string>('');
+    const observer = useRef<IntersectionObserver | null>(null);
+    const loadingMoreRef = useRef(false);
 
     useEffect(() => {
-        setDisplayedCount(INITIAL_GAMES_TO_SHOW);
+        const signature = games.map(g => g.id).join('|');
+        if (signature !== prevGamesSignatureRef.current) {
+            prevGamesSignatureRef.current = signature;
+            prevCountRef.current = 0;
+            setDisplayedCount(INITIAL_GAMES_TO_SHOW);
+        }
     }, [games]);
 
     const gamesToShow = games.slice(0, displayedCount);
 
+    // Animate only the new cards when they are displayed
     useEffect(() => {
-        if (!gridRef.current) return;
+        const container = gridRef.current;
+        if (!container) return;
 
-        let ctx: any = null;
-        let cancelled = false;
+        const cards = Array.from(container.querySelectorAll('.game-card-wrapper')) as HTMLElement[];
+        const prev = prevCountRef.current;
+        const curr = displayedCount;
 
-        (async () => {
-            try {
-                if (cancelled || !gridRef.current) return;
+        // If no new cards, do nothing
+        if (curr <= prev) {
+            prevCountRef.current = curr;
+            return;
+        }
 
-                ctx = gsap.context(() => {
-                    const cards = Array.from(gridRef.current!.querySelectorAll('.game-card-wrapper'));
+        const newCards = cards.slice(prev, curr);
+        if (newCards.length === 0) {
+            prevCountRef.current = curr;
+            return;
+        }
 
-                    if (prevGamesRef.current !== games) {
-                        gsap.fromTo(
-                            cards,
-                            { opacity: 0, y: 20 },
-                            { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out' }
-                        );
-                    } else if (cards.length > prevGamesRef.current.length) {
+        let ctx: gsap.Context | null = null;
+        ctx = gsap.context(() => {
+            gsap.fromTo(
+                newCards,
+                { opacity: 0, y: 16, willChange: 'transform, opacity' },
+                { opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: 'power3.out', clearProps: 'will-change' }
+            );
+        }, container);
 
-                        const newCards = cards.slice(prevGamesRef.current.length);
-                        gsap.fromTo(
-                            newCards,
-                            { opacity: 0, y: 20 },
-                            { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out' }
-                        );
-                    }
-                }, gridRef);
-            } catch (err) {
-                console.warn('GSAP no disponible:', err);
-            }
-        })();
-
-        prevGamesRef.current = gamesToShow;
+        prevCountRef.current = curr;
 
         return () => {
-            cancelled = true;
-            try {
-                if (ctx) ctx.revert();
-                if (gsap && gridRef.current) {
-                    gsap.killTweensOf(gridRef.current);
-                }
-            } catch (e) {
-                /* noop */
-            }
+            if (ctx) ctx.revert();
+            gsap.killTweensOf(newCards);
         };
-    }, [gamesToShow, games]);
+    }, [displayedCount]);
 
+    // IntersectionObserver with lock and rootMargin for avoided double-loading
     const loadMoreRef = useCallback((node: HTMLDivElement | null) => {
-        if (observer.current) observer.current.disconnect();
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && displayedCount < games.length) {
-                setDisplayedCount(prevCount => prevCount + GAMES_TO_LOAD_ON_SCROLL);
+        if (observer.current) {
+            observer.current.disconnect();
+            observer.current = null;
+        }
+        if (!node) return;
+
+        observer.current = new IntersectionObserver(
+            entries => {
+                const visible = entries.some(e => e.isIntersecting);
+                if (!visible) return;
+
+                if (!loadingMoreRef.current && displayedCount < games.length) {
+                    loadingMoreRef.current = true;
+                    setDisplayedCount(prev => Math.min(prev + GAMES_TO_LOAD_ON_SCROLL, games.length));
+                }
+            },
+            {
+                root: null,
+                rootMargin: '0px 0px 400px 0px', // pre-load before the end of the viewport
+                threshold: 0.01
             }
-        });
-        if (node) observer.current.observe(node);
+        );
+        observer.current.observe(node);
     }, [displayedCount, games.length]);
+
+    useEffect(() => {
+        loadingMoreRef.current = false;
+    }, [displayedCount]);
 
     if (games.length === 0) {
         return (
