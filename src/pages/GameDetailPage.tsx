@@ -4,7 +4,7 @@ import { route } from 'preact-router';
 import { Game } from "@/src/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faGamepad, faGlobe, faCog } from '@fortawesome/free-solid-svg-icons';
-import { BackButton } from "@/src/components";
+import {BackButton, LinkIcon} from "@/src/components";
 import { GameDetailPageProps } from "@/src/types";
 
 interface DetailSectionProps {

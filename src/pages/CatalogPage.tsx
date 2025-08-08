@@ -43,7 +43,6 @@ const CatalogPage = ({
                 onClearAll={onClearAllFilters}
                 clearAllEnabled={hasActiveFilters}
               />
-              <hr className="border-t border-slate-700" />
             </div>
           </div>
         </aside>

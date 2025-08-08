@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { GameStatus } from "@/src/types";
+import {h} from "preact";
 
 interface FilterPanelProps {
     genres: string[];
@@ -152,6 +153,8 @@ const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange, onClear
                 onToggleItem={onFilterChange}
                 onClearCategory={onClearCategory}
             />
+
+            <hr className="border-t border-slate-700" />
 
             <div>
                 <button
