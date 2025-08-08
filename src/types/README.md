@@ -7,8 +7,6 @@ Este directorio contiene todas las definiciones de tipos, interfaces y enumeraci
 - `interfaces/` - Directorio que contiene las definiciones de interfaces
     - `Game.ts` - Interfaz para los objetos de juego
     - `PageProps.ts` - Interfaces para las props de los componentes de página
-    - `index.ts` - Reexporta todas las interfaces
-- `index.ts` - Reexporta todos los tipos, interfaces y enumeraciones
 
 ## Uso
 Importa los tipos, interfaces y enumeraciones desde el punto de exportación central:

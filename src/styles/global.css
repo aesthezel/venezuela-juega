@@ -1,0 +1,15 @@
+:root {
+  --header-height: 0px;
+}
+
+.sticky-panel {
+  position: sticky;
+  top: calc(var(--header-height, 0px) + 2rem);
+  z-index: 30;
+}
+
+@media (max-width: 768px) {
+  .sticky-panel {
+    top: calc(var(--header-height, 0px) + 1rem);
+  }
+}

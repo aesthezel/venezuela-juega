@@ -23,8 +23,27 @@ const Header = ({ currentPath }: HeaderProps) => {
         const el = headerRef.current;
         if (!el) return;
 
-        const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const setHeaderHeightVar = () => {
+            try {
+                const rect = el.getBoundingClientRect();
+                const height = Math.ceil(rect.height);
+                document.documentElement.style.setProperty('--header-height', `${height}px`);
+            } catch (e) {
+                console.error('Error al establecer la altura del header:', e);
+            }
+        };
 
+        setHeaderHeightVar();
+
+        let resizeObserver: ResizeObserver | null = null;
+        try {
+            resizeObserver = new ResizeObserver(setHeaderHeightVar);
+            resizeObserver.observe(el);
+        } catch (e) {
+            window.addEventListener('resize', setHeaderHeightVar);
+        }
+
+        const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         el.style.willChange = 'transform, opacity';
 
         const clearHideTimeout = () => {
@@ -70,7 +89,8 @@ const Header = ({ currentPath }: HeaderProps) => {
             },
         });
 
-        // Asegurar estado inicial visible
+        // Asegurar estado inicial visible y variable inicial
+        setHeaderHeightVar();
         showHeader(true);
 
         return () => {
@@ -78,6 +98,11 @@ const Header = ({ currentPath }: HeaderProps) => {
             st.kill();
             gsap.killTweensOf(el);
             el.style.willChange = '';
+            // limpiar observadores
+            try {
+                if (resizeObserver) resizeObserver.disconnect();
+                else window.removeEventListener('resize', setHeaderHeightVar);
+            } catch {}
         };
     }, []);
 

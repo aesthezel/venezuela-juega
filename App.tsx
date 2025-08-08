@@ -6,27 +6,8 @@ import { Router, route } from 'preact-router';
 import { Game, CatalogPageProps } from "@/src/types";
 import { useDebounce } from '@/src/hooks';
 import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug } from '@/src/utils';
-import { 
-    Header,
-    SearchBar,
-    FilterPanel,
-    GameGrid,
-    Modal,
-    Highlights,
-    GameCounter,
-    LoadingSpinner,
-    Footer,
-    ScrollToTop
-} from '@/src/components';
-import { 
-    ChartsPage,
-    AddGamePage,
-    AboutPage,
-    CalendarPage,
-    GameDetailPage
-} from '@/src/pages';
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
+import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage } from '@/src/pages';
 
 const App = () => {
     const [games, setGames] = useState<Game[]>([]);
@@ -183,72 +164,37 @@ const App = () => {
         return <div className="text-center text-red-500 text-2xl p-10">{error}</div>;
     }
 
-    const CatalogPage = ({}: CatalogPageProps) => (
-        <main className="container mx-auto px-4 py-8">
-            <Highlights games={games} onGameClick={handleOpenModal} />
-            <GameCounter filteredCount={filteredGames.length} totalCount={games.length} />
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <aside className="md:col-span-1">
-                    <div className="sticky top-8">
-                        <div className="space-y-6 bg-slate-800 p-6 rounded-lg shadow-lg">
-                            <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} games={games} />
-                            <hr className="border-t border-slate-700" />
-                            <FilterPanel
-                                genres={allGenres}
-                                platforms={allPlatforms}
-                                activeFilters={activeFilters}
-                                onFilterChange={handleFilterChange}
-                                onClearCategory={clearFilterCategory}
-                            />
-                            <hr className="border-t border-slate-700" />
-                            <button
-                                onClick={clearFilters}
-                                className="w-full mt-4 bg-red-400 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2"
-                            >
-                                <span>Limpiar todos los filtros</span>
-                                <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
-                            </button>
-                        </div>
-                    </div>
-                </aside>
-                <section className="md:col-span-3">
-                    <GameGrid games={filteredGames} onGameClick={handleOpenModal} />
-                </section>
-            </div>
-        </main>
-    );
-
     return (
         <div className="min-h-screen bg-slate-900 text-gray-200 font-sans flex flex-col">
             <Header currentPath={currentPath} />
 
             <div className="flex-grow">
                 <Router onChange={handleRouteChange}>
-                    <CatalogPage path="/" />
+                    <CatalogPage
+                        path="/"
+                        games={games}
+                        filteredGames={filteredGames}
+                        allGenres={allGenres}
+                        allPlatforms={allPlatforms}
+                        searchTerm={searchTerm}
+                        onSearchChange={setSearchTerm}
+                        activeFilters={activeFilters}
+                        onFilterChange={handleFilterChange}
+                        onClearCategory={clearFilterCategory}
+                        onClearAllFilters={clearFilters}
+                        onGameClick={handleOpenModal}
+                    />
+
                     <CalendarPage
                         path="/calendar"
                         games={games}
                         onNavigateToCatalog={navigateToCatalog}
                         onEventClick={handleOpenModal}
                     />
-                    <ChartsPage
-                        path="/charts"
-                        games={games}
-                        onNavigateToCatalog={navigateToCatalog}
-                    />
-                    <AboutPage
-                        path="/about"
-                        onNavigateToCatalog={navigateToCatalog}
-                    />
-                    <GameDetailPage
-                        path="/game/:gameSlug"
-                        games={games}
-                    />
-                    <AddGamePage
-                        path="/add-game"
-                        onAddNewGame={handleAddNewGame}
-                        onNavigateToCatalog={navigateToCatalog}
-                    />
+                    <ChartsPage path="/charts" games={games} onNavigateToCatalog={navigateToCatalog} />
+                    <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
+                    <GameDetailPage path="/game/:gameSlug" games={games} />
+                    <AddGamePage path="/add-game" onAddNewGame={handleAddNewGame} onNavigateToCatalog={navigateToCatalog} />
                 </Router>
             </div>
 

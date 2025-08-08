@@ -4,12 +4,12 @@ Este directorio contiene todos los componentes de página utilizados en la aplic
 
 ## Estructura
 
--   `AboutPage.tsx` - Componente de la página "Acerca de"
--   `AddGamePage.tsx` - Componente de la página para agregar juegos
--   `CalendarPage.tsx` - Componente de la página del calendario
--   `ChartsPage.tsx` - Componente de la página de gráficos
--   `GameDetailPage.tsx` - Componente de la página de detalles del juego
--   `index.ts` - Reexporta todos los componentes de página
+-   `CatalogPage.tsx` - Carga todas tarjetas de juego desde la API
+-   `AboutPage.tsx` - La página "Acerca de"
+-   `AddGamePage.tsx` - La página tipo formulario para agregar juegos
+-   `CalendarPage.tsx` - La página del calendario que usa FullCalendar
+-   `ChartsPage.tsx` - Página de gráficos y datos relacionados con la lista de juegos
+-   `GameDetailPage.tsx` - Página de detalles del juego
 
 ## Uso
 Importa los componentes de página desde el punto de exportación central:

@@ -13,7 +13,6 @@ Este directorio contiene todos los componentes de interfaz de usuario reutilizab
     - `InfoIcon.tsx` - Ícono de información
     - `LinkIcon.tsx` - Ícono de enlace
     - `PlusIcon.tsx` - Ícono de más
-    - `index.ts` - Reexporta todos los íconos
 - `FilterPanel.tsx` - Componente para filtrar juegos
 - `Footer.tsx` - Componente de pie de página
 - `GameCard.tsx` - Componente de tarjeta para mostrar un juego
@@ -25,7 +24,7 @@ Este directorio contiene todos los componentes de interfaz de usuario reutilizab
 - `LoadingSpinner.tsx` - Componente de indicador de carga
 - `Modal.tsx` - Componente modal
 - `SearchBar.tsx` - Componente de barra de búsqueda
-- `index.ts` - Reexporta todos los componentes
+- `ScrollToTop.tsx` - Componente para subir hacia el tope de la página
 
 ## Uso
 
