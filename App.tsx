@@ -1,7 +1,9 @@
+// noinspection JSNonASCIINames
+
 import Papa from 'papaparse';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Router, route } from 'preact-router';
-import { GameStatus, Game, CatalogPageProps } from "@/src/types";
+import { Game, CatalogPageProps } from "@/src/types";
 import { useDebounce } from '@/src/hooks';
 import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug } from '@/src/utils';
 import { 

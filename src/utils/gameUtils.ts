@@ -1,4 +1,4 @@
-import { GameStatus } from '../types/enums';
+import { GameStatus } from '@/src/types';
 
 /**
  * Maps a string status to the corresponding GameStatus enum value.

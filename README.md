@@ -2,13 +2,13 @@
 Este repositorio sirve como una aplicación web que se despliega en [venezuelajuega.com](https://venezuelajuega.com) que organiza y presenta videojuegos desarrollados en Venezuela. La plataforma permite explorar, filtrar y descubrir juegos venezolanos de la manera más intuitiva, buscando ofrecer información detallada sobre cada título.
 
 ## 🎯 Características Principales
-- **Catálogo de Juegos**: Visualización completa de videojuegos venezolanos
-- **Filtros Avanzados**: Búsqueda por género, plataforma y estado de desarrollo
-- **Juegos Destacados**: Sección especial para títulos destacados
-- **Vista de Calendario**: Visualización de lanzamientos por fechas
+- **Catálogo de juegos**: Visualización completa de videojuegos venezolanos
+- **Filtros avanzados**: Búsqueda por género, plataforma y estado de desarrollo
+- **Juegos destacados**: Sección especial para títulos destacados
+- **Vista de calendario**: Visualización de lanzamientos por fechas
 - **Estadísticas**: Gráficos y análisis del ecosistema de videojuegos
-- **Detalles del Juego**: Páginas individuales con información completa
-- **Modo Responsivo**: Optimizado para dispositivos móviles y escritorio
+- **Detalles del juego**: Páginas individuales con información completa
+- **Modo responsivo**: Optimizado para dispositivos móviles y escritorio
 
 ## 🛠️ Tecnologías utilizadas
 ### Librerias principales
@@ -20,7 +20,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 
 ### Librerias extras
 - **Papa Parse** 5.5.3
-- **FontAwesome**
+- **FontAwesome** 7.0.0
 - **Vitest** 3.2.4
 - **Happy DOM** 18.0.1
 
@@ -53,7 +53,11 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [ ] Terminar formulario para agregar nuevos juegos
 - [ ] Agregar capturas de pantalla a los juegos
 - [ ] Agregar trailers a los juegos
-- [ ] Añadir un preview animado de los screenshots cuando haces click en una GameCard
+- [ ] Añadir un preview animado de los screenshots cuando haces clic en una GameCard
+- [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
+- [ ] Mejorar el responsive del calendario en mobile
+- [ ] Ajustar la sección del header y footer para cuando se hace scroll se retraigan
+- [ ] Burger menu en versión mobile
 
 ## 🤝 Colaboración
 Proyecto libre para colaboraciones, puedes hacer un fork y posteriormente solicitar Pull Request con los cambios, se tomará una revisión de dichos cambios y un chequeo respectivo antes de ser aceptados y mezclados.
