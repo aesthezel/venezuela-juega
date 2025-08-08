@@ -15,7 +15,8 @@ import {
     Highlights,
     GameCounter,
     LoadingSpinner,
-    Footer
+    Footer,
+    ScrollToTop
 } from '@/src/components';
 import { 
     ChartsPage,
@@ -104,6 +105,7 @@ const App = () => {
                 }).filter((game): game is Game => game !== null);
 
                 setGames(parsedGames);
+
                 setLoading(false);
             },
             error: (err) => {
@@ -251,6 +253,7 @@ const App = () => {
             </div>
 
             <Footer />
+            <ScrollToTop />
             {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
         </div>
     );

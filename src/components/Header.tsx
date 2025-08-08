@@ -1,18 +1,88 @@
+import { useRef, useEffect } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faInfoCircle, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { route } from 'preact-router';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface HeaderProps {
     currentPath: string;
 }
 
 const Header = ({ currentPath }: HeaderProps) => {
+    const headerRef = useRef<HTMLElement | null>(null);
+    const hideTimeout = useRef<number | null>(null);
+
     const navigateTo = (path: string) => {
         route(path);
     };
 
+    useEffect(() => {
+        const el = headerRef.current;
+        if (!el) return;
+
+        const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        el.style.willChange = 'transform, opacity';
+
+        const clearHideTimeout = () => {
+            if (hideTimeout.current != null) {
+                window.clearTimeout(hideTimeout.current);
+                hideTimeout.current = null;
+            }
+        };
+
+        const showHeader = (immediate = false) => {
+            clearHideTimeout();
+            if (prefersReducedMotion) {
+                el.style.transform = 'translateY(0)';
+                el.style.opacity = '1';
+                return;
+            }
+            gsap.to(el, { y: 0, opacity: 1, duration: immediate ? 0 : 0.35, ease: 'power2.out' });
+        };
+
+        const hideHeader = (immediate = false) => {
+            clearHideTimeout();
+            if (prefersReducedMotion) {
+                el.style.transform = 'translateY(-80px)';
+                el.style.opacity = '0';
+                return;
+            }
+            gsap.to(el, { y: -80, opacity: 0, duration: immediate ? 0 : 0.35, ease: 'power2.out' });
+        };
+
+        const st = ScrollTrigger.create({
+            start: 'top top',
+            onUpdate: (self) => {
+                if (self.direction === 1) {
+                    hideHeader();
+                } else if (self.direction === -1) {
+                    showHeader();
+                }
+
+                clearHideTimeout();
+                hideTimeout.current = window.setTimeout(() => {
+                    showHeader();
+                }, 600);
+            },
+        });
+
+        // Asegurar estado inicial visible
+        showHeader(true);
+
+        return () => {
+            clearHideTimeout();
+            st.kill();
+            gsap.killTweensOf(el);
+            el.style.willChange = '';
+        };
+    }, []);
+
     return (
-        <header className="bg-slate-800 shadow-lg sticky top-0 z-40">
+        <header ref={headerRef} className="bg-slate-800 shadow-lg sticky top-0 z-40">
             <div className="container mx-auto px-4 py-5 flex justify-between items-center">
                 <div className="flex items-center space-x-4">
                     <button 

@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
 import { Game } from '@/src/types';
 import GameCard from './GameCard';
-
-declare var gsap: any;
+import { gsap } from 'gsap';
 
 interface GameGridProps {
     games: Game[];
@@ -27,25 +26,55 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
     useEffect(() => {
         if (!gridRef.current) return;
 
-        const cards = Array.from(gridRef.current.querySelectorAll('.game-card-wrapper'));
+        // Cargamos GSAP de forma dinámica solo cuando lo necesitmos
+        let ctx: any = null;
+        let cancelled = false;
 
-        if (prevGamesRef.current !== games) {
-            gsap.fromTo(cards,
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out' }
-            );
-        }
-        // Lazyload
-        else if (cards.length > prevGamesRef.current.length) {
-            const newCards = cards.slice(prevGamesRef.current.length);
-            gsap.fromTo(newCards,
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out' }
-            );
-        }
+        (async () => {
+            try {
+                if (cancelled || !gridRef.current) return;
+
+                ctx = gsap.context(() => {
+                    const cards = Array.from(gridRef.current!.querySelectorAll('.game-card-wrapper'));
+
+                    // Si cambió el arreglo de juegos por completo
+                    if (prevGamesRef.current !== games) {
+                        gsap.fromTo(
+                            cards,
+                            { opacity: 0, y: 20 },
+                            { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out' }
+                        );
+                    } else if (cards.length > prevGamesRef.current.length) {
+                        // Solo animamos las nuevas cartas añadidas
+                        const newCards = cards.slice(prevGamesRef.current.length);
+                        gsap.fromTo(
+                            newCards,
+                            { opacity: 0, y: 20 },
+                            { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out' }
+                        );
+                    }
+                }, gridRef);
+            } catch (err) {
+                // Si falla la importación, no rompemos la app
+                // console.warn('GSAP no disponible:', err);
+            }
+        })();
 
         prevGamesRef.current = gamesToShow;
 
+        return () => {
+            cancelled = true;
+            try {
+                // revert() limpia animaciones en el contexto
+                if (ctx) ctx.revert();
+                // Como backup, podemos matar tweens del contenedor
+                if (gsap && gridRef.current) {
+                    gsap.killTweensOf(gridRef.current);
+                }
+            } catch (e) {
+                /* noop */
+            }
+        };
     }, [gamesToShow, games]);
 
     const loadMoreRef = useCallback((node: HTMLDivElement | null) => {

@@ -1,9 +1,42 @@
+import { useRef, useEffect } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faTwitter, faYoutube, faInstagram, faTiktok } from '@fortawesome/free-brands-svg-icons';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Footer = () => {
+    const footerRef = useRef<HTMLElement | null>(null);
+
+    useEffect(() => {
+        const el = footerRef.current;
+        if (!el) return;
+
+        el.style.willChange = 'transform, opacity';
+
+        const st = ScrollTrigger.create({
+            start: 'top top',
+            onUpdate: (self) => {
+                // Cuando el usuario hace scroll hacia abajo, ocultamos el footer (se asume contenido largo)
+                if (self.direction === 1) {
+                    gsap.to(el, { y: 80, opacity: 0, duration: 0.35, ease: 'power2.out' });
+                } else if (self.direction === -1) {
+                    // Al hacer scroll hacia arriba, lo mostramos
+                    gsap.to(el, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' });
+                }
+            },
+        });
+
+        return () => {
+            st.kill();
+            gsap.killTweensOf(el);
+            el.style.willChange = '';
+        };
+    }, []);
+
     return (
-        <footer className="bg-slate-800 text-gray-400 py-6 shadow-inner sticky bottom-0 z-50">
+        <footer ref={footerRef} className="bg-slate-800 text-gray-400 py-6 shadow-inner sticky bottom-0 z-50">
             <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
                 <div className="flex space-x-6 mb-4 sm:mb-0">
                     <a href="https://github.com/aesthezel/venezuela-juega" target="_blank" rel="noopener noreferrer" aria-label="Repositorio en GitHub">

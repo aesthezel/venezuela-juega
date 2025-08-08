@@ -11,20 +11,20 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - **Modo responsivo**: Optimizado para dispositivos móviles y escritorio
 
 ## 🛠️ Tecnologías utilizadas
-### Librerias principales
+### Librerías principales
 - **Preact** 10.22.1
 - **TypeScript** 5.8.2
 - **Preact Router** 4.1.2
 - **Vite** 6.2.0
-- **Tailwind CSS**
-
-### Librerias anexadas estáticas
-- **Chart.js**
 - **GSAP** 3.13.0
+
+### Librerías anexadas estáticas
+- **Tailwind CSS**
+- **Chart.js**
 - **Bootstrap Icons** 1.11.3
 - **FullCalendar** 6.1.18
 
-### Librerias extras
+### Librerías extras
 - **Papa Parse** 5.5.3
 - **FontAwesome** 7.0.0
 - **Vitest** 3.2.4
@@ -54,6 +54,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Página de contacto
 - [x] Calendario de lanzamientos
 - [x] Página con slug de los juegos por separado
+- [x] Ajustar la sección del header y footer para cuando se hace scroll se retraigan
 - [ ] Conexión a API de tiendas para obtener precios de los juegos
 - [ ] Conexión a API de IGDB o similar
 - [ ] Terminar formulario para agregar nuevos juegos
@@ -62,7 +63,6 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [ ] Añadir un preview animado de los screenshots cuando haces clic en una GameCard
 - [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
 - [ ] Mejorar el responsive del calendario en mobile
-- [ ] Ajustar la sección del header y footer para cuando se hace scroll se retraigan
 - [ ] Burger menu en versión mobile
 
 ## 🤝 Colaboración
