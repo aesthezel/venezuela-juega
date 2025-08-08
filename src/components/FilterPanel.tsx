@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'preact/hooks';
-import { GameStatus } from '../types';
+import { GameStatus } from "@/src/types";
 
 interface FilterPanelProps {
     genres: string[];

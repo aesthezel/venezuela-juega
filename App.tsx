@@ -1,97 +1,29 @@
 import Papa from 'papaparse';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Router, route } from 'preact-router';
-import { Game } from './interfaces/Game.ts';
-import { GameStatus } from './types';
-import Header from './components/Header';
-import SearchBar from './components/SearchBar';
-import FilterPanel from './components/FilterPanel';
-import GameGrid from './components/GameGrid';
-import Modal from './components/Modal';
-import Highlights from './components/Highlights';
-import ChartsPage from './components/pages/ChartsPage';
-import AddGamePage from './components/pages/AddGamePage';
-import GameCounter from './components/GameCounter';
-import LoadingSpinner from './components/LoadingSpinner';
-import Footer from "./components/Footer";
-import AboutPage from "./components/pages/AboutPage";
-import CalendarPage from "./components/pages/CalendarPage";
-import GameDetailPage from "./components/pages/GameDetailPage";
+import { GameStatus, Game, CatalogPageProps } from "@/src/types";
+import { useDebounce } from '@/src/hooks';
+import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug } from '@/src/utils';
+import { 
+    Header,
+    SearchBar,
+    FilterPanel,
+    GameGrid,
+    Modal,
+    Highlights,
+    GameCounter,
+    LoadingSpinner,
+    Footer
+} from '@/src/components';
+import { 
+    ChartsPage,
+    AddGamePage,
+    AboutPage,
+    CalendarPage,
+    GameDetailPage
+} from '@/src/pages';
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-/// HELPER FUNCTIONS
-const parseStringToArray = (str: string | undefined): string[] => {
-    if (!str) return [];
-    return str.split(',').map(item => item.trim()).filter(Boolean);
-};
-
-const mapStatus = (statusStr: string | undefined): GameStatus => {
-    const statusMap: { [key: string]: GameStatus } = {
-        'publicado': GameStatus.RELEASED,
-        'en desarrollo': GameStatus.IN_DEVELOPMENT,
-        'pausado': GameStatus.ON_HOLD,
-        'cancelado': GameStatus.CANCELED,
-        'lost media': GameStatus.LOST_MEDIA,
-        'acceso anticipado': GameStatus.EARLY_ACCESS,
-        'descontinuado': GameStatus.CANCELED,
-        'desconocido': GameStatus.UNKNOWN,
-        'prototipo': GameStatus.PROTOTYPE,
-        'publicado (demo)': GameStatus.RELEASED_DEMO,
-        'recuperado': GameStatus.RECOVERED,
-    };
-    return statusMap[statusStr?.toLowerCase() || ''] || GameStatus.IN_DEVELOPMENT;
-};
-
-const generateSlug = (title: string): string => {
-    return title
-        .toLowerCase()
-        .replace(/[áàâäã]/g, 'a')
-        .replace(/[éèêë]/g, 'e')
-        .replace(/[íìîï]/g, 'i')
-        .replace(/[óòôöõ]/g, 'o')
-        .replace(/[úùûü]/g, 'u')
-        .replace(/[ñ]/g, 'n')
-        .replace(/[ç]/g, 'c')
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-+|-+$/g, '');
-};
-
-const ensureUniqueSlug = (baseSlug: string, existingSlugs: Set<string>): string => {
-    let slug = baseSlug;
-    let counter = 1;
-    
-    while (existingSlugs.has(slug)) {
-        slug = `${baseSlug}-${counter}`;
-        counter++;
-    }
-    
-    existingSlugs.add(slug);
-    return slug;
-};
-
-const useDebounce = (value: string, delay: number) => {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(value);
-        }, delay);
-
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [value, delay]);
-
-    return debouncedValue;
-};
-/// HELPER FUNCTIONS
-
-interface CatalogPageProps {
-    path?: string;
-}
 
 const App = () => {
     const [games, setGames] = useState<Game[]>([]);

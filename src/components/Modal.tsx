@@ -1,9 +1,8 @@
 import { useEffect } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
-import { Game } from '../interfaces/Game.ts';
-import CloseIcon from './icons/CloseIcon';
-import LinkIcon from './icons/LinkIcon';
+import { Game } from '@/src/types';
+import { CloseIcon, LinkIcon } from '@/src/components/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 

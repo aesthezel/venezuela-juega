@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
-import { Game } from './../../interfaces/Game';
-import { GameStatus } from './../../types';
-import ArrowLeftIcon from '../icons/ArrowLeftIcon.tsx';
+import { Game, GameStatus } from "@/src/types";
+import ArrowLeftIcon from '../components/icons/ArrowLeftIcon.tsx';
 
 declare var Chart: any;
 

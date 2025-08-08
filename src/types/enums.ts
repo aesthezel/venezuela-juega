@@ -1,3 +1,9 @@
+/**
+ * Represents the current status of a game in its development lifecycle.
+ * 
+ * This enum is used to categorize games based on their release and development status,
+ * allowing for filtering and display of status information in the UI.
+ */
 export enum GameStatus {
   RELEASED = "Lanzado",
   RELEASED_DEMO = "Demo",
@@ -10,5 +16,3 @@ export enum GameStatus {
   RECOVERED = "Recuperado",
   UNKNOWN = "Desconocido",
 }
-
-export type Page = 'catalog' | 'charts' | 'add-game' | 'about' | 'calendar';

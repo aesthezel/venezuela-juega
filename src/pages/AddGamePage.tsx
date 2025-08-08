@@ -1,9 +1,8 @@
 import { useState } from 'preact/hooks';
 import { ComponentChildren, ComponentProps } from 'preact';
 import { JSX } from 'preact/jsx-runtime';
-import { Game } from './../../interfaces/Game';
-import { GameStatus } from '../../types.ts';
-import CloseIcon from '../icons/CloseIcon.tsx';
+import { Game, GameStatus } from "@/src/types";
+import CloseIcon from '../components/icons/CloseIcon.tsx';
 
 interface AddGamePageProps {
     path?: string;

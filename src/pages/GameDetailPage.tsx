@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
-import { Game } from '../../interfaces/Game';
+import { Game } from "@/src/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faGamepad, faGlobe, faCog } from '@fortawesome/free-solid-svg-icons';
-import LinkIcon from '../icons/LinkIcon';
+import LinkIcon from '../components/icons/LinkIcon';
 
 interface GameDetailPageProps {
     path?: string;

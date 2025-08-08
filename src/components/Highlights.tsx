@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'preact/hooks';
-import { Game } from '../interfaces/Game';
-import HighlightCard from './HighlightCard';
-import IndicatorLeftIcon from './icons/IndicatorLeftIcon.tsx';
-import IndicatorRightIcon from './icons/IndicatorRightIcon.tsx';
+import { Game } from '@/src/types';
+import { HighlightCard } from '@/src/components';
+import { IndicatorLeftIcon, IndicatorRightIcon } from '@/src/components/icons';
 
 interface HighlightsProps {
     games: Game[];

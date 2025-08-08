@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { Game } from './../../interfaces/Game';
-import ArrowLeftIcon from './../icons/ArrowLeftIcon';
+import { Game } from "@/src/types";
+import { ArrowLeftIcon } from '@/src/components/icons';
 
 declare var FullCalendar: any;
 

@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'preact/hooks';
-import { Game } from './../interfaces/Game';
-import { GameStatus } from '../types';
+import { Game, GameStatus } from '@/src/types';
 import { JSX } from 'preact/jsx-runtime';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 

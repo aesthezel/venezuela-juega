@@ -1,4 +1,4 @@
-import ArrowLeftIcon from '../icons/ArrowLeftIcon';
+import ArrowLeftIcon from '../components/icons/ArrowLeftIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import preact from "@preact/preset-vite";

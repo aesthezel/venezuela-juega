@@ -1,29 +1,14 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Game } from '../interfaces/Game';
+import { Game } from '@/src/types';
+import { useDebounce } from '@/src/hooks';
 
 interface SearchBarProps {
     searchTerm: string;
     onSearchChange: (term: string) => void;
     games: Game[];
 }
-
-const useDebounce = (value: string, delay: number) => {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(value);
-        }, delay);
-
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [value, delay]);
-
-    return debouncedValue;
-};
 
 const SearchBar = ({ searchTerm, onSearchChange, games }: SearchBarProps) => {
     const [suggestions, setSuggestions] = useState<Game[]>([]);

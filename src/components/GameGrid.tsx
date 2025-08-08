@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
-import { Game } from './../interfaces/Game';
+import { Game } from '@/src/types';
 import GameCard from './GameCard';
 
 declare var gsap: any;
