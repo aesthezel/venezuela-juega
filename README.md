@@ -1,7 +1,7 @@
 # Venezuela Juega
 Este repositorio sirve como una aplicación web que se despliega en [venezuelajuega.com](https://venezuelajuega.com) que organiza y presenta videojuegos desarrollados en Venezuela. La plataforma permite explorar, filtrar y descubrir juegos venezolanos de la manera más intuitiva, buscando ofrecer información detallada sobre cada título.
 
-## 🎯 Características Principales
+## 🎯 Características principales
 - **Catálogo de juegos**: Visualización completa de videojuegos venezolanos
 - **Filtros avanzados**: Búsqueda por género, plataforma y estado de desarrollo
 - **Juegos destacados**: Sección especial para títulos destacados
@@ -17,6 +17,12 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - **Preact Router** 4.1.2
 - **Vite** 6.2.0
 - **Tailwind CSS**
+
+### Librerias anexadas estáticas
+- **Chart.js**
+- **GSAP** 3.13.0
+- **Bootstrap Icons** 1.11.3
+- **FullCalendar** 6.1.18
 
 ### Librerias extras
 - **Papa Parse** 5.5.3
