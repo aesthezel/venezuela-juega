@@ -9,11 +9,27 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js'></script>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet'>
 
-    <link rel="preload" href="/src/styles/global.css" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/src/styles/global.css"></noscript>
+    <link rel="preload" href="%BASE_URL%src/styles/global.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="%BASE_URL%src/styles/global.css"></noscript>
+  <script>
+    // Restore original path for GitHub Pages SPA redirects
+    (function() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var p = params.get('p');
+        if (p) {
+          // Support both encoded and plain paths
+          var restored = p;
+          try { restored = decodeURIComponent(p); } catch (e) {}
+          var url = new URL(restored, window.location.origin);
+          window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+        }
+      } catch (_) {}
+    })();
+  </script>
 </head>
 <body class="bg-slate-900">
 <div id="root"></div>
-<script type="module" src="/index.tsx"></script>
+<script type="module" src="%BASE_URL%index.tsx"></script>
 </body>
 </html>
