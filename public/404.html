@@ -11,6 +11,11 @@
        */
       (function() {
         var l = window.location;
+        // Prevent redirect loop: if already has the SPA param, do nothing
+        try {
+          var params = new URLSearchParams(l.search);
+          if (params.has('p')) return;
+        } catch (_) {}
         var pathParts = l.pathname.split('/').filter(Boolean);
         // If there is at least one non-empty segment, assume it's a Project Page and keep the repo segment as base.
         var base = pathParts.length > 0 ? '/' + pathParts[0] + '/' : '/';
