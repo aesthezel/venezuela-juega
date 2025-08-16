@@ -5,15 +5,17 @@
     <title>Redirecting…</title>
     <script>
       /*!
-       * GitHub Pages SPA redirect (root fallback)
+       * GitHub Pages SPA redirect
        * Based on https://github.com/rafgraph/spa-github-pages
+       * This version auto-detects if the site is a Project Page (/repo/) or a User/Org Page (/)
        */
       (function() {
         var l = window.location;
-        // Build the redirect URL to the index with the original path preserved in the query
+        var pathParts = l.pathname.split('/').filter(Boolean);
+        // If there is at least one non-empty segment, assume it's a Project Page and keep the repo segment as base.
+        var base = pathParts.length > 0 ? '/' + pathParts[0] + '/' : '/';
         var origin = l.protocol + '//' + l.host;
-        var basePath = l.pathname.replace(/\/[^/]*$/, '/');
-        var redirectUrl = origin + basePath + '?p=' + encodeURIComponent(l.pathname + l.search) + l.hash;
+        var redirectUrl = origin + base + '?p=' + encodeURIComponent(l.pathname + l.search) + l.hash;
         window.location.replace(redirectUrl);
       })();
     </script>
