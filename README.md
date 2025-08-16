@@ -56,7 +56,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Página con slug de los juegos por separado
 - [x] Ajustar la sección del header y footer para cuando se hace scroll se retraigan
 - [x] Cambiar de modo grid a modo listado
-- [x] Modo lista y busqueda por #-A-Z para los juegos
+- [x] Modo lista y búsqueda por #-A-Z para los juegos
+- [ ] Solucionar persistencia del router cuando se cambia de página 
 - [ ] Conexión a API de tiendas para obtener precios de los juegos
 - [ ] Conexión a API de IGDB o similar
 - [ ] Terminar formulario para agregar nuevos juegos

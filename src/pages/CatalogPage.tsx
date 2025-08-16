@@ -28,13 +28,14 @@ const CatalogPage = ({
                      }: CatalogPageProps) => {
 
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
-    const [alpha, setAlpha] = useState<string | null>(null); // null = Todos
+    const [alpha, setAlpha] = useState<string | null>(null);
     const hasActiveFilters = Object.values(activeFilters || {}).some(arr => arr && arr.length > 0);
 
     useEffect(() => {
         const saved = typeof window !== 'undefined' ? (localStorage.getItem('catalog:viewMode') as ViewMode | null) : null;
         if (saved === 'grid' || saved === 'list') setViewMode(saved);
     }, []);
+
     useEffect(() => {
         if (typeof window !== 'undefined') localStorage.setItem('catalog:viewMode', viewMode);
     }, [viewMode]);
@@ -65,11 +66,11 @@ const CatalogPage = ({
     return (
         <main className="container mx-auto px-4 py-8">
             <Highlights games={games} onGameClick={onGameClick}/>
-            <GameCounter filteredCount={filteredGames.length} totalCount={games.length}/>
+            <GameCounter filteredCount={alpha ? alphaFilteredGames.length : filteredGames.length} totalCount={filteredGames.length}/>
 
             <div className="mb-6 w-full flex justify-center">
                 <div className="w-full max-w-5xl overflow-hidden [scrollbar-width:none] [ms-overflow-style:none] [&_*::-webkit-scrollbar]:hidden">
-                    <AlphaFilter value={alpha} onChange={setAlpha} />
+                    <AlphaFilter activeAlpha={alpha} onAlphaChange={setAlpha} />
                 </div>
             </div>
 
