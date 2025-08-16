@@ -55,6 +55,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Calendario de lanzamientos
 - [x] Página con slug de los juegos por separado
 - [x] Ajustar la sección del header y footer para cuando se hace scroll se retraigan
+- [x] Cambiar de modo grid a modo listado
+- [x] Modo lista y busqueda por #-A-Z para los juegos
 - [ ] Conexión a API de tiendas para obtener precios de los juegos
 - [ ] Conexión a API de IGDB o similar
 - [ ] Terminar formulario para agregar nuevos juegos
@@ -64,6 +66,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
 - [ ] Mejorar el responsive del calendario en mobile
 - [ ] Burger menu en versión móvil
+- [ ] Solucionar los tamaños de los grid, mejorar el responsive
 - [ ] Mansory grid view (Intentar nuevamente a ver si se logra)
 
 ## 🤝 Colaboración

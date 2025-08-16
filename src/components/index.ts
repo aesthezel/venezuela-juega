@@ -13,3 +13,6 @@ export { default as Modal } from './Modal';
 export { default as SearchBar } from './SearchBar';
 export { default as ScrollToTop } from './ScrollToTop';
 export { default as BackButton } from './BackButton';
+export { default as GameList } from './GameList';
+export { default as ViewModeToggle } from './ViewModeToggle';
+export { default as AlphaFilter } from './AlphaFilter';

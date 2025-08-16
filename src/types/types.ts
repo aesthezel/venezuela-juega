@@ -5,3 +5,4 @@
  * when referencing different sections of the application.
  */
 export type Page = 'catalog' | 'charts' | 'add-game' | 'about' | 'calendar';
+export type ViewMode = 'grid' | 'list';
