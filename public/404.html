@@ -17,8 +17,12 @@
           if (params.has('p')) return;
         } catch (_) {}
         var pathParts = l.pathname.split('/').filter(Boolean);
-        // If there is at least one non-empty segment, assume it's a Project Page and keep the repo segment as base.
-        var base = pathParts.length > 0 ? '/' + pathParts[0] + '/' : '/';
+        // Heuristic: if first segment is an app route, we're likely on a User/Org Page -> base '/'
+        // Otherwise, assume it's a Project Page and the first segment is the repo name -> base '/<repo>/'
+        var first = pathParts[0] || '';
+        var knownRoutes = { 'calendar':1, 'charts':1, 'game':1, 'about':1, 'add-game':1 };
+        var isUserOrgPage = first === '' || Object.prototype.hasOwnProperty.call(knownRoutes, first);
+        var base = isUserOrgPage ? '/' : '/' + first + '/';
         var origin = l.protocol + '//' + l.host;
         var redirectUrl = origin + base + '?p=' + encodeURIComponent(l.pathname + l.search) + l.hash;
         window.location.replace(redirectUrl);
