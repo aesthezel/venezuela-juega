@@ -190,6 +190,22 @@ const App = () => {
                         onGameClick={handleOpenModal}
                     />
 
+                    {/* Handle /game without a slug by showing the catalog */}
+                    <CatalogPage
+                        path="/game"
+                        games={games}
+                        filteredGames={filteredGames}
+                        allGenres={allGenres}
+                        allPlatforms={allPlatforms}
+                        searchTerm={searchTerm}
+                        onSearchChange={setSearchTerm}
+                        activeFilters={activeFilters}
+                        onFilterChange={handleFilterChange}
+                        onClearCategory={clearFilterCategory}
+                        onClearAllFilters={clearFilters}
+                        onGameClick={handleOpenModal}
+                    />
+
                     <CalendarPage
                         path="/calendar"
                         games={games}
