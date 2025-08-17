@@ -57,6 +57,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Ajustar la sección del header y footer para cuando se hace scroll se retraigan
 - [x] Cambiar de modo grid a modo listado
 - [x] Modo lista y búsqueda por #-A-Z para los juegos
+- [x] Burger menu en versión móvil
 - [ ] Solucionar persistencia del router cuando se cambia de página 
 - [ ] Conexión a API de tiendas para obtener precios de los juegos
 - [ ] Conexión a API de IGDB o similar
@@ -66,7 +67,6 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [ ] Añadir un preview animado de los screenshots cuando haces clic en una GameCard
 - [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
 - [ ] Mejorar el responsive del calendario en mobile
-- [ ] Burger menu en versión móvil
 - [ ] Solucionar los tamaños de los grid, mejorar el responsive
 - [ ] Mansory grid view (Intentar nuevamente a ver si se logra)
 
