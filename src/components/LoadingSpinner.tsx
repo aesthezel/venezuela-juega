@@ -1,29 +1,29 @@
-const LoadingSpinner = () => {
-    return (
-        <div className="flex flex-col justify-center items-center h-full p-10">
-            <svg
-                className="animate-spin h-12 w-12 text-cyan-400"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-            >
-                <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                ></circle>
-                <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-            </svg>
-            <p className="mt-4 text-xl text-white">La lista esta cargando...</p>
-        </div>
-    );
+import { FunctionComponent } from 'preact';
+
+const LoadingSpinner: FunctionComponent = () => {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95"
+      role="status"
+      aria-live="polite"
+      aria-label="Cargando la lista de Venezuela Juega"
+    >
+      <div className="flex flex-col items-center text-center px-6">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight md:leading-snug pb-1 overflow-visible bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-blue-300 to-red-300">
+          Venezuela Juega
+        </h1>
+
+        <div
+          className="mt-5 md:mt-6 h-1 w-24 rounded-full bg-cyan-400/70 motion-reduce:animate-none animate-pulse"
+          aria-hidden="true"
+        />
+
+        <p className="mt-6 text-base md:text-lg text-cyan-400 bg-slate-800/50 px-4 py-2 rounded-full">
+          La lista de videojuegos está cargando...
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default LoadingSpinner;

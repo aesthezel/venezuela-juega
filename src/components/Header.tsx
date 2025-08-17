@@ -1,6 +1,6 @@
-import { useRef, useEffect } from 'preact/hooks';
+import { useRef, useEffect, useState } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faInfoCircle, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { route } from 'preact-router';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -14,9 +14,11 @@ interface HeaderProps {
 const Header = ({ currentPath }: HeaderProps) => {
     const headerRef = useRef<HTMLElement | null>(null);
     const hideTimeout = useRef<number | null>(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navigateTo = (path: string) => {
         route(path);
+        setIsMenuOpen(false);
     };
 
     useEffect(() => {
@@ -43,7 +45,11 @@ const Header = ({ currentPath }: HeaderProps) => {
             window.addEventListener('resize', setHeaderHeightVar);
         }
 
-        const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const prefersReducedMotion =
+            typeof window !== 'undefined' &&
+            window.matchMedia &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
         el.style.willChange = 'transform, opacity';
 
         const clearHideTimeout = () => {
@@ -81,7 +87,6 @@ const Header = ({ currentPath }: HeaderProps) => {
                 } else if (self.direction === -1) {
                     showHeader();
                 }
-
                 clearHideTimeout();
                 hideTimeout.current = window.setTimeout(() => {
                     showHeader();
@@ -105,51 +110,159 @@ const Header = ({ currentPath }: HeaderProps) => {
         };
     }, []);
 
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setIsMenuOpen(false);
+        };
+        const onResize = () => {
+            if (window.innerWidth >= 768) setIsMenuOpen(false);
+        };
+        window.addEventListener('keydown', onKey);
+        window.addEventListener('resize', onResize);
+        return () => {
+            window.removeEventListener('keydown', onKey);
+            window.removeEventListener('resize', onResize);
+        };
+    }, []);
+
     return (
-        <header ref={headerRef} className="bg-slate-800 shadow-lg sticky top-0 z-40">
-            <div className="container mx-auto px-4 py-5 flex justify-between items-center">
-                <div className="flex items-center space-x-4">
-                    <button 
-                        onClick={() => navigateTo('/')} 
-                        className="flex items-center space-x-4 cursor-pointer hover:opacity-80 transition-opacity"
+        <header ref={headerRef} className="bg-slate-800/95 backdrop-blur shadow-lg sticky top-0 z-40">
+            <div className="container mx-auto px-4 py-4 md:py-5">
+                <div className="flex items-center justify-between gap-4">
+
+                    <button
+                        onClick={() => navigateTo('/')}
+                        className="group flex items-center gap-3 cursor-pointer select-none"
+                        aria-label="Ir al inicio"
                     >
-                        <div>
-                            <h1 className="text-3xl font-bold text-white">Venezuela Juega</h1>
-                            <p className="text-cyan-400">Explora la creciente industria del gaming en Venezuela</p>
+                        <div className="flex flex-col text-left leading-tight">
+                            <h1
+                                className="
+                                    font-extrabold tracking-tight text-white
+                                    text-[clamp(1.25rem,3.3vw,1.875rem)]
+                                    [text-wrap:balance]
+                                    drop-shadow-sm
+                                    group-hover:opacity-95 transition-opacity
+                                "
+                                style={{
+                                    fontFeatureSettings: '"ss01","ss02","cv01"',
+                                }}
+                            >
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-blue-300 to-red-300">
+                                    Venezuela Juega
+                                </span>
+                            </h1>
+                            <p
+                                className="
+                                    text-white-400/90
+                                    text-[clamp(0.75rem,1.8vw,0.95rem)]
+                                    md:text-base
+                                    leading-snug
+                                "
+                            >
+                                Explora la industria del gaming en el pais
+                            </p>
                         </div>
                     </button>
+
+                    <nav className="hidden md:flex items-center gap-2">
+                        <button
+                            onClick={() => navigateTo('/calendar')}
+                            className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
+                                currentPath === '/calendar'
+                                    ? 'bg-cyan-500 text-white'
+                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
+                            }`}
+                            aria-label="Ver calendario de juegos"
+                        >
+                            <FontAwesomeIcon icon={faCalendarAlt} />
+                            <span>Calendario</span>
+                        </button>
+                        <button
+                            onClick={() => navigateTo('/charts')}
+                            className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
+                                currentPath === '/charts'
+                                    ? 'bg-cyan-500 text-white'
+                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
+                            }`}
+                            aria-label="Ver estadísticas"
+                        >
+                            <FontAwesomeIcon icon={faChartBar} />
+                            <span>Estadísticas</span>
+                        </button>
+                        <button
+                            onClick={() => navigateTo('/about')}
+                            className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
+                                currentPath === '/about'
+                                    ? 'bg-cyan-500 text-white'
+                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
+                            }`}
+                            aria-label="Acerca de Venezuela Juega"
+                        >
+                            <FontAwesomeIcon icon={faInfoCircle} />
+                            <span>Acerca de</span>
+                        </button>
+                    </nav>
+
+                    <div className="md:hidden">
+                        <button
+                            type="button"
+                            className="inline-flex items-center justify-center rounded-lg p-2 text-white bg-slate-700 hover:bg-cyan-600 transition-colors"
+                            aria-label="Abrir menú"
+                            aria-controls="mobile-menu"
+                            aria-expanded={isMenuOpen}
+                            onClick={() => setIsMenuOpen((v) => !v)}
+                        >
+                            <FontAwesomeIcon icon={isMenuOpen ? faXmark : faBars} className="h-5 w-5" />
+                        </button>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => navigateTo('/calendar')}
-                        className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
-                            currentPath === '/calendar' ? 'bg-cyan-500 text-white' : 'bg-slate-700 hover:bg-cyan-600 text-white'
-                        }`}
-                        aria-label="Ver calendario de juegos"
-                    >
-                        <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span className="hidden sm:inline">Calendario</span>
-                    </button>
-                    <button
-                        onClick={() => navigateTo('/charts')}
-                        className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
-                            currentPath === '/charts' ? 'bg-cyan-500 text-white' : 'bg-slate-700 hover:bg-cyan-600 text-white'
-                        }`}
-                        aria-label="Ver estadísticas"
-                    >
-                        <FontAwesomeIcon icon={faChartBar} />
-                        <span className="hidden sm:inline">Estadísticas</span>
-                    </button>
-                    <button
-                        onClick={() => navigateTo('/about')}
-                        className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
-                            currentPath === '/about' ? 'bg-cyan-500 text-white' : 'bg-slate-700 hover:bg-cyan-600 text-white'
-                        }`}
-                        aria-label="Acerca de Venezuela Juega"
-                    >
-                        <FontAwesomeIcon icon={faInfoCircle} />
-                        <span className="hidden sm:inline">Acerca de</span>
-                    </button>
+
+                <div
+                    id="mobile-menu"
+                    className={`
+                        md:hidden overflow-hidden transition-all duration-300 ease-out
+                        ${isMenuOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0'}
+                    `}
+                >
+                    <div className="flex flex-col gap-2 bg-slate-800/90 rounded-lg p-3 shadow-md">
+                        <button
+                            onClick={() => navigateTo('/calendar')}
+                            className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${
+                                currentPath === '/calendar'
+                                    ? 'bg-cyan-500 text-white'
+                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
+                            }`}
+                            aria-label="Ver calendario de juegos"
+                        >
+                            <FontAwesomeIcon icon={faCalendarAlt} />
+                            <span>Calendario</span>
+                        </button>
+                        <button
+                            onClick={() => navigateTo('/charts')}
+                            className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${
+                                currentPath === '/charts'
+                                    ? 'bg-cyan-500 text-white'
+                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
+                            }`}
+                            aria-label="Ver estadísticas"
+                        >
+                            <FontAwesomeIcon icon={faChartBar} />
+                            <span>Estadísticas</span>
+                        </button>
+                        <button
+                            onClick={() => navigateTo('/about')}
+                            className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${
+                                currentPath === '/about'
+                                    ? 'bg-cyan-500 text-white'
+                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
+                            }`}
+                            aria-label="Acerca de Venezuela Juega"
+                        >
+                            <FontAwesomeIcon icon={faInfoCircle} />
+                            <span>Acerca de</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
