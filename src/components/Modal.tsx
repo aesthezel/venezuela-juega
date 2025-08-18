@@ -5,6 +5,7 @@ import { Game } from '@/src/types';
 import { CloseIcon, LinkIcon } from '@/src/components/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { CoverImage } from '@/src/components';
 
 interface ModalProps {
     game: Game;
@@ -48,7 +49,12 @@ const Modal = ({ game, onClose }: ModalProps) => {
                 className="bg-slate-800 rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden animate-slide-up"
                 onClick={e => e.stopPropagation()}
             >
-                <img src={game.imageUrl} alt={game.title} className="w-full md:w-1/3 h-64 md:h-auto object-cover"/>
+                <CoverImage
+                    src={game.imageUrl}
+                    alt={game.title}
+                    className="w-full md:w-1/3 h-64 md:h-auto object-cover"
+                    imgClassName="w-full md:w-1/3 h-64 md:h-auto object-cover"
+                />
                 <div className="p-8 flex-1 overflow-y-auto">
                     <div className="flex justify-between items-start">
                         <div className="flex-1 pr-4">
@@ -109,6 +115,23 @@ const Modal = ({ game, onClose }: ModalProps) => {
                             </div>
                         )}
                     </dl>
+
+                    {game.screenshots && game.screenshots.length > 0 && (
+                        <div className="mt-6">
+                            <h3 className="text-lg font-semibold text-white mb-2">Capturas</h3>
+                            <div className="flex gap-3 overflow-x-auto pb-2">
+                                {game.screenshots.slice(0, 8).map((shot, idx) => (
+                                    <img
+                                        key={`${shot}-${idx}`}
+                                        src={shot}
+                                        alt={`Screenshot ${idx + 1}`}
+                                        className="h-28 w-auto rounded-lg object-cover flex-shrink-0 border border-slate-700"
+                                        loading="lazy"
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
             <style>{`

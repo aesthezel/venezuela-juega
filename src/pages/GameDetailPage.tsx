@@ -3,8 +3,8 @@ import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
 import { Game } from "@/src/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faGamepad, faGlobe, faCog } from '@fortawesome/free-solid-svg-icons';
-import {BackButton, LinkIcon} from "@/src/components";
+import { faArrowLeft, faGamepad, faGlobe, faCog, faTimes, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import {BackButton, LinkIcon, CoverImage} from "@/src/components";
 import { GameDetailPageProps } from "@/src/types";
 
 interface DetailSectionProps {
@@ -26,6 +26,10 @@ const DetailSection = ({ title, children, icon }: DetailSectionProps) => (
 const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
     const [game, setGame] = useState<Game | null>(null);
 
+    // Lightbox state
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+    const [currentShotIndex, setCurrentShotIndex] = useState(0);
+
     useEffect(() => {
         if (gameSlug) {
             const normalizedSlug = decodeURIComponent(gameSlug).trim().toLowerCase();
@@ -39,6 +43,44 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
     const handleGoBack = () => {
         route('/');
     };
+
+    // Lightbox helpers
+    const openLightbox = (index: number) => {
+        setCurrentShotIndex(index);
+        setIsLightboxOpen(true);
+    };
+
+    const closeLightbox = () => {
+        setIsLightboxOpen(false);
+    };
+
+    const showPrev = () => {
+        if (!game?.screenshots?.length) return;
+        setCurrentShotIndex(prev => (prev - 1 + game.screenshots.length) % game.screenshots.length);
+    };
+
+    const showNext = () => {
+        if (!game?.screenshots?.length) return;
+        setCurrentShotIndex(prev => (prev + 1) % game.screenshots.length);
+    };
+
+    useEffect(() => {
+        if (!isLightboxOpen) return;
+
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') showPrev();
+            if (e.key === 'ArrowRight') showNext();
+        };
+        window.addEventListener('keydown', onKey);
+
+        const { overflow } = document.body.style;
+        document.body.style.overflow = 'hidden';
+        return () => {
+            window.removeEventListener('keydown', onKey);
+            document.body.style.overflow = overflow;
+        };
+    }, [isLightboxOpen, game?.screenshots?.length]);
 
     if (!gameSlug) {
         return (
@@ -83,10 +125,11 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
             <div className="bg-slate-800 rounded-lg overflow-hidden shadow-2xl mb-8">
                 <div className="md:flex">
                     <div className="md:w-1/2">
-                        <img 
-                            src={game.imageUrl} 
-                            alt={game.title} 
+                        <CoverImage
+                            src={game.imageUrl}
+                            alt={game.title}
                             className="w-full h-64 md:h-96 object-cover"
+                            imgClassName="w-full h-64 md:h-96 object-cover"
                         />
                     </div>
                     <div className="md:w-1/2 p-8">
@@ -113,6 +156,32 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     </div>
                 </div>
             </div>
+
+            {game.screenshots && game.screenshots.length > 0 && (
+                <div className="bg-slate-800 rounded-lg p-6 shadow-lg mb-8">
+                    <h3 className="text-xl font-bold text-white mb-4">Galería de Capturas</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {game.screenshots.map((shot, idx) => (
+                            <button
+                                key={`${shot}-${idx}`}
+                                type="button"
+                                onClick={() => openLightbox(idx)}
+                                className="relative group focus:outline-none"
+                                aria-label={`Abrir captura ${idx + 1}`}
+                                title="Ampliar"
+                            >
+                                <img
+                                    src={shot}
+                                    alt={`Screenshot ${idx + 1}`}
+                                    className="w-full h-40 sm:h-44 lg:h-48 object-cover rounded-lg border border-slate-700 cursor-zoom-in"
+                                    loading="lazy"
+                                />
+                                <span className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 group-hover:bg-black/20 transition-colors" />
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <DetailSection title="Información General" icon={faGamepad}>
@@ -217,6 +286,61 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     </DetailSection>
                 )}
             </div>
+
+            {isLightboxOpen && game.screenshots && game.screenshots.length > 0 && (
+                <div
+                    className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
+                    role="dialog"
+                    aria-modal="true"
+                    onClick={closeLightbox}
+                >
+                    <button
+                        type="button"
+                        onClick={closeLightbox}
+                        className="absolute top-4 right-4 text-white/80 hover:text-white bg-black/40 hover:bg-black/60 rounded-full p-2 transition-colors"
+                        aria-label="Cerrar"
+                    >
+                        <FontAwesomeIcon icon={faTimes} className="text-2xl" />
+                    </button>
+
+                    {game.screenshots.length > 1 && (
+                        <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); showPrev(); }}
+                            className="absolute left-2 sm:left-4 text-white/80 hover:text-white bg-black/40 hover:bg-black/60 rounded-full p-3 transition-colors"
+                            aria-label="Anterior"
+                        >
+                            <FontAwesomeIcon icon={faChevronLeft} className="text-2xl" />
+                        </button>
+                    )}
+
+                    {game.screenshots.length > 1 && (
+                        <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); showNext(); }}
+                            className="absolute right-2 sm:right-4 text-white/80 hover:text-white bg-black/40 hover:bg-black/60 rounded-full p-3 transition-colors"
+                            aria-label="Siguiente"
+                        >
+                            <FontAwesomeIcon icon={faChevronRight} className="text-2xl" />
+                        </button>
+                    )}
+
+                    <div
+                        className="max-w-[95vw] max-h-[90vh] flex items-center justify-center"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <img
+                            src={game.screenshots[currentShotIndex]}
+                            alt={`Screenshot ampliada ${currentShotIndex + 1}`}
+                            className="object-contain max-w-full max-h-[90vh] rounded-lg shadow-2xl"
+                        />
+                    </div>
+
+                    <div className="absolute bottom-4 left-0 right-0 text-center text-white/80 text-sm">
+                        {currentShotIndex + 1} / {game.screenshots.length}
+                    </div>
+                </div>
+            )}
         </main>
     );
 };

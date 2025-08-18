@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
 import { h } from 'preact';
 import { Game } from '@/src/types';
 import { gsap } from 'gsap';
+import { CoverImage } from '@/src/components';
 
 interface GameListProps {
   games: Game[];
@@ -113,11 +114,11 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
             onClick={() => onGameClick(game)}
             className="game-list-row w-full text-left bg-slate-800 hover:bg-slate-700 transition-colors rounded-lg p-3 flex gap-3 items-center"
           >
-            <img
+            <CoverImage
               src={game.imageUrl}
               alt={game.title}
               className="h-16 w-28 object-cover rounded-md flex-shrink-0"
-              loading="lazy"
+              imgClassName="h-16 w-28 object-cover rounded-md flex-shrink-0"
             />
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">

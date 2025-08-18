@@ -23,6 +23,28 @@ const App = () => {
 
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
+    // Screenshot helper
+    const parseScreenshots = (value?: string): string[] => {
+        if (!value) return [];
+        const trimmed = value.trim();
+        if (!trimmed) return [];
+        if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+            try {
+                const parsed = JSON.parse(trimmed);
+                if (Array.isArray(parsed)) {
+                    return parsed
+                        .filter((v) => typeof v === 'string')
+                        .map((v) => v.trim())
+                        .filter(Boolean);
+                }
+            } catch {
+                // TODO: do a fallback
+            }
+        }
+
+        return parseStringToArray(value).map((v) => v.trim()).filter(Boolean);
+    };
+
     useEffect(() => {
         const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1tVBCGdGaTSTTikMKWFVT4Lzmq71TRikWSzIjiIR15FA/pub?gid=0&single=true&output=csv';
 
@@ -78,9 +100,10 @@ const App = () => {
                         funding: rowObject['Financiamiento'] || undefined,
                         engine: rowObject['Motor'] || 'No especificado',
                         languages: parseStringToArray(rowObject['Idioma(s) disponible(s)']),
-                        imageUrl: rowObject['Portada'] || `https://picsum.photos/seed/${encodeURIComponent(title || index)}/500/300`,
+                        imageUrl: rowObject['Portada'] || '',
                         description: rowObject['Descripción'] || '',
                         isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
+                        screenshots: parseScreenshots(rowObject['Screenshots']),
                     };
                 }).filter((game): game is Game => game !== null);
 
@@ -136,7 +159,6 @@ const App = () => {
     const handleGameClick = (game: Game) => {
         route(`/game/${encodeURIComponent(game.slug)}`);
     };
-
 
     const clearFilters = () => setActiveFilters({ status: [], genre: [], platform: [] });
 

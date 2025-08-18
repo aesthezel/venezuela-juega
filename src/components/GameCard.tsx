@@ -17,6 +17,7 @@ import {
     faMobile,
     faGlobe
 } from '@fortawesome/free-solid-svg-icons';
+import { CoverImage } from '@/src/components';
 
 interface GameCardProps {
     game: Game;
@@ -92,7 +93,6 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
 
     useEffect(() => {
         const element = descriptionRef.current;
-        // Medición tras layout estable
         const id = requestAnimationFrame(() => {
             if (element && element.scrollHeight > element.clientHeight) {
                 setNeedsExpansion(true);
@@ -119,12 +119,11 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
             }}
         >
             <div className="relative aspect-[16/9]">
-                <img
+                <CoverImage
                     src={game.imageUrl}
                     alt={game.title}
                     className="absolute inset-0 w-full h-full object-cover"
-                    loading="lazy"
-                    decoding="async"
+                    imgClassName="absolute inset-0 w-full h-full object-cover"
                 />
 
                 <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
@@ -166,7 +165,6 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
                     {game.description}
                 </p>
 
-                {/* Reservar altura para evitar saltos del layout cuando aparece el botón */}
                 <div className="mt-2 min-h-6">
                     {needsExpansion && (
                         <button

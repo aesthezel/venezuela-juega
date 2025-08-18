@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
 import { Game } from '@/src/types';
-import GameCard from './GameCard';
+import { GameCard } from '@/src/components';
 import { gsap } from 'gsap';
 
 interface GameGridProps {
@@ -89,7 +89,7 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
             },
             {
                 root: null,
-                rootMargin: '0px 0px 400px 0px', // pre-load before the end of the viewport
+                rootMargin: '0px 0px 400px 0px', // preload before the end of the viewport
                 threshold: 0.01
             }
         );

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Game } from "@/src/types";
-import {BackButton} from "@/src/components";
+import { BackButton, CoverImage } from "@/src/components";
 import { CalendarPageProps } from "@/src/types";
 
 declare var FullCalendar: any;
@@ -34,7 +34,12 @@ const CalendarTooltip = ({ game, position }: { game: Game; position: { top: numb
             style={{ top: `${position.top}px`, left: `${position.left}px` }}
             className="absolute z-50 w-64 bg-slate-900 border border-slate-700 rounded-lg shadow-2xl p-3 pointer-events-none animate-fade-in-fast"
         >
-            <img src={game.imageUrl} alt={game.title} className="w-full h-32 object-cover rounded-md mb-2" />
+            <CoverImage
+                src={game.imageUrl}
+                alt={game.title}
+                className="w-full h-32 object-cover rounded-md mb-2"
+                imgClassName="w-full h-32 object-cover rounded-md mb-2"
+            />
             <h3 className="font-bold text-white truncate">{game.title}</h3>
             <p className="text-sm text-gray-400 truncate">{game.developers.join(', ')}</p>
         </div>

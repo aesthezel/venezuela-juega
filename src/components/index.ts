@@ -16,3 +16,4 @@ export { default as BackButton } from './BackButton';
 export { default as GameList } from './GameList';
 export { default as ViewModeToggle } from './ViewModeToggle';
 export { default as AlphaFilter } from './AlphaFilter';
+export { default as CoverImage } from './CoverImage';

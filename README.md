@@ -58,11 +58,11 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Cambiar de modo grid a modo listado
 - [x] Modo lista y búsqueda por #-A-Z para los juegos
 - [x] Burger menu en versión móvil
+- [x] Agregar capturas de pantalla a los juegos
 - [ ] Solucionar persistencia del router cuando se cambia de página 
 - [ ] Conexión a API de tiendas para obtener precios de los juegos
 - [ ] Conexión a API de IGDB o similar
 - [ ] Terminar formulario para agregar nuevos juegos
-- [ ] Agregar capturas de pantalla a los juegos
 - [ ] Agregar trailers a los juegos
 - [ ] Añadir un preview animado de los screenshots cuando haces clic en una GameCard
 - [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
