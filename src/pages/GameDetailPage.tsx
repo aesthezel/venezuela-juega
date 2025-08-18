@@ -126,7 +126,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                 <div className="md:flex">
                     <div className="md:w-1/2">
                         <CoverImage
-                            src={game.imageUrl}
+                            src={game.imageHero}
                             alt={game.title}
                             className="w-full h-64 md:h-96 object-cover"
                             imgClassName="w-full h-64 md:h-96 object-cover"

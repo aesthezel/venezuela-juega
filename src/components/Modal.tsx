@@ -50,7 +50,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                 onClick={e => e.stopPropagation()}
             >
                 <CoverImage
-                    src={game.imageUrl}
+                    src={game.imageCover}
                     alt={game.title}
                     className="w-full md:w-1/3 h-64 md:h-auto object-cover"
                     imgClassName="w-full md:w-1/3 h-64 md:h-auto object-cover"

@@ -26,7 +26,7 @@ const CoverImage = ({ src, alt, className = '', imgClassName = '' }: CoverImageP
       aria-label={alt}
       role="img"
       style={{
-        background: 'linear-gradient(135deg, rgba(8,145,178,0.25), rgba(2,6,23,0.6))', // cyan -> slate
+        background: 'linear-gradient(135deg, rgba(8,145,178,0.25), rgba(2,6,23,0.6))',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -35,7 +35,7 @@ const CoverImage = ({ src, alt, className = '', imgClassName = '' }: CoverImageP
         userSelect: 'none',
       }}
     >
-      <span style={{ fontSize: '3rem', lineHeight: 1 }} role="presentation">🎮</span>
+      <span style={{ fontSize: '2rem', lineHeight: 1, paddingBottom: 15 }} role="presentation">🎮</span>
     </div>
   );
 };

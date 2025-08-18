@@ -126,8 +126,8 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                     <CoverImage
                         src={game.imageUrl}
                         alt={game.title}
-                        className={hasImage ? 'w-full h-auto block' : 'w-full aspect-square object-cover block'}
-                        imgClassName="w-full h-auto block"
+                        className={hasImage ? 'w-full h-auto block' : 'w-full h-[150px] object-cover block'}
+                        imgClassName={hasImage ? 'w-full h-auto block' : 'w-full h-[150px] object-cover block'}
                     />
                     <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
                         {game.status}
@@ -153,7 +153,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                     </div>
                 </div>
             ) : (
-                <div className="relative aspect-[16/9]">
+                <div className={`relative ${hasImage ? 'aspect-[16/9]' : 'h-[250px]'}`}>
                     <CoverImage
                         src={game.imageUrl}
                         alt={game.title}

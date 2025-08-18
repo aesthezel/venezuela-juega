@@ -60,6 +60,8 @@ export interface Game {
 
     /** URL to the game's cover image */
     imageUrl: string;
+    imageHero: string;
+    imageCover: string;
 
     /** Detailed description of the game */
     description: string;
