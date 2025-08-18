@@ -46,7 +46,6 @@ const CatalogPage = ({
         const normalizeFirstChar = (title: string) => {
             const trimmed = (title || '').trim();
             if (!trimmed) return '';
-            // Quitar diacríticos para comparar letras (Á -> A)
             const first = trimmed[0].normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             return first.toUpperCase();
         };
@@ -58,7 +57,6 @@ const CatalogPage = ({
             if (alpha === '#') {
                 return !isLetter;
             }
-            // Letra específica A-Z
             return character === alpha;
         });
     }, [filteredGames, alpha]);
@@ -73,7 +71,6 @@ const CatalogPage = ({
                     <AlphaFilter activeAlpha={alpha} onAlphaChange={setAlpha} />
                 </div>
             </div>
-
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <aside className="md:col-span-1">

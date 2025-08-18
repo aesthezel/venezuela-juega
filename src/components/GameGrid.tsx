@@ -31,7 +31,7 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
 
     const gamesToShow = games.slice(0, displayedCount);
 
-    // Animate only the new cards when they are displayed
+    // Animar solo las nuevas tarjetas
     useEffect(() => {
         const container = gridRef.current;
         if (!container) return;
@@ -40,7 +40,6 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
         const prev = prevCountRef.current;
         const curr = displayedCount;
 
-        // If no new cards, do nothing
         if (curr <= prev) {
             prevCountRef.current = curr;
             return;
@@ -69,7 +68,7 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
         };
     }, [displayedCount]);
 
-    // IntersectionObserver with lock and rootMargin for avoided double-loading
+    // IntersectionObserver para carga incremental
     const loadMoreRef = useCallback((node: HTMLDivElement | null) => {
         if (observer.current) {
             observer.current.disconnect();
@@ -89,7 +88,7 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
             },
             {
                 root: null,
-                rootMargin: '0px 0px 400px 0px', // preload before the end of the viewport
+                rootMargin: '0px 0px 400px 0px',
                 threshold: 0.01
             }
         );
@@ -113,10 +112,17 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
 
     return (
         <>
-            <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+            <div
+                ref={gridRef}
+                className="columns-1 sm:columns-2 xl:columns-3 gap-6 [column-fill:balance] [&>*]:break-inside-avoid"
+            >
                 {gamesToShow.map(game => (
-                    <div key={game.id} className="game-card-wrapper">
-                        <GameCard game={game} onClick={() => onGameClick(game)} />
+                    <div key={game.id} className="game-card-wrapper mb-6 break-inside-avoid">
+                        <GameCard
+                            game={game}
+                            onClick={() => onGameClick(game)}
+                            layout="masonry"
+                        />
                     </div>
                 ))}
             </div>

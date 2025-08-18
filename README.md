@@ -59,6 +59,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Modo lista y búsqueda por #-A-Z para los juegos
 - [x] Burger menu en versión móvil
 - [x] Agregar capturas de pantalla a los juegos
+- [x] Mansory grid view (Intentar nuevamente a ver si se logra)
+- [x] Solucionar los tamaños de los grid, mejorar el responsive
 - [ ] Solucionar persistencia del router cuando se cambia de página 
 - [ ] Conexión a API de tiendas para obtener precios de los juegos
 - [ ] Conexión a API de IGDB o similar
@@ -67,8 +69,6 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [ ] Añadir un preview animado de los screenshots cuando haces clic en una GameCard
 - [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
 - [ ] Mejorar el responsive del calendario en mobile
-- [ ] Solucionar los tamaños de los grid, mejorar el responsive
-- [ ] Mansory grid view (Intentar nuevamente a ver si se logra)
 
 ## 🤝 Colaboración
 Proyecto libre para colaboraciones, puedes hacer un fork y posteriormente solicitar Pull Request con los cambios, se tomará una revisión de dichos cambios y un chequeo respectivo antes de ser aceptados y mezclados.

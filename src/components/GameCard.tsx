@@ -22,6 +22,7 @@ import { CoverImage } from '@/src/components';
 interface GameCardProps {
     game: Game;
     onClick: () => void;
+    layout?: 'grid' | 'masonry';
 }
 
 const statusColorMap: Record<GameStatus, string> = {
@@ -86,7 +87,7 @@ const getPlatformIcon = (platform: string) => {
     return faDesktop;
 };
 
-const GameCard = ({ game, onClick }: GameCardProps) => {
+const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [needsExpansion, setNeedsExpansion] = useState(false);
     const descriptionRef = useRef<HTMLParagraphElement>(null);
@@ -108,6 +109,8 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
         setIsExpanded(prev => !prev);
     };
 
+    const hasImage = !!(game.imageUrl && game.imageUrl.trim() !== '');
+
     return (
         <div
             onClick={onClick}
@@ -118,43 +121,70 @@ const GameCard = ({ game, onClick }: GameCardProps) => {
                 containIntrinsicSize: '600px'
             }}
         >
-            <div className="relative aspect-[16/9]">
-                <CoverImage
-                    src={game.imageUrl}
-                    alt={game.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    imgClassName="absolute inset-0 w-full h-full object-cover"
-                />
-
-                <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
-                    {game.status}
+            {layout === 'masonry' ? (
+                <div className="relative">
+                    <CoverImage
+                        src={game.imageUrl}
+                        alt={game.title}
+                        className={hasImage ? 'w-full h-auto block' : 'w-full aspect-square object-cover block'}
+                        imgClassName="w-full h-auto block"
+                    />
+                    <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
+                        {game.status}
+                    </div>
+                    <div className="absolute bottom-2 left-2 flex gap-1">
+                        {game.platform.slice(0, 4).map((platform, index) => (
+                            <div
+                                key={`${platform}-${index}`}
+                                className="w-6 h-6 bg-black/70 rounded-full backdrop-blur-sm flex items-center justify-center"
+                                title={platform}
+                            >
+                                <FontAwesomeIcon icon={getPlatformIcon(platform)} className="text-white text-xs" />
+                            </div>
+                        ))}
+                        {game.platform.length > 4 && (
+                            <div
+                                className="w-6 h-6 bg-black/70 rounded-full backdrop-blur-sm flex items-center justify-center"
+                                title={`+${game.platform.length - 4} más`}
+                            >
+                                <span className="text-white text-xs font-bold">+{game.platform.length - 4}</span>
+                            </div>
+                        )}
+                    </div>
                 </div>
-
-                <div className="absolute bottom-2 left-2 flex gap-1">
-                    {game.platform.slice(0, 4).map((platform, index) => (
-                        <div
-                            key={`${platform}-${index}`}
-                            className="w-6 h-6 bg-black bg-opacity-70 rounded-full backdrop-blur-sm flex items-center justify-center"
-                            title={platform}
-                        >
-                            <FontAwesomeIcon
-                                icon={getPlatformIcon(platform)}
-                                className="text-white text-xs"
-                            />
-                        </div>
-                    ))}
-                    {game.platform.length > 4 && (
-                        <div
-                            className="w-6 h-6 bg-black bg-opacity-70 rounded-full backdrop-blur-sm flex items-center justify-center"
-                            title={`+${game.platform.length - 4} más`}
-                        >
-                            <span className="text-white text-xs font-bold">+{game.platform.length - 4}</span>
-                        </div>
-                    )}
+            ) : (
+                <div className="relative aspect-[16/9]">
+                    <CoverImage
+                        src={game.imageUrl}
+                        alt={game.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        imgClassName="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
+                        {game.status}
+                    </div>
+                    <div className="absolute bottom-2 left-2 flex gap-1">
+                        {game.platform.slice(0, 4).map((platform, index) => (
+                            <div
+                                key={`${platform}-${index}`}
+                                className="w-6 h-6 bg-black/70 rounded-full backdrop-blur-sm flex items-center justify-center"
+                                title={platform}
+                            >
+                                <FontAwesomeIcon icon={getPlatformIcon(platform)} className="text-white text-xs" />
+                            </div>
+                        ))}
+                        {game.platform.length > 4 && (
+                            <div
+                                className="w-6 h-6 bg-black/70 rounded-full backdrop-blur-sm flex items-center justify-center"
+                                title={`+${game.platform.length - 4} más`}
+                            >
+                                <span className="text-white text-xs font-bold">+{game.platform.length - 4}</span>
+                            </div>
+                        )}
+                    </div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
                 </div>
-
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300"></div>
-            </div>
+            )}
 
             <div className="p-5 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold text-white truncate">{game.title}</h3>
