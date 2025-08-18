@@ -1,12 +1,28 @@
 // noinspection JSNonASCIINames
 import Papa from 'papaparse';
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { Router, route } from 'preact-router';
+import { Router, RoutableProps, route } from 'preact-router';
 import { Game } from "@/src/types";
 import { useDebounce } from '@/src/hooks';
 import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug } from '@/src/utils';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
 import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage } from '@/src/pages';
+
+// TODO: move to another component and fix something about vertical centering
+const NotFoundPage = (_props: RoutableProps) => (
+    <section className="fixed inset-0 z-10 flex items-center justify-center px-4">
+        <div className="text-center">
+            <h1 className="text-3xl font-bold text-white mb-4">Página no encontrada</h1>
+            <p className="text-gray-400 mb-6">La ruta que intentaste abrir no existe.</p>
+            <button
+                onClick={() => route('/')}
+                className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors"
+            >
+                Ir al catálogo
+            </button>
+        </div>
+    </section>
+);
 
 const App = () => {
     const [games, setGames] = useState<Game[]>([]);
@@ -228,6 +244,21 @@ const App = () => {
                         onGameClick={handleOpenModal}
                     />
 
+                    <CatalogPage
+                        path="/game/"
+                        games={games}
+                        filteredGames={filteredGames}
+                        allGenres={allGenres}
+                        allPlatforms={allPlatforms}
+                        searchTerm={searchTerm}
+                        onSearchChange={setSearchTerm}
+                        activeFilters={activeFilters}
+                        onFilterChange={handleFilterChange}
+                        onClearCategory={clearFilterCategory}
+                        onClearAllFilters={clearFilters}
+                        onGameClick={handleOpenModal}
+                    />
+
                     <CalendarPage
                         path="/calendar"
                         games={games}
@@ -236,8 +267,14 @@ const App = () => {
                     />
                     <ChartsPage path="/charts" games={games} onNavigateToCatalog={navigateToCatalog} />
                     <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
+
                     <GameDetailPage path="/game/:gameSlug" games={games} />
+                    <GameDetailPage path="/game/:gameSlug/" games={games} />
+
                     <AddGamePage path="/add-game" onAddNewGame={handleAddNewGame} onNavigateToCatalog={navigateToCatalog} />
+
+                    {/* Catch-all: show a friendly 404 instead of blank page */}
+                    <NotFoundPage default />
                 </Router>
             </div>
 
