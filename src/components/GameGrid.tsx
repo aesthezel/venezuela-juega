@@ -121,7 +121,7 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
                         <GameCard
                             game={game}
                             onClick={() => onGameClick(game)}
-                            layout="masonry"
+                            layout="grid"
                         />
                     </div>
                 ))}

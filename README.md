@@ -59,10 +59,10 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Modo lista y búsqueda por #-A-Z para los juegos
 - [x] Burger menu en versión móvil
 - [x] Agregar capturas de pantalla a los juegos
-- [x] Mansory grid view (Intentar nuevamente a ver si se logra)
+- [x] ~~Mansory grid view (Intentar nuevamente a ver si se logra)~~ Mansory no sirve adecuadamente
+- [x] Conexión a API de STEAM para obtener datos de los juegos
 - [x] Solucionar los tamaños de los grid, mejorar el responsive
-- [ ] Solucionar persistencia del router cuando se cambia de página 
-- [ ] Conexión a API de tiendas para obtener precios de los juegos
+- [ ] Solucionar persistencia del router cuando se cambia de página
 - [ ] Conexión a API de IGDB o similar
 - [ ] Terminar formulario para agregar nuevos juegos
 - [ ] Agregar trailers a los juegos

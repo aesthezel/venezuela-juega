@@ -19,6 +19,8 @@ const initialGameState: Omit<Game, 'id'> = {
     engine: '',
     languages: [],
     imageUrl: '',
+    imageCover: '',
+    imageHero: '',
     description: '',
     pitch: '',
     funding: '',
