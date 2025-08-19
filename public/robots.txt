@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aesthezel.github.io/venezuela-juega/sitemap.xml
+Sitemap: https://venezuelajuega.com/venezuela-juega/sitemap.xml
