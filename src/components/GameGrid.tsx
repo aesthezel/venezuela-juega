@@ -18,7 +18,7 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
     const prevCountRef = useRef(0);
     const prevGamesSignatureRef = useRef<string>('');
     const observer = useRef<IntersectionObserver | null>(null);
-    const loadingMoreRef = useRef<Boolean>(false);
+    const loadingMoreRef = useRef<boolean>(false);
 
     useEffect(() => {
         const signature = games.map(g => g.id).join('|');
@@ -114,10 +114,10 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
         <>
             <div
                 ref={gridRef}
-                className="columns-1 sm:columns-2 xl:columns-3 gap-6 [column-fill:balance] [&>*]:break-inside-avoid"
+                className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
             >
                 {gamesToShow.map(game => (
-                    <div key={game.id} className="game-card-wrapper mb-6 break-inside-avoid">
+                    <div key={game.id} className="game-card-wrapper">
                         <GameCard
                             game={game}
                             onClick={() => onGameClick(game)}
