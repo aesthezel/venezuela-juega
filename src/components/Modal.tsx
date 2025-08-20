@@ -5,7 +5,7 @@ import { Game } from '@/src/types';
 import { CloseIcon, LinkIcon } from '@/src/components/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { CoverImage } from '@/src/components';
+import {CoverImage, StoreButton} from '@/src/components';
 
 interface ModalProps {
     game: Game;
@@ -93,9 +93,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                 <DetailItem label="Tiendas">
                                     <div className="flex flex-wrap gap-2 mt-1">
                                         {game.stores.map(store => (
-                                            <a key={store.name} href={store.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 bg-slate-700 hover:bg-cyan-600 text-white font-bold py-1 px-3 rounded-lg text-sm transition-colors">
-                                                {store.name} <LinkIcon />
-                                            </a>
+                                            <StoreButton key={store.name} store={store} />
                                         ))}
                                     </div>
                                 </DetailItem>

@@ -62,7 +62,10 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] ~~Mansory grid view (Intentar nuevamente a ver si se logra)~~ Mansory no sirve adecuadamente
 - [x] Conexión a API de STEAM para obtener datos de los juegos
 - [x] Solucionar los tamaños de los grid, mejorar el responsive
-- [ ] Solucionar persistencia del router cuando se cambia de página
+- [x] Solucionar persistencia del router cuando se cambia de página
+- [x] Añadir boton para ir a tiendas y la pagina de steam (si la tiene)
+- [ ] Agregar sistema de links extras
+- [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar
 - [ ] Terminar formulario para agregar nuevos juegos
 - [ ] Agregar trailers a los juegos

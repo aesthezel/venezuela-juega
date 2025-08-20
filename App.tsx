@@ -82,6 +82,11 @@ const App = () => {
                 const gameRows = data.slice(headerIndex + 1);
                 const existingSlugs = new Set<string>();
 
+                const storeColumns = [
+                    'Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store',
+                    'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG'
+                ];
+
                 const parsedGames = gameRows.map((row: string[], index: number): Game | null => {
                     const rowObject = headers.reduce((obj, header, i) => {
                         if (header) {
@@ -98,6 +103,23 @@ const App = () => {
                     const baseSlug = generateSlug(title);
                     const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
 
+                    const stores = storeColumns
+                        .map(storeName => ({
+                            name: storeName,
+                            url: rowObject[storeName]?.trim(),
+                        }))
+                        .filter(store => store.url && store.url !== '');
+
+                    const links = Object.keys(rowObject)
+                        .filter(key => key.startsWith('Link') && key.endsWith('Name'))
+                        .map(nameKey => {
+                            const urlKey = nameKey.replace('Name', 'URL');
+                            const name = rowObject[nameKey]?.trim();
+                            const url = rowObject[urlKey]?.trim();
+                            return (name && url) ? { name, url } : null;
+                        })
+                        .filter((link): link is { name: string; url: string } => link !== null);
+
                     return {
                         id: index + 1,
                         slug: uniqueSlug,
@@ -109,8 +131,8 @@ const App = () => {
                         releaseDate: rowObject['Lanzamiento'] || 'No especificada',
                         lastUpdateDate: rowObject['Última actualización'] || undefined,
                         status: mapStatus(rowObject['Estado actual']),
-                        stores: [],
-                        links: [],
+                        stores: stores,
+                        links: links,
                         pressKitUrl: rowObject['Presskit'] || undefined,
                         pitch: rowObject['Pitch'] || '',
                         funding: rowObject['Financiamiento'] || undefined,

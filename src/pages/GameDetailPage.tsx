@@ -3,8 +3,8 @@ import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
 import { Game } from "@/src/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faGamepad, faGlobe, faCog, faTimes, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import {BackButton, LinkIcon, CoverImage} from "@/src/components";
+import { faArrowLeft, faGamepad, faGlobe, faCog, faTimes, faChevronLeft, faChevronRight, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { BackButton, LinkIcon, CoverImage, StoreButton } from "@/src/components";
 import { GameDetailPageProps } from "@/src/types";
 
 interface DetailSectionProps {
@@ -157,33 +157,8 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                 </div>
             </div>
 
-            {game.screenshots && game.screenshots.length > 0 && (
-                <div className="bg-slate-800 rounded-lg p-6 shadow-lg mb-8">
-                    <h3 className="text-xl font-bold text-white mb-4">Galería de Capturas</h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {game.screenshots.map((shot, idx) => (
-                            <button
-                                key={`${shot}-${idx}`}
-                                type="button"
-                                onClick={() => openLightbox(idx)}
-                                className="relative group focus:outline-none"
-                                aria-label={`Abrir captura ${idx + 1}`}
-                                title="Ampliar"
-                            >
-                                <img
-                                    src={shot}
-                                    alt={`Screenshot ${idx + 1}`}
-                                    className="w-full h-40 sm:h-44 lg:h-48 object-cover rounded-lg border border-slate-700 cursor-zoom-in"
-                                    loading="lazy"
-                                />
-                                <span className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 group-hover:bg-black/20 transition-colors" />
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
                 <DetailSection title="Información General" icon={faGamepad}>
                     <div className="space-y-4">
                         <div>
@@ -214,6 +189,16 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         </div>
                     </div>
                 </DetailSection>
+
+                {game.stores.length > 0 && (
+                    <DetailSection title="Disponible en Tiendas" icon={faShoppingCart}>
+                        <div className="flex flex-wrap gap-3">
+                            {game.stores.map(store => (
+                                <StoreButton key={store.name} store={store} />
+                            ))}
+                        </div>
+                    </DetailSection>
+                )}
 
                 <DetailSection title="Detalles Técnicos" icon={faCog}>
                     <div className="space-y-4">
@@ -248,25 +233,6 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     </div>
                 )}
 
-                {game.stores.length > 0 && (
-                    <DetailSection title="Disponible en Tiendas" icon={faGlobe}>
-                        <div className="flex flex-wrap gap-3">
-                            {game.stores.map(store => (
-                                <a
-                                    key={store.name}
-                                    href={store.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors"
-                                >
-                                    {store.name}
-                                    <LinkIcon />
-                                </a>
-                            ))}
-                        </div>
-                    </DetailSection>
-                )}
-
                 {game.links.length > 0 && (
                     <DetailSection title="Enlaces y Redes Sociales" icon={faGlobe}>
                         <div className="flex flex-wrap gap-3">
@@ -286,6 +252,32 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     </DetailSection>
                 )}
             </div>
+
+            {game.screenshots && game.screenshots.length > 0 && (
+                <div className="bg-slate-800 rounded-lg p-6 shadow-lg mt-8">
+                    <h3 className="text-xl font-bold text-white mb-4">Galería de Capturas</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {game.screenshots.map((shot, idx) => (
+                            <button
+                                key={`${shot}-${idx}`}
+                                type="button"
+                                onClick={() => openLightbox(idx)}
+                                className="relative group focus:outline-none"
+                                aria-label={`Abrir captura ${idx + 1}`}
+                                title="Ampliar"
+                            >
+                                <img
+                                    src={shot}
+                                    alt={`Screenshot ${idx + 1}`}
+                                    className="w-full h-40 sm:h-44 lg:h-48 object-cover rounded-lg border border-slate-700 cursor-zoom-in"
+                                    loading="lazy"
+                                />
+                                <span className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 group-hover:bg-black/20 transition-colors" />
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {isLightboxOpen && game.screenshots && game.screenshots.length > 0 && (
                 <div
