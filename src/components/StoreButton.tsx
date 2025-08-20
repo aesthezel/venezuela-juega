@@ -35,7 +35,7 @@ const storeStyles: Record<string, { icon: any; className: string }> = {
     },
     'Microsoft Store': {
         icon: faXbox,
-        className: 'bg-[#00a4ef] hover:bg-[#00bfff] text-white',
+        className: 'bg-[#107b10] hover:bg-[#00bfff] text-white',
     },
     'Play Store': {
         icon: faGooglePlay,
