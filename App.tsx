@@ -261,6 +261,37 @@ const App = () => {
                         onGameClick={handleOpenModal}
                     />
 
+                    {/* Support plural alias '/games' for compatibility */}
+                    <CatalogPage
+                        path="/games"
+                        games={games}
+                        filteredGames={filteredGames}
+                        allGenres={allGenres}
+                        allPlatforms={allPlatforms}
+                        searchTerm={searchTerm}
+                        onSearchChange={setSearchTerm}
+                        activeFilters={activeFilters}
+                        onFilterChange={handleFilterChange}
+                        onClearCategory={clearFilterCategory}
+                        onClearAllFilters={clearFilters}
+                        onGameClick={handleOpenModal}
+                    />
+
+                    <CatalogPage
+                        path="/games/"
+                        games={games}
+                        filteredGames={filteredGames}
+                        allGenres={allGenres}
+                        allPlatforms={allPlatforms}
+                        searchTerm={searchTerm}
+                        onSearchChange={setSearchTerm}
+                        activeFilters={activeFilters}
+                        onFilterChange={handleFilterChange}
+                        onClearCategory={clearFilterCategory}
+                        onClearAllFilters={clearFilters}
+                        onGameClick={handleOpenModal}
+                    />
+
                     <CalendarPage
                         path="/calendar"
                         games={games}
@@ -272,6 +303,10 @@ const App = () => {
 
                     <GameDetailPage path="/game/:gameSlug" games={games} />
                     <GameDetailPage path="/game/:gameSlug/" games={games} />
+
+                    {/* Support plural alias for game detail */}
+                    <GameDetailPage path="/games/:gameSlug" games={games} />
+                    <GameDetailPage path="/games/:gameSlug/" games={games} />
 
                     <AddGamePage path="/add-game" onAddNewGame={handleAddNewGame} onNavigateToCatalog={navigateToCatalog} />
 
