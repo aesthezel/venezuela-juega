@@ -8,6 +8,8 @@ import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug } from '@
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
 import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage } from '@/src/pages';
 
+declare const gtag: (type: string, event: string, params: Record<string, any>) => void;
+
 // TODO: move to another component and fix something about vertical centering
 const NotFoundPage = (_props: RoutableProps) => (
     <section className="fixed inset-0 z-10 flex items-center justify-center px-4">
@@ -217,6 +219,14 @@ const App = () => {
 
     const handleRouteChange = (e: any) => {
         setCurrentPath(e.url);
+
+        if (typeof gtag === 'function') {
+            gtag('event', 'page_view', {
+                page_path: e.url,
+                page_title: document.title,
+                page_location: window.location.href
+            });
+        }
     };
 
     const navigateToCatalog = () => {
