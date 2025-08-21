@@ -65,6 +65,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Solucionar persistencia del router cuando se cambia de página
 - [x] Añadir botón para ir a tiendas y la página de steam (si la tiene)
 - [x] Analíticas en tiempo real
+- [x] Ajuste de metadatos a nivel servidor cuando navegas por paginas
+- [ ] Ajustar metadatos pre-renderizados para cada juego y página
 - [ ] Filtro de ordenar búsqueda por un rango de año de lanzamiento
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales

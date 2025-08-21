@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Router, RoutableProps, route } from 'preact-router';
 import { Game } from "@/src/types";
 import { useDebounce } from '@/src/hooks';
-import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug } from '@/src/utils';
+import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata } from '@/src/utils';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
 import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage } from '@/src/pages';
 
@@ -25,6 +25,25 @@ const NotFoundPage = (_props: RoutableProps) => (
         </div>
     </section>
 );
+
+const pageMetadata = {
+    '/': {
+        title: 'Venezuela Juega — Catálogo de la industria de videojuegos',
+        description: 'Explora, filtra y descubre videojuegos desarrollados en Venezuela. Un catálogo completo de la industria venezolana.'
+    },
+    '/calendar': {
+        title: 'Calendario de Lanzamientos — Venezuela Juega',
+        description: 'Sigue las fechas de lanzamiento de los próximos videojuegos desarrollados en Venezuela.'
+    },
+    '/charts': {
+        title: 'Estadísticas de la Industria — Venezuela Juega',
+        description: 'Visualiza datos y gráficos sobre el ecosistema de desarrollo de videojuegos en Venezuela.'
+    },
+    '/about': {
+        title: 'Acerca de la Iniciativa — Venezuela Juega',
+        description: 'Conoce más sobre la iniciativa Venezuela Juega, sus colaboradores y cómo puedes contribuir.'
+    },
+};
 
 const App = () => {
     const [games, setGames] = useState<Game[]>([]);
@@ -218,6 +237,7 @@ const App = () => {
     };
 
     const handleRouteChange = (e: any) => {
+        const currentUrl = e.url;
         setCurrentPath(e.url);
 
         if (typeof gtag === 'function') {
@@ -227,6 +247,39 @@ const App = () => {
                 page_location: window.location.href
             });
         }
+
+        const gameSlugMatch = currentUrl.match(/^\/games?\/([^/]+)/);
+
+        if (gameSlugMatch && gameSlugMatch[1]) {
+            const gameSlug = decodeURIComponent(gameSlugMatch[1]);
+            const foundGame = games.find(g => g.slug.toLowerCase() === gameSlug.toLowerCase());
+
+            if (foundGame) {
+                document.title = `${foundGame.title} — Venezuela Juega`;
+                const description = foundGame.description.substring(0, 155).trim() + '...';
+                const imageUrl = foundGame.imageCover || foundGame.imageHero || foundGame.imageUrl;
+
+                updateMetadata('meta[name="description"]', 'content', description);
+                updateMetadata('meta[property="og:title"]', 'content', foundGame.title);
+                updateMetadata('meta[property="og:description"]', 'content', description);
+                updateMetadata('meta[property="og:image"]', 'content', imageUrl);
+                updateMetadata('meta[name="twitter:card"]', 'content', 'summary_large_image');
+            }
+        } else {
+            const metadata = pageMetadata[currentUrl as keyof typeof pageMetadata] || pageMetadata['/'];
+
+            document.title = metadata.title;
+            updateMetadata('meta[name="description"]', 'content', metadata.description);
+            updateMetadata('meta[property="og:title"]', 'content', metadata.title);
+            updateMetadata('meta[property="og:description"]', 'content', metadata.description);
+            // Volvemos a poner la imagen por defecto
+            updateMetadata('meta[property="og:image"]', 'content', 'URL_A_TU_IMAGEN_PRINCIPAL_AQUI'); // Reemplaza con una URL a tu logo o imagen principal
+            updateMetadata('meta[name="twitter:card"]', 'content', 'summary');
+        }
+
+        const pageUrl = window.location.href;
+        updateMetadata('link[rel="canonical"]', 'href', pageUrl);
+        updateMetadata('meta[property="og:url"]', 'content', pageUrl);
     };
 
     const navigateToCatalog = () => {
