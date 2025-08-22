@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'preact/hooks';
+import { useState, useRef, useEffect, useCallback } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { GameStatus } from "@/src/types";
@@ -12,8 +12,11 @@ interface FilterPanelProps {
     onClearCategory: (category: string) => void;
     onClearAll?: () => void;
     clearAllEnabled?: boolean;
+    minYear: number;
+    maxYear: number;
+    yearRange: { min: number; max: number } | null;
+    onYearRangeChange: (range: { min: number; max: number }) => void;
 }
-
 interface FilterSectionProps {
     title: string;
     items: string[];
@@ -119,8 +122,69 @@ const MultiSelectDropdown = ({ title, category, items, selectedItems, onToggleIt
     );
 };
 
-const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange, onClearCategory, onClearAll, clearAllEnabled }: FilterPanelProps) => {
-    const hasActiveFilters = clearAllEnabled ?? Object.values(activeFilters || {}).some(arr => arr && arr.length > 0);
+const YearRangeInputs = ({ minYear, maxYear, yearRange, onYearRangeChange }) => {
+    const [minVal, setMinVal] = useState(yearRange?.min);
+    const [maxVal, setMaxVal] = useState(yearRange?.max);
+
+    useEffect(() => {
+        setMinVal(yearRange?.min);
+        setMaxVal(yearRange?.max);
+    }, [yearRange]);
+
+    if (!yearRange) return null;
+
+    const commitChanges = () => {
+        let newMin = parseInt(String(minVal), 10) || minYear;
+        let newMax = parseInt(String(maxVal), 10) || maxYear;
+
+        // Clamp values within the allowed global range
+        newMin = Math.max(minYear, Math.min(newMin, maxYear));
+        newMax = Math.max(minYear, Math.min(newMax, maxYear));
+
+        // Ensure min is not greater than max
+        if (newMin > newMax) {
+            [newMin, newMax] = [newMax, newMin]; // Swap them
+        }
+
+        onYearRangeChange({ min: newMin, max: newMax });
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.target.blur(); // Trigger blur to commit changes
+        }
+    };
+
+    return (
+        <div>
+            <h3 className="text-lg font-semibold mb-3 text-gray-300">Fecha de lanzamiento</h3>
+            <div className="flex items-center justify-between gap-4">
+                <input
+                    type="number"
+                    value={minVal}
+                    onInput={(e) => setMinVal(e.currentTarget.value)}
+                    onBlur={commitChanges}
+                    onKeyDown={handleKeyDown}
+                    className="w-full bg-slate-700 border-2 border-slate-600 text-white rounded-lg p-2 text-center focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+                    aria-label="Año mínimo"
+                />
+                <span className="text-gray-400 font-bold">-</span>
+                <input
+                    type="number"
+                    value={maxVal}
+                    onInput={(e) => setMaxVal(e.currentTarget.value)}
+                    onBlur={commitChanges}
+                    onKeyDown={handleKeyDown}
+                    className="w-full bg-slate-700 border-2 border-slate-600 text-white rounded-lg p-2 text-center focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+                    aria-label="Año máximo"
+                />
+            </div>
+        </div>
+    );
+};
+
+const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange, onClearCategory, onClearAll, clearAllEnabled, minYear, maxYear, yearRange, onYearRangeChange }: FilterPanelProps) => {
+    const hasActiveFilters = !(!(clearAllEnabled ?? Object.values(activeFilters || {}).some(arr => arr && arr.length > 0)) && !(yearRange && (yearRange.min !== minYear || yearRange.max !== maxYear)));
 
     const handleClearAllClick = (e: MouseEvent) => {
         e.preventDefault();
@@ -152,6 +216,12 @@ const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange, onClear
                 selectedItems={activeFilters.platform || []}
                 onToggleItem={onFilterChange}
                 onClearCategory={onClearCategory}
+            />
+            <YearRangeInputs
+                minYear={minYear}
+                maxYear={maxYear}
+                yearRange={yearRange}
+                onYearRangeChange={onYearRangeChange}
             />
 
             <hr className="border-t border-slate-700" />

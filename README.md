@@ -66,8 +66,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Añadir botón para ir a tiendas y la página de steam (si la tiene)
 - [x] Analíticas en tiempo real
 - [x] Ajuste de metadatos a nivel servidor cuando navegas por paginas
+- [x] Filtro de ordenar búsqueda por un rango de fecha de lanzamiento
 - [ ] Ajustar metadatos pre-renderizados para cada juego y página
-- [ ] Filtro de ordenar búsqueda por un rango de año de lanzamiento
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar

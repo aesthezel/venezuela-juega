@@ -58,6 +58,8 @@ const App = () => {
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState('/');
 
+    const [yearRange, setYearRange] = useState<{ min: number; max: number } | null>(null);
+
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
     // Screenshot helper
@@ -183,19 +185,60 @@ const App = () => {
     const allGenres = useMemo(() => Array.from(new Set(games.flatMap(g => g.genre))), [games]);
     const allPlatforms = useMemo(() => Array.from(new Set(games.flatMap(g => g.platform))), [games]);
 
+    const { minYear, maxYear } = useMemo(() => {
+        if (games.length === 0) {
+            const currentYear = new Date().getFullYear();
+            return { minYear: currentYear - 20, maxYear: currentYear };
+        }
+        const years = games
+            .map(g => {
+                const yearMatch = g.releaseDate.match(/\b\d{4}\b/);
+                return yearMatch ? parseInt(yearMatch[0], 10) : null;
+            })
+            .filter((y): y is number => y !== null);
+
+        const uniqueYears = [...new Set(years)].sort((a, b) => a - b);
+        return {
+            minYear: uniqueYears.length > 0 ? uniqueYears[0] : 1985,
+            maxYear: new Date().getFullYear(),
+        };
+    }, [games]);
+
+    useEffect(() => {
+        if (minYear && maxYear && !yearRange) {
+            setYearRange({ min: minYear, max: maxYear });
+        }
+    }, [minYear, maxYear, yearRange]);
+
     const filteredGames = useMemo(() => {
         return games.filter(game => {
-            const searchMatch = debouncedSearchTerm === '' || 
+            const searchMatch = debouncedSearchTerm === '' ||
                 game.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
                 game.developers.some(dev => dev.toLowerCase().includes(debouncedSearchTerm.toLowerCase())) ||
                 game.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
-            
+
+            const isYearFilterActive = yearRange && (yearRange.min !== minYear || yearRange.max !== maxYear);
+
+
             const statusMatch = activeFilters.status.length === 0 || activeFilters.status.includes(game.status);
             const genreMatch = activeFilters.genre.length === 0 || activeFilters.genre.some(f => game.genre.includes(f));
             const platformMatch = activeFilters.platform.length === 0 || activeFilters.platform.some(f => game.platform.includes(f));
-            return searchMatch && statusMatch && genreMatch && platformMatch;
+
+            const releaseYearMatch = game.releaseDate.match(/\b\d{4}\b/);
+            const releaseYear = releaseYearMatch ? parseInt(releaseYearMatch[0], 10) : null;
+
+            let yearMatch = true;
+            if (isYearFilterActive) {
+                if (releaseYear === null) {
+                    yearMatch = false; // Oculta el juego si el filtro está activo y no hay año
+                } else {
+                    yearMatch = releaseYear >= yearRange.min && releaseYear <= yearRange.max;
+                }
+            }
+
+            return searchMatch && statusMatch && genreMatch && platformMatch && yearMatch;
         });
-    }, [debouncedSearchTerm, activeFilters, games]);
+    }, [debouncedSearchTerm, activeFilters, games, yearRange, minYear, maxYear]);
 
     const handleFilterChange = (category: string, value: string) => {
         setActiveFilters(prev => {
@@ -205,6 +248,10 @@ const App = () => {
                 : [...currentFilters, value];
             return { ...prev, [category]: newFilters };
         });
+    };
+
+    const handleYearRangeChange = (newRange: { min: number; max: number }) => {
+        setYearRange(newRange);
     };
 
     const clearFilterCategory = (category: string) => {
@@ -221,7 +268,10 @@ const App = () => {
         route(`/game/${encodeURIComponent(game.slug)}`);
     };
 
-    const clearFilters = () => setActiveFilters({ status: [], genre: [], platform: [] });
+    const clearFilters = () => {
+        setActiveFilters({ status: [], genre: [], platform: [] });
+        setYearRange({ min: minYear, max: maxYear });
+    };
 
     const handleAddNewGame = (newGameData: Omit<Game, 'id' | 'slug'>) => {
         const existingSlugs = new Set(games.map(g => g.slug));
@@ -286,6 +336,24 @@ const App = () => {
         route('/');
     };
 
+    const catalogPageProps = {
+        games: games,
+        filteredGames: filteredGames,
+        allGenres: allGenres,
+        allPlatforms: allPlatforms,
+        searchTerm: searchTerm,
+        onSearchChange: setSearchTerm,
+        activeFilters: activeFilters,
+        onFilterChange: handleFilterChange,
+        onClearCategory: clearFilterCategory,
+        onClearAllFilters: clearFilters,
+        onGameClick: handleOpenModal,
+        minYear: minYear,
+        maxYear: maxYear,
+        yearRange: yearRange,
+        onYearRangeChange: handleYearRangeChange,
+    };
+
     if (loading) {
         return <LoadingSpinner />;
     }
@@ -300,82 +368,11 @@ const App = () => {
 
             <div className="flex-grow">
                 <Router onChange={handleRouteChange}>
-                    <CatalogPage
-                        path="/"
-                        games={games}
-                        filteredGames={filteredGames}
-                        allGenres={allGenres}
-                        allPlatforms={allPlatforms}
-                        searchTerm={searchTerm}
-                        onSearchChange={setSearchTerm}
-                        activeFilters={activeFilters}
-                        onFilterChange={handleFilterChange}
-                        onClearCategory={clearFilterCategory}
-                        onClearAllFilters={clearFilters}
-                        onGameClick={handleOpenModal}
-                    />
-
-                    {/* Handle /game without a slug by showing the catalog */}
-                    <CatalogPage
-                        path="/game"
-                        games={games}
-                        filteredGames={filteredGames}
-                        allGenres={allGenres}
-                        allPlatforms={allPlatforms}
-                        searchTerm={searchTerm}
-                        onSearchChange={setSearchTerm}
-                        activeFilters={activeFilters}
-                        onFilterChange={handleFilterChange}
-                        onClearCategory={clearFilterCategory}
-                        onClearAllFilters={clearFilters}
-                        onGameClick={handleOpenModal}
-                    />
-
-                    <CatalogPage
-                        path="/game/"
-                        games={games}
-                        filteredGames={filteredGames}
-                        allGenres={allGenres}
-                        allPlatforms={allPlatforms}
-                        searchTerm={searchTerm}
-                        onSearchChange={setSearchTerm}
-                        activeFilters={activeFilters}
-                        onFilterChange={handleFilterChange}
-                        onClearCategory={clearFilterCategory}
-                        onClearAllFilters={clearFilters}
-                        onGameClick={handleOpenModal}
-                    />
-
-                    {/* Support plural alias '/games' for compatibility */}
-                    <CatalogPage
-                        path="/games"
-                        games={games}
-                        filteredGames={filteredGames}
-                        allGenres={allGenres}
-                        allPlatforms={allPlatforms}
-                        searchTerm={searchTerm}
-                        onSearchChange={setSearchTerm}
-                        activeFilters={activeFilters}
-                        onFilterChange={handleFilterChange}
-                        onClearCategory={clearFilterCategory}
-                        onClearAllFilters={clearFilters}
-                        onGameClick={handleOpenModal}
-                    />
-
-                    <CatalogPage
-                        path="/games/"
-                        games={games}
-                        filteredGames={filteredGames}
-                        allGenres={allGenres}
-                        allPlatforms={allPlatforms}
-                        searchTerm={searchTerm}
-                        onSearchChange={setSearchTerm}
-                        activeFilters={activeFilters}
-                        onFilterChange={handleFilterChange}
-                        onClearCategory={clearFilterCategory}
-                        onClearAllFilters={clearFilters}
-                        onGameClick={handleOpenModal}
-                    />
+                    <CatalogPage path="/" {...catalogPageProps} />
+                    <CatalogPage path="/game" {...catalogPageProps} />
+                    <CatalogPage path="/game/" {...catalogPageProps} />
+                    <CatalogPage path="/games" {...catalogPageProps} />
+                    <CatalogPage path="/games/" {...catalogPageProps} />
 
                     <CalendarPage
                         path="/calendar"

@@ -63,4 +63,8 @@ export interface CatalogPageProps {
     onClearCategory: (category: string) => void;
     onClearAllFilters: () => void;
     onGameClick: (game: Game) => void;
+    minYear: number;
+    maxYear: number;
+    yearRange: { min: number; max: number } | null;
+    onYearRangeChange: (range: { min: number; max: number }) => void;
 }

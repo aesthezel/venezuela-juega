@@ -25,6 +25,10 @@ const CatalogPage = ({
                          onClearCategory,
                          onClearAllFilters,
                          onGameClick,
+                         minYear,
+                         maxYear,
+                         yearRange,
+                         onYearRangeChange,
                      }: CatalogPageProps) => {
 
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -94,6 +98,10 @@ const CatalogPage = ({
                                 onClearCategory={onClearCategory}
                                 onClearAll={onClearAllFilters}
                                 clearAllEnabled={hasActiveFilters}
+                                minYear={minYear}
+                                maxYear={maxYear}
+                                yearRange={yearRange}
+                                onYearRangeChange={onYearRangeChange}
                             />
                         </div>
                     </div>
