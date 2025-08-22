@@ -26,6 +26,7 @@ const NotFoundPage = (_props: RoutableProps) => (
     </section>
 );
 
+// TODO: move to metada settings file
 const pageMetadata = {
     '/': {
         title: 'Venezuela Juega — Catálogo de la industria de videojuegos',
@@ -45,6 +46,7 @@ const pageMetadata = {
     },
 };
 
+// TODO: refactor and separate hooks, useStates and useEffects properly
 const App = () => {
     const [games, setGames] = useState<Game[]>([]);
     const [loading, setLoading] = useState(true);
@@ -59,6 +61,10 @@ const App = () => {
     const [currentPath, setCurrentPath] = useState('/');
 
     const [yearRange, setYearRange] = useState<{ min: number; max: number } | null>(null);
+    const [isYearFilterManuallySet, setIsYearFilterManuallySet] = useState(false);
+    const [minYear, setMinYear] = useState(new Date().getFullYear() - 40);
+    const [maxYear, setMaxYear] = useState(new Date().getFullYear());
+
 
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
@@ -171,7 +177,6 @@ const App = () => {
                 }).filter((game): game is Game => game !== null);
 
                 setGames(parsedGames);
-
                 setLoading(false);
             },
             error: (err) => {
@@ -182,33 +187,29 @@ const App = () => {
         });
     }, []);
 
-    const allGenres = useMemo(() => Array.from(new Set(games.flatMap(g => g.genre))), [games]);
-    const allPlatforms = useMemo(() => Array.from(new Set(games.flatMap(g => g.platform))), [games]);
-
-    const { minYear, maxYear } = useMemo(() => {
-        if (games.length === 0) {
+    useEffect(() => {
+        if (games.length > 0) {
             const currentYear = new Date().getFullYear();
-            return { minYear: currentYear - 20, maxYear: currentYear };
-        }
-        const years = games
-            .map(g => {
-                const yearMatch = g.releaseDate.match(/\b\d{4}\b/);
-                return yearMatch ? parseInt(yearMatch[0], 10) : null;
-            })
-            .filter((y): y is number => y !== null);
+            const years = games
+                .map(g => {
+                    const yearMatch = g.releaseDate.match(/\b\d{4}\b/);
+                    return yearMatch ? parseInt(yearMatch[0], 10) : null;
+                })
+                .filter((y): y is number => y !== null);
 
-        const uniqueYears = [...new Set(years)].sort((a, b) => a - b);
-        return {
-            minYear: uniqueYears.length > 0 ? uniqueYears[0] : 1985,
-            maxYear: new Date().getFullYear(),
-        };
+            const uniqueYears = [...new Set(years)].sort((a, b) => a - b);
+
+            const newMinYear = uniqueYears.length > 0 ? uniqueYears[0] : currentYear - 40;
+            const newMaxYear = uniqueYears.length > 0 ? uniqueYears[uniqueYears.length - 1] : currentYear;
+
+            setMinYear(newMinYear);
+            setMaxYear(newMaxYear);
+            setYearRange({ min: newMinYear, max: newMaxYear });
+        }
     }, [games]);
 
-    useEffect(() => {
-        if (minYear && maxYear && !yearRange) {
-            setYearRange({ min: minYear, max: maxYear });
-        }
-    }, [minYear, maxYear, yearRange]);
+    const allGenres = useMemo(() => Array.from(new Set(games.flatMap(g => g.genre))), [games]);
+    const allPlatforms = useMemo(() => Array.from(new Set(games.flatMap(g => g.platform))), [games]);
 
     const filteredGames = useMemo(() => {
         return games.filter(game => {
@@ -216,9 +217,6 @@ const App = () => {
                 game.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
                 game.developers.some(dev => dev.toLowerCase().includes(debouncedSearchTerm.toLowerCase())) ||
                 game.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
-
-            const isYearFilterActive = yearRange && (yearRange.min !== minYear || yearRange.max !== maxYear);
-
 
             const statusMatch = activeFilters.status.length === 0 || activeFilters.status.includes(game.status);
             const genreMatch = activeFilters.genre.length === 0 || activeFilters.genre.some(f => game.genre.includes(f));
@@ -228,17 +226,17 @@ const App = () => {
             const releaseYear = releaseYearMatch ? parseInt(releaseYearMatch[0], 10) : null;
 
             let yearMatch = true;
-            if (isYearFilterActive) {
+            if (isYearFilterManuallySet) {
                 if (releaseYear === null) {
-                    yearMatch = false; // Oculta el juego si el filtro está activo y no hay año
-                } else {
+                    yearMatch = false;
+                } else if (yearRange) {
                     yearMatch = releaseYear >= yearRange.min && releaseYear <= yearRange.max;
                 }
             }
 
             return searchMatch && statusMatch && genreMatch && platformMatch && yearMatch;
         });
-    }, [debouncedSearchTerm, activeFilters, games, yearRange, minYear, maxYear]);
+    }, [debouncedSearchTerm, activeFilters, games, yearRange, isYearFilterManuallySet]);
 
     const handleFilterChange = (category: string, value: string) => {
         setActiveFilters(prev => {
@@ -252,6 +250,7 @@ const App = () => {
 
     const handleYearRangeChange = (newRange: { min: number; max: number }) => {
         setYearRange(newRange);
+        setIsYearFilterManuallySet(true);
     };
 
     const clearFilterCategory = (category: string) => {
@@ -271,13 +270,14 @@ const App = () => {
     const clearFilters = () => {
         setActiveFilters({ status: [], genre: [], platform: [] });
         setYearRange({ min: minYear, max: maxYear });
+        setIsYearFilterManuallySet(false);
     };
 
     const handleAddNewGame = (newGameData: Omit<Game, 'id' | 'slug'>) => {
         const existingSlugs = new Set(games.map(g => g.slug));
         const baseSlug = generateSlug(newGameData.title);
         const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
-        
+
         const newGame: Game = {
             ...newGameData,
             id: games.length > 0 ? Math.max(...games.map(g => g.id)) + 1 : 1,
@@ -386,13 +386,11 @@ const App = () => {
                     <GameDetailPage path="/game/:gameSlug" games={games} />
                     <GameDetailPage path="/game/:gameSlug/" games={games} />
 
-                    {/* Support plural alias for game detail */}
                     <GameDetailPage path="/games/:gameSlug" games={games} />
                     <GameDetailPage path="/games/:gameSlug/" games={games} />
 
                     <AddGamePage path="/add-game" onAddNewGame={handleAddNewGame} onNavigateToCatalog={navigateToCatalog} />
 
-                    {/* Catch-all: show a friendly 404 instead of blank page */}
                     <NotFoundPage default />
                 </Router>
             </div>
