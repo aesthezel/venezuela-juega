@@ -18,6 +18,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+      SHEET_NAME: ${{ secrets.SHEET_NAME }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

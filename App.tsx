@@ -91,7 +91,11 @@ const App = () => {
     };
 
     useEffect(() => {
-        const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1tVBCGdGaTSTTikMKWFVT4Lzmq71TRikWSzIjiIR15FA/pub?gid=0&single=true&output=csv';
+        // @ts-ignore
+        const SPREADSHEET_ID = import.meta.env.VITE_SPREADSHEET_ID;
+        // @ts-ignore
+        const SHEET_NAME = import.meta.env.VITE_SHEET_NAME;
+        const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
 
         Papa.parse(SPREADSHEET_URL, {
             download: true,
