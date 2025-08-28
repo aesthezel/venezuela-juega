@@ -160,7 +160,7 @@ const Header = ({ currentPath }: HeaderProps) => {
                                     leading-snug
                                 "
                             >
-                                Explora la industria del gaming en el pais
+                                Explora la industria del gaming en el país
                             </p>
                         </div>
                     </button>
