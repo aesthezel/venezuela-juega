@@ -98,6 +98,16 @@ const App = () => {
         const SHEET_NAME = import.meta.env.VITE_SHEET_NAME;
         const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
 
+        const CORRECT_HEADERS = [
+            'Título del videojuego', 'Plataforma(s)', 'Género(s)', 'Desarrollador(es)',
+            'Distribuidor', 'Fecha de lanzamiento', 'Última actualización', 'Estado actual',
+            'Tiendas', 'Enlace(s)', 'Presskit', 'Pitch', 'Financiamiento', 'Motor',
+            'Origen inicial', 'Idioma(s) disponible(s)', 'Destacado', 'steam_appid',
+            'google_appid', 'Enlace directo', 'Steam', 'GOG', 'Itch', 'Nintendo Shop',
+            'PlayStation Store', 'Microsoft Store', 'Play Store', 'App Store', 'Meta',
+            'Tienda externa', 'Hero', 'Portada', 'Mini Image', 'Trailer', 'Screenshots', 'Descripción'
+        ];
+
         Papa.parse(SPREADSHEET_URL, {
             download: true,
             header: false,
@@ -112,7 +122,6 @@ const App = () => {
                     return;
                 }
 
-                const headers = data[headerIndex];
                 const gameRows = data.slice(headerIndex + 1);
                 const existingSlugs = new Set<string>();
 
@@ -121,19 +130,19 @@ const App = () => {
                     'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'
                 ];
 
-                const parsedGames = gameRows.map((row: string[], index: number): Game | null => {
-                    const rowObject = headers.reduce((obj, header, i) => {
-                        if (header) {
+                const parsedGames = gameRows.map((row: string[]): Game | null => {
+                    const rowObject = CORRECT_HEADERS.reduce((obj, header, i) => {
+                        if (header && i < row.length) {
                             obj[header] = row[i];
                         }
                         return obj;
                     }, {} as { [key: string]: string });
 
-                    if (!rowObject['Título del videojuego']) {
+                    const title = rowObject['Título del videojuego'];
+                    if (!title) {
                         return null;
                     }
 
-                    const title = rowObject['Título del videojuego'];
                     const baseSlug = generateSlug(title);
                     const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
 
@@ -142,7 +151,7 @@ const App = () => {
                             name: storeName,
                             url: rowObject[storeName]?.trim(),
                         }))
-                        .filter(store => store.url && store.url !== '');
+                        .filter(store => store.url);
 
                     const links = Object.keys(rowObject)
                         .filter(key => key.startsWith('Link') && key.endsWith('Name'))
@@ -155,14 +164,14 @@ const App = () => {
                         .filter((link): link is { name: string; url: string } => link !== null);
 
                     return {
-                        id: index + 1,
+                        id: (games.length || 0) + existingSlugs.size + 1,
                         slug: uniqueSlug,
                         title: title,
                         platform: parseStringToArray(rowObject['Plataforma(s)']),
                         genre: parseStringToArray(rowObject['Género(s)']),
                         developers: parseStringToArray(rowObject['Desarrollador(es)']),
                         publishers: parseStringToArray(rowObject['Distribuidor']),
-                        releaseDate: rowObject['Lanzamiento'] || 'No especificada',
+                        releaseDate: rowObject['Fecha de lanzamiento'] || 'No especificada',
                         lastUpdateDate: rowObject['Última actualización'] || undefined,
                         status: mapStatus(rowObject['Estado actual']),
                         stores: stores,
@@ -388,6 +397,7 @@ const App = () => {
                         onNavigateToCatalog={navigateToCatalog}
                         onEventClick={handleOpenModal}
                     />
+
                     <ChartsPage path="/charts" games={games} onNavigateToCatalog={navigateToCatalog} />
                     <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
 

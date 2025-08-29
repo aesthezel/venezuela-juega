@@ -6,24 +6,25 @@ import { CalendarPageProps } from "@/src/types";
 declare var FullCalendar: any;
 
 const parseDate = (dateString: string): string | null => {
-    const dateRegex = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
-    if (!dateString || !dateRegex.test(dateString)) {
+    if (!dateString || isNaN(new Date(dateString).getTime())) {
         return null;
     }
 
-    try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) {
-            return null;
-        }
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    } catch (error) {
-        console.error(`Error al parsear la fecha: ${dateString}`, error);
+    const date = new Date(dateString);
+
+    if (isNaN(date.getTime())) {
         return null;
     }
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    if (year < 1980 || year > new Date().getFullYear() + 20) {
+        return null;
+    }
+
+    return `${year}-${month}-${day}`;
 };
 
 const CalendarTooltip = ({ game, position }: { game: Game; position: { top: number; left: number } }) => {
@@ -48,6 +49,9 @@ const CalendarTooltip = ({ game, position }: { game: Game; position: { top: numb
 
 
 const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPageProps) => {
+
+    console.log(games);
+
     const calendarRef = useRef<HTMLDivElement>(null);
     const [previewGame, setPreviewGame] = useState<Game | null>(null);
     const [previewPosition, setPreviewPosition] = useState({ top: 0, left: 0 });
