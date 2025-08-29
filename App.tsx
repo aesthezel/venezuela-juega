@@ -117,7 +117,7 @@ const App = () => {
 
                 const storeColumns = [
                     'Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store',
-                    'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG'
+                    'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'
                 ];
 
                 const parsedGames = gameRows.map((row: string[], index: number): Game | null => {

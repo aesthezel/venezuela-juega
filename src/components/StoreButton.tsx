@@ -9,7 +9,7 @@ import {
     faApple,
     faMeta,
 } from '@fortawesome/free-brands-svg-icons';
-import { faDesktop, faGamepad } from '@fortawesome/free-solid-svg-icons';
+import { faGamepad, faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { LinkIcon } from './icons';
 
 interface StoreButtonProps {
@@ -54,7 +54,7 @@ const storeStyles: Record<string, { icon: any; className: string }> = {
         className: 'bg-[#c99aff] hover:bg-[#3391ff] text-white',
     },
     'Default': {
-        icon: faDesktop,
+        icon: faGlobe,
         className: 'bg-cyan-500 hover:bg-cyan-600 text-white',
     },
 };
