@@ -7,6 +7,7 @@ import {h} from "preact";
 interface FilterPanelProps {
     genres: string[];
     platforms: string[];
+    stores: string[];
     activeFilters: Record<string, string[]>;
     onFilterChange: (category: string, value: string) => void;
     onClearCategory: (category: string) => void;
@@ -183,7 +184,7 @@ const YearRangeInputs = ({ minYear, maxYear, yearRange, onYearRangeChange }) => 
     );
 };
 
-const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange, onClearCategory, onClearAll, clearAllEnabled, minYear, maxYear, yearRange, onYearRangeChange }: FilterPanelProps) => {
+const FilterPanel = ({ genres, platforms, stores, activeFilters, onFilterChange, onClearCategory, onClearAll, clearAllEnabled, minYear, maxYear, yearRange, onYearRangeChange }: FilterPanelProps) => {
     const hasActiveFilters = !(!(clearAllEnabled ?? Object.values(activeFilters || {}).some(arr => arr && arr.length > 0)) && !(yearRange && (yearRange.min !== minYear || yearRange.max !== maxYear)));
 
     const handleClearAllClick = (e: MouseEvent) => {
@@ -206,6 +207,14 @@ const FilterPanel = ({ genres, platforms, activeFilters, onFilterChange, onClear
                 category="genre"
                 items={genres}
                 selectedItems={activeFilters.genre || []}
+                onToggleItem={onFilterChange}
+                onClearCategory={onClearCategory}
+            />
+            <MultiSelectDropdown
+                title="Tiendas"
+                category="stores"
+                items={stores}
+                selectedItems={activeFilters.stores || []}
                 onToggleItem={onFilterChange}
                 onClearCategory={onClearCategory}
             />

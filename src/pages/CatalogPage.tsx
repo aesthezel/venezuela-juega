@@ -18,6 +18,7 @@ const CatalogPage = ({
                          filteredGames,
                          allGenres,
                          allPlatforms,
+                         allStores,
                          searchTerm,
                          onSearchChange,
                          activeFilters,
@@ -93,6 +94,7 @@ const CatalogPage = ({
                             <FilterPanel
                                 genres={allGenres}
                                 platforms={allPlatforms}
+                                stores={allStores}
                                 activeFilters={activeFilters}
                                 onFilterChange={onFilterChange}
                                 onClearCategory={onClearCategory}

@@ -56,6 +56,7 @@ const App = () => {
         status: [],
         genre: [],
         platform: [],
+        stores: [],
     });
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState('/');
@@ -214,6 +215,7 @@ const App = () => {
 
     const allGenres = useMemo(() => Array.from(new Set(games.flatMap(g => g.genre))), [games]);
     const allPlatforms = useMemo(() => Array.from(new Set(games.flatMap(g => g.platform))), [games]);
+    const allStores = useMemo(() => Array.from(new Set(games.flatMap(g => g.stores.map(s => s.name)))), [games]);
 
     const filteredGames = useMemo(() => {
         return games.filter(game => {
@@ -225,6 +227,7 @@ const App = () => {
             const statusMatch = activeFilters.status.length === 0 || activeFilters.status.includes(game.status);
             const genreMatch = activeFilters.genre.length === 0 || activeFilters.genre.some(f => game.genre.includes(f));
             const platformMatch = activeFilters.platform.length === 0 || activeFilters.platform.some(f => game.platform.includes(f));
+            const storeMatch = activeFilters.stores.length === 0 || activeFilters.stores.some(f => game.stores.some(s => s.name === f));
 
             const releaseYearMatch = game.releaseDate.match(/\b\d{4}\b/);
             const releaseYear = releaseYearMatch ? parseInt(releaseYearMatch[0], 10) : null;
@@ -238,7 +241,7 @@ const App = () => {
                 }
             }
 
-            return searchMatch && statusMatch && genreMatch && platformMatch && yearMatch;
+            return searchMatch && statusMatch && genreMatch && platformMatch && storeMatch && yearMatch;
         });
     }, [debouncedSearchTerm, activeFilters, games, yearRange, isYearFilterManuallySet]);
 
@@ -272,7 +275,7 @@ const App = () => {
     };
 
     const clearFilters = () => {
-        setActiveFilters({ status: [], genre: [], platform: [] });
+        setActiveFilters({ status: [], genre: [], platform: [], stores: [] });
         setYearRange({ min: minYear, max: maxYear });
         setIsYearFilterManuallySet(false);
     };
@@ -345,6 +348,7 @@ const App = () => {
         filteredGames: filteredGames,
         allGenres: allGenres,
         allPlatforms: allPlatforms,
+        allStores: allStores,
         searchTerm: searchTerm,
         onSearchChange: setSearchTerm,
         activeFilters: activeFilters,

@@ -56,6 +56,7 @@ export interface CatalogPageProps {
     filteredGames: Game[];
     allGenres: string[];
     allPlatforms: string[];
+    allStores: string[];
     searchTerm: string;
     onSearchChange: (value: string) => void;
     activeFilters: Record<string, string[]>;

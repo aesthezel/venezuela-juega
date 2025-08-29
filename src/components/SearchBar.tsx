@@ -4,6 +4,7 @@ import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { route } from 'preact-router';
 import { Game } from '@/src/types';
 import { useDebounce } from '@/src/hooks';
+import {CoverImage} from "@/src/components/index.ts";
 
 interface SearchBarProps {
     searchTerm: string;
@@ -231,11 +232,11 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame }: SearchBa
                             }`}
                         >
                             <div className="flex items-center gap-3">
-                                <img
+                                <CoverImage
                                     src={game.imageUrl}
                                     alt={game.title}
-                                    className="w-12 h-12 object-cover rounded flex-shrink-0"
-                                    loading="lazy"
+                                    className={'w-12 h-12 object-cover rounded flex-shrink-0'}
+                                    imgClassName={'w-12 h-12 object-cover rounded flex-shrink-0'}
                                 />
                                 <div className="flex-1 min-w-0">
                                     <div className="text-white font-medium truncate">
