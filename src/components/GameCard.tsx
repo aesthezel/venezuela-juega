@@ -117,7 +117,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                         imgClassName={hasImage ? 'w-full h-auto block' : 'w-full h-[150px] object-cover block'}
                     />
                     <div className="absolute top-2 right-2">
-                        <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1 text-black" />
+                        <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1" />
                     </div>
                     <div className="absolute bottom-2 left-2 flex gap-1">
                         {game.platform.slice(0, 4).map((platform, index) => (
@@ -148,7 +148,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                         imgClassName="absolute inset-0 w-full h-full object-cover"
                     />
                     <div className="absolute top-2 right-2">
-                        <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1 text-black" />
+                        <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1" />
                     </div>
                     <div className="absolute bottom-2 left-2 flex gap-1">
                         {game.platform.slice(0, 4).map((platform, index) => (

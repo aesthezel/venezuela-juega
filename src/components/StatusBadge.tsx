@@ -13,11 +13,11 @@ export interface StatusBadgeProps {
 }
 
 const defaultBgMap: Record<GameStatus, string> = {
-  [GameStatus.RELEASED]: "bg-green-500",
+  [GameStatus.RELEASED]: "bg-green-600",
   [GameStatus.IN_DEVELOPMENT]: "bg-yellow-500",
   [GameStatus.ON_HOLD]: "bg-gray-500",
   [GameStatus.CANCELED]: "bg-red-600",
-  [GameStatus.RELEASED_DEMO]: 'bg-green-200',
+  [GameStatus.RELEASED_DEMO]: 'bg-green-400',
   [GameStatus.PROTOTYPE]: 'bg-gray-200',
   [GameStatus.LOST_MEDIA]: 'bg-red-200',
   [GameStatus.EARLY_ACCESS]: 'bg-cyan-500',
@@ -64,7 +64,7 @@ export default function StatusBadge({
   let variantClasses = '';
   switch (variant) {
     case 'solid':
-      variantClasses = `${bg} text-white`;
+      variantClasses = `${bg} text-black`;
       break;
     case 'soft':
       variantClasses = `${toSoftBg(bg)} ${text} ring-1 ring-white/15`;
