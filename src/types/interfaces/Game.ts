@@ -69,6 +69,9 @@ export interface Game {
     /** Whether the game is featured in the highlights section */
     isHighlighted?: boolean;
 
+    /** Reason why the game is featured in highlights */
+    highlightReason?: string;
+
     /** Screenshots URLs for the game (empty if none) */
     screenshots?: string[];
 }

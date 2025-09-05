@@ -102,7 +102,7 @@ const App = () => {
             'Título del videojuego', 'Plataforma(s)', 'Género(s)', 'Desarrollador(es)',
             'Distribuidor', 'Fecha de lanzamiento', 'Última actualización', 'Estado actual',
             'Tiendas', 'Enlace(s)', 'Presskit', 'Pitch', 'Financiamiento', 'Motor',
-            'Origen inicial', 'Idioma(s) disponible(s)', 'Destacado', 'steam_appid',
+            'Origen inicial', 'Idioma(s) disponible(s)', 'Destacado', 'Descripción del Destacado', 'steam_appid',
             'google_appid', 'Enlace directo', 'Steam', 'GOG', 'Itch', 'Nintendo Shop',
             'PlayStation Store', 'Microsoft Store', 'Play Store', 'App Store', 'Meta',
             'Tienda externa', 'Hero', 'Portada', 'Mini Image', 'Trailer', 'Screenshots', 'Descripción'
@@ -186,6 +186,7 @@ const App = () => {
                         imageHero: rowObject['Hero'] || '',
                         description: rowObject['Descripción'] || '',
                         isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
+                        highlightReason: rowObject['Descripción del Destacado'] || '',
                         screenshots: parseScreenshots(rowObject['Screenshots']),
                     };
                 }).filter((game): game is Game => game !== null);
