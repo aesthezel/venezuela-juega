@@ -4,7 +4,7 @@ import { route } from 'preact-router';
 import { Game } from "@/src/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faGamepad, faGlobe, faCog, faTimes, faChevronLeft, faChevronRight, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { BackButton, LinkIcon, CoverImage, StoreButton } from "@/src/components";
+import {BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge} from "@/src/components";
 import { GameDetailPageProps } from "@/src/types";
 import { updateMetadata } from "@/src/utils";
 
@@ -161,7 +161,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         <h1 className="text-4xl font-bold text-white mb-2">{game.title}</h1>
                         <p className="text-xl text-cyan-400 mb-4">{game.developers.join(', ')}</p>
                         <p className="text-gray-300 mb-6">{game.description}</p>
-                        
+
                         <div className="flex flex-wrap gap-2 mb-4">
                             {game.genre.map(g => (
                                 <span key={g} className="bg-cyan-500 text-white text-sm font-semibold px-3 py-1 rounded-full">
@@ -169,18 +169,12 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                                 </span>
                             ))}
                         </div>
-                        
-                        <div className={`inline-block px-4 py-2 text-white font-bold rounded-full text-sm ${
-                            game.status === 'Lanzado' ? 'bg-green-500' :
-                            game.status === 'En desarrollo' ? 'bg-yellow-500' :
-                            game.status === 'Pausado' ? 'bg-gray-500' :
-                            'bg-red-500'
-                        }`}>
-                            {game.status}
-                        </div>
+
+                        <StatusBadge status={game.status} size="md" variant="soft" className="rounded-full" />
                     </div>
                 </div>
             </div>
+
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 

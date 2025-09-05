@@ -1,6 +1,6 @@
 // noinspection JSNonASCIINames
 import { useState, useRef, useEffect } from 'preact/hooks';
-import { Game, GameStatus } from '@/src/types';
+import { Game } from '@/src/types';
 import { JSX } from 'preact/jsx-runtime';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,26 +17,13 @@ import {
     faMobile,
     faGlobe
 } from '@fortawesome/free-solid-svg-icons';
-import { CoverImage } from '@/src/components';
+import {CoverImage, StatusBadge} from '@/src/components';
 
 interface GameCardProps {
     game: Game;
     onClick: () => void;
     layout?: 'grid' | 'masonry';
 }
-
-const statusColorMap: Record<GameStatus, string> = {
-    [GameStatus.RELEASED]: "bg-green-500",
-    [GameStatus.IN_DEVELOPMENT]: "bg-yellow-500",
-    [GameStatus.ON_HOLD]: "bg-gray-500",
-    [GameStatus.CANCELED]: "bg-red-600",
-    [GameStatus.RELEASED_DEMO]: 'bg-green-200',
-    [GameStatus.PROTOTYPE]: 'bg-gray-200',
-    [GameStatus.LOST_MEDIA]: 'bg-red-200',
-    [GameStatus.EARLY_ACCESS]: 'bg-cyan-500',
-    [GameStatus.RECOVERED]: 'bg-blue-500',
-    [GameStatus.UNKNOWN]: 'bg-gray-900'
-};
 
 const platformIconMap: Record<string, any> = {
     'Windows': faWindows,
@@ -129,8 +116,8 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                         className={hasImage ? 'w-full h-auto block' : 'w-full h-[150px] object-cover block'}
                         imgClassName={hasImage ? 'w-full h-auto block' : 'w-full h-[150px] object-cover block'}
                     />
-                    <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
-                        {game.status}
+                    <div className="absolute top-2 right-2">
+                        <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1 text-black" />
                     </div>
                     <div className="absolute bottom-2 left-2 flex gap-1">
                         {game.platform.slice(0, 4).map((platform, index) => (
@@ -160,8 +147,8 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                         className="absolute inset-0 w-full h-full object-cover"
                         imgClassName="absolute inset-0 w-full h-full object-cover"
                     />
-                    <div className={`absolute top-2 right-2 px-2 py-1 text-xs text-white font-bold rounded-full ${statusColorMap[game.status]}`}>
-                        {game.status}
+                    <div className="absolute top-2 right-2">
+                        <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1 text-black" />
                     </div>
                     <div className="absolute bottom-2 left-2 flex gap-1">
                         {game.platform.slice(0, 4).map((platform, index) => (
