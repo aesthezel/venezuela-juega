@@ -68,6 +68,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Ajuste de metadatos a nivel servidor cuando navegas por paginas
 - [x] Filtro de ordenar búsqueda por un rango de fecha de lanzamiento
 - [x] Filtro para ordenar juegos por tiendas
+- [x] Juego destacado mejor proporcionado
 - [ ] Ajustar metadatos pre-renderizados para cada juego y página
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
