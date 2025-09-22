@@ -6,6 +6,7 @@ import { Game } from "@/src/types";
 import { useDebounce } from '@/src/hooks';
 import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata } from '@/src/utils';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
+import { trackPageView, trackGameView, trackEvent } from '@/src/utils/analytics';
 import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage, GameJamPage } from '@/src/pages';
 
 declare const gtag: (type: string, event: string, params: Record<string, any>) => void;
@@ -320,13 +321,8 @@ const App = () => {
         const currentUrl = e.url;
         setCurrentPath(e.url);
 
-        if (typeof gtag === 'function') {
-            gtag('event', 'page_view', {
-                page_path: e.url,
-                page_title: document.title,
-                page_location: window.location.href
-            });
-        }
+        // GA4 page view
+        trackPageView(e.url, document.title);
 
         const gameSlugMatch = currentUrl.match(/^\/games?\/([^/]+)/);
 
@@ -344,6 +340,9 @@ const App = () => {
                 updateMetadata('meta[property="og:description"]', 'content', description);
                 updateMetadata('meta[property="og:image"]', 'content', imageUrl);
                 updateMetadata('meta[name="twitter:card"]', 'content', 'summary_large_image');
+
+                // Analytics: viewing a game detail
+                trackGameView({ slug: foundGame.slug, title: foundGame.title });
             }
         } else {
             const metadata = pageMetadata[currentUrl as keyof typeof pageMetadata] || pageMetadata['/'];
@@ -355,6 +354,11 @@ const App = () => {
             // Volvemos a poner la imagen por defecto
             updateMetadata('meta[property="og:image"]', 'content', 'URL_A_TU_IMAGEN_PRINCIPAL_AQUI'); // Reemplaza con una URL a tu logo o imagen principal
             updateMetadata('meta[name="twitter:card"]', 'content', 'summary');
+
+            // Analytics: specific page views
+            if (currentUrl === '/gamejam') {
+                trackEvent('view_gamejam');
+            }
         }
 
         const pageUrl = window.location.href;

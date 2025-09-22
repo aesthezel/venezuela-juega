@@ -3,6 +3,7 @@ import { h } from 'preact';
 import { Game } from '@/src/types';
 import { gsap } from 'gsap';
 import { CoverImage } from '@/src/components';
+import { trackGameCardClick } from '@/src/utils/analytics';
 
 interface GameListProps {
   games: Game[];
@@ -108,10 +109,10 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
   return (
     <>
       <div ref={listRef} className="space-y-3">
-        {gamesToShow.map(game => (
+        {gamesToShow.map((game, idx) => (
           <button
             key={game.id}
-            onClick={() => onGameClick(game)}
+            onClick={() => { trackGameCardClick({ slug: game.slug, title: game.title }, idx, 'list'); onGameClick(game); }}
             className="game-list-row w-full text-left bg-slate-800 hover:bg-slate-700 transition-colors rounded-lg p-3 flex gap-3 items-center"
           >
             <CoverImage

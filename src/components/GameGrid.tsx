@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
 import { Game } from '@/src/types';
 import { GameCard } from '@/src/components';
 import { gsap } from 'gsap';
+import { trackGameCardClick } from '@/src/utils/analytics';
 
 interface GameGridProps {
     games: Game[];
@@ -116,11 +117,11 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
                 ref={gridRef}
                 className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
             >
-                {gamesToShow.map(game => (
+                {gamesToShow.map((game, idx) => (
                     <div key={game.id} className="game-card-wrapper">
                         <GameCard
                             game={game}
-                            onClick={() => onGameClick(game)}
+                            onClick={() => { trackGameCardClick({ slug: game.slug, title: game.title }, idx, 'grid'); onGameClick(game); }}
                             layout="grid"
                         />
                     </div>

@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad } from '@fortawesome/free-solid-svg-icons';
 import { route } from 'preact-router';
+import { trackNav } from '@/src/utils/analytics';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -17,6 +18,7 @@ const Header = ({ currentPath }: HeaderProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navigateTo = (path: string) => {
+        trackNav(path, 'header');
         route(path);
         setIsMenuOpen(false);
     };

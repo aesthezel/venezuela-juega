@@ -6,6 +6,7 @@ import { CloseIcon, LinkIcon } from '@/src/components/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import {CoverImage, StoreButton} from '@/src/components';
+import { trackEvent } from '@/src/utils/analytics';
 
 interface ModalProps {
     game: Game;
@@ -93,7 +94,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                 <DetailItem label="Tiendas">
                                     <div className="flex flex-wrap gap-2 mt-1">
                                         {game.stores.map(store => (
-                                            <StoreButton key={store.name} store={store} />
+                                            <StoreButton key={store.name} store={store} gameSlug={game.slug} gameTitle={game.title} />
                                         ))}
                                     </div>
                                 </DetailItem>
@@ -104,7 +105,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                 <DetailItem label="Enlaces y Redes">
                                     <div className="flex flex-wrap gap-2 mt-1">
                                         {game.links.map(link => (
-                                            <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 bg-slate-700 hover:bg-cyan-600 text-white font-bold py-1 px-3 rounded-lg text-sm transition-colors">
+                                            <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 bg-slate-700 hover:bg-cyan-600 text-white font-bold py-1 px-3 rounded-lg text-sm transition-colors" onClick={() => trackEvent('game_external_click', { game_slug: game.slug, game_title: game.title, link_name: link.name, url: link.url })}>
                                                 {link.name} <LinkIcon />
                                             </a>
                                         ))}

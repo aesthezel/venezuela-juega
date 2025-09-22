@@ -11,9 +11,12 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { faGamepad, faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { LinkIcon } from './icons';
+import { trackExternalStore } from '@/src/utils/analytics';
 
 interface StoreButtonProps {
     store: { name: string; url: string };
+    gameSlug?: string;
+    gameTitle?: string;
 }
 
 const storeStyles: Record<string, { icon: any; className: string }> = {
@@ -68,6 +71,11 @@ const StoreButton = ({ store }: StoreButtonProps) => {
             target="_blank"
             rel="noopener noreferrer"
             className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg text-sm transition-colors ${style.className}`}
+            onClick={() => {
+                if (gameSlug && gameTitle) {
+                    trackExternalStore({ slug: gameSlug, title: gameTitle }, store.name, store.url);
+                }
+            }}
         >
             <FontAwesomeIcon icon={style.icon} />
             <span>{store.name}</span>
