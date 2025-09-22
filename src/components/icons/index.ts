@@ -6,3 +6,4 @@ export { default as IndicatorRightIcon } from './IndicatorRightIcon';
 export { default as InfoIcon } from './InfoIcon';
 export { default as LinkIcon } from './LinkIcon';
 export { default as PlusIcon } from './PlusIcon';
+export { default as ExternalLinkIcon } from './ExternalLinkIcon';

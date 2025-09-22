@@ -6,7 +6,7 @@ import { Game } from "@/src/types";
 import { useDebounce } from '@/src/hooks';
 import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata } from '@/src/utils';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
-import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage } from '@/src/pages';
+import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage, GameJamPage } from '@/src/pages';
 
 declare const gtag: (type: string, event: string, params: Record<string, any>) => void;
 
@@ -391,6 +391,9 @@ const App = () => {
                     <CatalogPage path="/game/" {...catalogPageProps} />
                     <CatalogPage path="/games" {...catalogPageProps} />
                     <CatalogPage path="/games/" {...catalogPageProps} />
+
+                    <GameJamPage path="/gamejam" />
+                    <GameJamPage path="/gamejam/" />
 
                     <CalendarPage
                         path="/calendar"

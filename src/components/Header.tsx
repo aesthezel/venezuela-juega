@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad } from '@fortawesome/free-solid-svg-icons';
 import { route } from 'preact-router';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -20,6 +20,9 @@ const Header = ({ currentPath }: HeaderProps) => {
         route(path);
         setIsMenuOpen(false);
     };
+
+    const gameJamRef = useRef<HTMLButtonElement | null>(null);
+    const glowTweenRef = useRef<gsap.core.Tween | null>(null);
 
     useEffect(() => {
         const el = headerRef.current;
@@ -111,6 +114,49 @@ const Header = ({ currentPath }: HeaderProps) => {
     }, []);
 
     useEffect(() => {
+        const btn = gameJamRef.current;
+        if (!btn) return;
+
+        glowTweenRef.current = gsap.to(btn, {
+            boxShadow: "0 8px 28px rgba(99,102,241,0.30)",
+            textShadow: "0 0 10px rgba(99,102,241,0.55)",
+            scale: 1.02,
+            duration: 1.2,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            paused: false,
+        });
+
+        const onPointerDown = () => {
+            glowTweenRef.current?.pause();
+            gsap.fromTo(
+                btn,
+                { y: 0, scale: 1 },
+                {
+                    y: -10,
+                    scale: 1.06,
+                    duration: 0.18,
+                    ease: "power2.out",
+                    yoyo: true,
+                    repeat: 1,
+                    onComplete: () => {
+                        setTimeout(() => glowTweenRef.current?.play(), 120);
+                    },
+                }
+            );
+        };
+
+        btn.addEventListener('pointerdown', onPointerDown);
+
+        return () => {
+            btn.removeEventListener('pointerdown', onPointerDown);
+            glowTweenRef.current?.kill();
+            glowTweenRef.current = null;
+        };
+    }, []);
+
+    useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
             if (e.key === 'Escape') setIsMenuOpen(false);
         };
@@ -166,6 +212,31 @@ const Header = ({ currentPath }: HeaderProps) => {
                     </button>
 
                     <nav className="hidden md:flex items-center gap-2">
+
+                        <button
+                            ref={gameJamRef}
+                            onClick={() => {
+                                const btn = gameJamRef.current;
+                                if (btn) {
+                                    gsap.fromTo(
+                                        btn,
+                                        { y: 0, scale: 1 },
+                                        { y: -10, scale: 1.06, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1 }
+                                    );
+                                }
+                                navigateTo('/gamejam');
+                            }}
+                            className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
+                                currentPath === '/gamejam'
+                                    ? 'bg-cyan-600 text-white'
+                                    : 'bg-yellow-600 hover:bg-cyan-600 text-white'
+                            }`}
+                            aria-label="GameJam+ 25/26"
+                        >
+                            <FontAwesomeIcon icon={faGamepad} />
+                            <span>Participa en la GameJam+</span>
+                        </button>
+
                         <button
                             onClick={() => navigateTo('/calendar')}
                             className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
@@ -200,7 +271,7 @@ const Header = ({ currentPath }: HeaderProps) => {
                             aria-label="Acerca de Venezuela Juega"
                         >
                             <FontAwesomeIcon icon={faInfoCircle} />
-                            <span>Acerca de</span>
+                            <span>Créditos</span>
                         </button>
                     </nav>
 
@@ -227,6 +298,29 @@ const Header = ({ currentPath }: HeaderProps) => {
                 >
                     <div className="flex flex-col gap-2 bg-slate-800/90 rounded-lg p-3 shadow-md">
                         <button
+                            onClick={() => {
+                                const btn = gameJamRef.current;
+                                if (btn) {
+                                    gsap.fromTo(
+                                        btn,
+                                        { y: 0, scale: 1 },
+                                        { y: -8, scale: 1.04, duration: 0.16, ease: "power2.out", yoyo: true, repeat: 1 }
+                                    );
+                                }
+                                navigateTo('/gamejam');
+                            }}
+                            className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${
+                                currentPath === '/gamejam'
+                                    ? 'bg-cyan-600 text-white'
+                                    : 'bg-yellow-600 hover:bg-cyan-600 text-white'
+                            }`}
+                            aria-label="GameJam+ 25/26"
+                        >
+                            <FontAwesomeIcon icon={faGamepad} />
+                            <span>Inscripción de la GameJam+</span>
+                        </button>
+
+                        <button
                             onClick={() => navigateTo('/calendar')}
                             className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${
                                 currentPath === '/calendar'
@@ -260,7 +354,7 @@ const Header = ({ currentPath }: HeaderProps) => {
                             aria-label="Acerca de Venezuela Juega"
                         >
                             <FontAwesomeIcon icon={faInfoCircle} />
-                            <span>Acerca de</span>
+                            <span>Créditos</span>
                         </button>
                     </div>
                 </div>
