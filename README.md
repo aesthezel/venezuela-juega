@@ -69,6 +69,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Filtro de ordenar búsqueda por un rango de fecha de lanzamiento
 - [x] Filtro para ordenar juegos por tiendas
 - [x] Juego destacado mejor proporcionado
+- [x] Añadida pagina de eventos especiales como la GJ+ 25/26
 - [ ] Ajustar metadatos pre-renderizados para cada juego y página
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales

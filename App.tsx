@@ -26,6 +26,15 @@ const NotFoundPage = (_props: RoutableProps) => (
     </section>
 );
 
+// Simple redirect component to normalize routes (e.g., trailing slashes)
+const Redirect = ({ to }: { to: string } & RoutableProps) => {
+    useEffect(() => {
+        // replace: true to avoid adding an extra entry in the history
+        route(to, true);
+    }, [to]);
+    return null;
+};
+
 // TODO: move to metada settings file
 const pageMetadata = {
     '/': {
@@ -43,6 +52,10 @@ const pageMetadata = {
     '/about': {
         title: 'Acerca de la Iniciativa — Venezuela Juega',
         description: 'Conoce más sobre la iniciativa Venezuela Juega, sus colaboradores y cómo puedes contribuir.'
+    },
+    '/gamejam': {
+        title: 'GameJam+ 25/26 — Venezuela Juega',
+        description: 'Participa en la GameJam+ edición 25/26. Información, charlas y registro para creadores de videojuegos.'
     },
 };
 
@@ -393,7 +406,8 @@ const App = () => {
                     <CatalogPage path="/games/" {...catalogPageProps} />
 
                     <GameJamPage path="/gamejam" />
-                    <GameJamPage path="/gamejam/" />
+                    <Redirect path="/gamejam/" to="/gamejam" />
+                    <Redirect path="/gamejam/index.html" to="/gamejam" />
 
                     <CalendarPage
                         path="/calendar"
