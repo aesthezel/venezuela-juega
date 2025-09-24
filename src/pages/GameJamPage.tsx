@@ -139,7 +139,7 @@ const GameJamPage: FunctionalComponent = () => {
                     <aside className="md:col-span-1">
                         <div className="sticky top-20 space-y-6">
                             <section id="inscripcion"
-                                     className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700">
+                                     className="bg-gradient-to-br from-slate-800 to-slate-700 p-6 rounded-xl shadow-xl border border-slate-600/50 relative overflow-hidden">
                                 <div className="flex items-center gap-3 mb-4">
                                     <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">
                                         Inscríbete ahora
@@ -147,7 +147,7 @@ const GameJamPage: FunctionalComponent = () => {
                                 </div>
 
                                 <div
-                                    className="mb-4 p-4 bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/30 rounded-lg">
+                                    className="mb-4 p-4 bg-gradient-to-r from-yellow-700/70 to-orange-600/50 border border-red-100/50 rounded-lg">
                                     <p className="text-xs text-red-300 mb-2 font-medium">TIEMPO RESTANTE</p>
                                     {isExpired ? (
                                         <p className="text-red-400 font-bold text-lg">¡INSCRIPCIONES CERRADAS!</p>
@@ -171,7 +171,7 @@ const GameJamPage: FunctionalComponent = () => {
                                             </div>
                                         </div>
                                     )}
-                                    <p className="text-xs text-gray-400 mt-2 text-center">
+                                    <p className="text-xs text-gray-300 mt-2 text-center">
                                         Fecha límite: 16 de Octubre del 2025
                                     </p>
                                 </div>
@@ -268,7 +268,7 @@ const GameJamPage: FunctionalComponent = () => {
                                 </div>
                             </section>
 
-                            <section className="bg-slate-800 p-4 rounded-lg shadow-lg border border-slate-700 text-sm">
+                            <section className="bg-gradient-to-br from-slate-800 to-slate-700 p-6 rounded-xl shadow-xl border border-slate-600/50 relative overflow-hidden">
 
                                 <div className="flex items-center gap-3 mb-4">
                                     <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">
@@ -330,7 +330,7 @@ const GameJamPage: FunctionalComponent = () => {
                     </aside>
 
                     <section className="md:col-span-2 space-y-6">
-                        <article id="info" className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700">
+                        <article id="info" className="p-6 rounded-lg shadow-lg border border-slate-700 bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-xl relative overflow-hidden">
                             <h2 className="text-2xl font-semibold mb-4 text-white flex items-center gap-2">¿Qué es una Game Jam?</h2>
                             <p className="text-gray-300 mb-4">
                                 Una Game Jam es un evento donde desarrolladores, artistas, diseñadores y músicos se
@@ -364,7 +364,7 @@ const GameJamPage: FunctionalComponent = () => {
                             </div>
                         </article>
 
-                        <article className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700">
+                        <article className="p-6 rounded-lg shadow-lg border border-slate-700 bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-xl relative overflow-hidden">
                             <h2 className="text-2xl font-semibold mb-4 text-white flex items-center gap-2">
                                 Charlas de GameJam+ 25/26
                             </h2>
@@ -410,7 +410,7 @@ const GameJamPage: FunctionalComponent = () => {
                             </div>
                         </article>
 
-                        <article className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700">
+                        <article className="p-6 rounded-lg shadow-lg border border-slate-700 bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-xl relative overflow-hidden">
                             <h2 className="text-2xl font-semibold mb-4 text-white flex items-center gap-2">Preguntas frecuentes</h2>
 
                             <div className="space-y-3">

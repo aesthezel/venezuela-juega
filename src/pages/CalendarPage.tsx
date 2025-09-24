@@ -158,6 +158,13 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
                     color: #ffffff;
                     font-size: 1.25rem;
                 }
+                .fc .fc-event-title {
+                    font-size: 1rem;
+                    color: #ffffff;
+                }
+                .fc .fc-more-link {
+                    color: #ffffff;
+                }
                 .fc .fc-button {
                     font-size: 0.875rem;
                     padding: 0.4em 0.8em;
