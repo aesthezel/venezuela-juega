@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
 import { h } from 'preact';
 import { Game } from '@/src/types';
 import { gsap } from 'gsap';
-import { CoverImage } from '@/src/components';
+import {CoverImage, StatusBadge} from '@/src/components';
 import { trackGameCardClick } from '@/src/utils/analytics';
 
 interface GameListProps {
@@ -138,9 +138,7 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
               </div>
             </div>
             <div className="ml-3">
-              <span className="text-xs px-2 py-1 rounded-full bg-slate-700 text-cyan-300 border border-slate-600">
-                {game.status}
-              </span>
+                <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1" />
             </div>
           </button>
         ))}
