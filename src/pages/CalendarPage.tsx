@@ -333,7 +333,7 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
     }, [events, onEventClick]);
 
     return (
-        <main className="container mx-auto px-4 py-8 animate-fade-in min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <main className="container mx-auto px-4 py-8">
             {previewGame && <CalendarTooltip game={previewGame} position={previewPosition} />}
 
             <div className="mb-8">
