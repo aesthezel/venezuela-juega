@@ -278,7 +278,7 @@ const GameJamPage: FunctionalComponent = () => {
 
                                 <div className="space-y-3">
                                     <a
-                                        href="https://discord.gg/venezuelajuega"
+                                        href="http://link.venezuelajuega.com/discord"
                                         target="_blank"
                                         rel="noopener"
                                         className="flex items-center gap-3 px-3 py-2 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 rounded-lg transition-colors group"
