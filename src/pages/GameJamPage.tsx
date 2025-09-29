@@ -357,7 +357,7 @@ const GameJamPage: FunctionalComponent = () => {
                                     <ul className="list-disc list-inside text-gray-300 space-y-1">
                                         <li>Define un alcance realista</li>
                                         <li>Prioriza prototipo jugable</li>
-                                        <li>Hidratate, descansa y continua desarrolando</li>
+                                        <li>Hidrátate, descansa y continúa desarrollando</li>
                                         <li>Comunica tareas dentro del equipo</li>
                                     </ul>
                                 </div>
