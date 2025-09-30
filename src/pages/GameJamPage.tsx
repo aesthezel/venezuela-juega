@@ -20,6 +20,7 @@ const GameJamPage: FunctionalComponent = () => {
     });
     const [isExpired, setIsExpired] = useState(false);
 
+    const signUpLink = 'https://docs.google.com/forms/d/e/1FAIpQLSeQ74krSdM8n_tQkwCNMO_KndDiLkpVBCWOIrTDiFoNjfMH_w/viewform?usp=dialog';
 
     const talks: Talk[] = [
         {
@@ -125,7 +126,7 @@ const GameJamPage: FunctionalComponent = () => {
                             </div>
                         </div>
                         <nav className="flex space-x-4">
-                            <a href="https://platform.gamejamplus.com/"
+                            <a href={signUpLink}
                                className="bg-white/20 backdrop-blur hover:bg-white/30 text-white px-6 py-3 rounded-lg shadow-sm text-base font-medium transition-all">
                                 Inscríbete ahora
                             </a>
@@ -182,7 +183,7 @@ const GameJamPage: FunctionalComponent = () => {
                                                 ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
                                                 : 'border border-yellow-500 hover:bg-yellow-500/10 text-yellow-400 hover:text-yellow-300'
                                         }`}
-                                           href={isExpired ? '#' : 'https://platform.gamejamplus.com/'}
+                                           href={isExpired ? '#' : signUpLink }
                                            target={isExpired ? '_self' : '_blank'}
                                            rel="noopener">
                                             {isExpired ? 'Inscripciones cerradas' : '¡Inscribirse!'}
