@@ -60,8 +60,7 @@ const GameJamPage: FunctionalComponent = () => {
         }
     ];
 
-    // Fecha límite: 16 de Octubre del 2025 a las 23:59:59
-    const deadline = new Date('2025-10-16T23:59:59');
+    const deadline = new Date('2025-10-17T23:59:59');
 
     useEffect(() => {
         const timer = setInterval(() => {
