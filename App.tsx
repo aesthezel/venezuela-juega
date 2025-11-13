@@ -7,7 +7,7 @@ import { useDebounce } from '@/src/hooks';
 import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata, mapOrigin } from '@/src/utils';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
 import { trackPageView, trackGameView, trackEvent } from '@/src/utils/analytics';
-import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage, GameJamPage } from '@/src/pages';
+import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage, GameJamPage, GameJamGalleryPage } from '@/src/pages';
 
 declare const gtag: (type: string, event: string, params: Record<string, any>) => void;
 
@@ -417,6 +417,12 @@ const App = () => {
                     {/*<GameJamPage path="/gamejam" />*/}
                     {/*<Redirect path="/gamejam/" to="/gamejam" />*/}
                     {/*<Redirect path="/gamejam/index.html" to="/gamejam" />*/}
+
+                    <GameJamGalleryPage
+                        path="/gamejam-gallery"
+                        games={games}
+                        onGameClick={handleOpenModal}
+                    />
 
                     <CalendarPage
                         path="/calendar"
