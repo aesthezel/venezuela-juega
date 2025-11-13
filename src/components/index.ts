@@ -19,3 +19,4 @@ export { default as AlphaFilter } from './AlphaFilter';
 export { default as CoverImage } from './CoverImage';
 export { default as StoreButton } from './StoreButton';
 export { default as StatusBadge } from './StatusBadge';
+export { default as GameJamPlusSection } from './GameJamPlusSection';

@@ -1,4 +1,4 @@
-import { GameStatus } from '@/src/types';
+import { GameStatus, GameOrigin } from '@/src/types';
 
 export const mapStatus = (statusStr: string | undefined): GameStatus => {
     const statusMap: { [key: string]: GameStatus } = {
@@ -44,4 +44,34 @@ export const ensureUniqueSlug = (baseSlug: string, existingSlugs: Set<string>): 
     
     existingSlugs.add(slug);
     return slug;
+};
+
+/**
+ * Maps a raw origin string from the spreadsheet to the GameOrigin enum
+ * @param rawOrigin - The origin string from the spreadsheet
+ * @returns The corresponding GameOrigin enum value or undefined if not found
+ */
+export const mapOrigin = (rawOrigin?: string): GameOrigin | undefined => {
+    if (!rawOrigin) return undefined;
+    
+    const normalizedOrigin = rawOrigin.trim();
+    
+    // Map the string values to enum values
+    switch (normalizedOrigin) {
+        case 'Desde casa':
+            return GameOrigin.FROM_HOME;
+        case 'Gamejam':
+            return GameOrigin.GAME_JAM;
+        case 'Proyecto de grado':
+            return GameOrigin.DEGREE_PROJECT;
+        case 'Contratación':
+            return GameOrigin.CONTRACT;
+        case 'Modding':
+            return GameOrigin.MODDING;
+        case 'GameJam+ 25/26':
+            return GameOrigin.GAME_JAM_PLUS_25_26;
+        default:
+            console.warn(`Unknown origin: ${normalizedOrigin}`);
+            return undefined;
+    }
 };

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Router, RoutableProps, route } from 'preact-router';
 import { Game } from "@/src/types";
 import { useDebounce } from '@/src/hooks';
-import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata } from '@/src/utils';
+import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata, mapOrigin } from '@/src/utils';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
 import { trackPageView, trackGameView, trackEvent } from '@/src/utils/analytics';
 import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage, GameJamPage } from '@/src/pages';
@@ -54,10 +54,10 @@ const pageMetadata = {
         title: 'Acerca de la Iniciativa — Venezuela Juega',
         description: 'Conoce más sobre la iniciativa Venezuela Juega, sus colaboradores y cómo puedes contribuir.'
     },
-    '/gamejam': {
-        title: 'GameJam+ 25/26 — Venezuela Juega',
-        description: 'Participa en la GameJam+ edición 25/26. Información, charlas y registro para creadores de videojuegos.'
-    },
+    // '/gamejam': {
+    //     title: 'GameJam+ 25/26 — Venezuela Juega',
+    //     description: 'Participa en la GameJam+ edición 25/26. Información, charlas y registro para creadores de videojuegos.'
+    // },
 };
 
 // TODO: refactor and separate hooks, useStates and useEffects properly
@@ -203,7 +203,7 @@ const App = () => {
                         isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
                         highlightReason: rowObject['Descripción del Destacado'] || '',
                         screenshots: parseScreenshots(rowObject['Screenshots']),
-                        origin: rowObject['Origen inicial'] || undefined, // Agregamos el campo origin
+                        origin: mapOrigin(rowObject['Origen inicial']),
                     };
                 }).filter((game): game is Game => game !== null);
 
@@ -242,7 +242,7 @@ const App = () => {
     const allGenres = useMemo(() => Array.from(new Set(games.flatMap(g => g.genre))), [games]);
     const allPlatforms = useMemo(() => Array.from(new Set(games.flatMap(g => g.platform))), [games]);
     const allStores = useMemo(() => Array.from(new Set(games.flatMap(g => g.stores.map(s => s.name)))), [games]);
-    const allOrigins = useMemo(() => Array.from(new Set(games.map(g => g.origin).filter(Boolean))), [games]); // Nuevo memo para orígenes
+    const allOrigins = useMemo(() => Array.from(new Set(games.map(g => g.origin).filter(Boolean))), [games]);
 
     const filteredGames = useMemo(() => {
         return games.filter(game => {
@@ -255,7 +255,7 @@ const App = () => {
             const genreMatch = activeFilters.genre.length === 0 || activeFilters.genre.some(f => game.genre.includes(f));
             const platformMatch = activeFilters.platform.length === 0 || activeFilters.platform.some(f => game.platform.includes(f));
             const storeMatch = activeFilters.stores.length === 0 || activeFilters.stores.some(f => game.stores.some(s => s.name === f));
-            const originMatch = activeFilters.origin.length === 0 || (game.origin && activeFilters.origin.includes(game.origin)); // Agregamos el filtro de origen
+            const originMatch = activeFilters.origin.length === 0 || (game.origin && activeFilters.origin.includes(game.origin));
 
             const releaseYearMatch = game.releaseDate.match(/\b\d{4}\b/);
             const releaseYear = releaseYearMatch ? parseInt(releaseYearMatch[0], 10) : null;
@@ -269,7 +269,7 @@ const App = () => {
                 }
             }
 
-            return searchMatch && statusMatch && genreMatch && platformMatch && storeMatch && originMatch && yearMatch; // Incluimos originMatch
+            return searchMatch && statusMatch && genreMatch && platformMatch && storeMatch && originMatch && yearMatch;
         });
     }, [debouncedSearchTerm, activeFilters, games, yearRange, isYearFilterManuallySet]);
 
@@ -303,7 +303,7 @@ const App = () => {
     };
 
     const clearFilters = () => {
-        setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] }); // Agregamos origin
+        setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] });
         setYearRange({ min: minYear, max: maxYear });
         setIsYearFilterManuallySet(false);
     };
@@ -380,7 +380,7 @@ const App = () => {
         allGenres: allGenres,
         allPlatforms: allPlatforms,
         allStores: allStores,
-        allOrigins: allOrigins, // Pasamos los orígenes al catálogo
+        allOrigins: allOrigins,
         searchTerm: searchTerm,
         onSearchChange: setSearchTerm,
         activeFilters: activeFilters,
@@ -414,9 +414,9 @@ const App = () => {
                     <CatalogPage path="/games" {...catalogPageProps} />
                     <CatalogPage path="/games/" {...catalogPageProps} />
 
-                    <GameJamPage path="/gamejam" />
-                    <Redirect path="/gamejam/" to="/gamejam" />
-                    <Redirect path="/gamejam/index.html" to="/gamejam" />
+                    {/*<GameJamPage path="/gamejam" />*/}
+                    {/*<Redirect path="/gamejam/" to="/gamejam" />*/}
+                    {/*<Redirect path="/gamejam/index.html" to="/gamejam" />*/}
 
                     <CalendarPage
                         path="/calendar"

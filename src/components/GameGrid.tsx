@@ -32,7 +32,6 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
 
     const gamesToShow = games.slice(0, displayedCount);
 
-    // Animar solo las nuevas tarjetas
     useEffect(() => {
         const container = gridRef.current;
         if (!container) return;
@@ -69,7 +68,6 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
         };
     }, [displayedCount]);
 
-    // IntersectionObserver para carga incremental
     const loadMoreRef = useCallback((node: HTMLDivElement | null) => {
         if (observer.current) {
             observer.current.disconnect();

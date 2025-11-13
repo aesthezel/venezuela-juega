@@ -1,4 +1,4 @@
-import { GameStatus } from '../enums';
+import { GameStatus, GameOrigin } from '../enums';
 
 /**
  * Represents a video game in the Venezuela Juega catalog.
@@ -74,5 +74,7 @@ export interface Game {
 
     /** Screenshots URLs for the game (empty if none) */
     screenshots?: string[];
-    origin?: string;
+    
+    /** Origin or context of the game development */
+    origin?: GameOrigin;
 }

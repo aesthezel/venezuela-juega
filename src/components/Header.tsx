@@ -215,29 +215,29 @@ const Header = ({ currentPath }: HeaderProps) => {
 
                     <nav className="hidden md:flex items-center gap-2">
 
-                        <button
-                            ref={gameJamRef}
-                            onClick={() => {
-                                const btn = gameJamRef.current;
-                                if (btn) {
-                                    gsap.fromTo(
-                                        btn,
-                                        { y: 0, scale: 1 },
-                                        { y: -10, scale: 1.06, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1 }
-                                    );
-                                }
-                                navigateTo('/gamejam');
-                            }}
-                            className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
-                                currentPath === '/gamejam'
-                                    ? 'bg-cyan-600 text-white'
-                                    : 'bg-yellow-600 hover:bg-cyan-600 text-white'
-                            }`}
-                            aria-label="GameJam+ 25/26"
-                        >
-                            <FontAwesomeIcon icon={faGamepad} />
-                            <span>Participa en la GameJam+</span>
-                        </button>
+                        {/*<button*/}
+                        {/*    ref={gameJamRef}*/}
+                        {/*    onClick={() => {*/}
+                        {/*        const btn = gameJamRef.current;*/}
+                        {/*        if (btn) {*/}
+                        {/*            gsap.fromTo(*/}
+                        {/*                btn,*/}
+                        {/*                { y: 0, scale: 1 },*/}
+                        {/*                { y: -10, scale: 1.06, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1 }*/}
+                        {/*            );*/}
+                        {/*        }*/}
+                        {/*        navigateTo('/gamejam');*/}
+                        {/*    }}*/}
+                        {/*    className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${*/}
+                        {/*        currentPath === '/gamejam'*/}
+                        {/*            ? 'bg-cyan-600 text-white'*/}
+                        {/*            : 'bg-yellow-600 hover:bg-cyan-600 text-white'*/}
+                        {/*    }`}*/}
+                        {/*    aria-label="GameJam+ 25/26"*/}
+                        {/*>*/}
+                        {/*    <FontAwesomeIcon icon={faGamepad} />*/}
+                        {/*    <span>Participa en la GameJam+</span>*/}
+                        {/*</button>*/}
 
                         <button
                             onClick={() => navigateTo('/calendar')}
@@ -299,28 +299,28 @@ const Header = ({ currentPath }: HeaderProps) => {
                     `}
                 >
                     <div className="flex flex-col gap-2 bg-slate-800/90 rounded-lg p-3 shadow-md">
-                        <button
-                            onClick={() => {
-                                const btn = gameJamRef.current;
-                                if (btn) {
-                                    gsap.fromTo(
-                                        btn,
-                                        { y: 0, scale: 1 },
-                                        { y: -8, scale: 1.04, duration: 0.16, ease: "power2.out", yoyo: true, repeat: 1 }
-                                    );
-                                }
-                                navigateTo('/gamejam');
-                            }}
-                            className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${
-                                currentPath === '/gamejam'
-                                    ? 'bg-cyan-600 text-white'
-                                    : 'bg-yellow-600 hover:bg-cyan-600 text-white'
-                            }`}
-                            aria-label="GameJam+ 25/26"
-                        >
-                            <FontAwesomeIcon icon={faGamepad} />
-                            <span>Inscripción de la GameJam+</span>
-                        </button>
+                        {/*<button*/}
+                        {/*    onClick={() => {*/}
+                        {/*        const btn = gameJamRef.current;*/}
+                        {/*        if (btn) {*/}
+                        {/*            gsap.fromTo(*/}
+                        {/*                btn,*/}
+                        {/*                { y: 0, scale: 1 },*/}
+                        {/*                { y: -8, scale: 1.04, duration: 0.16, ease: "power2.out", yoyo: true, repeat: 1 }*/}
+                        {/*            );*/}
+                        {/*        }*/}
+                        {/*        navigateTo('/gamejam');*/}
+                        {/*    }}*/}
+                        {/*    className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${*/}
+                        {/*        currentPath === '/gamejam'*/}
+                        {/*            ? 'bg-cyan-600 text-white'*/}
+                        {/*            : 'bg-yellow-600 hover:bg-cyan-600 text-white'*/}
+                        {/*    }`}*/}
+                        {/*    aria-label="GameJam+ 25/26"*/}
+                        {/*>*/}
+                        {/*    <FontAwesomeIcon icon={faGamepad} />*/}
+                        {/*    <span>Inscripción de la GameJam+</span>*/}
+                        {/*</button>*/}
 
                         <button
                             onClick={() => navigateTo('/calendar')}

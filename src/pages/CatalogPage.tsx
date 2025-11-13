@@ -8,10 +8,11 @@ import {
     GameGrid,
     GameList,
     ViewModeToggle,
-    AlphaFilter
+    AlphaFilter,
+    GameJamPlusSection
 } from '@/src/components';
 import { ViewMode } from '@/src/types';
-import {CatalogPageProps} from "@/src/types";
+import { CatalogPageProps } from "@/src/types";
 
 const CatalogPage = ({
                          games,
@@ -69,6 +70,7 @@ const CatalogPage = ({
     return (
         <main className="container mx-auto px-4 py-8">
             <Highlights games={games} onGameClick={onGameClick}/>
+            <GameJamPlusSection games={games} onGameClick={onGameClick}/>
             <GameCounter filteredCount={alpha ? alphaFilteredGames.length : filteredGames.length} totalCount={filteredGames.length}/>
 
             <div className="mb-6 w-full flex justify-center">

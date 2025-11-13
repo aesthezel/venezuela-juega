@@ -16,3 +16,28 @@ export enum GameStatus {
   RECOVERED = "Recuperado",
   UNKNOWN = "Desconocido",
 }
+
+/**
+ * Enumeration of possible game origins.
+ *
+ * Represents the context or initiative under which the game was developed.
+ */
+export enum GameOrigin {
+    /** Game developed at home as a personal project */
+    FROM_HOME = 'Desde casa',
+
+    /** Game developed during a game jam event */
+    GAME_JAM = 'Gamejam',
+
+    /** Game developed as a graduation project */
+    DEGREE_PROJECT = 'Proyecto de grado',
+
+    /** Game developed under a commercial contract */
+    CONTRACT = 'Contratación',
+
+    /** Game is a mod of another game */
+    MODDING = 'Modding',
+
+    /** Game developed during GameJam+ 25/26 event */
+    GAME_JAM_PLUS_25_26 = 'GameJam+ 25/26',
+}
