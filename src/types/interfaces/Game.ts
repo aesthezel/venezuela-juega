@@ -74,4 +74,5 @@ export interface Game {
 
     /** Screenshots URLs for the game (empty if none) */
     screenshots?: string[];
+    origin?: string;
 }

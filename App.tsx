@@ -71,6 +71,7 @@ const App = () => {
         genre: [],
         platform: [],
         stores: [],
+        origin: [],
     });
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState('/');
@@ -202,6 +203,7 @@ const App = () => {
                         isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
                         highlightReason: rowObject['Descripción del Destacado'] || '',
                         screenshots: parseScreenshots(rowObject['Screenshots']),
+                        origin: rowObject['Origen inicial'] || undefined, // Agregamos el campo origin
                     };
                 }).filter((game): game is Game => game !== null);
 
@@ -240,6 +242,7 @@ const App = () => {
     const allGenres = useMemo(() => Array.from(new Set(games.flatMap(g => g.genre))), [games]);
     const allPlatforms = useMemo(() => Array.from(new Set(games.flatMap(g => g.platform))), [games]);
     const allStores = useMemo(() => Array.from(new Set(games.flatMap(g => g.stores.map(s => s.name)))), [games]);
+    const allOrigins = useMemo(() => Array.from(new Set(games.map(g => g.origin).filter(Boolean))), [games]); // Nuevo memo para orígenes
 
     const filteredGames = useMemo(() => {
         return games.filter(game => {
@@ -252,6 +255,7 @@ const App = () => {
             const genreMatch = activeFilters.genre.length === 0 || activeFilters.genre.some(f => game.genre.includes(f));
             const platformMatch = activeFilters.platform.length === 0 || activeFilters.platform.some(f => game.platform.includes(f));
             const storeMatch = activeFilters.stores.length === 0 || activeFilters.stores.some(f => game.stores.some(s => s.name === f));
+            const originMatch = activeFilters.origin.length === 0 || (game.origin && activeFilters.origin.includes(game.origin)); // Agregamos el filtro de origen
 
             const releaseYearMatch = game.releaseDate.match(/\b\d{4}\b/);
             const releaseYear = releaseYearMatch ? parseInt(releaseYearMatch[0], 10) : null;
@@ -265,7 +269,7 @@ const App = () => {
                 }
             }
 
-            return searchMatch && statusMatch && genreMatch && platformMatch && storeMatch && yearMatch;
+            return searchMatch && statusMatch && genreMatch && platformMatch && storeMatch && originMatch && yearMatch; // Incluimos originMatch
         });
     }, [debouncedSearchTerm, activeFilters, games, yearRange, isYearFilterManuallySet]);
 
@@ -299,7 +303,7 @@ const App = () => {
     };
 
     const clearFilters = () => {
-        setActiveFilters({ status: [], genre: [], platform: [], stores: [] });
+        setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] }); // Agregamos origin
         setYearRange({ min: minYear, max: maxYear });
         setIsYearFilterManuallySet(false);
     };
@@ -376,6 +380,7 @@ const App = () => {
         allGenres: allGenres,
         allPlatforms: allPlatforms,
         allStores: allStores,
+        allOrigins: allOrigins, // Pasamos los orígenes al catálogo
         searchTerm: searchTerm,
         onSearchChange: setSearchTerm,
         activeFilters: activeFilters,
