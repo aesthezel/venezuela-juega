@@ -71,6 +71,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Juego destacado mejor proporcionado
 - [x] Añadida página de eventos especiales como la GJ+ 25/26
 - [x] Mejora de estadisticas en la sección de calendario
+- [x] Creación de páginas con resultados de juegos hechos en la GJ+ 25/26
 - [ ] Ajustar metadatos pre-renderizados para cada juego y página
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
