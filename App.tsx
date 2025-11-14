@@ -1,13 +1,22 @@
 // noinspection JSNonASCIINames
 import Papa from 'papaparse';
-import { useEffect, useMemo, useState } from 'preact/hooks';
-import { Router, RoutableProps, route } from 'preact-router';
-import { Game } from "@/src/types";
-import { useDebounce } from '@/src/hooks';
-import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata, mapOrigin } from '@/src/utils';
-import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
-import { trackPageView, trackGameView, trackEvent } from '@/src/utils/analytics';
-import {ChartsPage, AddGamePage, AboutPage, CalendarPage, GameDetailPage, CatalogPage, GameJamPage, GameJamGalleryPage } from '@/src/pages';
+import {useEffect, useMemo, useState} from 'preact/hooks';
+import {Router, RoutableProps, route} from 'preact-router';
+import {Game} from "@/src/types";
+import {useDebounce} from '@/src/hooks';
+import {parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata, mapOrigin} from '@/src/utils';
+import {Header, Modal, LoadingSpinner, Footer, ScrollToTop} from '@/src/components';
+import {trackPageView, trackGameView, trackEvent} from '@/src/utils/analytics';
+import {
+    ChartsPage,
+    AddGamePage,
+    AboutPage,
+    CalendarPage,
+    GameDetailPage,
+    CatalogPage,
+    GameJamPage,
+    GameJamGalleryPage
+} from '@/src/pages';
 
 declare const gtag: (type: string, event: string, params: Record<string, any>) => void;
 
@@ -28,7 +37,7 @@ const NotFoundPage = (_props: RoutableProps) => (
 );
 
 // Simple redirect component to normalize routes (e.g., trailing slashes)
-const Redirect = ({ to }: { to: string } & RoutableProps) => {
+const Redirect = ({to}: { to: string } & RoutableProps) => {
     useEffect(() => {
         // replace: true to avoid adding an extra entry in the history
         route(to, true);
@@ -53,6 +62,10 @@ const pageMetadata = {
     '/about': {
         title: 'Acerca de la Iniciativa — Venezuela Juega',
         description: 'Conoce más sobre la iniciativa Venezuela Juega, sus colaboradores y cómo puedes contribuir.'
+    },
+    '/gamejam-gallery': {
+        title: 'GameJam+ 25/26 — Venezuela Juega',
+        description: 'Todos los juegos que fueron realizados en menos de 48 horas.'
     },
     // '/gamejam': {
     //     title: 'GameJam+ 25/26 — Venezuela Juega',
@@ -174,7 +187,7 @@ const App = () => {
                             const urlKey = nameKey.replace('Name', 'URL');
                             const name = rowObject[nameKey]?.trim();
                             const url = rowObject[urlKey]?.trim();
-                            return (name && url) ? { name, url } : null;
+                            return (name && url) ? {name, url} : null;
                         })
                         .filter((link): link is { name: string; url: string } => link !== null);
 
@@ -235,7 +248,7 @@ const App = () => {
 
             setMinYear(newMinYear);
             setMaxYear(newMaxYear);
-            setYearRange({ min: newMinYear, max: newMaxYear });
+            setYearRange({min: newMinYear, max: newMaxYear});
         }
     }, [games]);
 
@@ -279,7 +292,7 @@ const App = () => {
             const newFilters = currentFilters.includes(value)
                 ? currentFilters.filter(item => item !== value)
                 : [...currentFilters, value];
-            return { ...prev, [category]: newFilters };
+            return {...prev, [category]: newFilters};
         });
     };
 
@@ -303,8 +316,8 @@ const App = () => {
     };
 
     const clearFilters = () => {
-        setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] });
-        setYearRange({ min: minYear, max: maxYear });
+        setActiveFilters({status: [], genre: [], platform: [], stores: [], origin: []});
+        setYearRange({min: minYear, max: maxYear});
         setIsYearFilterManuallySet(false);
     };
 
@@ -346,7 +359,7 @@ const App = () => {
                 updateMetadata('meta[name="twitter:card"]', 'content', 'summary_large_image');
 
                 // Analytics: viewing a game detail
-                trackGameView({ slug: foundGame.slug, title: foundGame.title });
+                trackGameView({slug: foundGame.slug, title: foundGame.title});
             }
         } else {
             const metadata = pageMetadata[currentUrl as keyof typeof pageMetadata] || pageMetadata['/'];
@@ -395,7 +408,7 @@ const App = () => {
     };
 
     if (loading) {
-        return <LoadingSpinner />;
+        return <LoadingSpinner/>;
     }
 
     if (error) {
@@ -404,7 +417,7 @@ const App = () => {
 
     return (
         <div className="min-h-screen bg-slate-900 text-gray-200 font-sans flex flex-col">
-            <Header currentPath={currentPath} />
+            <Header currentPath={currentPath}/>
 
             <div className="flex-grow">
                 <Router onChange={handleRouteChange}>
@@ -424,6 +437,9 @@ const App = () => {
                         onGameClick={handleOpenModal}
                     />
 
+                    <Redirect path="/gamejam-gallery/" to="/gamejam-gallery" />
+                    <Redirect path="/gamejam-gallery/index.html" to="/gamejam-gallery" />
+
                     <CalendarPage
                         path="/calendar"
                         games={games}
@@ -431,24 +447,25 @@ const App = () => {
                         onEventClick={handleOpenModal}
                     />
 
-                    <ChartsPage path="/charts" games={games} onNavigateToCatalog={navigateToCatalog} />
-                    <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
+                    <ChartsPage path="/charts" games={games} onNavigateToCatalog={navigateToCatalog}/>
+                    <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog}/>
 
-                    <GameDetailPage path="/game/:gameSlug" games={games} />
-                    <GameDetailPage path="/game/:gameSlug/" games={games} />
+                    <GameDetailPage path="/game/:gameSlug" games={games}/>
+                    <GameDetailPage path="/game/:gameSlug/" games={games}/>
 
-                    <GameDetailPage path="/games/:gameSlug" games={games} />
-                    <GameDetailPage path="/games/:gameSlug/" games={games} />
+                    <GameDetailPage path="/games/:gameSlug" games={games}/>
+                    <GameDetailPage path="/games/:gameSlug/" games={games}/>
 
-                    <AddGamePage path="/add-game" onAddNewGame={handleAddNewGame} onNavigateToCatalog={navigateToCatalog} />
+                    <AddGamePage path="/add-game" onAddNewGame={handleAddNewGame}
+                                 onNavigateToCatalog={navigateToCatalog}/>
 
-                    <NotFoundPage default />
+                    <NotFoundPage default/>
                 </Router>
             </div>
 
-            <Footer />
-            <ScrollToTop />
-            {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
+            <Footer/>
+            <ScrollToTop/>
+            {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal}/>}
         </div>
     );
 };
