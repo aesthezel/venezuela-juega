@@ -141,21 +141,21 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
                     <div className="flex flex-col items-center px-8 py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[160px] transition-transform hover:scale-105 shadow-lg">
                         <span className="text-4xl font-bold text-white mb-1">{stats.count}</span>
                         <span className="text-xs md:text-sm text-slate-400 uppercase tracking-widest flex items-center gap-2 font-semibold">
-                            <FontAwesomeIcon icon={faGamepad} className="text-cyan-500" /> Juegos
+                            <FontAwesomeIcon icon={faGamepad} className="text-yellow-300" /> Juegos
                         </span>
                     </div>
 
                     <div className="flex flex-col items-center px-8 py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[160px] transition-transform hover:scale-105 shadow-lg">
                         <span className="text-4xl font-bold text-white mb-1">{stats.devs}</span>
                         <span className="text-xs md:text-sm text-slate-400 uppercase tracking-widest flex items-center gap-2 font-semibold">
-                            <FontAwesomeIcon icon={faUsers} className="text-purple-500" /> Estudios
+                            <FontAwesomeIcon icon={faUsers} className="text-blue-300" /> Estudios
                         </span>
                     </div>
 
                     <div className="flex flex-col items-center px-8 py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[160px] transition-transform hover:scale-105 shadow-lg">
                         <span className="text-4xl font-bold text-white mb-1">{stats.history}+</span>
                         <span className="text-xs md:text-sm text-slate-400 uppercase tracking-widest flex items-center gap-2 font-semibold">
-                            <FontAwesomeIcon icon={faCodeBranch} className="text-rose-500" /> Años de historia
+                            <FontAwesomeIcon icon={faCodeBranch} className="text-red-300" /> Años de historia
                         </span>
                     </div>
                 </div>
