@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { route } from 'preact-router';
 import { trackNav } from '@/src/utils/analytics';
 import { gsap } from 'gsap';
@@ -9,12 +9,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 interface HeaderProps {
-    currentPath: string;
+    currentPath?: string;
 }
 
-const Header = ({ currentPath }: HeaderProps) => {
+const LOGO_URL = "https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png";
+
+const Header = ({ currentPath = '/' }: HeaderProps) => {
     const headerRef = useRef<HTMLElement | null>(null);
-    const hideTimeout = useRef<number | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navigateTo = (path: string) => {
@@ -23,345 +24,124 @@ const Header = ({ currentPath }: HeaderProps) => {
         setIsMenuOpen(false);
     };
 
-    const gameJamRef = useRef<HTMLButtonElement | null>(null);
-    const glowTweenRef = useRef<gsap.core.Tween | null>(null);
-
     useEffect(() => {
         const el = headerRef.current;
         if (!el) return;
 
-        const setHeaderHeightVar = () => {
-            try {
-                const rect = el.getBoundingClientRect();
-                const height = Math.ceil(rect.height);
-                document.documentElement.style.setProperty('--header-height', `${height}px`);
-            } catch (e) {
-                console.error('Error al establecer la altura del header:', e);
-            }
-        };
-
-        setHeaderHeightVar();
-
-        let resizeObserver: ResizeObserver | null = null;
-        try {
-            resizeObserver = new ResizeObserver(setHeaderHeightVar);
-            resizeObserver.observe(el);
-        } catch (e) {
-            window.addEventListener('resize', setHeaderHeightVar);
-        }
-
-        const prefersReducedMotion =
-            typeof window !== 'undefined' &&
-            window.matchMedia &&
-            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        el.style.willChange = 'transform, opacity';
-
-        const clearHideTimeout = () => {
-            if (hideTimeout.current != null) {
-                window.clearTimeout(hideTimeout.current);
-                hideTimeout.current = null;
-            }
-        };
-
-        const showHeader = (immediate = false) => {
-            clearHideTimeout();
-            if (prefersReducedMotion) {
-                el.style.transform = 'translateY(0)';
-                el.style.opacity = '1';
-                return;
-            }
-            gsap.to(el, { y: 0, opacity: 1, duration: immediate ? 0 : 0.35, ease: 'power2.out' });
-        };
-
-        const hideHeader = (immediate = false) => {
-            clearHideTimeout();
-            if (prefersReducedMotion) {
-                el.style.transform = 'translateY(-80px)';
-                el.style.opacity = '0';
-                return;
-            }
-            gsap.to(el, { y: -80, opacity: 0, duration: immediate ? 0 : 0.35, ease: 'power2.out' });
-        };
+        // Animación simple: desaparece hacia arriba al bajar, aparece al subir
+        const showHeader = () => gsap.to(el, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' });
+        const hideHeader = () => gsap.to(el, { y: -100, opacity: 0, duration: 0.4, ease: 'power3.out' });
 
         const st = ScrollTrigger.create({
             start: 'top top',
             onUpdate: (self) => {
-                if (self.direction === 1) {
+                if (self.direction === 1 && self.scroll() > 50) {
                     hideHeader();
                 } else if (self.direction === -1) {
                     showHeader();
                 }
-                clearHideTimeout();
-                hideTimeout.current = window.setTimeout(() => {
-                    showHeader();
-                }, 600);
             },
         });
 
-        setHeaderHeightVar();
-        showHeader(true);
-
         return () => {
-            clearHideTimeout();
             st.kill();
             gsap.killTweensOf(el);
-            el.style.willChange = '';
-
-            try {
-                if (resizeObserver) resizeObserver.disconnect();
-                else window.removeEventListener('resize', setHeaderHeightVar);
-            } catch {}
-        };
-    }, []);
-
-    useEffect(() => {
-        const btn = gameJamRef.current;
-        if (!btn) return;
-
-        glowTweenRef.current = gsap.to(btn, {
-            boxShadow: "0 8px 28px rgba(99,102,241,0.30)",
-            textShadow: "0 0 10px rgba(99,102,241,0.55)",
-            scale: 1.02,
-            duration: 1.2,
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            paused: false,
-        });
-
-        const onPointerDown = () => {
-            glowTweenRef.current?.pause();
-            gsap.fromTo(
-                btn,
-                { y: 0, scale: 1 },
-                {
-                    y: -10,
-                    scale: 1.06,
-                    duration: 0.18,
-                    ease: "power2.out",
-                    yoyo: true,
-                    repeat: 1,
-                    onComplete: () => {
-                        setTimeout(() => glowTweenRef.current?.play(), 120);
-                    },
-                }
-            );
-        };
-
-        btn.addEventListener('pointerdown', onPointerDown);
-
-        return () => {
-            btn.removeEventListener('pointerdown', onPointerDown);
-            glowTweenRef.current?.kill();
-            glowTweenRef.current = null;
-        };
-    }, []);
-
-    useEffect(() => {
-        const onKey = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') setIsMenuOpen(false);
-        };
-        const onResize = () => {
-            if (window.innerWidth >= 768) setIsMenuOpen(false);
-        };
-        window.addEventListener('keydown', onKey);
-        window.addEventListener('resize', onResize);
-        return () => {
-            window.removeEventListener('keydown', onKey);
-            window.removeEventListener('resize', onResize);
         };
     }, []);
 
     return (
-        <header ref={headerRef} className="bg-slate-800/95 backdrop-blur shadow-lg sticky top-0 z-40">
-            <div className="container mx-auto px-4 py-4 md:py-5">
-                <div className="flex items-center justify-between gap-4">
+        <>
+            <header
+                ref={headerRef}
+                className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none transition-transform will-change-transform"
+            >
+                <div className="relative w-full flex justify-center">
+                    <div
+                        className="absolute top-0 h-20 w-full bg-slate-950/80 backdrop-blur-xl border-b border-white/5 shadow-2xl"
+                        style={{
+                            maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
+                            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)'
+                        }}
+                    />
 
-                    <button
-                        onClick={() => navigateTo('/')}
-                        className="group flex items-center gap-3 cursor-pointer select-none"
-                        aria-label="Ir al inicio"
-                    >
-                        <div className="flex flex-col text-left leading-tight">
-                            <h1
-                                className="
-                                    font-extrabold tracking-tight text-white
-                                    text-[clamp(1.25rem,3.3vw,1.875rem)]
-                                    [text-wrap:balance]
-                                    drop-shadow-sm
-                                    group-hover:opacity-95 transition-opacity
-                                "
-                                style={{
-                                    fontFeatureSettings: '"ss01","ss02","cv01"',
-                                }}
+                    <div className="container mx-auto px-6 h-20 flex items-center justify-between relative z-10 pointer-events-auto">
+
+                        <button
+                            onClick={() => navigateTo('/')}
+                            className="group flex-shrink-0 hover:opacity-80 transition-opacity"
+                            aria-label="Ir al inicio"
+                        >
+                            <img
+                                src={LOGO_URL}
+                                alt="Venezuela Juega"
+                                className="h-8 md:h-10 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+                            />
+                        </button>
+
+                        <nav className="hidden md:flex items-center gap-2">
+                            {[
+                                { path: '/calendar', label: 'Calendario', icon: faCalendarAlt },
+                                { path: '/charts', label: 'Estadísticas', icon: faChartBar },
+                                { path: '/about', label: 'Créditos', icon: faInfoCircle },
+                            ].map((item) => (
+                                <button
+                                    key={item.path}
+                                    onClick={() => navigateTo(item.path)}
+                                    className={`flex items-center gap-2 px-5 py-2 rounded text-sm font-medium transition-all duration-300 border border-transparent ${
+                                        currentPath === item.path
+                                            ? 'text-cyan-400 bg-cyan-950/30 border-cyan-500/20 shadow-[0_0_15px_rgba(34,211,238,0.1)]'
+                                            : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                    }`}
+                                >
+                                    <FontAwesomeIcon icon={item.icon} className={currentPath === item.path ? "animate-pulse" : ""} />
+                                    <span>{item.label}</span>
+                                </button>
+                            ))}
+                        </nav>
+
+                        <div className="md:hidden">
+                            <button
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                className="p-2 text-slate-300 hover:text-white transition-colors"
                             >
-                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-blue-300 to-red-300">
-                                    Venezuela Juega
-                                </span>
-                            </h1>
-                            <p
-                                className="
-                                    text-white-400/90
-                                    text-[clamp(0.75rem,1.8vw,0.95rem)]
-                                    md:text-base
-                                    leading-snug
-                                "
-                            >
-                                Explora la industria del gaming en el país
-                            </p>
+                                <FontAwesomeIcon icon={isMenuOpen ? faXmark : faBars} size="lg" />
+                            </button>
                         </div>
-                    </button>
-
-                    <nav className="hidden md:flex items-center gap-2">
-
-                        {/*<button*/}
-                        {/*    ref={gameJamRef}*/}
-                        {/*    onClick={() => {*/}
-                        {/*        const btn = gameJamRef.current;*/}
-                        {/*        if (btn) {*/}
-                        {/*            gsap.fromTo(*/}
-                        {/*                btn,*/}
-                        {/*                { y: 0, scale: 1 },*/}
-                        {/*                { y: -10, scale: 1.06, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1 }*/}
-                        {/*            );*/}
-                        {/*        }*/}
-                        {/*        navigateTo('/gamejam');*/}
-                        {/*    }}*/}
-                        {/*    className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${*/}
-                        {/*        currentPath === '/gamejam'*/}
-                        {/*            ? 'bg-cyan-600 text-white'*/}
-                        {/*            : 'bg-yellow-600 hover:bg-cyan-600 text-white'*/}
-                        {/*    }`}*/}
-                        {/*    aria-label="GameJam+ 25/26"*/}
-                        {/*>*/}
-                        {/*    <FontAwesomeIcon icon={faGamepad} />*/}
-                        {/*    <span>Participa en la GameJam+</span>*/}
-                        {/*</button>*/}
-
-                        <button
-                            onClick={() => navigateTo('/calendar')}
-                            className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
-                                currentPath === '/calendar'
-                                    ? 'bg-cyan-500 text-white'
-                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
-                            }`}
-                            aria-label="Ver calendario de juegos"
-                        >
-                            <FontAwesomeIcon icon={faCalendarAlt} />
-                            <span>Calendario</span>
-                        </button>
-                        <button
-                            onClick={() => navigateTo('/charts')}
-                            className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
-                                currentPath === '/charts'
-                                    ? 'bg-cyan-500 text-white'
-                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
-                            }`}
-                            aria-label="Ver estadísticas"
-                        >
-                            <FontAwesomeIcon icon={faChartBar} />
-                            <span>Estadísticas</span>
-                        </button>
-                        <button
-                            onClick={() => navigateTo('/about')}
-                            className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg transition-colors duration-300 ${
-                                currentPath === '/about'
-                                    ? 'bg-cyan-500 text-white'
-                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
-                            }`}
-                            aria-label="Acerca de Venezuela Juega"
-                        >
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            <span>Créditos</span>
-                        </button>
-                    </nav>
-
-                    <div className="md:hidden">
-                        <button
-                            type="button"
-                            className="inline-flex items-center justify-center rounded-lg p-2 text-white bg-slate-700 hover:bg-cyan-600 transition-colors"
-                            aria-label="Abrir menú"
-                            aria-controls="mobile-menu"
-                            aria-expanded={isMenuOpen}
-                            onClick={() => setIsMenuOpen((v) => !v)}
-                        >
-                            <FontAwesomeIcon icon={isMenuOpen ? faXmark : faBars} className="h-5 w-5" />
-                        </button>
                     </div>
                 </div>
+            </header>
 
-                <div
-                    id="mobile-menu"
-                    className={`
-                        md:hidden overflow-hidden transition-all duration-300 ease-out
-                        ${isMenuOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0'}
-                    `}
-                >
-                    <div className="flex flex-col gap-2 bg-slate-800/90 rounded-lg p-3 shadow-md">
-                        {/*<button*/}
-                        {/*    onClick={() => {*/}
-                        {/*        const btn = gameJamRef.current;*/}
-                        {/*        if (btn) {*/}
-                        {/*            gsap.fromTo(*/}
-                        {/*                btn,*/}
-                        {/*                { y: 0, scale: 1 },*/}
-                        {/*                { y: -8, scale: 1.04, duration: 0.16, ease: "power2.out", yoyo: true, repeat: 1 }*/}
-                        {/*            );*/}
-                        {/*        }*/}
-                        {/*        navigateTo('/gamejam');*/}
-                        {/*    }}*/}
-                        {/*    className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${*/}
-                        {/*        currentPath === '/gamejam'*/}
-                        {/*            ? 'bg-cyan-600 text-white'*/}
-                        {/*            : 'bg-yellow-600 hover:bg-cyan-600 text-white'*/}
-                        {/*    }`}*/}
-                        {/*    aria-label="GameJam+ 25/26"*/}
-                        {/*>*/}
-                        {/*    <FontAwesomeIcon icon={faGamepad} />*/}
-                        {/*    <span>Inscripción de la GameJam+</span>*/}
-                        {/*</button>*/}
-
-                        <button
-                            onClick={() => navigateTo('/calendar')}
-                            className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${
-                                currentPath === '/calendar'
-                                    ? 'bg-cyan-500 text-white'
-                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
-                            }`}
-                            aria-label="Ver calendario de juegos"
-                        >
-                            <FontAwesomeIcon icon={faCalendarAlt} />
-                            <span>Calendario</span>
-                        </button>
-                        <button
-                            onClick={() => navigateTo('/charts')}
-                            className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${
-                                currentPath === '/charts'
-                                    ? 'bg-cyan-500 text-white'
-                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
-                            }`}
-                            aria-label="Ver estadísticas"
-                        >
-                            <FontAwesomeIcon icon={faChartBar} />
-                            <span>Estadísticas</span>
-                        </button>
-                        <button
-                            onClick={() => navigateTo('/about')}
-                            className={`w-full justify-start flex items-center gap-2 font-semibold py-2 px-3 rounded-md transition-colors duration-200 ${
-                                currentPath === '/about'
-                                    ? 'bg-cyan-500 text-white'
-                                    : 'bg-slate-700 hover:bg-cyan-600 text-white'
-                            }`}
-                            aria-label="Acerca de Venezuela Juega"
-                        >
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            <span>Créditos</span>
-                        </button>
+            {isMenuOpen && (
+                <div className="fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-xl pt-24 px-6 animate-fade-in md:hidden flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
+                        {[
+                            { path: '/calendar', label: 'Calendario', icon: faCalendarAlt, color: 'text-purple-400', bg: 'bg-purple-500/10' },
+                            { path: '/charts', label: 'Estadísticas', icon: faChartBar, color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
+                            { path: '/about', label: 'Créditos', icon: faInfoCircle, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+                        ].map((item) => (
+                            <button
+                                key={item.path}
+                                onClick={() => navigateTo(item.path)}
+                                className="flex items-center gap-4 text-lg font-medium text-slate-200 p-4 rounded-xl hover:bg-white/5 border border-white/5 transition-colors"
+                            >
+                                <div className={`w-10 h-10 rounded-lg ${item.bg} flex items-center justify-center ${item.color}`}>
+                                    <FontAwesomeIcon icon={item.icon} />
+                                </div>
+                                {item.label}
+                            </button>
+                        ))}
                     </div>
                 </div>
-            </div>
-        </header>
+            )}
+
+            <style>{`
+                @keyframes fade-in {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .animate-fade-in { animation: fade-in 0.2s ease-out forwards; }
+            `}</style>
+        </>
     );
 };
 

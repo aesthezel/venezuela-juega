@@ -39,7 +39,6 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
 
     return (
         <section className="mb-12" aria-labelledby="highlights-title">
-            <h2 id="highlights-title" className="text-3xl font-bold mb-6 text-cyan-400 pl-4">Destacados</h2>
             <div className="relative group">
                 <div className="w-full h-56 overflow-hidden rounded-lg">
                     <div

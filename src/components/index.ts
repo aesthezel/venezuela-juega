@@ -22,3 +22,4 @@ export { default as StatusBadge } from './StatusBadge';
 export { default as GameJamPlusSection } from './GameJamPlusSection';
 export { default as PromoHeader } from './PromoHeader';
 export { default as LoadingOverlay } from './LoadingOverlay';
+export { default as HeroMosaic } from './HeroMosaic';
