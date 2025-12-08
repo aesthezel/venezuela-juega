@@ -431,11 +431,11 @@ const App = () => {
                     {/*<Redirect path="/gamejam/" to="/gamejam" />*/}
                     {/*<Redirect path="/gamejam/index.html" to="/gamejam" />*/}
 
-                    <GameJamGalleryPage
-                        path="/gamejam-gallery"
-                        games={games}
-                        onGameClick={handleOpenModal}
-                    />
+                    {/*<GameJamGalleryPage*/}
+                    {/*    path="/gamejam-gallery"*/}
+                    {/*    games={games}*/}
+                    {/*    onGameClick={handleOpenModal}*/}
+                    {/*/>*/}
 
                     <Redirect path="/gamejam-gallery/" to="/gamejam-gallery" />
                     <Redirect path="/gamejam-gallery/index.html" to="/gamejam-gallery" />
