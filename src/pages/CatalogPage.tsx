@@ -91,7 +91,7 @@ const CatalogPage = ({
 
                 <div className="mb-12 space-y-12">
                     <Highlights games={games} onGameClick={onGameClick}/>
-                    <GameJamPlusSection games={games} onGameClick={onGameClick}/>
+                    {/*<GameJamPlusSection games={games} onGameClick={onGameClick}/>*/}
                 </div>
 
                 <div className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md py-4 -mx-4 px-4 border-b border-slate-800 mb-8 shadow-2xl transition-all duration-300">
