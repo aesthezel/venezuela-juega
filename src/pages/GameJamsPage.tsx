@@ -57,6 +57,7 @@ interface ProcessedVenue {
     accentColor: string;
     accentColorSolid: string;
     logo?: string;
+    logoTheme: 'day' | 'night';
     socials: VenueSocialLink[];
     games: JamGame[];
     orderPriority: number;
@@ -126,15 +127,27 @@ const parseSocials = (socialsString?: string): VenueSocialLink[] => {
     return [];
 };
 
-const processImageUrl = (url?: string): string | undefined => {
-    if (!url) return undefined;
-    const trimUrl = url.trim();
-    // Convertir links de Google Drive a links directos
-    const driveMatch = trimUrl.match(/drive\.google\.com\/file\/d\/([^/]+)/);
-    if (driveMatch && driveMatch[1]) {
-        return `https://drive.google.com/uc?id=${driveMatch[1]}`;
+const processImageUrl = (rawUrl?: string): { url?: string; theme: 'day' | 'night' } => {
+    if (!rawUrl) return { url: undefined, theme: 'day' };
+    
+    let url = rawUrl.trim();
+    let theme: 'day' | 'night' = 'day';
+
+    if (url.toLowerCase().startsWith('night:')) {
+        theme = 'night';
+        url = url.substring(6).trim();
+    } else if (url.toLowerCase().startsWith('day:')) {
+        theme = 'day';
+        url = url.substring(4).trim();
     }
-    return trimUrl;
+
+    // Convertir links de Google Drive a links directos
+    const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+    if (driveMatch && driveMatch[1]) {
+        return { url: `https://drive.google.com/uc?id=${driveMatch[1]}`, theme };
+    }
+    
+    return { url, theme };
 };
 
 // Each city/venue gets a unique accent color pair (gradient + solid)
@@ -290,7 +303,11 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
 
                 {/* Logo or icon */}
                 {venue.logo ? (
-                    <div className="w-12 h-12 bg-white rounded-xl flex-shrink-0 flex items-center justify-center p-1.5 shadow-[0_0_12px_rgba(255,255,255,0.15)] border border-slate-200/50 overflow-hidden transition-transform duration-300 hover:scale-105 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.25)]">
+                    <div className={`w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center p-1.5 overflow-hidden transition-transform duration-300 hover:scale-105 ${
+                        venue.logoTheme === 'night' 
+                            ? 'bg-slate-900 border border-slate-700/50 shadow-[0_0_12px_rgba(0,0,0,0.3)] group-hover:shadow-[0_0_15px_rgba(0,0,0,0.5)]' 
+                            : 'bg-white border border-slate-200/50 shadow-[0_0_12px_rgba(255,255,255,0.15)] group-hover:shadow-[0_0_15px_rgba(255,255,255,0.25)]'
+                    }`}>
                         <img
                             src={venue.logo}
                             alt={`Logo ${venue.name}`}
@@ -351,7 +368,11 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
                     {/* Resumen de la sede */}
                     <div className="mb-6 flex flex-col md:flex-row gap-6 items-center md:items-start bg-slate-900/40 p-5 rounded-2xl border border-slate-700/50 shadow-inner">
                         {venue.logo ? (
-                            <div className="w-32 h-32 bg-white rounded-2xl flex-shrink-0 flex items-center justify-center p-3 shadow-[0_0_20px_rgba(255,255,255,0.1)] border border-slate-200/50 overflow-hidden">
+                            <div className={`w-32 h-32 rounded-2xl flex-shrink-0 flex items-center justify-center p-3 overflow-hidden ${
+                                venue.logoTheme === 'night'
+                                    ? 'bg-slate-900 border border-slate-700/50 shadow-[0_0_20px_rgba(0,0,0,0.4)]'
+                                    : 'bg-white border border-slate-200/50 shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+                            }`}>
                                 <img
                                     src={venue.logo}
                                     alt={`Logo ${venue.name}`}
@@ -545,6 +566,8 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
 
                 const palette = getVenuePalette(setting.Venue_City || setting.Venue);
 
+                const logoData = processImageUrl(setting.Venue_Logo_URL || setting.Venue_Logo);
+
                 venues.push({
                     id: `${editionYear}-${venueUID}`,
                     uid: venueUID,
@@ -552,7 +575,8 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                     city: setting.Venue_City || setting.Venue,
                     accentColor: palette.grad,
                     accentColorSolid: palette.solid,
-                    logo: processImageUrl(setting.Venue_Logo_URL || setting.Venue_Logo),
+                    logo: logoData.url,
+                    logoTheme: logoData.theme,
                     socials: parseSocials(setting.Venue_Socials),
                     games: venueGames,
                     orderPriority: parseInt(setting.Order_Priority || '0', 10),

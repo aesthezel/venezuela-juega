@@ -25,4 +25,19 @@
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>
     </url>
+    <url>
+        <loc>https://venezuelajuega.com/venezuela-juega/game-jams</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://venezuelajuega.com/venezuela-juega/gamejam-gallery</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://venezuelajuega.com/venezuela-juega/credits</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
+    </url>
 </urlset>
