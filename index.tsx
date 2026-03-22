@@ -10,12 +10,14 @@ import App from './App';
         const p = params.get('p');
         if (p) {
             // Replace the current URL with the original path so the router sees the correct route
-            // p already contains the full path (and possible search) relative to the site base
-            const target = p + l.hash;
+            // Extraer y preservar cualquier otro query parameter adicional
+            params.delete('p');
+            const remainingSearch = params.toString() ? '?' + params.toString() : '';
+            const target = p.split('?')[0] + remainingSearch + l.hash;
             window.history.replaceState({}, '', target);
         }
     } catch (_) {
-        console.error("Something going wrong with redirect fetching!!!")
+        console.error("Something went wrong with redirect fetching!!!");
     }
 })();
 

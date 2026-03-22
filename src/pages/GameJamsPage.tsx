@@ -24,6 +24,7 @@ export interface JamSettingRow {
     Organization: string;
     Venue: string;
     Venue_City: string;
+    Venue_Logo_URL?: string;
     Venue_Logo?: string;
     Venue_Socials?: string;
     Order_Priority: string;
@@ -90,19 +91,50 @@ const getSocialHoverColor = (redName: string): string => {
 const parseSocials = (socialsString?: string): VenueSocialLink[] => {
     if (!socialsString?.trim()) return [];
     try {
-        const parsed = JSON.parse(socialsString);
-        if (Array.isArray(parsed)) {
-            return parsed.filter(
-                (item): item is VenueSocialLink =>
-                    typeof item === 'object' &&
-                    typeof item.red === 'string' &&
-                    typeof item.link === 'string'
-            );
+        // Intento 1: Parsear como JSON (Ej. [{"red": "twitter", "link": "https://..."}])
+        if (socialsString.trim().startsWith('[')) {
+            const parsed = JSON.parse(socialsString);
+            if (Array.isArray(parsed)) {
+                return parsed.filter(
+                    (item): item is VenueSocialLink =>
+                        typeof item === 'object' &&
+                        item !== null &&
+                        'red' in item && typeof item.red === 'string' &&
+                        'link' in item && typeof item.link === 'string'
+                );
+            }
         }
+
+        // Intento 2: Parsear formato legible en Excel (Ej. "instagram:https://..., x:https://...")
+        const links = socialsString.split(',').map(s => s.trim()).filter(Boolean);
+        const parsedLinks: VenueSocialLink[] = [];
+        for (const link of links) {
+            const idx = link.indexOf(':');
+            if (idx > -1) {
+                const redTrim = link.substring(0, idx).trim().toLowerCase();
+                const urlTrim = link.substring(idx + 1).trim();
+                if (redTrim && urlTrim) {
+                    parsedLinks.push({ red: redTrim, link: urlTrim });
+                }
+            }
+        }
+        if (parsedLinks.length > 0) return parsedLinks;
+
     } catch (e) {
         console.warn('Error parsing venue socials:', e);
     }
     return [];
+};
+
+const processImageUrl = (url?: string): string | undefined => {
+    if (!url) return undefined;
+    const trimUrl = url.trim();
+    // Convertir links de Google Drive a links directos
+    const driveMatch = trimUrl.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+    if (driveMatch && driveMatch[1]) {
+        return `https://drive.google.com/uc?id=${driveMatch[1]}`;
+    }
+    return trimUrl;
 };
 
 // Each city/venue gets a unique accent color pair (gradient + solid)
@@ -258,11 +290,11 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
 
                 {/* Logo or icon */}
                 {venue.logo ? (
-                    <div className="w-12 h-12 rounded-xl bg-slate-700/50 border border-slate-600/50 overflow-hidden flex-shrink-0 flex items-center justify-center p-1">
+                    <div className="w-12 h-12 bg-white rounded-xl flex-shrink-0 flex items-center justify-center p-1.5 shadow-[0_0_12px_rgba(255,255,255,0.15)] border border-slate-200/50 overflow-hidden transition-transform duration-300 hover:scale-105 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.25)]">
                         <img
                             src={venue.logo}
                             alt={`Logo ${venue.name}`}
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-contain drop-shadow-sm"
                         />
                     </div>
                 ) : (
@@ -313,9 +345,51 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
                 </div>
             </button>
 
-            {/* Games grid */}
+            {/* Expanded Content */}
             {isExpanded && (
-                <div className="px-5 pb-6 pt-1">
+                <div className="px-5 pb-6 pt-1 animate-[jam-fade-in_0.3s_ease-out]">
+                    {/* Resumen de la sede */}
+                    <div className="mb-6 flex flex-col md:flex-row gap-6 items-center md:items-start bg-slate-900/40 p-5 rounded-2xl border border-slate-700/50 shadow-inner">
+                        {venue.logo ? (
+                            <div className="w-32 h-32 bg-white rounded-2xl flex-shrink-0 flex items-center justify-center p-3 shadow-[0_0_20px_rgba(255,255,255,0.1)] border border-slate-200/50 overflow-hidden">
+                                <img
+                                    src={venue.logo}
+                                    alt={`Logo ${venue.name}`}
+                                    className="w-full h-full object-contain drop-shadow-md"
+                                />
+                            </div>
+                        ) : (
+                            <div className="w-32 h-32 rounded-2xl flex-shrink-0 flex items-center justify-center" style={{ background: `${c}22`, border: `1px solid ${c}44` }}>
+                                <FontAwesomeIcon icon={faLocationDot} style={{ color: c }} className="text-4xl" />
+                            </div>
+                        )}
+                        
+                        <div className="flex-1 text-center md:text-left flex flex-col justify-center h-full">
+                            <h3 className="text-2xl font-black text-white mb-2">{venue.name}</h3>
+                            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-3">
+                                <span className="flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full text-slate-300 bg-slate-800 border border-slate-700">
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} className="text-slate-400" />
+                                    {venue.city}
+                                </span>
+                            </div>
+                            <p className="text-slate-400 text-sm leading-relaxed max-w-2xl mb-4">
+                                Esta sede oficial fue el punto de encuentro en {venue.city} para organizar equipos y darle vida a {venue.games.length} {venue.games.length === 1 ? 'juego asombroso' : 'juegos asombrosos'} durante la maratón de desarrollo.
+                            </p>
+                            
+                            {venue.socials.length > 0 && (
+                                <div className="flex items-center justify-center md:justify-start gap-3 pt-3 border-t border-slate-700/50">
+                                    <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider">Redes:</span>
+                                    <VenueSocialLinks socials={venue.socials} />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Games grid */}
+                    <div className="flex items-center gap-2 mb-4">
+                        <FontAwesomeIcon icon={faGamepad} className="text-lg" style={{ color: c }} />
+                        <h4 className="text-white font-bold text-lg">Juegos desarrollados</h4>
+                    </div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                         {venue.games.map((game) => (
                             <GameCard
@@ -478,7 +552,7 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                     city: setting.Venue_City || setting.Venue,
                     accentColor: palette.grad,
                     accentColorSolid: palette.solid,
-                    logo: setting.Venue_Logo?.trim() || undefined,
+                    logo: processImageUrl(setting.Venue_Logo_URL || setting.Venue_Logo),
                     socials: parseSocials(setting.Venue_Socials),
                     games: venueGames,
                     orderPriority: parseInt(setting.Order_Priority || '0', 10),

@@ -18,6 +18,7 @@ export interface JamSettingRow {
     Organization: string;
     Venue: string;
     Venue_City: string;
+    Venue_Logo_URL?: string;
     Venue_Logo?: string;
     Venue_Socials?: string;
     Order_Priority: string;
@@ -261,6 +262,7 @@ export const useGamesData = () => {
                                 Organization: row['Organization']?.trim() || '',
                                 Venue: row['Venue']?.trim() || '',
                                 Venue_City: row['Venue_City']?.trim() || '',
+                                Venue_Logo_URL: row['Venue_Logo_URL']?.trim() || undefined,
                                 Venue_Logo: row['Venue_Logo']?.trim() || undefined,
                                 Venue_Socials: row['Venue_Socials']?.trim() || undefined,
                                 Order_Priority: row['Order_Priority']?.trim() || '0',
