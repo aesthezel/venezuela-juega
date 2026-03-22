@@ -96,21 +96,34 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                 { path: '/about', label: 'Créditos', icon: faInfoCircle },
                             ].map((item) => {
                                 const active = currentPath === item.path;
+                                const isGameJamsOnHome = item.path === '/game-jams' && (currentPath === '/' || currentPath === '');
                                 return (
-                                    <button
-                                        key={item.path}
-                                        onClick={() => navigateTo(item.path)}
-                                        className={`relative flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300 border ${active
+                                    <div key={item.path} className="relative">
+                                        <button
+                                            onClick={() => navigateTo(item.path)}
+                                            className={`relative flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300 border ${active
                                                 ? 'text-cyan-200 bg-cyan-950/30 border-cyan-500/25 shadow-[0_0_18px_rgba(34,211,238,0.12)]'
                                                 : 'text-slate-300 border-transparent hover:text-white hover:bg-white/5'
-                                            }`}
-                                    >
-                                        <FontAwesomeIcon icon={item.icon} className={active ? "animate-pulse" : ""} />
-                                        <span>{item.label}</span>
-                                        {active && (
-                                            <span className="absolute inset-x-3 -bottom-[9px] h-[2px] bg-gradient-to-r from-yellow-400 via-blue-500 to-red-500 rounded-full" />
+                                                }`}
+                                        >
+                                            <FontAwesomeIcon icon={item.icon} className={active ? "animate-pulse" : ""} />
+                                            <span>{item.label}</span>
+                                            {active && (
+                                                <span className="absolute inset-x-3 -bottom-[9px] h-[2px] bg-gradient-to-r from-yellow-400 via-blue-500 to-red-500 rounded-full" />
+                                            )}
+                                        </button>
+
+                                        {/* Animated Tooltip Bubble */}
+                                        {isGameJamsOnHome && (
+                                            <div className="absolute top-full mt-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-blue-400 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.4)] animate-bounce pointer-events-none z-50">
+                                                <span>¡Revisa los juegos de este año!</span>
+                                                <div
+                                                    className="absolute -top-[6px] left-1/2 -translate-x-1/2"
+                                                    style={{ borderLeft: '6px solid transparent', borderRight: '6px solid transparent', borderBottom: '6px solid #50a2ff' }}
+                                                />
+                                            </div>
                                         )}
-                                    </button>
+                                    </div>
                                 );
                             })}
                         </nav>
@@ -147,18 +160,28 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                         { path: '/calendar', label: 'Calendario', icon: faCalendarAlt, color: 'text-purple-300', bg: 'bg-purple-500/10' },
                                         { path: '/charts', label: 'Estadísticas', icon: faChartBar, color: 'text-cyan-300', bg: 'bg-cyan-500/10' },
                                         { path: '/about', label: 'Créditos', icon: faInfoCircle, color: 'text-emerald-300', bg: 'bg-emerald-500/10' },
-                                    ].map((item) => (
-                                        <button
-                                            key={item.path}
-                                            onClick={() => navigateTo(item.path)}
-                                            className="flex items-center gap-4 text-base font-semibold text-slate-100 p-4 rounded-xl hover:bg-white/5 border border-white/5 transition-colors"
-                                        >
-                                            <div className={`w-10 h-10 rounded-lg ${item.bg} flex items-center justify-center ${item.color} border border-white/10`}>
-                                                <FontAwesomeIcon icon={item.icon} />
-                                            </div>
-                                            {item.label}
-                                        </button>
-                                    ))}
+                                    ].map((item) => {
+                                        const isGameJamsOnHome = item.path === '/game-jams' && (currentPath === '/' || currentPath === '');
+                                        return (
+                                            <button
+                                                key={item.path}
+                                                onClick={() => navigateTo(item.path)}
+                                                className="w-full flex items-center justify-between text-base font-semibold text-slate-100 p-4 rounded-xl hover:bg-white/5 border border-white/5 transition-colors"
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-10 h-10 rounded-lg ${item.bg} flex items-center justify-center ${item.color} border border-white/10`}>
+                                                        <FontAwesomeIcon icon={item.icon} />
+                                                    </div>
+                                                    {item.label}
+                                                </div>
+                                                {isGameJamsOnHome && (
+                                                    <span className="text-[10px] uppercase font-bold tracking-wider bg-blue-600 text-white px-2 py-1 rounded-full animate-pulse shadow-[0_0_10px_rgba(37,99,235,0.5)]">
+                                                        ¡NUEVO!
+                                                    </span>
+                                                )}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
