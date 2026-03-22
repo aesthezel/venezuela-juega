@@ -19,10 +19,10 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - **GSAP** 3.13.0
 
 ### Librerías anexadas estáticas
-- **Tailwind CSS**
-- **Chart.js**
-- **Bootstrap Icons** 1.11.3
-- **FullCalendar** 6.1.18
+- **Tailwind CSS** 4.0.0
+- **Chart.js** 4.5.1
+- **Bootstrap Icons** 1.13.1
+- **FullCalendar** 6.1.15
 
 ### Librerías extras
 - **Papa Parse** 5.5.3
@@ -74,6 +74,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Creación de páginas con resultados de juegos hechos en la GJ+ 25/26
 - [x] Componente Hero para presentación de página
 - [x] Mejora de disposición de los filtros
+- [x] Migración a Tailwind CSS v4 local
+- [x] Mejoras de accesibilidad, UI/UX y soporte para animaciones
 - [ ] Ajustar metadatos pre-renderizados para cada juego y página
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
