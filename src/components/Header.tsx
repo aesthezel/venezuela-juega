@@ -115,11 +115,11 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
 
                                         {/* Animated Tooltip Bubble */}
                                         {isGameJamsOnHome && (
-                                            <div className="absolute top-full mt-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-blue-400 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.4)] animate-bounce pointer-events-none z-50">
-                                                <span>¡Revisa los juegos de este año!</span>
-                                                <div
-                                                    className="absolute -top-[6px] left-1/2 -translate-x-1/2"
-                                                    style={{ borderLeft: '6px solid transparent', borderRight: '6px solid transparent', borderBottom: '6px solid #50a2ff' }}
+                                            <div className="absolute top-full mt-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-blue-600 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-[0_0_20px_rgba(69,124,214,0.4)] animate-bounce pointer-events-none z-50">
+                                                <span>✨ Revisa los juegos de este año</span>
+                                                <div 
+                                                    className="absolute -top-[6px] left-1/2 -translate-x-1/2" 
+                                                    style={{ borderLeft: '6px solid transparent', borderRight: '6px solid transparent', borderBottom: '6px solid #457cd6' }}
                                                 />
                                             </div>
                                         )}
@@ -175,7 +175,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                                     {item.label}
                                                 </div>
                                                 {isGameJamsOnHome && (
-                                                    <span className="text-[10px] uppercase font-bold tracking-wider bg-blue-600 text-white px-2 py-1 rounded-full animate-pulse shadow-[0_0_10px_rgba(37,99,235,0.5)]">
+                                                    <span className="text-[10px] uppercase font-bold tracking-wider bg-blue-600 text-white px-2 py-1 rounded-full animate-pulse shadow-[0_0_10px_rgba(69,124,214,0.5)]">
                                                         ¡NUEVO!
                                                     </span>
                                                 )}

@@ -513,74 +513,71 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
 
     return (
         <main className="container mx-auto px-4 py-8">
-                <BackButton onClick={() => route('/')} className="mb-6" />
+            <BackButton onClick={() => route('/')} className="mb-6" />
 
-                {/* Page header */}
-                <header className="mb-10">
-                    <div className="flex items-start gap-4 mb-4">
-                        <div className="flex-1">
-                            <p className="text-orange-500/80 text-xs font-semibold uppercase tracking-widest mb-2">
-                                Venezuela Juega
-                            </p>
-                            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">
-                                Game Jams
-                                <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent"> Venezuela</span>
-                            </h1>
-                            <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
-                                Videojuegos creados por desarrolladores venezolanos en eventos de 48 horas.
-                                Explora ediciones, sedes y el talento detrás de cada juego.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Stats bar */}
-                    <div className="flex flex-wrap gap-3 mt-6">
-                        {[
-                            { icon: faGamepad, value: totalStats.games, label: 'Juegos', color: '#f97316' },
-                            { icon: faCalendarAlt, value: totalStats.editions, label: 'Ediciones', color: '#a855f7' },
-                            { icon: faLayerGroup, value: totalStats.venues, label: 'Sedes', color: '#06b6d4' },
-                            { icon: faLocationDot, value: totalStats.cities, label: 'Ciudades', color: '#10b981' },
-                        ].map(({ icon, value, label, color }) => (
-                            <div
-                                key={label}
-                                className="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/40 rounded-xl px-4 py-2.5"
-                            >
-                                <div
-                                    className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                                    style={{ background: `${color}1a` }}
-                                >
-                                    <FontAwesomeIcon icon={icon} style={{ color }} className="text-xs" />
-                                </div>
-                                <div>
-                                    <p className="text-white font-black text-lg leading-none">{value}</p>
-                                    <p className="text-slate-500 text-[10px] font-medium uppercase tracking-wide">{label}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </header>
-
-                {/* Divider */}
-                <div className="h-px bg-gradient-to-r from-orange-500/20 via-slate-700/30 to-transparent mb-12" />
-
-                {/* Editions */}
-                {processedData.length > 0 ? (
-                    processedData.map(edition => (
-                        <EditionSection
-                            key={edition.id}
-                            edition={edition}
-                            onGameClick={onGameClick}
-                        />
-                    ))
-                ) : (
-                    <div className="flex flex-col items-center justify-center py-32 bg-slate-800/30 border border-slate-700/40 rounded-2xl text-center">
-                        <div className="text-6xl mb-6 opacity-40">👾</div>
-                        <h3 className="text-xl font-bold text-white mb-2">Sin datos de Game Jams</h3>
-                        <p className="text-slate-500 max-w-sm text-sm leading-relaxed">
-                            No se encontraron juegos o aún estamos cargando los datos de las jams.
+            {/* Page header */}
+            <header className="mb-10">
+                <div className="flex items-start gap-4 mb-4">
+                    <div className="flex-1">
+                        <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">
+                            Game Jams
+                            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent"> Venezuela</span>
+                        </h1>
+                        <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                            Videojuegos creados por desarrolladores venezolanos en eventos de 48 horas.
+                            Explora ediciones, sedes y el talento detrás de cada juego.
                         </p>
                     </div>
-                )}
+                </div>
+
+                {/* Stats bar */}
+                <div className="flex flex-wrap gap-3 mt-6">
+                    {[
+                        { icon: faGamepad, value: totalStats.games, label: 'Juegos', color: '#f97316' },
+                        { icon: faCalendarAlt, value: totalStats.editions, label: 'Ediciones', color: '#a855f7' },
+                        { icon: faLayerGroup, value: totalStats.venues, label: 'Sedes', color: '#06b6d4' },
+                        { icon: faLocationDot, value: totalStats.cities, label: 'Ciudades', color: '#10b981' },
+                    ].map(({ icon, value, label, color }) => (
+                        <div
+                            key={label}
+                            className="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/40 rounded-xl px-4 py-2.5"
+                        >
+                            <div
+                                className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                                style={{ background: `${color}1a` }}
+                            >
+                                <FontAwesomeIcon icon={icon} style={{ color }} className="text-xs" />
+                            </div>
+                            <div>
+                                <p className="text-white font-black text-lg leading-none">{value}</p>
+                                <p className="text-slate-500 text-[10px] font-medium uppercase tracking-wide">{label}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </header>
+
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-orange-500/20 via-slate-700/30 to-transparent mb-12" />
+
+            {/* Editions */}
+            {processedData.length > 0 ? (
+                processedData.map(edition => (
+                    <EditionSection
+                        key={edition.id}
+                        edition={edition}
+                        onGameClick={onGameClick}
+                    />
+                ))
+            ) : (
+                <div className="flex flex-col items-center justify-center py-32 bg-slate-800/30 border border-slate-700/40 rounded-2xl text-center">
+                    <div className="text-6xl mb-6 opacity-40">👾</div>
+                    <h3 className="text-xl font-bold text-white mb-2">Sin datos de Game Jams</h3>
+                    <p className="text-slate-500 max-w-sm text-sm leading-relaxed">
+                        No se encontraron juegos o aún estamos cargando los datos de las jams.
+                    </p>
+                </div>
+            )}
 
             <style>{`
                 @keyframes jam-fade-in {

@@ -63,9 +63,6 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
         };
     }, [games, jamGames]);
 
-    // ... (mosaicGames and other logic stays same)
-    // I'll need to keep the intermediate parts to ensure a clean replace.
-    // Mosaic images
     const mosaicGames = useMemo(() => {
         const withImages = games.filter(g => {
             const src = g.imageCover || g.imageUrl;
@@ -146,10 +143,10 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
                 </div>
 
                 {/* Title */}
-                <h1 
+                <h1
                     className="mb-4 text-6xl font-extrabold leading-none tracking-tight drop-shadow-2xl md:text-8xl bg-clip-text text-transparent"
                     style={{
-                        backgroundImage: 'linear-gradient(to right, #FCD34D 0%, #3B82F6 50%, #EF4444 100%)',
+                        backgroundImage: 'linear-gradient(to right, #f2b63d 0%, #457cd6 50%, #e34262 100%)',
                         WebkitBackgroundClip: 'text',
                         backgroundClip: 'text',
                     }}
@@ -166,12 +163,12 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
 
                 {/* Stats */}
                 <div className="flex w-full flex-wrap justify-center gap-6 md:gap-8">
-                    <StatCard 
-                        value={stats.totalCount} 
-                        label="Juegos" 
-                        icon={faGamepad} 
+                    <StatCard
+                        value={stats.totalCount}
+                        label="Juegos"
+                        icon={faGamepad}
                         iconClass="text-yellow-300"
-                        subValue={`${stats.gameCount} estándar + ${stats.jamCount} de jams`}
+                        subValue={`${stats.gameCount} por estudios + ${stats.jamCount} de jams`}
                     />
                     <StatCard value={stats.devs} label="Estudios" icon={faUsers} iconClass="text-blue-300" />
                     <StatCard value={`${stats.history}+`} label="Años de historia" icon={faCodeBranch} iconClass="text-red-300" />

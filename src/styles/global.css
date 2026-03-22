@@ -2,24 +2,73 @@
 
 @theme {
   --font-sans: 'Inter', 'SF Pro', system-ui, sans-serif;
-  --color-slate-950: oklch(0.12 0.01 250);
-  --color-cyan-500: oklch(0.7 0.15 200);
-  --color-purple-600: oklch(0.5 0.25 300);
+  
+  /* Deep Dark Backgrounds for Legibility */
+  --color-slate-950: #0d0a11;
+  --color-slate-900: #18131e;
+  --color-slate-800: #221a2a;
+  --color-slate-700: #2c1b2e; /* Palette's darkest shade as base border/accent */
+  --color-slate-600: #3b2a3d;
+  --color-slate-500: #5b4a5d;
+  --color-slate-400: #9c8a9d;
+  --color-slate-300: #d4cfd6;
+  --color-slate-200: #eae7ec;
+  --color-slate-100: #fff4e0; /* Palette's warm white */
+  --color-slate-50:  #ffffff;
+  --color-white: #fff4e0;
+
+  /* Venezuelan Flag / Core Highlights */
+  --color-yellow-300: #f2b63d;
+  --color-yellow-400: #f2b63d;
+  --color-yellow-500: #f2b63d;
+
+  --color-blue-400: #457cd6;
+  --color-blue-500: #457cd6;
+  --color-blue-600: #457cd6;
+
+  --color-red-400: #e34262;
+  --color-red-500: #e34262;
+  --color-red-600: #94353d;
+
+  /* Supplemental Highlights mapped from the 17 Custom Colors */
+  --color-cyan-200: #8fcccb;
+  --color-cyan-300: #8fcccb;
+  --color-cyan-400: #8fcccb;
+  --color-cyan-500: #449489;
+  --color-cyan-950: #285763;
+  
+  --color-indigo-400: #4b3b9c;
+  --color-indigo-500: #4b3b9c;
+  --color-indigo-600: #2f2b5c;
+
+  --color-emerald-300: #b4ba47;
+  --color-emerald-400: #b4ba47;
+  --color-emerald-500: #6d8c32;
+  --color-emerald-600: #6d8c32;
+  
+  --color-orange-300: #d46e33;
+  --color-orange-400: #d46e33;
+  --color-orange-500: #d46e33;
+
+  --color-purple-300: #9c656c;
+  --color-purple-400: #9c656c;
+  --color-purple-500: #57253b;
+  --color-purple-600: #2c1b2e;
 }
 
 :root {
     --header-height: 80px;
-    --primary-glow: conic-gradient(from 180deg at 50% 50%, #2a8af6 0deg, #a853ba 180deg, #e92a67 360deg);
+    --primary-glow: conic-gradient(from 180deg at 50% 50%, #457cd6 0deg, #e34262 180deg, #f2b63d 360deg);
 }
 
 body {
-    background-color: #0f172a;
+    background-color: var(--color-slate-950);
     background-image:
-            radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%),
-            radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%),
-            radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            radial-gradient(at 0% 0%, var(--color-slate-900) 0, transparent 50%),
+            radial-gradient(at 50% 0%, var(--color-slate-800) 0, transparent 50%),
+            radial-gradient(at 100% 0%, var(--color-slate-950) 0, transparent 50%);
     background-attachment: fixed;
-    color: #e2e8f0;
+    color: var(--color-slate-200);
 }
 
 ::-webkit-scrollbar {
@@ -27,21 +76,21 @@ body {
     height: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.5);
+    background: #0d0a11; /* slate-950 */
 }
 ::-webkit-scrollbar-thumb {
-    background: #334155;
+    background: #2c1b2e; /* slate-700 / palette's darkest */
     border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #475569;
+    background: #4b3b9c; /* nice palette highlight */
 }
 
 .glass-panel {
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(24, 19, 30, 0.7); /* slate-900 eq */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 244, 224, 0.05); /* very faint white */
 }
 
 /* Layout helper para que el contenido NO quede debajo del header fijo */
