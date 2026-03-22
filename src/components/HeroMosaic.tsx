@@ -69,23 +69,22 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
         const container = containerRef.current;
         if (!el || !container) return;
 
-        gsap.fromTo(el,
-            { opacity: 0, scale: 1.1 },
-            { opacity: 0.4, scale: 1, duration: 1.5, ease: 'power2.out' },
-        );
+        const ctx = gsap.context(() => {
+            gsap.fromTo(el,
+                { opacity: 0, scale: 1.1 },
+                { opacity: 0.4, scale: 1, duration: 1.5, ease: 'power2.out' },
+            );
 
-        const st = ScrollTrigger.create({
-            trigger: container,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-            animation: gsap.to(el, { y: 150, ease: 'none' }),
-        });
+            ScrollTrigger.create({
+                trigger: container,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true,
+                animation: gsap.to(el, { y: 150, ease: 'none' }),
+            });
+        }, container);
 
-        return () => {
-            st.kill();
-            gsap.killTweensOf(el);
-        };
+        return () => ctx.revert();
     }, []);
 
     // ── Scroll to catalog ──────────────────────────────────────────────────

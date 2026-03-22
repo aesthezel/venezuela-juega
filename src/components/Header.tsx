@@ -28,24 +28,23 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
         const el = headerRef.current;
         if (!el) return;
 
-        const showHeader = () => gsap.to(el, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' });
-        const hideHeader = () => gsap.to(el, { y: -100, opacity: 0, duration: 0.4, ease: 'power3.out' });
+        const ctx = gsap.context(() => {
+            const showHeader = () => gsap.to(el, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' });
+            const hideHeader = () => gsap.to(el, { y: -100, opacity: 0, duration: 0.4, ease: 'power3.out' });
 
-        const st = ScrollTrigger.create({
-            start: 'top top',
-            onUpdate: (self) => {
-                if (self.direction === 1 && self.scroll() > 50) {
-                    hideHeader();
-                } else if (self.direction === -1) {
-                    showHeader();
-                }
-            },
-        });
+            ScrollTrigger.create({
+                start: 'top top',
+                onUpdate: (self) => {
+                    if (self.direction === 1 && self.scroll() > 50) {
+                        hideHeader();
+                    } else if (self.direction === -1) {
+                        showHeader();
+                    }
+                },
+            });
+        }, el);
 
-        return () => {
-            st.kill();
-            gsap.killTweensOf(el);
-        };
+        return () => ctx.revert();
     }, []);
 
     useEffect(() => {
@@ -109,7 +108,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                         <FontAwesomeIcon icon={item.icon} className={active ? "animate-pulse" : ""} />
                                         <span>{item.label}</span>
                                         {active && (
-                                            <span className="absolute inset-x-3 -bottom-[9px] h-[2px] bg-gradient-to-r from-cyan-400 via-purple-400 to-orange-400 rounded-full" />
+                                            <span className="absolute inset-x-3 -bottom-[9px] h-[2px] bg-gradient-to-r from-yellow-400 via-blue-500 to-red-500 rounded-full" />
                                         )}
                                     </button>
                                 );

@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { Game, GameStatus } from "@/src/types";
-import {BackButton} from "@/src/components";
+import { BackButton } from "@/src/components";
 import { ChartsPageProps } from "@/src/types";
+import { Chart, registerables } from 'chart.js/auto';
 
-declare var Chart: any;
+Chart.register(...registerables);
 
 const countItems = (data: Game[], key: 'platform' | 'genre') => {
     const counts = new Map<string, number>();

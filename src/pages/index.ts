@@ -7,3 +7,5 @@ export { default as CatalogPage } from './CatalogPage';
 export { default as GameJamPage } from './GameJamPage';
 export { default as GameJamGalleryPage } from './GameJamGalleryPage';
 export { default as GameJamsPage } from './GameJamsPage';
+export { default as NotFoundPage } from './NotFoundPage';
+export { default as Redirect } from './Redirect';

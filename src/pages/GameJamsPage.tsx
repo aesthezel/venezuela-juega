@@ -336,11 +336,7 @@ const EditionSection = ({ edition, onGameClick }: {
     edition: ProcessedEdition;
     onGameClick: (game: Game) => void;
 }) => {
-    const [expandedVenues, setExpandedVenues] = useState<Set<string>>(
-        new Set(edition.venues.length <= 4
-            ? edition.venues.map(v => v.id)
-            : [edition.venues[0]?.id])
-    );
+    const [expandedVenues, setExpandedVenues] = useState<Set<string>>(new Set());
 
     const toggleVenue = (venueId: string) => {
         setExpandedVenues(prev => {

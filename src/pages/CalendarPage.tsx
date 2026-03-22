@@ -15,8 +15,12 @@ import {
     faFire,
     faCalendarCheck
 } from '@fortawesome/free-solid-svg-icons';
-
-declare var FullCalendar: any;
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import esLocale from '@fullcalendar/core/locales/es';
+// @ts-ignore
+import { CalendarOptions } from '@fullcalendar/core';
 
 const parseDate = (dateString: string): string | null => {
     if (!dateString || isNaN(new Date(dateString).getTime())) {
@@ -266,72 +270,6 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
             .filter((event): event is NonNullable<typeof event> => event !== null);
     }, [games]);
 
-    useEffect(() => {
-        if (!calendarRef.current) return;
-
-        const calendar = new FullCalendar.Calendar(calendarRef.current, {
-            initialView: 'dayGridMonth',
-            events: events,
-            locale: 'es',
-            height: 'auto',
-            aspectRatio: 1.8,
-            dayHeaderFormat: { weekday: 'short' },
-            eventDisplay: 'block',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,multiMonthYear,listWeek'
-            },
-            buttonText: {
-                today: 'Hoy',
-                month: 'Mes',
-                week: 'Semana',
-                year: 'Años',
-                list: 'Lista'
-            },
-            eventColor: '#0891b2',
-            eventBackgroundColor: '#0891b2',
-            eventBorderColor: '#06b6d4',
-            eventTextColor: '#ffffff',
-
-            eventClick: (info: any) => {
-                info.jsEvent.preventDefault();
-                const game = info.event.extendedProps.game;
-                if (game) {
-                    onEventClick(game);
-                }
-            },
-
-            eventMouseEnter: (info: any) => {
-                const rect = info.el.getBoundingClientRect();
-                let top = rect.bottom + window.scrollY + 15;
-                let left = rect.left + window.scrollX;
-
-                if (left + 288 > window.innerWidth) {
-                    left = window.innerWidth - 298;
-                }
-                if (top + 200 > window.innerHeight + window.scrollY) {
-                    top = rect.top + window.scrollY - 210;
-                }
-
-                setPreviewPosition({ top, left });
-                setPreviewGame(info.event.extendedProps.game);
-            },
-            eventMouseLeave: () => {
-                setPreviewGame(null);
-            },
-
-            dayMaxEvents: 3,
-            moreLinkClick: 'popover',
-        });
-
-        calendar.render();
-
-        return () => {
-            calendar.destroy();
-        };
-    }, [events, onEventClick]);
-
     return (
         <main className="container mx-auto px-4 py-8">
             {previewGame && <CalendarTooltip game={previewGame} position={previewPosition} />}
@@ -353,7 +291,44 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
 
             <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden">
                 <div className="p-6 sm:p-8">
-                    <div ref={calendarRef} id="calendar" className="calendar-container"></div>
+                    <div className="calendar-container">
+                        <FullCalendar
+                            plugins={[dayGridPlugin, interactionPlugin]}
+                            initialView="dayGridMonth"
+                            events={events}
+                            locale={esLocale}
+                            height="auto"
+                            aspectRatio={1.8}
+                            dayHeaderFormat={{ weekday: 'short' }}
+                            headerToolbar={{
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'dayGridMonth,dayGridWeek,dayGridDay'
+                            }}
+                            buttonText={{
+                                today: 'Hoy',
+                                month: 'Mes',
+                                week: 'Semana',
+                                day: 'Día'
+                            }}
+                            eventClick={(info) => {
+                                info.jsEvent.preventDefault();
+                                const game = info.event.extendedProps.game;
+                                if (game) onEventClick(game);
+                            }}
+                            eventMouseEnter={(info) => {
+                                const rect = info.el.getBoundingClientRect();
+                                let top = rect.bottom + window.scrollY + 15;
+                                let left = rect.left + window.scrollX;
+                                if (left + 288 > window.innerWidth) left = window.innerWidth - 298;
+                                if (top + 200 > window.innerHeight + window.scrollY) top = rect.top + window.scrollY - 210;
+                                setPreviewPosition({ top, left });
+                                setPreviewGame(info.event.extendedProps.game);
+                            }}
+                            eventMouseLeave={() => setPreviewGame(null)}
+                            dayMaxEvents={3}
+                        />
+                    </div>
                 </div>
             </div>
 

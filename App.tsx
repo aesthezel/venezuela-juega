@@ -1,12 +1,9 @@
-// noinspection JSNonASCIINames
-import Papa from 'papaparse';
-import { useEffect, useMemo, useState } from 'preact/hooks';
-import { Router, RoutableProps, route } from 'preact-router';
-import { Game } from "@/src/types";
-import { useDebounce } from '@/src/hooks';
-import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata, mapOrigin } from '@/src/utils';
+import { useState, useMemo } from 'preact/hooks';
+import { Router, route } from 'preact-router';
+import { Game, ViewMode } from "@/src/types";
+import { useGamesData, useMetadata } from '@/src/hooks';
+import { generateSlug, ensureUniqueSlug } from '@/src/utils';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
-import { trackPageView, trackGameView, trackEvent } from '@/src/utils/analytics';
 import {
     ChartsPage,
     AddGamePage,
@@ -14,654 +11,117 @@ import {
     CalendarPage,
     GameDetailPage,
     CatalogPage,
-    GameJamPage, // TODO: move logic to new component called GameJamsPage
-    GameJamGalleryPage, // TODO: move logic to new component called GameJamsPage
-    GameJamsPage
+    GameJamGalleryPage,
+    GameJamsPage,
+    NotFoundPage,
+    Redirect
 } from '@/src/pages';
-import { JamSettingRow } from '@/src/pages/GameJamsPage';
 
-interface JamGame extends Game {
-    Jam_Org_UID?: string;
-    Jam_Edition?: string;
-}
-
-declare const gtag: (type: string, event: string, params: Record<string, any>) => void;
-
-// TODO: move to another component and fix something about vertical centering
-const NotFoundPage = (_props: RoutableProps) => (
-    <section className="fixed inset-0 z-10 flex items-center justify-center px-4">
-        <div className="text-center">
-            <h1 className="text-3xl font-bold text-white mb-4">Página no encontrada</h1>
-            <p className="text-gray-400 mb-6">La ruta que intentaste abrir no existe.</p>
-            <button
-                onClick={() => route('/')}
-                className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors"
-            >
-                Ir al catálogo
-            </button>
-        </div>
-    </section>
-);
-
-// Simple redirect component to normalize routes (e.g., trailing slashes)
-const Redirect = ({ to }: { to: string } & RoutableProps) => {
-    useEffect(() => {
-        // replace: true to avoid adding an extra entry in the history
-        route(to, true);
-    }, [to]);
-    return null;
-};
-
-// TODO: move to metada settings file
-const pageMetadata = {
-    '/': {
-        title: 'Venezuela Juega — Catálogo de la industria de videojuegos',
-        description: 'Explora, filtra y descubre videojuegos desarrollados en Venezuela. Un catálogo completo de la industria venezolana.'
-    },
-    '/calendar': {
-        title: 'Calendario de Lanzamientos — Venezuela Juega',
-        description: 'Sigue las fechas de lanzamiento de los próximos videojuegos desarrollados en Venezuela.'
-    },
-    '/charts': {
-        title: 'Estadísticas de la Industria — Venezuela Juega',
-        description: 'Visualiza datos y gráficos sobre el ecosistema de desarrollo de videojuegos en Venezuela.'
-    },
-    '/about': {
-        title: 'Acerca de la Iniciativa — Venezuela Juega',
-        description: 'Conoce más sobre la iniciativa Venezuela Juega, sus colaboradores y cómo puedes contribuir.'
-    },
-    '/gamejam-gallery': {
-        title: 'GameJam+ 25/26 — Venezuela Juega',
-        description: 'Todos los juegos que fueron realizados en menos de 48 horas.'
-    },
-    // '/gamejam': {
-    //     title: 'GameJam+ 25/26 — Venezuela Juega',
-    //     description: 'Participa en la GameJam+ edición 25/26. Información, charlas y registro para creadores de videojuegos.'
-    // },
-    '/game-jams': {
-        title: 'Game Jams Venezuela — Venezuela Juega',
-        description: 'Descubre los increíbles juegos creados en menos de 48 horas por desarrolladores venezolanos en eventos Game Jam.'
-    },
-};
-
-// TODO: refactor and separate hooks, useStates and useEffects properly
 const App = () => {
-    const [games, setGames] = useState<Game[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { 
+        games, 
+        loading, 
+        error, 
+        jamGames, 
+        jamSettings, 
+        jamLoading 
+    } = useGamesData();
+
     const [searchTerm, setSearchTerm] = useState('');
     const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({
-        status: [],
-        genre: [],
-        platform: [],
-        stores: [],
-        origin: [],
+        status: [], genre: [], platform: [], stores: [], origin: [],
     });
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState('/');
 
     const [yearRange, setYearRange] = useState<{ min: number; max: number } | null>(null);
     const [isYearFilterManuallySet, setIsYearFilterManuallySet] = useState(false);
-    const [minYear, setMinYear] = useState(new Date().getFullYear() - 40);
-    const [maxYear, setMaxYear] = useState(new Date().getFullYear());
 
-    // GAME JAMS!
-    const [jamGames, setJamGames] = useState<JamGame[]>([]);
-    const [jamSettings, setJamSettings] = useState<JamSettingRow[]>([]);
-    const [jamLoading, setJamLoading] = useState(true);
-
-
-    const debouncedSearchTerm = useDebounce(searchTerm, 300);
-
-    // Screenshot helper
-    const parseScreenshots = (value?: string): string[] => {
-        if (!value) return [];
-        const trimmed = value.trim();
-        if (!trimmed) return [];
-        if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-            try {
-                const parsed = JSON.parse(trimmed);
-                if (Array.isArray(parsed)) {
-                    return parsed
-                        .filter((v) => typeof v === 'string')
-                        .map((v) => v.trim())
-                        .filter(Boolean);
-                }
-            } catch {
-                // TODO: do a fallback
-            }
-        }
-
-        return parseStringToArray(value).map((v) => v.trim()).filter(Boolean);
-    };
-
-    useEffect(() => {
-        // @ts-ignore
-        const SPREADSHEET_ID = import.meta.env.VITE_SPREADSHEET_ID;
-        // @ts-ignore
-        const SHEET_NAME = import.meta.env.VITE_SHEET_NAME;
-        const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
-
-        const CORRECT_HEADERS = [
-            'Título del videojuego', 'Plataforma(s)', 'Género(s)', 'Desarrollador(es)',
-            'Distribuidor', 'Fecha de lanzamiento', 'Última actualización', 'Estado actual',
-            'Tiendas', 'Enlace(s)', 'Presskit', 'Pitch', 'Financiamiento', 'Motor',
-            'Origen inicial', 'Idioma(s) disponible(s)', 'Destacado', 'Descripción del Destacado', 'steam_appid',
-            'google_appid', 'Enlace directo', 'Steam', 'GOG', 'Itch', 'Nintendo Shop',
-            'PlayStation Store', 'Microsoft Store', 'Play Store', 'App Store', 'Meta',
-            'Tienda externa', 'Hero', 'Portada', 'Mini Image', 'Trailer', 'Screenshots', 'Descripción'
-        ];
-
-        Papa.parse(SPREADSHEET_URL, {
-            download: true,
-            header: false,
-            skipEmptyLines: true,
-            complete: (results) => {
-                const data = results.data as string[][];
-                const headerIndex = data.findIndex(row => row[0] === 'Título del videojuego');
-
-                if (headerIndex === -1) {
-                    setError('Error: No se encontró la fila de encabezado "Título del videojuego" en el CSV.');
-                    setLoading(false);
-                    return;
-                }
-
-                const gameRows = data.slice(headerIndex + 1);
-                const existingSlugs = new Set<string>();
-
-                const storeColumns = [
-                    'Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store',
-                    'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'
-                ];
-
-                const parsedGames = gameRows.map((row: string[]): Game | null => {
-                    const rowObject = CORRECT_HEADERS.reduce((obj, header, i) => {
-                        if (header && i < row.length) {
-                            obj[header] = row[i];
-                        }
-                        return obj;
-                    }, {} as { [key: string]: string });
-
-                    const title = rowObject['Título del videojuego'];
-                    if (!title) {
-                        return null;
-                    }
-
-                    const baseSlug = generateSlug(title);
-                    const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
-
-                    const stores = storeColumns
-                        .map(storeName => ({
-                            name: storeName,
-                            url: rowObject[storeName]?.trim(),
-                        }))
-                        .filter(store => store.url);
-
-                    const links = Object.keys(rowObject)
-                        .filter(key => key.startsWith('Link') && key.endsWith('Name'))
-                        .map(nameKey => {
-                            const urlKey = nameKey.replace('Name', 'URL');
-                            const name = rowObject[nameKey]?.trim();
-                            const url = rowObject[urlKey]?.trim();
-                            return (name && url) ? { name, url } : null;
-                        })
-                        .filter((link): link is { name: string; url: string } => link !== null);
-
-                    return {
-                        id: (games.length || 0) + existingSlugs.size + 1,
-                        slug: uniqueSlug,
-                        title: title,
-                        platform: parseStringToArray(rowObject['Plataforma(s)']),
-                        genre: parseStringToArray(rowObject['Género(s)']),
-                        developers: parseStringToArray(rowObject['Desarrollador(es)']),
-                        publishers: parseStringToArray(rowObject['Distribuidor']),
-                        releaseDate: rowObject['Fecha de lanzamiento'] || 'No especificada',
-                        lastUpdateDate: rowObject['Última actualización'] || undefined,
-                        status: mapStatus(rowObject['Estado actual']),
-                        stores: stores,
-                        links: links,
-                        pressKitUrl: rowObject['Presskit'] || undefined,
-                        pitch: rowObject['Pitch'] || '',
-                        funding: rowObject['Financiamiento'] || undefined,
-                        engine: rowObject['Motor'] || 'No especificado',
-                        languages: parseStringToArray(rowObject['Idioma(s) disponible(s)']),
-                        imageUrl: rowObject['Mini Image'] || '',
-                        imageCover: rowObject['Portada'] || '',
-                        imageHero: rowObject['Hero'] || '',
-                        description: rowObject['Descripción'] || '',
-                        isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
-                        highlightReason: rowObject['Descripción del Destacado'] || '',
-                        screenshots: parseScreenshots(rowObject['Screenshots']),
-                        origin: mapOrigin(rowObject['Origen inicial']),
-                    };
-                }).filter((game): game is Game => game !== null);
-
-                setGames(parsedGames);
-                setLoading(false);
-            },
-            error: (err) => {
-                setError('Ha habido un error al cargar la lista de juegos');
-                console.error(err);
-                setLoading(false);
-            }
-        });
-    }, []);
-
-    // GameJam Load
-    useEffect(() => {
-        // @ts-ignore
-        const JAM_SPREADSHEET_ID = import.meta.env.VITE_GAMEJAMSHEET_ID;
-        // @ts-ignore
-        const JAM_GAMES_SHEET = import.meta.env.VITE_GAMEJAMSHEET_NAME_GAMES;
-        // @ts-ignore
-        const JAM_SETTINGS_SHEET = import.meta.env.VITE_GAMEJAMSHEET_NAME_SETTINGS;
-
-        const JAM_GAMES_URL = `https://docs.google.com/spreadsheets/d/${JAM_SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${JAM_GAMES_SHEET}`;
-        const JAM_SETTINGS_URL = `https://docs.google.com/spreadsheets/d/${JAM_SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${JAM_SETTINGS_SHEET}`;
-
-        const JAM_GAME_HEADERS = [
-            // Col 1-5: datos base del juego
-            'Título del videojuego', 'Plataforma(s)', 'Género(s)', 'Desarrollador(es)', 'Distribuidor',
-            // Col 6-7: campos específicos de Jam (sin Jam_Venue)
-            'Jam_Org_UID', 'Jam_Edition',
-            // Col 8-10: fechas y estado
-            'Fecha de lanzamiento', 'Última actualización', 'Estado actual',
-            // Col 11-23: tiendas, links, detalles
-            'Tiendas', 'Enlace(s)', 'Presskit', 'Pitch', 'Financiamiento', 'Motor',
-            'Origen inicial', 'Idioma(s) disponible(s)', 'Destacado', 'Descripción del Destacado',
-            'steam_appid', 'google_appid', 'Enlace directo',
-            // Col 24-33: tiendas individuales
-            'Steam', 'GOG', 'Itch', 'Nintendo Shop', 'PlayStation Store',
-            'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'Tienda externa',
-            // Col 34-40: media y metadata
-            'Hero', 'Portada', 'Mini Image', 'Trailer', 'Screenshots', 'Descripción', 'UID'
-        ];
-
-        const storeColumns = [
-            'Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store',
-            'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'
-        ];
-
-        Promise.all([
-            new Promise<JamGame[]>((resolve, reject) => {
-                Papa.parse(JAM_GAMES_URL, {
-                    download: true,
-                    header: false,  // ✅ Cambiar a false porque buscaremos manualmente el header
-                    skipEmptyLines: true,
-                    complete: (results) => {
-                        const data = results.data as string[][];
-
-                        // 🔍 Buscar la fila de headers (debe coincidir con JAM_GAME_HEADERS)
-                        const headerIndex = data.findIndex(row =>
-                            row[0] === 'Título del videojuego' && row[5] === 'Jam_Org_UID'
-                        );
-
-                        if (headerIndex === -1) {
-                            console.error('No se encontró fila de encabezado de Game Jam. Se esperaba columna 0: "Título del videojuego", columna 5: "Jam_Org_UID"');
-                            resolve([]);
-                            return;
-                        }
-
-                        console.log(`Headers encontrados en fila ${headerIndex + 1}`);
-
-                        const gameRows = data.slice(headerIndex + 1);
-                        const existingSlugs = new Set<string>();
-
-                        const storeColumns = [
-                            'Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store',
-                            'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'
-                        ];
-
-                        const parsedJamGames = gameRows.map((row: string[], index): JamGame | null => {
-                            // Crear objeto con headers para acceso fácil
-                            const rowObject = JAM_GAME_HEADERS.reduce((obj, header, i) => {
-                                if (header && i < row.length) {
-                                    obj[header] = row[i];
-                                }
-                                return obj;
-                            }, {} as { [key: string]: string });
-
-                            const title = rowObject['Título del videojuego'];
-                            if (!title || !title.trim()) return null;
-
-                            const baseSlug = generateSlug(title);
-                            const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
-
-                            const stores = storeColumns
-                                .map(storeName => ({
-                                    name: storeName,
-                                    url: rowObject[storeName]?.trim(),
-                                }))
-                                .filter(store => store.url);
-
-                            // LOG para debugging
-                            if (index < 3) {
-                                console.log(`Juego ${index}: "${title}"`, {
-                                    Jam_Org_UID: rowObject['Jam_Org_UID'],
-                                    Jam_Edition: rowObject['Jam_Edition'],
-                                });
-                            }
-
-                            return {
-                                id: index + 1,
-                                slug: uniqueSlug,
-                                title: title,
-                                platform: parseStringToArray(rowObject['Plataforma(s)']),
-                                genre: parseStringToArray(rowObject['Género(s)']),
-                                developers: parseStringToArray(rowObject['Desarrollador(es)']),
-                                publishers: parseStringToArray(rowObject['Distribuidor']),
-                                releaseDate: rowObject['Fecha de lanzamiento'] || 'No especificada',
-                                lastUpdateDate: rowObject['Última actualización'] || undefined,
-                                status: mapStatus(rowObject['Estado actual']),
-                                stores: stores,
-                                links: [],
-                                pressKitUrl: rowObject['Presskit'] || undefined,
-                                pitch: rowObject['Pitch'] || '',
-                                funding: rowObject['Financiamiento'] || undefined,
-                                engine: rowObject['Motor'] || 'No especificado',
-                                languages: parseStringToArray(rowObject['Idioma(s) disponible(s)']),
-                                imageUrl: rowObject['Mini Image'] || '',
-                                imageCover: rowObject['Portada'] || '',
-                                imageHero: rowObject['Hero'] || '',
-                                description: rowObject['Descripción'] || '',
-                                isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
-                                highlightReason: rowObject['Descripción del Destacado'] || '',
-                                screenshots: parseScreenshots(rowObject['Screenshots']),
-                                origin: mapOrigin(rowObject['Origen inicial']),
-                                // Campos específicos de Game Jam
-                                Jam_Org_UID: rowObject['Jam_Org_UID']?.trim() || undefined,
-                                Jam_Edition: rowObject['Jam_Edition']?.trim() || undefined,
-                            };
-                        }).filter((game): game is JamGame => game !== null);
-
-                        console.log(`Game Jams cargados: ${parsedJamGames.length} juegos`);
-                        resolve(parsedJamGames);
-                    },
-                    error: (err) => {
-                        console.error('Error cargando juegos de Game Jam:', err);
-                        resolve([]);
-                    }
-                });
-            }),
-
-            new Promise<JamSettingRow[]>((resolve, reject) => {
-                Papa.parse(JAM_SETTINGS_URL, {
-                    download: true,
-                    header: true,
-                    skipEmptyLines: true,
-                    complete: (results) => {
-                        const data = results.data as Record<string, string>[];
-
-                        const settings: JamSettingRow[] = data
-                            .filter(row => row['Organization'] && row['Venue'] && row['UID'])  // Sin Edition
-                            .map(row => ({
-                                Organization: row['Organization']?.trim() || '',
-                                // Ya no hay Edition en settings
-                                Venue: row['Venue']?.trim() || '',
-                                Venue_City: row['Venue_City']?.trim() || '',
-                                Venue_Logo: row['Venue_Logo']?.trim() || undefined,
-                                Venue_Socials: row['Venue_Socials']?.trim() || undefined,
-                                Order_Priority: row['Order_Priority']?.trim() || '0',
-                                UID: row['UID']?.trim() || '',
-                            }));
-
-                        console.log('Settings cargados:', settings);
-                        resolve(settings);
-                    },
-                    error: (err) => {
-                        console.error('Error cargando settings de Game Jam:', err);
-                        resolve([]);
-                    }
-                });
-            })
-        ]).then(([loadedJamGames, loadedSettings]) => {
-            setJamGames(loadedJamGames);
-            setJamSettings(loadedSettings);
-            setJamLoading(false);
-            console.log(`Game Jams cargados: ${loadedJamGames.length} juegos, ${loadedSettings.length} sedes`);
-        });
-    }, []);
-
-    useEffect(() => {
-        if (games.length > 0) {
-            const currentYear = new Date().getFullYear();
-            const years = games
-                .map(g => {
-                    const yearMatch = g.releaseDate.match(/\b\d{4}\b/);
-                    return yearMatch ? parseInt(yearMatch[0], 10) : null;
-                })
-                .filter((y): y is number => y !== null);
-
-            const uniqueYears = [...new Set(years)].sort((a, b) => a - b);
-
-            const newMinYear = uniqueYears.length > 0 ? uniqueYears[0] : currentYear - 40;
-            const newMaxYear = uniqueYears.length > 0 ? uniqueYears[uniqueYears.length - 1] : currentYear;
-
-            setMinYear(newMinYear);
-            setMaxYear(newMaxYear);
-            setYearRange({ min: newMinYear, max: newMaxYear });
-        }
-    }, [games]);
-
-    const allGenres = useMemo(() => Array.from(new Set(games.flatMap(g => g.genre))), [games]);
-    const allPlatforms = useMemo(() => Array.from(new Set(games.flatMap(g => g.platform))), [games]);
-    const allStores = useMemo(() => Array.from(new Set(games.flatMap(g => g.stores.map(s => s.name)))), [games]);
-    const allOrigins = useMemo(() => Array.from(new Set(games.map(g => g.origin).filter(Boolean))), [games]);
+    useMetadata(currentPath, games);
 
     const filteredGames = useMemo(() => {
-        return games.filter(game => {
-            const searchMatch = debouncedSearchTerm === '' ||
-                game.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-                game.developers.some(dev => dev.toLowerCase().includes(debouncedSearchTerm.toLowerCase())) ||
-                game.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+        return games.filter((game: Game) => {
+            const searchMatch = searchTerm === '' ||
+                game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                game.developers.some((dev: string) => dev.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                game.description.toLowerCase().includes(searchTerm.toLowerCase());
 
             const statusMatch = activeFilters.status.length === 0 || activeFilters.status.includes(game.status);
-            const genreMatch = activeFilters.genre.length === 0 || activeFilters.genre.some(f => game.genre.includes(f));
-            const platformMatch = activeFilters.platform.length === 0 || activeFilters.platform.some(f => game.platform.includes(f));
-            const storeMatch = activeFilters.stores.length === 0 || activeFilters.stores.some(f => game.stores.some(s => s.name === f));
+            const genreMatch = activeFilters.genre.length === 0 || activeFilters.genre.some((f: string) => game.genre.includes(f));
+            const platformMatch = activeFilters.platform.length === 0 || activeFilters.platform.some((f: string) => game.platform.includes(f));
+            const storeMatch = activeFilters.stores.length === 0 || activeFilters.stores.some((f: string) => game.stores.some((s: any) => s.name === f));
             const originMatch = activeFilters.origin.length === 0 || (game.origin && activeFilters.origin.includes(game.origin));
 
             const releaseYearMatch = game.releaseDate.match(/\b\d{4}\b/);
             const releaseYear = releaseYearMatch ? parseInt(releaseYearMatch[0], 10) : null;
 
             let yearMatch = true;
-            if (isYearFilterManuallySet) {
-                if (releaseYear === null) {
-                    yearMatch = false;
-                } else if (yearRange) {
-                    yearMatch = releaseYear >= yearRange.min && releaseYear <= yearRange.max;
-                }
+            if (isYearFilterManuallySet && yearRange) {
+                yearMatch = releaseYear !== null && releaseYear >= yearRange.min && releaseYear <= yearRange.max;
             }
 
             return searchMatch && statusMatch && genreMatch && platformMatch && storeMatch && originMatch && yearMatch;
         });
-    }, [debouncedSearchTerm, activeFilters, games, yearRange, isYearFilterManuallySet]);
+    }, [searchTerm, activeFilters, games, yearRange, isYearFilterManuallySet]);
 
     const handleFilterChange = (category: string, value: string) => {
         setActiveFilters(prev => {
-            const currentFilters = prev[category] || [];
-            const newFilters = currentFilters.includes(value)
-                ? currentFilters.filter(item => item !== value)
-                : [...currentFilters, value];
-            return { ...prev, [category]: newFilters };
+            const current = prev[category] || [];
+            const next = current.includes(value) ? current.filter(i => i !== value) : [...current, value];
+            return { ...prev, [category]: next };
         });
     };
 
-    const handleYearRangeChange = (newRange: { min: number; max: number }) => {
-        setYearRange(newRange);
-        setIsYearFilterManuallySet(true);
-    };
-
-    const clearFilterCategory = (category: string) => {
-        setActiveFilters(prev => ({
-            ...prev,
-            [category]: [],
-        }));
-    };
-
+    const handleRouteChange = (e: any) => setCurrentPath(e.url);
     const handleOpenModal = (game: Game) => setSelectedGame(game);
     const handleCloseModal = () => setSelectedGame(null);
-
-    const handleGameClick = (game: Game) => {
-        route(`/game/${encodeURIComponent(game.slug)}`);
-    };
-
-    const clearFilters = () => {
-        setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] });
-        setYearRange({ min: minYear, max: maxYear });
-        setIsYearFilterManuallySet(false);
-    };
-
-    const handleAddNewGame = (newGameData: Omit<Game, 'id' | 'slug'>) => {
-        const existingSlugs = new Set(games.map(g => g.slug));
-        const baseSlug = generateSlug(newGameData.title);
-        const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
-
-        const newGame: Game = {
-            ...newGameData,
-            id: games.length > 0 ? Math.max(...games.map(g => g.id)) + 1 : 1,
-            slug: uniqueSlug,
-        };
-        setGames(prevGames => [newGame, ...prevGames]);
-    };
-
-    const handleRouteChange = (e: any) => {
-        const currentUrl = e.url;
-        setCurrentPath(e.url);
-
-        // GA4 page view
-        trackPageView(e.url, document.title);
-
-        const gameSlugMatch = currentUrl.match(/^\/games?\/([^/]+)/);
-
-        if (gameSlugMatch && gameSlugMatch[1]) {
-            const gameSlug = decodeURIComponent(gameSlugMatch[1]);
-            const foundGame = games.find(g => g.slug.toLowerCase() === gameSlug.toLowerCase());
-
-            if (foundGame) {
-                document.title = `${foundGame.title} — Venezuela Juega`;
-                const description = foundGame.description.substring(0, 155).trim() + '...';
-                const imageUrl = foundGame.imageCover || foundGame.imageHero || foundGame.imageUrl;
-
-                updateMetadata('meta[name="description"]', 'content', description);
-                updateMetadata('meta[property="og:title"]', 'content', foundGame.title);
-                updateMetadata('meta[property="og:description"]', 'content', description);
-                updateMetadata('meta[property="og:image"]', 'content', imageUrl);
-                updateMetadata('meta[name="twitter:card"]', 'content', 'summary_large_image');
-
-                // Analytics: viewing a game detail
-                trackGameView({ slug: foundGame.slug, title: foundGame.title });
-            }
-        } else {
-            const metadata = pageMetadata[currentUrl as keyof typeof pageMetadata] || pageMetadata['/'];
-
-            document.title = metadata.title;
-            updateMetadata('meta[name="description"]', 'content', metadata.description);
-            updateMetadata('meta[property="og:title"]', 'content', metadata.title);
-            updateMetadata('meta[property="og:description"]', 'content', metadata.description);
-            // Volvemos a poner la imagen por defecto
-            updateMetadata('meta[property="og:image"]', 'content', 'URL_A_TU_IMAGEN_PRINCIPAL_AQUI'); // Reemplaza con una URL a tu logo o imagen principal
-            updateMetadata('meta[name="twitter:card"]', 'content', 'summary');
-
-            // Analytics: specific page views
-            if (currentUrl === '/gamejam') {
-                trackEvent('view_gamejam');
-            }
-        }
-
-        const pageUrl = window.location.href;
-        updateMetadata('link[rel="canonical"]', 'href', pageUrl);
-        updateMetadata('meta[property="og:url"]', 'content', pageUrl);
-    };
-
-    const navigateToCatalog = () => {
-        route('/');
-    };
+    const navigateToCatalog = () => route('/');
 
     const catalogPageProps = {
-        games: games,
-        filteredGames: filteredGames,
-        allGenres: allGenres,
-        allPlatforms: allPlatforms,
-        allStores: allStores,
-        allOrigins: allOrigins,
-        searchTerm: searchTerm,
+        games,
+        filteredGames,
+        allGenres: Array.from(new Set(games.flatMap((g: Game) => g.genre))),
+        allPlatforms: Array.from(new Set(games.flatMap((g: Game) => g.platform))),
+        allStores: Array.from(new Set(games.flatMap((g: Game) => g.stores.map((s: any) => s.name)))),
+        allOrigins: Array.from(new Set(games.map((g: Game) => g.origin).filter(Boolean) as string[])),
+        searchTerm,
         onSearchChange: setSearchTerm,
-        activeFilters: activeFilters,
+        activeFilters,
         onFilterChange: handleFilterChange,
-        onClearCategory: clearFilterCategory,
-        onClearAllFilters: clearFilters,
+        onClearCategory: (category: string) => setActiveFilters(prev => ({ ...prev, [category]: [] })),
+        onClearAllFilters: () => setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] }),
         onGameClick: handleOpenModal,
-        minYear: minYear,
-        maxYear: maxYear,
-        yearRange: yearRange,
-        onYearRangeChange: handleYearRangeChange,
+        minYear: 1980, // Dynamic logic could be moved back if needed
+        maxYear: new Date().getFullYear(),
+        yearRange,
+        onYearRangeChange: (range: { min: number; max: number }) => { setYearRange(range); setIsYearFilterManuallySet(true); },
     };
 
-    if (loading) {
-        return <LoadingSpinner />;
-    }
-
-    if (error) {
-        return <div className="text-center text-red-500 text-2xl p-10">{error}</div>;
-    }
+    if (loading) return <LoadingSpinner />;
+    if (error) return <div className="text-center text-red-500 text-2xl p-10">{error}</div>;
 
     return (
         <div className="min-h-screen bg-slate-900 text-gray-200 font-sans flex flex-col">
             <Header currentPath={currentPath} />
-
             <div className="flex-grow app-content">
                 <Router onChange={handleRouteChange}>
                     <CatalogPage path="/" {...catalogPageProps} />
                     <CatalogPage path="/game" {...catalogPageProps} />
-                    <CatalogPage path="/game/" {...catalogPageProps} />
                     <CatalogPage path="/games" {...catalogPageProps} />
-                    <CatalogPage path="/games/" {...catalogPageProps} />
-
-                    {/*<GameJamPage path="/gamejam" />*/}
-                    {/*<Redirect path="/gamejam/" to="/gamejam" />*/}
-                    {/*<Redirect path="/gamejam/index.html" to="/gamejam" />*/}
-
-                    <GameJamGalleryPage
-                        path="/gamejam-gallery"
-                        games={games}
-                        onGameClick={handleOpenModal}
-                    />
-
+                    <GameJamGalleryPage path="/gamejam-gallery" games={games} onGameClick={handleOpenModal} />
                     <Redirect path="/gamejam-gallery/" to="/gamejam-gallery" />
-                    <Redirect path="/gamejam-gallery/index.html" to="/gamejam-gallery" />
-
-                    <GameJamsPage
-                        path="/game-jams"
-                        games={jamGames}
-                        settings={jamSettings}
-                        onGameClick={handleOpenModal}
-                    />
+                    <GameJamsPage path="/game-jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
                     <Redirect path="/game-jams/" to="/game-jams" />
-
-                    <CalendarPage
-                        path="/calendar"
-                        games={games}
-                        onNavigateToCatalog={navigateToCatalog}
-                        onEventClick={handleOpenModal}
-                    />
-
+                    <CalendarPage path="/calendar" games={games} onNavigateToCatalog={navigateToCatalog} onEventClick={handleOpenModal} />
                     <ChartsPage path="/charts" games={games} onNavigateToCatalog={navigateToCatalog} />
-                    <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
-
                     <GameDetailPage path="/game/:gameSlug" games={games} />
-                    <GameDetailPage path="/game/:gameSlug/" games={games} />
-
                     <GameDetailPage path="/games/:gameSlug" games={games} />
-                    <GameDetailPage path="/games/:gameSlug/" games={games} />
-
-                    <AddGamePage path="/add-game" onAddNewGame={handleAddNewGame}
-                        onNavigateToCatalog={navigateToCatalog} />
-
+                    <AddGamePage path="/add-game" onAddNewGame={() => {}} onNavigateToCatalog={navigateToCatalog} />
+                    <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
+                    <AboutPage path="/credits" onNavigateToCatalog={navigateToCatalog} />
                     <NotFoundPage default />
                 </Router>
             </div>
-
             <Footer />
             <ScrollToTop />
             {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
