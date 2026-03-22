@@ -172,23 +172,62 @@ const getVenuePalette = (seed: string) => {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-const VenueSocialLinks = ({ socials }: { socials: VenueSocialLink[] }) => {
+const VenueSocialLinks = ({ socials, limitInHeader }: { socials: VenueSocialLink[], limitInHeader?: boolean }) => {
     if (socials.length === 0) return null;
+
+    if (!limitInHeader) {
+        return (
+            <div className="flex items-center gap-1.5 flex-wrap">
+                {socials.map((social, index) => (
+                    <a
+                        key={`${social.red}-${index}`}
+                        href={social.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className={`w-8 h-8 flex items-center justify-center rounded-lg bg-slate-700/60 border border-slate-600/50 text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-slate-700 ${getSocialHoverColor(social.red)}`}
+                        title={social.red.charAt(0).toUpperCase() + social.red.slice(1)}
+                    >
+                        <FontAwesomeIcon icon={getSocialIcon(social.red)} className="text-xs" />
+                    </a>
+                ))}
+            </div>
+        );
+    }
+
     return (
-        <div className="flex items-center gap-1.5 flex-wrap">
-            {socials.map((social, index) => (
-                <a
-                    key={`${social.red}-${index}`}
-                    href={social.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    class={`w-8 h-8 flex items-center justify-center rounded-lg bg-slate-700/60 border border-slate-600/50 text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-slate-700 ${getSocialHoverColor(social.red)}`}
-                    title={social.red.charAt(0).toUpperCase() + social.red.slice(1)}
-                >
-                    <FontAwesomeIcon icon={getSocialIcon(social.red)} className="text-xs" />
-                </a>
-            ))}
+        <div className="flex items-center gap-1.5 flex-nowrap">
+            {socials.map((social, index) => {
+                let displayClass = 'flex';
+                if (index > 2) displayClass = 'hidden';
+                else if (index > 0) displayClass = 'hidden sm:flex';
+
+                return (
+                    <a
+                        key={`${social.red}-${index}`}
+                        href={social.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className={`w-8 h-8 items-center justify-center rounded-lg bg-slate-700/60 border border-slate-600/50 text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-slate-700 flex-shrink-0 ${getSocialHoverColor(social.red)} ${displayClass}`}
+                        title={social.red.charAt(0).toUpperCase() + social.red.slice(1)}
+                    >
+                        <FontAwesomeIcon icon={getSocialIcon(social.red)} className="text-xs" />
+                    </a>
+                );
+            })}
+            
+            {socials.length > 1 && (
+                <div className="w-8 h-8 flex sm:hidden items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700 text-slate-400 text-[10px] font-bold flex-shrink-0 cursor-default" title="Más redes disponibles al expandir">
+                    +{socials.length - 1}
+                </div>
+            )}
+            
+            {socials.length > 3 && (
+                <div className="w-8 h-8 hidden sm:flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700 text-slate-400 text-[10px] font-bold flex-shrink-0 cursor-default" title="Más redes disponibles al expandir">
+                    +{socials.length - 3}
+                </div>
+            )}
         </div>
     );
 };
@@ -349,7 +388,7 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
 
                 {/* Socials + chevron */}
                 <div className="flex items-center gap-3 flex-shrink-0">
-                    <VenueSocialLinks socials={venue.socials} />
+                    <VenueSocialLinks socials={venue.socials} limitInHeader />
                     <div
                         className="w-7 h-7 flex items-center justify-center rounded-lg transition-all duration-200"
                         style={{ background: `${c}1a`, color: c }}
