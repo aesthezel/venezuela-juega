@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface HeroMosaicProps {
     games: Game[];
+    jamGames?: Game[];
     onGameClick: (game: Game) => void;
 }
 
@@ -20,20 +21,26 @@ interface StatCardProps {
     label: string;
     icon: typeof faGamepad;
     iconClass: string;
+    subValue?: string;
 }
 
-const StatCard = ({ value, label, icon, iconClass }: StatCardProps) => (
-    <div className="flex flex-col items-center px-8 py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[160px] shadow-lg transition-transform duration-300 hover:scale-105">
+const StatCard = ({ value, label, icon, iconClass, subValue }: StatCardProps) => (
+    <div className="flex flex-col items-center px-8 py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[160px] shadow-lg transition-transform duration-300 hover:scale-105 group">
         <span className="text-4xl font-bold text-white mb-1">{value}</span>
-        <span className="flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-slate-400 md:text-sm">
+        <span className="flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-slate-400 md:text-sm mb-1">
             <FontAwesomeIcon icon={icon} className={iconClass} />
             {label}
         </span>
+        {subValue && (
+            <span className="text-[10px] text-slate-500 font-medium bg-white/5 px-2 py-0.5 rounded-full border border-white/5 group-hover:border-white/10 transition-colors">
+                {subValue}
+            </span>
+        )}
     </div>
 );
 
 // ─── HeroMosaic ──────────────────────────────────────────────────────────────
-const HeroMosaic = ({ games }: HeroMosaicProps) => {
+const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
 
@@ -48,13 +55,17 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
         const historyYears = new Date().getFullYear() - minYear;
 
         return {
-            count: games.length,
+            gameCount: games.length,
+            jamCount: jamGames.length,
+            totalCount: games.length + jamGames.length,
             devs: uniqueDevs.size,
             history: Math.max(1, historyYears),
         };
-    }, [games]);
+    }, [games, jamGames]);
 
-    // ── Mosaic images ──────────────────────────────────────────────────────
+    // ... (mosaicGames and other logic stays same)
+    // I'll need to keep the intermediate parts to ensure a clean replace.
+    // Mosaic images
     const mosaicGames = useMemo(() => {
         const withImages = games.filter(g => {
             const src = g.imageCover || g.imageUrl;
@@ -63,7 +74,7 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
         return [...withImages].sort(() => 0.5 - Math.random()).slice(0, 28);
     }, [games]);
 
-    // ── GSAP animations ────────────────────────────────────────────────────
+    // GSAP animations
     useEffect(() => {
         const el = gridRef.current;
         const container = containerRef.current;
@@ -87,7 +98,7 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
         return () => ctx.revert();
     }, []);
 
-    // ── Scroll to catalog ──────────────────────────────────────────────────
+    // Scroll to catalog
     const scrollDown = () => {
         const el = document.getElementById('catalog-content');
         if (el) {
@@ -95,13 +106,13 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
         }
     };
 
-    // ── Render ─────────────────────────────────────────────────────────────
+    // Render
     return (
         <div
             ref={containerRef}
             className="relative flex h-screen min-h-[700px] w-full flex-col items-center justify-center overflow-hidden bg-slate-950"
         >
-            {/* ── Background mosaic grid ── */}
+            {/* Background mosaic grid */}
             <div
                 ref={gridRef}
                 className="pointer-events-none absolute inset-[-10%] -rotate-3 grid h-[120%] w-[120%] select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7"
@@ -121,11 +132,11 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
                 ))}
             </div>
 
-            {/* ── Gradient overlays ── */}
+            {/* Gradient overlays */}
             <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-slate-950/90 via-slate-950/60 to-slate-950" />
             <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#020617_100%)]" />
 
-            {/* ── Hero content ── */}
+            {/* Hero content */}
             <div className="relative z-10 mx-auto max-w-6xl animate-fade-in-up px-4 text-center -mt-60">
 
                 {/* Badge */}
@@ -135,19 +146,17 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
                 </div>
 
                 {/* Title */}
-                <h1 className="mb-4 text-6xl font-extrabold leading-none tracking-tight drop-shadow-2xl md:text-8xl">
-                    <span
-                        className="bg-clip-text text-transparent"
-                        style={{
-                            backgroundImage: 'linear-gradient(90deg, #ffcd75 0%, #41a6f6 60%, #b13e53 80%)',
-                            WebkitBackgroundClip: 'text',
-                            backgroundClip: 'text',
-                        }}
-                    >
-                        VENEZUELA
-                    </span>
+                <h1 
+                    className="mb-4 text-6xl font-extrabold leading-none tracking-tight drop-shadow-2xl md:text-8xl bg-clip-text text-transparent"
+                    style={{
+                        backgroundImage: 'linear-gradient(to right, #FCD34D 0%, #3B82F6 50%, #EF4444 100%)',
+                        WebkitBackgroundClip: 'text',
+                        backgroundClip: 'text',
+                    }}
+                >
+                    VENEZUELA
                     <br className="md:hidden" />
-                    <span className="ml-0 text-white md:ml-4">JUEGA</span>
+                    <span className="ml-0 md:ml-4">JUEGA</span>
                 </h1>
 
                 {/* Subtitle */}
@@ -157,7 +166,13 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
 
                 {/* Stats */}
                 <div className="flex w-full flex-wrap justify-center gap-6 md:gap-8">
-                    <StatCard value={stats.count} label="Juegos" icon={faGamepad} iconClass="text-yellow-300" />
+                    <StatCard 
+                        value={stats.totalCount} 
+                        label="Juegos" 
+                        icon={faGamepad} 
+                        iconClass="text-yellow-300"
+                        subValue={`${stats.gameCount} estándar + ${stats.jamCount} de jams`}
+                    />
                     <StatCard value={stats.devs} label="Estudios" icon={faUsers} iconClass="text-blue-300" />
                     <StatCard value={`${stats.history}+`} label="Años de historia" icon={faCodeBranch} iconClass="text-red-300" />
                 </div>

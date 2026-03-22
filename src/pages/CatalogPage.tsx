@@ -34,6 +34,7 @@ const CatalogPage = ({
                          maxYear,
                          yearRange,
                          onYearRangeChange,
+                         jamGames,
                      }: CatalogPageProps) => {
 
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -85,7 +86,7 @@ const CatalogPage = ({
 
     return (
         <div className="w-full bg-slate-900 min-h-screen">
-            <HeroMosaic games={games} onGameClick={onGameClick} />
+            <HeroMosaic games={games} jamGames={jamGames} onGameClick={onGameClick} />
 
             <main id="catalog-content" className="container mx-auto px-4 py-8">
 

@@ -76,6 +76,7 @@ const App = () => {
     const handleOpenModal = (game: Game) => setSelectedGame(game);
     const handleCloseModal = () => setSelectedGame(null);
     const navigateToCatalog = () => route('/');
+    const allGames = useMemo(() => [...games, ...jamGames], [games, jamGames]);
 
     const catalogPageProps = {
         games,
@@ -91,6 +92,7 @@ const App = () => {
         onClearCategory: (category: string) => setActiveFilters(prev => ({ ...prev, [category]: [] })),
         onClearAllFilters: () => setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] }),
         onGameClick: handleOpenModal,
+        jamGames,
         minYear: 1980, // Dynamic logic could be moved back if needed
         maxYear: new Date().getFullYear(),
         yearRange,
@@ -114,8 +116,8 @@ const App = () => {
                     <Redirect path="/game-jams/" to="/game-jams" />
                     <CalendarPage path="/calendar" games={games} onNavigateToCatalog={navigateToCatalog} onEventClick={handleOpenModal} />
                     <ChartsPage path="/charts" games={games} onNavigateToCatalog={navigateToCatalog} />
-                    <GameDetailPage path="/game/:gameSlug" games={games} />
-                    <GameDetailPage path="/games/:gameSlug" games={games} />
+                    <GameDetailPage path="/game/:gameSlug" games={allGames} />
+                    <GameDetailPage path="/games/:gameSlug" games={allGames} />
                     <AddGamePage path="/add-game" onAddNewGame={() => {}} onNavigateToCatalog={navigateToCatalog} />
                     <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
                     <AboutPage path="/credits" onNavigateToCatalog={navigateToCatalog} />
