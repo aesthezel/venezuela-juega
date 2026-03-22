@@ -21,6 +21,9 @@ jobs:
     env:
       VITE_SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
       VITE_SHEET_NAME: ${{ secrets.SHEET_NAME }}
+      VITE_GAMEJAMSHEET_NAME_GAMES: ${{ secrets.GAMEJAMSHEET_NAME_GAMES }}
+      VITE_GAMEJAMSHEET_NAME_SETTINGS: ${{ secrets.GAMEJAMSHEET_NAME_SETTINGS }}
+      VITE_GAMEJAMSHEET_ID: ${{ secrets.GAMEJAMSHEET_ID }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
