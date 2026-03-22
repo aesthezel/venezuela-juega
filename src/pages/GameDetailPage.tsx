@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useState, useMemo } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
 import { Game } from "@/src/types";
@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faGamepad, faGlobe, faCog, faTimes, faChevronLeft, faChevronRight, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import {BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge} from "@/src/components";
 import { GameDetailPageProps } from "@/src/types";
-import { updateMetadata } from "@/src/utils";
+import { updateMetadata, getTrailerInfo } from "@/src/utils";
 
 interface DetailSectionProps {
     title: string;
@@ -26,6 +26,8 @@ const DetailSection = ({ title, children, icon }: DetailSectionProps) => (
 
 const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
     const [game, setGame] = useState<Game | null>(null);
+
+    const trailerInfo = useMemo(() => game ? getTrailerInfo(game.trailerUrl) : null, [game?.trailerUrl]);
 
     // Lightbox state
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -147,30 +149,63 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
         <main className="container mx-auto px-4 py-8">
             <BackButton onClick={handleGoBack} className="mb-8" />
 
-            <div className="bg-slate-800 rounded-lg overflow-hidden shadow-2xl mb-8">
-                <div className="md:flex">
-                    <div className="md:w-1/2">
-                        <CoverImage
-                            src={game.imageHero}
-                            alt={game.title}
-                            className="w-full h-64 md:h-96 object-cover"
-                            imgClassName="w-full h-64 md:h-96 object-cover"
-                        />
+            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl overflow-hidden shadow-2xl mb-8 relative">
+                {/* Decorative background glow */}
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-900/20 to-transparent pointer-events-none" />
+                
+                <div className="flex flex-col lg:flex-row relative z-10">
+                    <div className="lg:w-[60%] relative aspect-video bg-black">
+                        {trailerInfo ? (
+                            trailerInfo.type === 'youtube' ? (
+                                <iframe
+                                    src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=0&controls=1&modestbranding=1&rel=0`}
+                                    className="w-full h-full"
+                                    allow="autoplay; encrypted-media; fullscreen"
+                                    allowFullScreen
+                                    title={`${game.title} trailer`}
+                                />
+                            ) : (
+                                <video
+                                    src={trailerInfo.url}
+                                    controls
+                                    autoPlay
+                                    muted={false}
+                                    playsInline
+                                    className="w-full h-full object-cover"
+                                />
+                            )
+                        ) : (
+                            <CoverImage
+                                src={game.imageHero || game.imageUrl}
+                                alt={game.title}
+                                className="absolute inset-0 w-full h-full object-cover"
+                                imgClassName="absolute inset-0 w-full h-full object-cover"
+                            />
+                        )}
                     </div>
-                    <div className="md:w-1/2 p-8">
-                        <h1 className="text-4xl font-bold text-white mb-2">{game.title}</h1>
-                        <p className="text-xl text-cyan-400 mb-4">{game.developers.join(', ')}</p>
-                        <p className="text-gray-300 mb-6">{game.description}</p>
+                    <div className="lg:w-[40%] p-6 lg:p-8 flex flex-col justify-center">
+                        <h1 className="text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 mb-2 leading-tight">
+                            {game.title}
+                        </h1>
+                        <p className="text-xl text-cyan-400 font-medium mb-6">
+                            {game.developers.join(', ')}
+                        </p>
+                        
+                        <p className="text-gray-300 mb-8 leading-relaxed text-lg">
+                            {game.description}
+                        </p>
 
-                        <div className="flex flex-wrap gap-2 mb-4">
+                        <div className="flex flex-wrap gap-2 mb-6">
                             {game.genre.map(g => (
-                                <span key={g} className="bg-cyan-500 text-white text-sm font-semibold px-3 py-1 rounded-full">
+                                <span key={g} className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm">
                                     {g}
                                 </span>
                             ))}
                         </div>
 
-                        <StatusBadge status={game.status} size="md" variant="soft" className="rounded-full" />
+                        <div>
+                            <StatusBadge status={game.status} size="md" variant="solid" className="rounded-full shadow-md shadow-cyan-500/20" />
+                        </div>
                     </div>
                 </div>
             </div>

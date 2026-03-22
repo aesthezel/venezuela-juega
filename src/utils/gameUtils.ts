@@ -75,3 +75,26 @@ export const mapOrigin = (rawOrigin?: string): GameOrigin | undefined => {
             return undefined;
     }
 };
+
+export type TrailerInfo = { type: 'youtube'; id: string } | { type: 'video'; url: string } | null;
+
+/**
+ * Extracts trailer info, detecting if it's a direct HTML video or a YouTube URL.
+ * @param url - The Trailer URL
+ * @returns The TrailerInfo object or null if not found
+ */
+export const getTrailerInfo = (url?: string): TrailerInfo => {
+    if (!url) return null;
+    
+    // Si contiene extensión de vídeo o es de steam, usamos la etiqueta <video>
+    if (url.includes('.mp4') || url.includes('.webm') || url.includes('steamstatic.com')) {
+        return { type: 'video', url };
+    }
+
+    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+    if (match && match[1]) {
+        return { type: 'youtube', id: match[1] };
+    }
+
+    return null;
+};

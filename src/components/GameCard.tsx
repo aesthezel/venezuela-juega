@@ -1,5 +1,5 @@
 // noinspection JSNonASCIINames
-import { useState, useRef, useEffect } from 'preact/hooks';
+import { useState, useRef, useEffect, useMemo } from 'preact/hooks';
 import { Game } from '@/src/types';
 import { JSX } from 'preact/jsx-runtime';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,6 +18,7 @@ import {
     faGlobe
 } from '@fortawesome/free-solid-svg-icons';
 import {CoverImage, StatusBadge} from '@/src/components';
+import { getTrailerInfo } from '@/src/utils';
 
 interface GameCardProps {
     game: Game;
@@ -79,6 +80,13 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
     const [needsExpansion, setNeedsExpansion] = useState(false);
     const descriptionRef = useRef<HTMLParagraphElement>(null);
 
+    const [isHovered, setIsHovered] = useState(false);
+
+    const trailerInfo = useMemo(() => getTrailerInfo(game.trailerUrl), [game.trailerUrl]);
+
+    const handleMouseEnter = () => setIsHovered(true);
+    const handleMouseLeave = () => setIsHovered(false);
+
     useEffect(() => {
         const element = descriptionRef.current;
         const id = requestAnimationFrame(() => {
@@ -91,7 +99,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
         return () => cancelAnimationFrame(id);
     }, [game.description]);
 
-    const handleReadMoreClick = (e: JSX.TargetedEvent<HTMLButtonElement>) => {
+    const handleReadMoreClick = (e: MouseEvent) => {
         e.stopPropagation();
         setIsExpanded(prev => !prev);
     };
@@ -109,17 +117,50 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
             }}
         >
             {layout === 'masonry' ? (
-                <div className="relative">
+                <div className="relative overflow-hidden" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <CoverImage
                         src={game.imageUrl}
                         alt={game.title}
                         className={hasImage ? 'w-full h-auto block' : 'w-full h-[150px] object-cover block'}
                         imgClassName={hasImage ? 'w-full h-auto block' : 'w-full h-[150px] object-cover block'}
                     />
-                    <div className="absolute top-2 right-2">
+                    {isHovered && trailerInfo && (
+                        trailerInfo.type === 'youtube' ? (
+                            <iframe
+                                src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] pointer-events-none opacity-0 transition-opacity duration-700"
+                                style={{ zIndex: 5, maxWidth: 'none' }}
+                                allow="autoplay; encrypted-media"
+                                title={`${game.title} trailer`}
+                                onLoad={(e) => {
+                                    if (e.target instanceof HTMLIFrameElement) {
+                                        e.target.classList.remove('opacity-0');
+                                        e.target.classList.add('opacity-100');
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <video
+                                src={trailerInfo.url}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700"
+                                style={{ zIndex: 5 }}
+                                onCanPlay={(e) => {
+                                    if (e.target instanceof HTMLVideoElement) {
+                                        e.target.classList.remove('opacity-0');
+                                        e.target.classList.add('opacity-100');
+                                    }
+                                }}
+                            />
+                        )
+                    )}
+                    <div className="absolute top-2 right-2" style={{ zIndex: 10 }}>
                         <StatusBadge status={game.status} size="xs" variant="solid" className="px-2 py-1" />
                     </div>
-                    <div className="absolute bottom-2 left-2 flex gap-1">
+                    <div className="absolute bottom-2 left-2 flex gap-1" style={{ zIndex: 10 }}>
                         {game.platform.slice(0, 4).map((platform, index) => (
                             <div
                                 key={`${platform}-${index}`}
@@ -140,17 +181,50 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                     </div>
                 </div>
             ) : (
-                <div className={`relative ${hasImage ? 'aspect-[16/9]' : 'h-[250px]'}`}>
+                <div className={`relative overflow-hidden ${hasImage ? 'aspect-[16/9]' : 'h-[250px]'}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <CoverImage
                         src={game.imageUrl}
                         alt={game.title}
                         className="absolute inset-0 w-full h-full object-cover"
                         imgClassName="absolute inset-0 w-full h-full object-cover"
                     />
-                    <div className="absolute top-2 right-2">
+                    {isHovered && trailerInfo && (
+                        trailerInfo.type === 'youtube' ? (
+                            <iframe
+                                src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] pointer-events-none opacity-0 transition-opacity duration-700"
+                                style={{ zIndex: 5, maxWidth: 'none' }}
+                                allow="autoplay; encrypted-media"
+                                title={`${game.title} trailer`}
+                                onLoad={(e) => {
+                                    if (e.target instanceof HTMLIFrameElement) {
+                                        e.target.classList.remove('opacity-0');
+                                        e.target.classList.add('opacity-100');
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <video
+                                src={trailerInfo.url}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700"
+                                style={{ zIndex: 5 }}
+                                onCanPlay={(e) => {
+                                    if (e.target instanceof HTMLVideoElement) {
+                                        e.target.classList.remove('opacity-0');
+                                        e.target.classList.add('opacity-100');
+                                    }
+                                }}
+                            />
+                        )
+                    )}
+                    <div className="absolute top-2 right-2" style={{ zIndex: 10 }}>
                         <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1" />
                     </div>
-                    <div className="absolute bottom-2 left-2 flex gap-1">
+                    <div className="absolute bottom-2 left-2 flex gap-1" style={{ zIndex: 10 }}>
                         {game.platform.slice(0, 4).map((platform, index) => (
                             <div
                                 key={`${platform}-${index}`}
@@ -169,7 +243,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                             </div>
                         )}
                     </div>
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" style={{ zIndex: 10, pointerEvents: 'none' }} />
                 </div>
             )}
 

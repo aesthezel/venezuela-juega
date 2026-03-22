@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'preact/hooks';
 import { h } from 'preact';
 import { Game } from '@/src/types';
 import { gsap } from 'gsap';
 import {CoverImage, StatusBadge} from '@/src/components';
 import { trackGameCardClick } from '@/src/utils/analytics';
+import { getTrailerInfo } from '@/src/utils';
 
 interface GameListProps {
   games: Game[];
@@ -106,41 +107,89 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
 
   const hasMoreGames = displayedCount < games.length;
 
+  const GameRowItem = ({ game, idx }: { game: Game; idx: number }) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    const trailerInfo = useMemo(() => getTrailerInfo(game.trailerUrl), [game.trailerUrl]);
+
+    const handleMouseEnter = () => setIsHovered(true);
+    const handleMouseLeave = () => setIsHovered(false);
+
+    return (
+      <button
+        onClick={() => { trackGameCardClick({ slug: game.slug, title: game.title }, idx, 'list'); onGameClick(game); }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="game-list-row w-full text-left bg-slate-800 hover:bg-slate-700 transition-colors rounded-lg p-3 flex gap-3 items-center"
+      >
+        <div className="relative h-16 w-28 flex-shrink-0 overflow-hidden rounded-md bg-slate-900 border border-slate-700/50">
+          <CoverImage
+            src={game.imageUrl}
+            alt={game.title}
+            className="w-full h-full object-cover"
+            imgClassName="w-full h-full object-cover"
+          />
+          {isHovered && trailerInfo && (
+              trailerInfo.type === 'youtube' ? (
+                  <iframe
+                      src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] pointer-events-none opacity-0 transition-opacity duration-700"
+                      style={{ maxWidth: 'none' }}
+                      allow="autoplay; encrypted-media"
+                      title={`${game.title} trailer`}
+                      onLoad={(e) => {
+                          if (e.target instanceof HTMLIFrameElement) {
+                              e.target.classList.remove('opacity-0');
+                              e.target.classList.add('opacity-100');
+                          }
+                      }}
+                  />
+              ) : (
+                  <video
+                      src={trailerInfo.url}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700"
+                      onCanPlay={(e) => {
+                          if (e.target instanceof HTMLVideoElement) {
+                              e.target.classList.remove('opacity-0');
+                              e.target.classList.add('opacity-100');
+                          }
+                      }}
+                  />
+              )
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <h3 className="text-base md:text-lg font-semibold text-white truncate">{game.title}</h3>
+            {game.isHighlighted && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                Destacado
+              </span>
+            )}
+          </div>
+          <div className="mt-1 text-sm text-gray-300 truncate">
+            {game.genre?.join(' • ') || 'Género no especificado'}
+          </div>
+          <div className="mt-0.5 text-xs text-gray-400 truncate">
+            {(game.platform?.length ? game.platform : ['Plataforma no especificada']).join(' • ')}
+          </div>
+        </div>
+        <div className="ml-3">
+            <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1" />
+        </div>
+      </button>
+    );
+  };
+
   return (
     <>
       <div ref={listRef} className="space-y-3">
         {gamesToShow.map((game, idx) => (
-          <button
-            key={game.id}
-            onClick={() => { trackGameCardClick({ slug: game.slug, title: game.title }, idx, 'list'); onGameClick(game); }}
-            className="game-list-row w-full text-left bg-slate-800 hover:bg-slate-700 transition-colors rounded-lg p-3 flex gap-3 items-center"
-          >
-            <CoverImage
-              src={game.imageUrl}
-              alt={game.title}
-              className="h-16 w-28 object-cover rounded-md flex-shrink-0"
-              imgClassName="h-16 w-28 object-cover rounded-md flex-shrink-0"
-            />
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <h3 className="text-base md:text-lg font-semibold text-white truncate">{game.title}</h3>
-                {game.isHighlighted && (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                    Destacado
-                  </span>
-                )}
-              </div>
-              <div className="mt-1 text-sm text-gray-300 truncate">
-                {game.genre?.join(' • ') || 'Género no especificado'}
-              </div>
-              <div className="mt-0.5 text-xs text-gray-400 truncate">
-                {(game.platform?.length ? game.platform : ['Plataforma no especificada']).join(' • ')}
-              </div>
-            </div>
-            <div className="ml-3">
-                <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1" />
-            </div>
-          </button>
+          <GameRowItem key={game.id} game={game} idx={idx} />
         ))}
       </div>
 

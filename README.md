@@ -41,7 +41,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 ### 2. Interfaz de usuario
 - **Búsqueda en tiempo real**: Búsqueda con debounce
 - **Filtros múltiples**: Por estado, género y plataforma
-- **Modal de detalles**: Vista
+- **Previsualización de Videos**: Trailers incrustados en hover (YouTube y Steam)
+- **Modal de detalles**: Vista enriquecida con Hero dinámico y layout 60/40
 
 ## 📋 TO-DO
 - [x] Scraping de CSV de la lista de videojuegos
@@ -76,12 +77,12 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Mejora de disposición de los filtros
 - [x] Migración a Tailwind CSS v4 local
 - [x] Mejoras de accesibilidad, UI/UX y soporte para animaciones
+- [x] Agregar trailers a los juegos interactivos desde YouTube o Steam
 - [ ] Ajustar metadatos pre-renderizados para cada juego y página
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar
 - [ ] Terminar formulario para agregar nuevos juegos
-- [ ] Agregar trailers a los juegos
 - [ ] Añadir un preview animado de los screenshots cuando haces clic en una GameCard
 - [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
 - [ ] Mejorar el responsive del calendario en mobile

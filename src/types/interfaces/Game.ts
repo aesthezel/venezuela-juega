@@ -63,6 +63,9 @@ export interface Game {
     imageHero: string;
     imageCover: string;
 
+    /** Youtube Trailer URL */
+    trailerUrl?: string;
+
     /** Detailed description of the game */
     description: string;
 
