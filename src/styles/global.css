@@ -1,5 +1,5 @@
 :root {
-    --header-height: 0px;
+    --header-height: 80px;
     --primary-glow: conic-gradient(from 180deg at 50% 50%, #2a8af6 0deg, #a853ba 180deg, #e92a67 360deg);
 }
 
@@ -33,4 +33,9 @@ body {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Layout helper para que el contenido NO quede debajo del header fijo */
+.app-content {
+    padding-top: var(--header-height);
 }

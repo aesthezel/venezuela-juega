@@ -14,10 +14,30 @@ interface HeroMosaicProps {
     onGameClick: (game: Game) => void;
 }
 
+// ─── Stat Card ───────────────────────────────────────────────────────────────
+interface StatCardProps {
+    value: string | number;
+    label: string;
+    icon: typeof faGamepad;
+    iconClass: string;
+}
+
+const StatCard = ({ value, label, icon, iconClass }: StatCardProps) => (
+    <div className="flex flex-col items-center px-8 py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[160px] shadow-lg transition-transform duration-300 hover:scale-105">
+        <span className="text-4xl font-bold text-white mb-1">{value}</span>
+        <span className="flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-slate-400 md:text-sm">
+            <FontAwesomeIcon icon={icon} className={iconClass} />
+            {label}
+        </span>
+    </div>
+);
+
+// ─── HeroMosaic ──────────────────────────────────────────────────────────────
 const HeroMosaic = ({ games }: HeroMosaicProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
 
+    // ── Stats ──────────────────────────────────────────────────────────────
     const stats = useMemo(() => {
         const uniqueDevs = new Set(games.flatMap(g => g.developers));
         const years = games
@@ -30,40 +50,36 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
         return {
             count: games.length,
             devs: uniqueDevs.size,
-            history: Math.max(1, historyYears)
+            history: Math.max(1, historyYears),
         };
     }, [games]);
 
+    // ── Mosaic images ──────────────────────────────────────────────────────
     const mosaicGames = useMemo(() => {
-        // Filtrar juegos que tengan imagen válida
         const withImages = games.filter(g => {
             const src = g.imageCover || g.imageUrl;
             return src && src.length > 5;
         });
-
         return [...withImages].sort(() => 0.5 - Math.random()).slice(0, 28);
     }, [games]);
 
+    // ── GSAP animations ────────────────────────────────────────────────────
     useEffect(() => {
         const el = gridRef.current;
         const container = containerRef.current;
-
         if (!el || !container) return;
 
         gsap.fromTo(el,
             { opacity: 0, scale: 1.1 },
-            { opacity: 0.4, scale: 1, duration: 1.5, ease: "power2.out" }
+            { opacity: 0.4, scale: 1, duration: 1.5, ease: 'power2.out' },
         );
 
         const st = ScrollTrigger.create({
             trigger: container,
-            start: "top top",
-            end: "bottom top",
+            start: 'top top',
+            end: 'bottom top',
             scrub: true,
-            animation: gsap.to(el, {
-                y: 150,
-                ease: "none"
-            })
+            animation: gsap.to(el, { y: 150, ease: 'none' }),
         });
 
         return () => {
@@ -72,105 +88,97 @@ const HeroMosaic = ({ games }: HeroMosaicProps) => {
         };
     }, []);
 
+    // ── Scroll to catalog ──────────────────────────────────────────────────
     const scrollDown = () => {
         const el = document.getElementById('catalog-content');
-        const yOffset = 0;
         if (el) {
-            const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({top: y, behavior: 'smooth'});
+            window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset, behavior: 'smooth' });
         }
     };
 
+    // ── Render ─────────────────────────────────────────────────────────────
     return (
         <div
             ref={containerRef}
-            className="relative w-full h-screen min-h-[700px] overflow-hidden bg-slate-950 flex flex-col justify-center items-center"
+            className="relative flex h-screen min-h-[700px] w-full flex-col items-center justify-center overflow-hidden bg-slate-950"
         >
+            {/* ── Background mosaic grid ── */}
             <div
                 ref={gridRef}
-                className="absolute inset-[-10%] w-[120%] h-[120%] grid grid-cols-4 md:grid-cols-7 gap-4 opacity-0 select-none pointer-events-none transform -rotate-3"
+                className="pointer-events-none absolute inset-[-10%] -rotate-3 grid h-[120%] w-[120%] select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7"
             >
-                {mosaicGames.map((game, idx) => (
+                {mosaicGames.map((game) => (
                     <div
                         key={game.id}
-                        className="relative w-full h-full overflow-hidden rounded-lg bg-slate-800 shadow-xl"
+                        className="relative h-full w-full overflow-hidden rounded-lg bg-slate-800 shadow-xl"
                     >
                         <CoverImage
                             src={game.imageCover || game.imageUrl}
                             alt=""
-                            className="w-full h-full object-cover filter grayscale brightness-75 hover:grayscale-0 transition-all duration-700"
+                            className="h-full w-full object-cover brightness-75 grayscale transition-all duration-700 hover:grayscale-0"
                         />
-                        <div className="absolute inset-0 bg-slate-950/20"></div>
+                        <div className="absolute inset-0 bg-slate-950/20" />
                     </div>
                 ))}
             </div>
 
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/60 to-slate-950 z-0 pointer-events-none" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#020617_100%)] z-0 pointer-events-none" />
+            {/* ── Gradient overlays ── */}
+            <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-slate-950/90 via-slate-950/60 to-slate-950" />
+            <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#020617_100%)]" />
 
-            <div className="relative z-10 text-center px-4 max-w-6xl mx-auto mt-8 animate-fade-in-up">
+            {/* ── Hero content ── */}
+            <div className="relative z-10 mx-auto max-w-6xl animate-fade-in-up px-4 text-center -mt-60">
 
-                <div className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-slate-400 text-xs md:text-sm font-bold tracking-widest uppercase">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                {/* Badge */}
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-slate-400 backdrop-blur-md md:text-sm">
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
                     Base de datos colaborativa
                 </div>
 
-                <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight mb-8 leading-none drop-shadow-2xl">
+                {/* Title */}
+                <h1 className="mb-4 text-6xl font-extrabold leading-none tracking-tight drop-shadow-2xl md:text-8xl">
                     <span
-                        className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-blue-600 to-red-600"
+                        className="bg-clip-text text-transparent"
                         style={{
                             backgroundImage: 'linear-gradient(90deg, #ffcd75 0%, #41a6f6 60%, #b13e53 80%)',
                             WebkitBackgroundClip: 'text',
                             backgroundClip: 'text',
-                            color: 'transparent'
                         }}
                     >
                         VENEZUELA
                     </span>
                     <br className="md:hidden" />
-                    <span className="text-white ml-0 md:ml-4">
-                        JUEGA
-                    </span>
+                    <span className="ml-0 text-white md:ml-4">JUEGA</span>
                 </h1>
 
-                <p className="text-xl md:text-2xl text-slate-300 font-light max-w-3xl mx-auto mb-16 leading-relaxed">
+                {/* Subtitle */}
+                <p className="mx-auto mb-8 max-w-3xl text-xl font-light leading-relaxed text-slate-300 md:text-2xl">
                     La documentación digital que preserva y conecta la historia del desarrollo de videojuegos en el país
                 </p>
 
-                <div className="flex flex-wrap justify-center gap-6 md:gap-8 w-full">
-                    <div className="flex flex-col items-center px-8 py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[160px] transition-transform hover:scale-105 shadow-lg">
-                        <span className="text-4xl font-bold text-white mb-1">{stats.count}</span>
-                        <span className="text-xs md:text-sm text-slate-400 uppercase tracking-widest flex items-center gap-2 font-semibold">
-                            <FontAwesomeIcon icon={faGamepad} className="text-yellow-300" /> Juegos
-                        </span>
-                    </div>
-
-                    <div className="flex flex-col items-center px-8 py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[160px] transition-transform hover:scale-105 shadow-lg">
-                        <span className="text-4xl font-bold text-white mb-1">{stats.devs}</span>
-                        <span className="text-xs md:text-sm text-slate-400 uppercase tracking-widest flex items-center gap-2 font-semibold">
-                            <FontAwesomeIcon icon={faUsers} className="text-blue-300" /> Estudios
-                        </span>
-                    </div>
-
-                    <div className="flex flex-col items-center px-8 py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[160px] transition-transform hover:scale-105 shadow-lg">
-                        <span className="text-4xl font-bold text-white mb-1">{stats.history}+</span>
-                        <span className="text-xs md:text-sm text-slate-400 uppercase tracking-widest flex items-center gap-2 font-semibold">
-                            <FontAwesomeIcon icon={faCodeBranch} className="text-red-300" /> Años de historia
-                        </span>
-                    </div>
+                {/* Stats */}
+                <div className="flex w-full flex-wrap justify-center gap-6 md:gap-8">
+                    <StatCard value={stats.count} label="Juegos" icon={faGamepad} iconClass="text-yellow-300" />
+                    <StatCard value={stats.devs} label="Estudios" icon={faUsers} iconClass="text-blue-300" />
+                    <StatCard value={`${stats.history}+`} label="Años de historia" icon={faCodeBranch} iconClass="text-red-300" />
                 </div>
             </div>
 
+            {/* ── Scroll-down button ── */}
             <button
                 onClick={scrollDown}
-                className="absolute bottom-28 text-slate-600 hover:text-white transition-all duration-300 p-4 hover:-translate-y-1 z-20"
+                className="absolute bottom-60 z-20 p-4 text-slate-500 transition-all duration-300 hover:-translate-y-1 hover:text-white"
                 aria-label="Desplazar hacia abajo"
             >
-                <FontAwesomeIcon icon={faArrowDown} className="text-2xl opacity-80 animate-bounce" />
+                <FontAwesomeIcon icon={faArrowDown} className="animate-bounce text-2xl opacity-80" />
             </button>
 
             <style>{`
-                .animate-fade-in-up { animation: fadeInUp 1s ease-out forwards; opacity: 0; transform: translateY(20px); }
+                .animate-fade-in-up {
+                    animation: fadeInUp 1s ease-out forwards;
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
                 @keyframes fadeInUp {
                     to { opacity: 1; transform: translateY(0); }
                 }

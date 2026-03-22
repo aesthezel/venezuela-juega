@@ -6,3 +6,4 @@ export { default as GameDetailPage } from './GameDetailPage';
 export { default as CatalogPage } from './CatalogPage';
 export { default as GameJamPage } from './GameJamPage';
 export { default as GameJamGalleryPage } from './GameJamGalleryPage';
+export { default as GameJamsPage } from './GameJamsPage';

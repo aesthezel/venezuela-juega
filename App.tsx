@@ -1,12 +1,12 @@
 // noinspection JSNonASCIINames
 import Papa from 'papaparse';
-import {useEffect, useMemo, useState} from 'preact/hooks';
-import {Router, RoutableProps, route} from 'preact-router';
-import {Game} from "@/src/types";
-import {useDebounce} from '@/src/hooks';
-import {parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata, mapOrigin} from '@/src/utils';
-import {Header, Modal, LoadingSpinner, Footer, ScrollToTop} from '@/src/components';
-import {trackPageView, trackGameView, trackEvent} from '@/src/utils/analytics';
+import { useEffect, useMemo, useState } from 'preact/hooks';
+import { Router, RoutableProps, route } from 'preact-router';
+import { Game } from "@/src/types";
+import { useDebounce } from '@/src/hooks';
+import { parseStringToArray, mapStatus, generateSlug, ensureUniqueSlug, updateMetadata, mapOrigin } from '@/src/utils';
+import { Header, Modal, LoadingSpinner, Footer, ScrollToTop } from '@/src/components';
+import { trackPageView, trackGameView, trackEvent } from '@/src/utils/analytics';
 import {
     ChartsPage,
     AddGamePage,
@@ -14,9 +14,16 @@ import {
     CalendarPage,
     GameDetailPage,
     CatalogPage,
-    GameJamPage,
-    GameJamGalleryPage
+    GameJamPage, // TODO: move logic to new component called GameJamsPage
+    GameJamGalleryPage, // TODO: move logic to new component called GameJamsPage
+    GameJamsPage
 } from '@/src/pages';
+import { JamSettingRow } from '@/src/pages/GameJamsPage';
+
+interface JamGame extends Game {
+    Jam_Org_UID?: string;
+    Jam_Edition?: string;
+}
 
 declare const gtag: (type: string, event: string, params: Record<string, any>) => void;
 
@@ -37,7 +44,7 @@ const NotFoundPage = (_props: RoutableProps) => (
 );
 
 // Simple redirect component to normalize routes (e.g., trailing slashes)
-const Redirect = ({to}: { to: string } & RoutableProps) => {
+const Redirect = ({ to }: { to: string } & RoutableProps) => {
     useEffect(() => {
         // replace: true to avoid adding an extra entry in the history
         route(to, true);
@@ -71,6 +78,10 @@ const pageMetadata = {
     //     title: 'GameJam+ 25/26 — Venezuela Juega',
     //     description: 'Participa en la GameJam+ edición 25/26. Información, charlas y registro para creadores de videojuegos.'
     // },
+    '/game-jams': {
+        title: 'Game Jams Venezuela — Venezuela Juega',
+        description: 'Descubre los increíbles juegos creados en menos de 48 horas por desarrolladores venezolanos en eventos Game Jam.'
+    },
 };
 
 // TODO: refactor and separate hooks, useStates and useEffects properly
@@ -93,6 +104,11 @@ const App = () => {
     const [isYearFilterManuallySet, setIsYearFilterManuallySet] = useState(false);
     const [minYear, setMinYear] = useState(new Date().getFullYear() - 40);
     const [maxYear, setMaxYear] = useState(new Date().getFullYear());
+
+    // GAME JAMS!
+    const [jamGames, setJamGames] = useState<JamGame[]>([]);
+    const [jamSettings, setJamSettings] = useState<JamSettingRow[]>([]);
+    const [jamLoading, setJamLoading] = useState(true);
 
 
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -187,7 +203,7 @@ const App = () => {
                             const urlKey = nameKey.replace('Name', 'URL');
                             const name = rowObject[nameKey]?.trim();
                             const url = rowObject[urlKey]?.trim();
-                            return (name && url) ? {name, url} : null;
+                            return (name && url) ? { name, url } : null;
                         })
                         .filter((link): link is { name: string; url: string } => link !== null);
 
@@ -231,6 +247,181 @@ const App = () => {
         });
     }, []);
 
+    // GameJam Load
+    useEffect(() => {
+        // @ts-ignore
+        const JAM_SPREADSHEET_ID = import.meta.env.VITE_GAMEJAMSHEET_ID;
+        // @ts-ignore
+        const JAM_GAMES_SHEET = import.meta.env.VITE_GAMEJAMSHEET_NAME_GAMES;
+        // @ts-ignore
+        const JAM_SETTINGS_SHEET = import.meta.env.VITE_GAMEJAMSHEET_NAME_SETTINGS;
+
+        const JAM_GAMES_URL = `https://docs.google.com/spreadsheets/d/${JAM_SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${JAM_GAMES_SHEET}`;
+        const JAM_SETTINGS_URL = `https://docs.google.com/spreadsheets/d/${JAM_SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${JAM_SETTINGS_SHEET}`;
+
+        const JAM_GAME_HEADERS = [
+            // Col 1-5: datos base del juego
+            'Título del videojuego', 'Plataforma(s)', 'Género(s)', 'Desarrollador(es)', 'Distribuidor',
+            // Col 6-7: campos específicos de Jam (sin Jam_Venue)
+            'Jam_Org_UID', 'Jam_Edition',
+            // Col 8-10: fechas y estado
+            'Fecha de lanzamiento', 'Última actualización', 'Estado actual',
+            // Col 11-23: tiendas, links, detalles
+            'Tiendas', 'Enlace(s)', 'Presskit', 'Pitch', 'Financiamiento', 'Motor',
+            'Origen inicial', 'Idioma(s) disponible(s)', 'Destacado', 'Descripción del Destacado',
+            'steam_appid', 'google_appid', 'Enlace directo',
+            // Col 24-33: tiendas individuales
+            'Steam', 'GOG', 'Itch', 'Nintendo Shop', 'PlayStation Store',
+            'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'Tienda externa',
+            // Col 34-40: media y metadata
+            'Hero', 'Portada', 'Mini Image', 'Trailer', 'Screenshots', 'Descripción', 'UID'
+        ];
+
+        const storeColumns = [
+            'Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store',
+            'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'
+        ];
+
+        Promise.all([
+            new Promise<JamGame[]>((resolve, reject) => {
+                Papa.parse(JAM_GAMES_URL, {
+                    download: true,
+                    header: false,  // ✅ Cambiar a false porque buscaremos manualmente el header
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        const data = results.data as string[][];
+
+                        // 🔍 Buscar la fila de headers (debe coincidir con JAM_GAME_HEADERS)
+                        const headerIndex = data.findIndex(row =>
+                            row[0] === 'Título del videojuego' && row[5] === 'Jam_Org_UID'
+                        );
+
+                        if (headerIndex === -1) {
+                            console.error('No se encontró fila de encabezado de Game Jam. Se esperaba columna 0: "Título del videojuego", columna 5: "Jam_Org_UID"');
+                            resolve([]);
+                            return;
+                        }
+
+                        console.log(`Headers encontrados en fila ${headerIndex + 1}`);
+
+                        const gameRows = data.slice(headerIndex + 1);
+                        const existingSlugs = new Set<string>();
+
+                        const storeColumns = [
+                            'Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store',
+                            'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'
+                        ];
+
+                        const parsedJamGames = gameRows.map((row: string[], index): JamGame | null => {
+                            // Crear objeto con headers para acceso fácil
+                            const rowObject = JAM_GAME_HEADERS.reduce((obj, header, i) => {
+                                if (header && i < row.length) {
+                                    obj[header] = row[i];
+                                }
+                                return obj;
+                            }, {} as { [key: string]: string });
+
+                            const title = rowObject['Título del videojuego'];
+                            if (!title || !title.trim()) return null;
+
+                            const baseSlug = generateSlug(title);
+                            const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
+
+                            const stores = storeColumns
+                                .map(storeName => ({
+                                    name: storeName,
+                                    url: rowObject[storeName]?.trim(),
+                                }))
+                                .filter(store => store.url);
+
+                            // LOG para debugging
+                            if (index < 3) {
+                                console.log(`Juego ${index}: "${title}"`, {
+                                    Jam_Org_UID: rowObject['Jam_Org_UID'],
+                                    Jam_Edition: rowObject['Jam_Edition'],
+                                });
+                            }
+
+                            return {
+                                id: index + 1,
+                                slug: uniqueSlug,
+                                title: title,
+                                platform: parseStringToArray(rowObject['Plataforma(s)']),
+                                genre: parseStringToArray(rowObject['Género(s)']),
+                                developers: parseStringToArray(rowObject['Desarrollador(es)']),
+                                publishers: parseStringToArray(rowObject['Distribuidor']),
+                                releaseDate: rowObject['Fecha de lanzamiento'] || 'No especificada',
+                                lastUpdateDate: rowObject['Última actualización'] || undefined,
+                                status: mapStatus(rowObject['Estado actual']),
+                                stores: stores,
+                                links: [],
+                                pressKitUrl: rowObject['Presskit'] || undefined,
+                                pitch: rowObject['Pitch'] || '',
+                                funding: rowObject['Financiamiento'] || undefined,
+                                engine: rowObject['Motor'] || 'No especificado',
+                                languages: parseStringToArray(rowObject['Idioma(s) disponible(s)']),
+                                imageUrl: rowObject['Mini Image'] || '',
+                                imageCover: rowObject['Portada'] || '',
+                                imageHero: rowObject['Hero'] || '',
+                                description: rowObject['Descripción'] || '',
+                                isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
+                                highlightReason: rowObject['Descripción del Destacado'] || '',
+                                screenshots: parseScreenshots(rowObject['Screenshots']),
+                                origin: mapOrigin(rowObject['Origen inicial']),
+                                // Campos específicos de Game Jam
+                                Jam_Org_UID: rowObject['Jam_Org_UID']?.trim() || undefined,
+                                Jam_Edition: rowObject['Jam_Edition']?.trim() || undefined,
+                            };
+                        }).filter((game): game is JamGame => game !== null);
+
+                        console.log(`Game Jams cargados: ${parsedJamGames.length} juegos`);
+                        resolve(parsedJamGames);
+                    },
+                    error: (err) => {
+                        console.error('Error cargando juegos de Game Jam:', err);
+                        resolve([]);
+                    }
+                });
+            }),
+
+            new Promise<JamSettingRow[]>((resolve, reject) => {
+                Papa.parse(JAM_SETTINGS_URL, {
+                    download: true,
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        const data = results.data as Record<string, string>[];
+
+                        const settings: JamSettingRow[] = data
+                            .filter(row => row['Organization'] && row['Venue'] && row['UID'])  // Sin Edition
+                            .map(row => ({
+                                Organization: row['Organization']?.trim() || '',
+                                // Ya no hay Edition en settings
+                                Venue: row['Venue']?.trim() || '',
+                                Venue_City: row['Venue_City']?.trim() || '',
+                                Venue_Logo: row['Venue_Logo']?.trim() || undefined,
+                                Venue_Socials: row['Venue_Socials']?.trim() || undefined,
+                                Order_Priority: row['Order_Priority']?.trim() || '0',
+                                UID: row['UID']?.trim() || '',
+                            }));
+
+                        console.log('Settings cargados:', settings);
+                        resolve(settings);
+                    },
+                    error: (err) => {
+                        console.error('Error cargando settings de Game Jam:', err);
+                        resolve([]);
+                    }
+                });
+            })
+        ]).then(([loadedJamGames, loadedSettings]) => {
+            setJamGames(loadedJamGames);
+            setJamSettings(loadedSettings);
+            setJamLoading(false);
+            console.log(`Game Jams cargados: ${loadedJamGames.length} juegos, ${loadedSettings.length} sedes`);
+        });
+    }, []);
+
     useEffect(() => {
         if (games.length > 0) {
             const currentYear = new Date().getFullYear();
@@ -248,7 +439,7 @@ const App = () => {
 
             setMinYear(newMinYear);
             setMaxYear(newMaxYear);
-            setYearRange({min: newMinYear, max: newMaxYear});
+            setYearRange({ min: newMinYear, max: newMaxYear });
         }
     }, [games]);
 
@@ -292,7 +483,7 @@ const App = () => {
             const newFilters = currentFilters.includes(value)
                 ? currentFilters.filter(item => item !== value)
                 : [...currentFilters, value];
-            return {...prev, [category]: newFilters};
+            return { ...prev, [category]: newFilters };
         });
     };
 
@@ -316,8 +507,8 @@ const App = () => {
     };
 
     const clearFilters = () => {
-        setActiveFilters({status: [], genre: [], platform: [], stores: [], origin: []});
-        setYearRange({min: minYear, max: maxYear});
+        setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] });
+        setYearRange({ min: minYear, max: maxYear });
         setIsYearFilterManuallySet(false);
     };
 
@@ -359,7 +550,7 @@ const App = () => {
                 updateMetadata('meta[name="twitter:card"]', 'content', 'summary_large_image');
 
                 // Analytics: viewing a game detail
-                trackGameView({slug: foundGame.slug, title: foundGame.title});
+                trackGameView({ slug: foundGame.slug, title: foundGame.title });
             }
         } else {
             const metadata = pageMetadata[currentUrl as keyof typeof pageMetadata] || pageMetadata['/'];
@@ -408,7 +599,7 @@ const App = () => {
     };
 
     if (loading) {
-        return <LoadingSpinner/>;
+        return <LoadingSpinner />;
     }
 
     if (error) {
@@ -417,9 +608,9 @@ const App = () => {
 
     return (
         <div className="min-h-screen bg-slate-900 text-gray-200 font-sans flex flex-col">
-            <Header currentPath={currentPath}/>
+            <Header currentPath={currentPath} />
 
-            <div className="flex-grow">
+            <div className="flex-grow app-content">
                 <Router onChange={handleRouteChange}>
                     <CatalogPage path="/" {...catalogPageProps} />
                     <CatalogPage path="/game" {...catalogPageProps} />
@@ -440,6 +631,14 @@ const App = () => {
                     <Redirect path="/gamejam-gallery/" to="/gamejam-gallery" />
                     <Redirect path="/gamejam-gallery/index.html" to="/gamejam-gallery" />
 
+                    <GameJamsPage
+                        path="/game-jams"
+                        games={jamGames}
+                        settings={jamSettings}
+                        onGameClick={handleOpenModal}
+                    />
+                    <Redirect path="/game-jams/" to="/game-jams" />
+
                     <CalendarPage
                         path="/calendar"
                         games={games}
@@ -447,25 +646,25 @@ const App = () => {
                         onEventClick={handleOpenModal}
                     />
 
-                    <ChartsPage path="/charts" games={games} onNavigateToCatalog={navigateToCatalog}/>
-                    <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog}/>
+                    <ChartsPage path="/charts" games={games} onNavigateToCatalog={navigateToCatalog} />
+                    <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
 
-                    <GameDetailPage path="/game/:gameSlug" games={games}/>
-                    <GameDetailPage path="/game/:gameSlug/" games={games}/>
+                    <GameDetailPage path="/game/:gameSlug" games={games} />
+                    <GameDetailPage path="/game/:gameSlug/" games={games} />
 
-                    <GameDetailPage path="/games/:gameSlug" games={games}/>
-                    <GameDetailPage path="/games/:gameSlug/" games={games}/>
+                    <GameDetailPage path="/games/:gameSlug" games={games} />
+                    <GameDetailPage path="/games/:gameSlug/" games={games} />
 
                     <AddGamePage path="/add-game" onAddNewGame={handleAddNewGame}
-                                 onNavigateToCatalog={navigateToCatalog}/>
+                        onNavigateToCatalog={navigateToCatalog} />
 
-                    <NotFoundPage default/>
+                    <NotFoundPage default />
                 </Router>
             </div>
 
-            <Footer/>
-            <ScrollToTop/>
-            {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal}/>}
+            <Footer />
+            <ScrollToTop />
+            {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
         </div>
     );
 };
