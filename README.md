@@ -26,6 +26,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 
 ### Librerías extras
 - **Papa Parse** 5.5.3
+- **Dotenv** 17.3.1
 - **FontAwesome** 7.0.0
 - **Vitest** 3.2.4
 - **Happy DOM** 18.0.1
@@ -37,6 +38,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - **Parser CSV**: Procesamiento automático de datos
 - **Validación**: Mapeo y validación de estados de juegos
 - **Generación de slugs**: URLs amigables para cada juego
+- **Pre-renderizado de Metadatos**: Script de post-build para inyectar SEO (OpenGraph/Twitter) en cada juego.
 
 ### 2. Interfaz de usuario
 - **Búsqueda en tiempo real**: Búsqueda con debounce
@@ -78,7 +80,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Migración a Tailwind CSS v4 local
 - [x] Mejoras de accesibilidad, UI/UX y soporte para animaciones
 - [x] Agregar trailers a los juegos interactivos desde YouTube o Steam
-- [ ] Ajustar metadatos pre-renderizados para cada juego y página
+- [x] Ajustar metadatos pre-renderizados para cada juego y página
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar
