@@ -27,22 +27,43 @@ const CONTRIBUTORS = [
 ];
 
 const Card = ({ children, className = "" }: { children: preact.ComponentChildren, className?: string }) => (
-    <div className={`bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700 hover:border-slate-600 transition-all ${className}`}>
+    <div className={`bg-slate-800/30 backdrop-blur-sm p-6 rounded-2xl border border-slate-700/40 hover:border-slate-600/60 transition-all duration-300 ${className}`}>
         {children}
     </div>
 );
 
 const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
     return (
-        <main className="container mx-auto px-4 py-8 animate-fade-in text-gray-300">
-            <BackButton onClick={onNavigateToCatalog} className="mb-8" />
+        <main className="container mx-auto px-4 py-8 text-gray-300">
+            <BackButton onClick={onNavigateToCatalog} className="mb-6" />
 
-            <div className="space-y-16">
+            {/* Page header */}
+            <header className="mb-10">
+                <div className="flex items-start gap-4 mb-4">
+                    <div className="flex-1">
+                        <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">
+                            Sobre el
+                            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent"> Proyecto</span>
+                        </h1>
+                        <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                            Conoce la iniciativa, los colaboradores y el propósito detrás de la base de datos de videojuegos venezolanos más completa.
+                        </p>
+                    </div>
+                </div>
+            </header>
+
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-orange-500/20 via-slate-700/30 to-transparent mb-12" />
+
+            <div className="space-y-12">
 
                 <section>
-                    <h2 className="text-3xl font-bold text-white mb-6 pl-4">
-                        Sobre la lista de videojuegos
-                    </h2>
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-1 bg-orange-500 self-stretch rounded-full" />
+                        <h2 className="text-2xl md:text-3xl font-black text-white">
+                            Iniciativa
+                        </h2>
+                    </div>
                     <Card>
                         <p className="mb-4 text-lg leading-relaxed">
                             Venezuela Juega es una iniciativa comunitaria sin fines de lucro dedicada a la documentación y visibilización de la industria de desarrollo de videojuegos en Venezuela. Nuestro objetivo es crear una base de datos centralizada, abierta y accesible que sirva como referencia histórica y punto de encuentro para desarrolladores, estudiantes, periodistas y entusiastas.
@@ -53,10 +74,16 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                     </Card>
                 </section>
 
+                {/* Section Divider */}
+                <div className="h-px bg-slate-800/50 w-full" />
+
                 <section>
-                    <h2 className="text-3xl font-bold text-white mb-6 pl-4">
-                        Colaboradores
-                    </h2>
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-1 bg-cyan-500 self-stretch rounded-full" />
+                        <h2 className="text-2xl md:text-3xl font-black text-white">
+                            Colaboradores
+                        </h2>
+                    </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {CONTRIBUTORS.map((person, idx) => (
@@ -95,10 +122,16 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                     </div>
                 </section>
 
+                {/* Section Divider */}
+                <div className="h-px bg-slate-800/50 w-full" />
+
                 <section>
-                    <h2 className="text-3xl font-bold text-white mb-6 pl-4">
-                        Patrocinadores
-                    </h2>
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-1 bg-emerald-500 self-stretch rounded-full" />
+                        <h2 className="text-2xl md:text-3xl font-black text-white">
+                            Patrocinadores
+                        </h2>
+                    </div>
                     <Card>
                         <p className="text-sm text-gray-400 mb-4">Gracias a quienes apoyan este proyecto:</p>
                         <div className="flex flex-wrap gap-4 items-center">
@@ -110,15 +143,13 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                 </section>
             </div>
 
-            <style>
-                {`
-                @keyframes fade-in {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
+            <style>{`
+                @keyframes about-fade-in {
+                    from { opacity: 0; transform: translateY(12px); }
+                    to   { opacity: 1; transform: translateY(0); }
                 }
-                .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
-            `}
-            </style>
+                main { animation: about-fade-in 0.4s ease-out forwards; }
+            `}</style>
         </main>
     );
 };

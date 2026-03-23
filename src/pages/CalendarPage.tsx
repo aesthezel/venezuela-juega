@@ -144,106 +144,41 @@ const CalendarStats = ({ games }: { games: Game[] }) => {
     
     const mostActiveYearCount = mostActiveYear[1];
     const mostActiveYearLabel = mostActiveYear[0];
+    const currentYearLabel = currentYear.toString();
+
+    const statItems = [
+        { icon: faGamepad, value: totalGames, label: 'Total de Juegos', color: '#06b6d4' },
+        { icon: faCalendarWeek, value: gamesThisYear, label: `Lanzamientos ${currentYear}`, color: '#a855f7' },
+        { icon: faCalendarCheck, value: gamesThisQuarter, label: `Trimestre Q${currentQuarter}`, color: '#10b981' },
+        { icon: faCalendarDays, value: gamesThisMonth, label: 'Eventos este mes', color: '#f97316' },
+        { icon: faRocket, value: upcomingThisYear, label: `Próximos ${currentYear}`, color: '#f43f5e' },
+        { icon: faChartLine, value: monthlyAverage, label: 'Promedio mensual', color: '#6366f1' },
+        { icon: faFire, value: peakMonthCount, label: `Mes pico (${peakMonthName})`, color: '#ec4899' },
+        { icon: faTrophy, value: mostActiveYearLabel, label: 'Año más activo', color: '#14b8a6', subValue: `(${mostActiveYearCount} juegos)` },
+    ];
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4 mb-8">
-            <div className="bg-gradient-to-r from-cyan-600 to-cyan-700 rounded-xl p-4 text-white">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-cyan-100 text-sm">Total de juegos</p>
-                        <p className="text-2xl font-bold">{totalGames}</p>
+        <div className="flex flex-wrap gap-3 mb-8">
+            {statItems.map(({ icon, value, label, color, subValue }) => (
+                <div
+                    key={label}
+                    className="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/40 rounded-xl px-4 py-2.5"
+                >
+                    <div
+                        className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                        style={{ background: `${color}1a` }}
+                    >
+                        <FontAwesomeIcon icon={icon} style={{ color }} className="text-xs" />
                     </div>
-                    <div className="p-2 bg-cyan-500/30 rounded-lg">
-                        <FontAwesomeIcon icon={faGamepad} className="text-white w-6 h-6" />
+                    <div>
+                        <div className="flex items-baseline gap-1.5">
+                            <p className="text-white font-black text-lg leading-none">{value}</p>
+                            {subValue && <span className="text-[10px] text-slate-500 font-medium">{subValue}</span>}
+                        </div>
+                        <p className="text-slate-500 text-[10px] font-medium uppercase tracking-wide">{label}</p>
                     </div>
                 </div>
-            </div>
-            
-            <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl p-4 text-white">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-purple-100 text-sm">Lanzamientos este año ({currentYear})</p>
-                        <p className="text-2xl font-bold">{gamesThisYear}</p>
-                    </div>
-                    <div className="p-2 bg-purple-500/30 rounded-lg">
-                        <FontAwesomeIcon icon={faCalendarWeek} className="text-white w-6 h-6" />
-                    </div>
-                </div>
-            </div>
-
-            <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-4 text-white">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-green-100 text-sm">Lo que ha sucedido este trimestre (Q{currentQuarter})</p>
-                        <p className="text-2xl font-bold">{gamesThisQuarter}</p>
-                    </div>
-                    <div className="p-2 bg-green-500/30 rounded-lg">
-                        <FontAwesomeIcon icon={faCalendarCheck} className="text-white w-6 h-6" />
-                    </div>
-                </div>
-            </div>
-
-            <div className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-xl p-4 text-white">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-orange-100 text-sm">Eventos este mes</p>
-                        <p className="text-2xl font-bold">{gamesThisMonth}</p>
-                    </div>
-                    <div className="p-2 bg-orange-500/30 rounded-lg">
-                        <FontAwesomeIcon icon={faCalendarDays} className="text-white w-6 h-6" />
-                    </div>
-                </div>
-            </div>
-
-            {/* Fila 2 - Métricas adicionales */}
-            <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-xl p-4 text-white">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-red-100 text-sm">Próximos lanzamientos del {currentYear}</p>
-                        <p className="text-2xl font-bold">{upcomingThisYear}</p>
-                    </div>
-                    <div className="p-2 bg-red-500/30 rounded-lg">
-                        <FontAwesomeIcon icon={faRocket} className="text-white w-6 h-6" />
-                    </div>
-                </div>
-            </div>
-
-            <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-xl p-4 text-white">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-indigo-100 text-sm">Promedio mensual</p>
-                        <p className="text-2xl font-bold">{monthlyAverage}</p>
-                    </div>
-                    <div className="p-2 bg-indigo-500/30 rounded-lg">
-                        <FontAwesomeIcon icon={faChartLine} className="text-white w-6 h-6" />
-                    </div>
-                </div>
-            </div>
-
-            <div className="bg-gradient-to-r from-pink-600 to-pink-700 rounded-xl p-4 text-white">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-pink-100 text-sm">Mes pico con mas lanzamientos ({peakMonthName}) de {currentYear}</p>
-                        <p className="text-2xl font-bold">{peakMonthCount}</p>
-                    </div>
-                    <div className="p-2 bg-pink-500/30 rounded-lg">
-                        <FontAwesomeIcon icon={faFire} className="text-white w-6 h-6" />
-                    </div>
-                </div>
-            </div>
-
-            <div className="bg-gradient-to-r from-teal-600 to-teal-700 rounded-xl p-4 text-white">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-teal-100 text-sm">Año más activo</p>
-                        <p className="text-lg font-bold">{mostActiveYearLabel}</p>
-                        <p className="text-sm text-teal-200">({mostActiveYearCount} juegos)</p>
-                    </div>
-                    <div className="p-2 bg-teal-500/30 rounded-lg">
-                        <FontAwesomeIcon icon={faTrophy} className="text-white w-6 h-6" />
-                    </div>
-                </div>
-            </div>
+            ))}
         </div>
     );
 };
@@ -274,22 +209,29 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
         <main className="container mx-auto px-4 py-8">
             {previewGame && <CalendarTooltip game={previewGame} position={previewPosition} />}
 
-            <div className="mb-8">
-                <BackButton onClick={onNavigateToCatalog} className="mb-6" />
-                
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                        Calendario de eventos
-                    </h1>
-                    <p className="text-slate-300 text-lg">
-                        Explora las fechas de lanzamiento de los juegos venezolanos, eventos importantes de la industria, y todo el historial que ha acontecido sobre videojuegos en el pais.
-                    </p>
+            <BackButton onClick={onNavigateToCatalog} className="mb-6" />
+
+            {/* Page header */}
+            <header className="mb-10">
+                <div className="flex items-start gap-4 mb-4">
+                    <div className="flex-1">
+                        <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">
+                            Calendario de
+                            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent"> Eventos</span>
+                        </h1>
+                        <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                            Explora las fechas de lanzamiento de los juegos venezolanos, eventos importantes de la industria, y todo el historial que ha acontecido sobre videojuegos en el país.
+                        </p>
+                    </div>
                 </div>
 
                 <CalendarStats games={games} />
-            </div>
+            </header>
 
-            <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden">
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-cyan-500/20 via-slate-700/30 to-transparent mb-12" />
+
+            <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-700/40 rounded-2xl shadow-2xl overflow-hidden">
                 <div className="p-6 sm:p-8">
                     <div className="calendar-container">
                         <FullCalendar
