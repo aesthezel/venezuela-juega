@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useMemo, useEffect, useRef } from 'preact/hooks';
+import { useMemo, useEffect, useRef, useState } from 'preact/hooks';
 import { Game } from '@/src/types';
 import { CoverImage } from '@/src/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -43,6 +43,7 @@ const StatCard = ({ value, label, icon, iconClass, subValue }: StatCardProps) =>
 const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
+    const [showHint, setShowHint] = useState(false);
 
     // ── Stats ──────────────────────────────────────────────────────────────
     const stats = useMemo(() => {
@@ -95,8 +96,44 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
         return () => ctx.revert();
     }, []);
 
+    // Scroll hint timer
+    useEffect(() => {
+        let timer: NodeJS.Timeout | null = null;
+
+        const startTimer = () => {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(() => setShowHint(true), 1500);
+        };
+
+        startTimer();
+
+        const handleScroll = () => {
+            if (window.scrollY > 720) {
+                setShowHint(false);
+                if (timer) {
+                    clearTimeout(timer);
+                    timer = null;
+                }
+            } else if (window.scrollY < 10) {
+                setShowHint(prev => {
+                    if (!prev && !timer) {
+                        startTimer();
+                    }
+                    return prev;
+                });
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            if (timer) clearTimeout(timer);
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     // Scroll to catalog
     const scrollDown = () => {
+        setShowHint(false);
         const el = document.getElementById('catalog-content');
         if (el) {
             window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset, behavior: 'smooth' });
@@ -173,6 +210,19 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
                     <StatCard value={stats.devs} label="Estudios" icon={faUsers} iconClass="text-blue-300" />
                     <StatCard value={`${stats.history}+`} label="Años de historia" icon={faCodeBranch} iconClass="text-red-300" />
                 </div>
+            </div>
+
+            {/* ── Scroll-down hint ── */}
+            <div
+                className={`absolute bottom-80 z-20 flex flex-col items-center gap-3 transition-all duration-1000 ${showHint ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+                    }`}
+            >
+                <div className="px-5 py-2.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl group transition-transform duration-500 hover:scale-105">
+                    <p className="text-slate-300 text-sm font-medium tracking-wide">
+                        Desliza hacia abajo para ver todos los juegos
+                    </p>
+                </div>
+                <div className="h-10 w-px bg-gradient-to-b from-white/20 to-transparent animate-pulse" />
             </div>
 
             {/* ── Scroll-down button ── */}
