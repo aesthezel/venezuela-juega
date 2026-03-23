@@ -11,9 +11,10 @@ interface SearchBarProps {
     onSearchChange: (term: string) => void;
     games: Game[];
     onSelectGame?: (game: Game) => void;
+    renderSuggestionSubtitle?: (game: Game) => any;
 }
 
-const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame }: SearchBarProps) => {
+const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSuggestionSubtitle }: SearchBarProps) => {
     const [suggestions, setSuggestions] = useState<Game[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [activeSuggestion, setActiveSuggestion] = useState(-1);
@@ -243,7 +244,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame }: SearchBa
                                         {highlightMatch(game.title, debouncedLocalTerm)}
                                     </div>
                                     <div className="text-gray-400 text-sm truncate">
-                                        {game.developers.join(', ')}
+                                        {renderSuggestionSubtitle ? renderSuggestionSubtitle(game) : game.developers.join(', ')}
                                     </div>
                                     {game.genre.length > 0 && (
                                         <div className="flex gap-1 mt-1">

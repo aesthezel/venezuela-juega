@@ -1,14 +1,15 @@
 import { h } from 'preact';
-import { useMemo, useState } from 'preact/hooks';
+import { useMemo, useState, useEffect } from 'preact/hooks';
 import { Game } from '@/src/types';
 import { RoutableProps, route } from 'preact-router';
-import { CoverImage, BackButton } from '@/src/components';
+import { SearchBar, AlphaFilter, CoverImage, BackButton } from '@/src/components';
 import { getTrailerInfo } from '@/src/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTrophy, faMapMarkerAlt, faCalendarAlt, faUsers,
     faChevronDown, faChevronUp, faGamepad, faGlobe,
-    faFire, faLocationDot, faLayerGroup, faArrowRight
+    faFire, faLocationDot, faLayerGroup, faArrowRight,
+    faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faDiscord, faInstagram, faTwitter, faYoutube,
@@ -608,15 +609,47 @@ const EditionSection = ({ edition, onGameClick }: {
 
 const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
 
+    const [searchTerm, setSearchTerm] = useState('');
+    const [activeAlpha, setActiveAlpha] = useState<string | null>(null);
+
+    const filteredGames = useMemo(() => {
+        let result = games;
+
+        if (activeAlpha) {
+            const normalizeFirstChar = (title: string) => {
+                const trimmed = (title || '').trim();
+                if (!trimmed) return '';
+                const first = trimmed[0].normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                return first.toUpperCase();
+            };
+            result = result.filter((g) => {
+                const character = normalizeFirstChar(g.title);
+                const isLetter = /^[A-Z]$/.test(character);
+                if (activeAlpha === '#') return !isLetter;
+                return character === activeAlpha;
+            });
+        }
+
+        if (searchTerm.trim().length >= 2) {
+            const searchLower = searchTerm.toLowerCase();
+            result = result.filter(g =>
+                g.title.toLowerCase().includes(searchLower) ||
+                g.developers.some(dev => dev.toLowerCase().includes(searchLower))
+            );
+        }
+
+        return result;
+    }, [games, activeAlpha, searchTerm]);
+
     const processedData = useMemo(() => {
-        if (!games?.length || !settings?.length) return [];
+        if (!filteredGames?.length || !settings?.length) return [];
 
         const settingsByUID = new Map<string, JamSettingRow>();
         settings.forEach(s => { if (s.UID) settingsByUID.set(s.UID, s); });
 
         const editionVenueGames = new Map<string, Map<string, JamGame[]>>();
 
-        games.forEach(game => {
+        filteredGames.forEach(game => {
             if (!game.Jam_Org_UID || !game.Jam_Edition) return;
             const setting = settingsByUID.get(game.Jam_Org_UID);
             if (!setting) {
@@ -674,7 +707,7 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
         });
 
         return editions;
-    }, [games, settings]);
+    }, [filteredGames, settings]);
 
     const totalStats = useMemo(() => {
         const totalGames = processedData.reduce((acc, ed) =>
@@ -691,44 +724,87 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
             <BackButton onClick={() => route('/')} className="mb-6" />
 
             {/* Page header */}
-            <header className="mb-10">
-                <div className="flex items-start gap-4 mb-4">
-                    <div className="flex-1">
-                        <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">
+            <header className="mb-12">
+                {/* Hero Section: Title & Stats */}
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10">
+                    <div className="max-w-3xl">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-4">
                             Game Jams
                             <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent"> Venezuela</span>
                         </h1>
-                        <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
-                            Videojuegos creados por desarrolladores venezolanos en eventos de 48 horas.
+                        <p className="text-slate-400 text-base md:text-lg leading-relaxed">
+                            Videojuegos creados por desarrolladores venezolanos en eventos de 48 horas. 
                             Explora ediciones, sedes y el talento detrás de cada juego.
                         </p>
                     </div>
+
+                    {/* Stats bar - Dashboard style */}
+                    <div className="flex flex-wrap gap-3">
+                        {[
+                            { icon: faGamepad, value: totalStats.games, label: 'Juegos', color: '#f97316' },
+                            { icon: faCalendarAlt, value: totalStats.editions, label: 'Ediciones', color: '#a855f7' },
+                            { icon: faLayerGroup, value: totalStats.venues, label: 'Sedes', color: '#06b6d4' },
+                            { icon: faLocationDot, value: totalStats.cities, label: 'Ciudades', color: '#10b981' },
+                        ].map(({ icon, value, label, color }) => (
+                            <div
+                                key={label}
+                                className="flex items-center gap-3 bg-slate-800/40 backdrop-blur-sm border border-slate-700/30 rounded-2xl px-5 py-3 shadow-lg hover:border-slate-600/50 transition-colors"
+                            >
+                                <div
+                                    className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner"
+                                    style={{ background: `${color}15`, border: `1px solid ${color}33` }}
+                                >
+                                    <FontAwesomeIcon icon={icon} style={{ color }} className="text-xs" />
+                                </div>
+                                <div>
+                                    <p className="text-white font-black text-xl leading-none mb-0.5">{value}</p>
+                                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{label}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Stats bar */}
-                <div className="flex flex-wrap gap-3 mt-6">
-                    {[
-                        { icon: faGamepad, value: totalStats.games, label: 'Juegos', color: '#f97316' },
-                        { icon: faCalendarAlt, value: totalStats.editions, label: 'Ediciones', color: '#a855f7' },
-                        { icon: faLayerGroup, value: totalStats.venues, label: 'Sedes', color: '#06b6d4' },
-                        { icon: faLocationDot, value: totalStats.cities, label: 'Ciudades', color: '#10b981' },
-                    ].map(({ icon, value, label, color }) => (
-                        <div
-                            key={label}
-                            className="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/40 rounded-xl px-4 py-2.5"
-                        >
-                            <div
-                                className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                                style={{ background: `${color}1a` }}
-                            >
-                                <FontAwesomeIcon icon={icon} style={{ color }} className="text-xs" />
+                {/* Discovery Toolbar: Search & Filter */}
+                <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/10 to-transparent rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition duration-700"></div>
+                    <div className="relative bg-slate-900/50 backdrop-blur-xl border border-slate-700/50 rounded-[1.5rem] p-4 md:p-6 shadow-2xl">
+                        <div className="flex flex-col lg:flex-row gap-6 items-stretch lg:items-center">
+                            {/* Search area */}
+                            <div className="flex-1 lg:flex-[1.2]">
+                                <SearchBar
+                                    searchTerm={searchTerm}
+                                    onSearchChange={setSearchTerm}
+                                    games={games}
+                                    onSelectGame={onGameClick}
+                                    renderSuggestionSubtitle={(game: JamGame) => {
+                                        const setting = settings?.find(s => s.UID === game.Jam_Org_UID);
+                                        const venue = setting?.Venue || 'Sede desconocida';
+                                        const org = setting?.Organization || 'Jam';
+                                        return (
+                                            <span className="flex items-center gap-1.5 text-[11px] mt-0.5">
+                                                <span className="text-orange-400 font-semibold">{venue}</span>
+                                                <span className="text-slate-500">•</span>
+                                                <span className="text-slate-400">{org} {game.Jam_Edition}</span>
+                                            </span>
+                                        );
+                                    }}
+                                />
                             </div>
-                            <div>
-                                <p className="text-white font-black text-lg leading-none">{value}</p>
-                                <p className="text-slate-500 text-[10px] font-medium uppercase tracking-wide">{label}</p>
+
+                            {/* Separator for desktop */}
+                            <div className="hidden lg:block w-px h-10 bg-slate-700/50"></div>
+
+                            {/* Alpha Filter area */}
+                            <div className="flex-1 overflow-x-auto scrollbar-hide">
+                                <AlphaFilter
+                                    activeAlpha={activeAlpha}
+                                    onAlphaChange={setActiveAlpha}
+                                    className="bg-transparent border-none"
+                                />
                             </div>
                         </div>
-                    ))}
+                    </div>
                 </div>
             </header>
 
