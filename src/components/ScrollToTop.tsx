@@ -21,7 +21,7 @@ const ScrollToTop = () => {
             // Detectamos dirección del scroll para mover el botón si el footer aparece
             const currentY = window.scrollY || document.documentElement.scrollTop;
             const currentDirection = currentY < lastScrollY.current ? 'up' : 'down';
-            
+
             // Solo nos importa el estado "subiendo" si hemos pasado el umbral de visibilidad
             if (y > SCROLL_SHOW_THRESHOLD) {
                 setIsScrollingUp(currentDirection === 'up');
@@ -43,7 +43,7 @@ const ScrollToTop = () => {
     useEffect(() => {
         const desktopEl = desktopBtnRef.current;
         const mobileEl = mobileBtnRef.current;
-        
+
         const elements = [desktopEl, mobileEl].filter(Boolean) as HTMLElement[];
         if (elements.length === 0) return;
 
@@ -118,7 +118,7 @@ const ScrollToTop = () => {
             {/* ── Mobile Version (Horizontal Bar) ── */}
             <div
                 ref={mobileBtnRef}
-                className="md:hidden fixed bottom-6 left-4 right-4 z-[70]"
+                className="md:hidden fixed left-4 right-4 z-[70]"
                 style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', pointerEvents: 'none' }}
             >
                 <button
