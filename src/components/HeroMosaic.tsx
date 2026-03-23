@@ -25,14 +25,14 @@ interface StatCardProps {
 }
 
 const StatCard = ({ value, label, icon, iconClass, subValue }: StatCardProps) => (
-    <div className="flex flex-col items-center px-8 py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[160px] shadow-lg transition-transform duration-300 hover:scale-105 group">
-        <span className="text-4xl font-bold text-white mb-1">{value}</span>
-        <span className="flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-slate-400 md:text-sm mb-1">
+    <div className="flex flex-col items-center px-3 py-2.5 md:px-8 md:py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[110px] md:min-w-[160px] shadow-lg transition-transform duration-300 hover:scale-105 group">
+        <span className="text-2xl md:text-4xl font-bold text-white mb-1">{value}</span>
+        <span className="flex items-center gap-2 text-[10px] md:text-xs font-semibold tracking-widest uppercase text-slate-400 md:text-sm mb-1">
             <FontAwesomeIcon icon={icon} className={iconClass} />
             {label}
         </span>
         {subValue && (
-            <span className="text-[10px] text-slate-500 font-medium bg-white/5 px-2 py-0.5 rounded-full border border-white/5 group-hover:border-white/10 transition-colors">
+            <span className="text-[9px] md:text-[10px] text-slate-500 font-medium bg-white/5 px-2 py-0.5 rounded-full border border-white/5 group-hover:border-white/10 transition-colors line-clamp-1 md:line-clamp-none">
                 {subValue}
             </span>
         )}
@@ -144,7 +144,7 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
     return (
         <div
             ref={containerRef}
-            className="relative flex h-screen min-h-[700px] w-full flex-col items-center justify-center overflow-hidden bg-slate-950"
+            className="relative flex h-[100dvh] w-full flex-col items-center justify-center overflow-hidden bg-slate-950"
         >
             {/* Background mosaic grid */}
             <div
@@ -171,17 +171,17 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
             <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#020617_100%)]" />
 
             {/* Hero content */}
-            <div className="relative z-10 mx-auto max-w-6xl animate-fade-in-up px-4 text-center -mt-60">
+            <div className="relative z-10 mx-auto max-w-6xl animate-fade-in-up px-4 text-center -mt-[40vh] md:-mt-60">
 
                 {/* Badge */}
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-slate-400 backdrop-blur-md md:text-sm">
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+                <div className="mb-1.5 md:mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 backdrop-blur-md md:text-sm">
+                    <span className="h-1.5 w-1.5 md:h-2 md:w-2 animate-pulse rounded-full bg-emerald-500" />
                     Base de datos colaborativa
                 </div>
 
                 {/* Title */}
                 <h1
-                    className="mb-4 text-6xl font-extrabold leading-none tracking-tight drop-shadow-2xl md:text-8xl bg-clip-text text-transparent"
+                    className="mb-1.5 md:mb-4 text-4xl sm:text-5xl md:text-8xl font-extrabold leading-tight md:leading-none tracking-tight drop-shadow-2xl bg-clip-text text-transparent"
                     style={{
                         backgroundImage: 'linear-gradient(to right, #f2b63d 0%, #457cd6 50%, #e34262 100%)',
                         WebkitBackgroundClip: 'text',
@@ -194,12 +194,12 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
                 </h1>
 
                 {/* Subtitle */}
-                <p className="mx-auto mb-8 max-w-3xl text-xl font-light leading-relaxed text-slate-300 md:text-2xl">
+                <p className="mx-auto mb-3 md:mb-8 max-w-3xl text-lg font-light leading-relaxed text-slate-300 md:text-2xl">
                     La documentación digital que preserva y conecta la historia del desarrollo de videojuegos en el país
                 </p>
 
                 {/* Stats */}
-                <div className="flex w-full flex-wrap justify-center gap-6 md:gap-8">
+                <div className="flex w-full flex-wrap justify-center gap-3 md:gap-8">
                     <StatCard
                         value={stats.totalCount}
                         label="Juegos"
@@ -214,7 +214,7 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
 
             {/* ── Scroll-down hint ── */}
             <div
-                className={`absolute bottom-80 z-20 flex flex-col items-center gap-3 transition-all duration-1000 ${showHint ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+                className={`absolute bottom-[300px] md:bottom-80 z-[60] flex flex-col items-center gap-3 transition-all duration-1000 ${showHint ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
                     }`}
             >
                 <div className="px-5 py-2.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl group transition-transform duration-500 hover:scale-105">
@@ -228,10 +228,10 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
             {/* ── Scroll-down button ── */}
             <button
                 onClick={scrollDown}
-                className="absolute bottom-60 z-20 p-4 text-slate-500 transition-all duration-300 hover:-translate-y-1 hover:text-white"
+                className="absolute bottom-[250px] md:bottom-60 z-[60] p-4 text-slate-500 transition-all duration-300 hover:-translate-y-1 hover:text-white"
                 aria-label="Desplazar hacia abajo"
             >
-                <FontAwesomeIcon icon={faArrowDown} className="animate-bounce text-2xl opacity-80" />
+                <FontAwesomeIcon icon={faArrowDown} className="animate-bounce text-xl md:text-2xl opacity-80" />
             </button>
 
             <style>{`
