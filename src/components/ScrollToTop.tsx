@@ -111,7 +111,7 @@ const ScrollToTop = () => {
             {/* Mantenemos bottom-6 fijo y usamos GSAP 'y' para desplazarlo hacia arriba si hace falta */}
             <div
                 ref={mobileBtnRef}
-                className="md:hidden fixed bottom-6 left-4 right-4 z-[70]"
+                className="md:hidden fixed bottom-6 left-4 right-4 z-[10]"
                 style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', pointerEvents: 'none', bottom: '1.5rem' }}
             >
                 <button

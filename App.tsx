@@ -78,6 +78,21 @@ const App = () => {
     const navigateToCatalog = () => route('/');
     const allGames = useMemo(() => [...games, ...jamGames], [games, jamGames]);
 
+    const { minYear, maxYear } = useMemo(() => {
+        if (games.length === 0) return { minYear: 1980, maxYear: new Date().getFullYear() };
+        const years = games
+            .map(g => {
+                const match = g.releaseDate.match(/\b\d{4}\b/);
+                return match ? parseInt(match[0], 10) : null;
+            })
+            .filter((y): y is number => y !== null);
+        
+        return {
+            minYear: years.length > 0 ? Math.min(...years) : 1980,
+            maxYear: years.length > 0 ? Math.max(...years, new Date().getFullYear()) : new Date().getFullYear()
+        };
+    }, [games]);
+
     const catalogPageProps = {
         games,
         filteredGames,
@@ -90,11 +105,15 @@ const App = () => {
         activeFilters,
         onFilterChange: handleFilterChange,
         onClearCategory: (category: string) => setActiveFilters(prev => ({ ...prev, [category]: [] })),
-        onClearAllFilters: () => setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] }),
+        onClearAllFilters: () => {
+            setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] });
+            setYearRange(null);
+            setIsYearFilterManuallySet(false);
+        },
         onGameClick: handleOpenModal,
         jamGames,
-        minYear: 1980, // Dynamic logic could be moved back if needed
-        maxYear: new Date().getFullYear(),
+        minYear,
+        maxYear,
         yearRange,
         onYearRangeChange: (range: { min: number; max: number }) => { setYearRange(range); setIsYearFilterManuallySet(true); },
     };

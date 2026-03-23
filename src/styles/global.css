@@ -54,6 +54,18 @@
   --color-purple-400: #9c656c;
   --color-purple-500: #57253b;
   --color-purple-600: #2c1b2e;
+
+  /* Status Colors */
+  --color-status-released: #16a34a;
+  --color-status-in-development: #f2b63d;
+  --color-status-on-hold: #71717a;
+  --color-status-canceled: #94353d;
+  --color-status-demo: #4ade80;
+  --color-status-prototype: #e4e4e7;
+  --color-status-lost: #fecaca;
+  --color-status-early: #449489;
+  --color-status-recovered: #457cd6;
+  --color-status-unknown: #18181b;
 }
 
 :root {

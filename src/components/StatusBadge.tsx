@@ -13,29 +13,29 @@ export interface StatusBadgeProps {
 }
 
 const defaultBgMap: Record<GameStatus, string> = {
-  [GameStatus.RELEASED]: "bg-green-600",
-  [GameStatus.IN_DEVELOPMENT]: "bg-yellow-500",
-  [GameStatus.ON_HOLD]: "bg-gray-500",
-  [GameStatus.CANCELED]: "bg-red-600",
-  [GameStatus.RELEASED_DEMO]: 'bg-green-400',
-  [GameStatus.PROTOTYPE]: 'bg-gray-200',
-  [GameStatus.LOST_MEDIA]: 'bg-red-200',
-  [GameStatus.EARLY_ACCESS]: 'bg-cyan-500',
-  [GameStatus.RECOVERED]: 'bg-blue-500',
-  [GameStatus.UNKNOWN]: 'bg-gray-900'
+  [GameStatus.RELEASED]: "bg-status-released",
+  [GameStatus.IN_DEVELOPMENT]: "bg-status-in-development",
+  [GameStatus.ON_HOLD]: "bg-status-on-hold",
+  [GameStatus.CANCELED]: "bg-status-canceled",
+  [GameStatus.RELEASED_DEMO]: "bg-status-demo",
+  [GameStatus.PROTOTYPE]: "bg-status-prototype",
+  [GameStatus.LOST_MEDIA]: "bg-status-lost",
+  [GameStatus.EARLY_ACCESS]: "bg-status-early",
+  [GameStatus.RECOVERED]: "bg-status-recovered",
+  [GameStatus.UNKNOWN]: "bg-status-unknown"
 };
 
 const defaultTextMap: Record<GameStatus, string> = {
-  [GameStatus.RELEASED]: "text-green-500",
-  [GameStatus.IN_DEVELOPMENT]: "text-yellow-500",
-  [GameStatus.ON_HOLD]: "text-gray-500",
-  [GameStatus.CANCELED]: "text-red-600",
-  [GameStatus.RELEASED_DEMO]: 'text-green-700',
-  [GameStatus.PROTOTYPE]: 'text-gray-700',
-  [GameStatus.LOST_MEDIA]: 'text-red-700',
-  [GameStatus.EARLY_ACCESS]: 'text-cyan-500',
-  [GameStatus.RECOVERED]: 'text-blue-500',
-  [GameStatus.UNKNOWN]: 'text-gray-900'
+  [GameStatus.RELEASED]: "text-status-released",
+  [GameStatus.IN_DEVELOPMENT]: "text-status-in-development",
+  [GameStatus.ON_HOLD]: "text-status-on-hold",
+  [GameStatus.CANCELED]: "text-status-canceled",
+  [GameStatus.RELEASED_DEMO]: "text-status-demo",
+  [GameStatus.PROTOTYPE]: "text-status-prototype",
+  [GameStatus.LOST_MEDIA]: "text-status-lost",
+  [GameStatus.EARLY_ACCESS]: "text-status-early",
+  [GameStatus.RECOVERED]: "text-status-recovered",
+  [GameStatus.UNKNOWN]: "text-status-unknown"
 };
 
 const sizeClasses: Record<Size, string> = {

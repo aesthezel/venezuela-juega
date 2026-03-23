@@ -1,8 +1,17 @@
-import { useState, useRef, useEffect, useCallback } from 'preact/hooks';
+import { useState, useRef, useEffect } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { 
+    faTrash, 
+    faChevronDown, 
+    faCalendarAlt, 
+    faCheck, 
+    faFilter, 
+    faTags, 
+    faDesktop, 
+    faStore 
+} from '@fortawesome/free-solid-svg-icons';
 import { GameStatus } from "@/src/types";
-import {h} from "preact";
+import { h } from "preact";
 
 interface FilterPanelProps {
     genres: string[];
@@ -18,12 +27,15 @@ interface FilterPanelProps {
     yearRange: { min: number; max: number } | null;
     onYearRangeChange: (range: { min: number; max: number }) => void;
 }
+
 interface FilterSectionProps {
     title: string;
     items: string[];
     category: string;
     activeItems: string[];
     onFilterChange: (category: string, value: string) => void;
+    icon?: any;
+    itemColorMap?: Record<string, string>;
 }
 
 interface MultiSelectDropdownProps {
@@ -32,31 +44,50 @@ interface MultiSelectDropdownProps {
     items: string[];
     selectedItems: string[];
     onToggleItem: (category: string, item: string) => void;
-    onClearCategory: (category:string) => void;
+    onClearCategory: (category: string) => void;
+    icon?: any;
 }
 
-const FilterButtons = ({ title, items, category, activeItems, onFilterChange }: FilterSectionProps) => (
-    <div>
-        <h3 className="text-lg font-semibold mb-3 text-gray-300">{title}</h3>
+const FilterButtons = ({ title, items, category, activeItems, onFilterChange, icon, itemColorMap }: FilterSectionProps) => (
+    <div className="space-y-3">
+        <div className="flex items-center gap-2 text-slate-400 font-medium text-sm tracking-wider uppercase">
+            {icon && <FontAwesomeIcon icon={icon} className="text-xs" />}
+            <h3>{title}</h3>
+        </div>
         <div className="flex flex-wrap gap-2">
-            {items.map(item => (
-                <button
-                    key={item}
-                    onClick={() => onFilterChange(category, item)}
-                    className={`px-3 py-1 text-sm rounded-full transition-colors duration-300 ${
-                        activeItems.includes(item)
-                            ? 'bg-cyan-500 text-white font-bold'
-                            : 'bg-slate-700 hover:bg-slate-600 text-gray-300'
-                    }`}
-                >
-                    {item}
-                </button>
-            ))}
+            {items.map(item => {
+                const isActive = activeItems.includes(item);
+                const statusColorBase = itemColorMap ? itemColorMap[item] : null;
+                
+                return (
+                    <button
+                        key={item}
+                        onClick={() => onFilterChange(category, item)}
+                        className={`group relative px-4 py-1.5 text-xs font-bold rounded-full transition-all duration-300 border ${
+                            isActive
+                                ? 'text-white border-transparent'
+                                : 'bg-slate-800/60 hover:bg-slate-700/80 text-slate-400 hover:text-slate-200 border-slate-700/50'
+                        }`}
+                        style={isActive && statusColorBase ? {
+                            backgroundColor: `var(--color-${statusColorBase})`,
+                            boxShadow: `0 10px 15px -3px var(--color-${statusColorBase} / 0.4)`
+                        } : {}}
+                    >
+                        {isActive && !statusColorBase && (
+                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-purple-600 animate-gradient-half"></div>
+                        )}
+                        <span className="relative z-10 flex items-center gap-1.5">
+                            {isActive && <FontAwesomeIcon icon={faCheck} className="text-[10px]" />}
+                            {item}
+                        </span>
+                    </button>
+                );
+            })}
         </div>
     </div>
 );
 
-const MultiSelectDropdown = ({ title, category, items, selectedItems, onToggleItem, onClearCategory }: MultiSelectDropdownProps) => {
+const MultiSelectDropdown = ({ title, category, items, selectedItems, onToggleItem, onClearCategory, icon }: MultiSelectDropdownProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -72,120 +103,163 @@ const MultiSelectDropdown = ({ title, category, items, selectedItems, onToggleIt
 
     const selectedCount = selectedItems.length;
 
-    const handleClearClick = (e: MouseEvent) => {
-        e.stopPropagation();
-        onClearCategory(category);
-    };
-
     return (
-        <div className="relative" ref={dropdownRef}>
-            <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-semibold text-gray-300">{title}</h3>
+        <div className="relative group" ref={dropdownRef}>
+            <div className="flex justify-between items-end mb-2 px-1">
+                <div className="flex items-center gap-2 text-slate-400 font-medium text-sm tracking-wider uppercase">
+                    {icon && <FontAwesomeIcon icon={icon} className="text-xs" />}
+                    <h3>{title}</h3>
+                </div>
                 {selectedCount > 0 && (
                     <button
-                        onClick={handleClearClick}
-                        className="text-xs text-cyan-400 hover:text-cyan-300 hover:underline focus:outline-none"
+                        onClick={(e) => { e.stopPropagation(); onClearCategory(category); }}
+                        className="text-[10px] font-bold text-cyan-400 hover:text-cyan-300 uppercase tracking-tight transition-colors"
                     >
                         Limpiar
                     </button>
                 )}
             </div>
+            
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg flex justify-between items-center transition-colors"
+                className={`w-full group flex items-center justify-between px-4 py-3 rounded-xl border transition-all duration-300 ${
+                    isOpen 
+                        ? 'bg-slate-800/90 border-cyan-500/50 ring-2 ring-cyan-500/10' 
+                        : 'bg-slate-800/40 border-slate-700/50 hover:border-slate-600'
+                }`}
             >
-                <span>
-                    {selectedCount > 0 ? `${selectedCount} seleccionado(s)` : `Seleccionar ${title.toLowerCase()}`}
-                </span>
-                <svg className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'transform rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <div className="flex items-center gap-2">
+                    {selectedCount > 0 ? (
+                        <div className="flex items-center gap-2">
+                            <span className="bg-cyan-500 text-white text-[10px] font-black h-5 w-5 flex items-center justify-center rounded-full">
+                                {selectedCount}
+                            </span>
+                            <span className="text-sm font-semibold text-white truncate max-w-[120px]">
+                                {selectedItems.join(', ')}
+                            </span>
+                        </div>
+                    ) : (
+                        <span className="text-sm font-medium text-slate-500">Filtrar por {title.toLowerCase()}</span>
+                    )}
+                </div>
+                <FontAwesomeIcon 
+                    icon={faChevronDown} 
+                    className={`text-xs text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-cyan-500' : 'group-hover:text-slate-400'}`} 
+                />
             </button>
 
             {isOpen && (
-                <div className="absolute z-10 w-full mt-2 bg-slate-800 border border-slate-600 rounded-lg shadow-xl max-h-60 overflow-y-auto">
-                    <ul>
+                <div className="absolute z-50 w-full mt-2 bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden animate-slide-up">
+                    <div className="max-h-60 overflow-y-auto py-2 scrollbar-hide">
                         {items.sort().map(item => (
-                            <li key={item} className="p-2 hover:bg-slate-700 cursor-pointer">
-                                <label className="flex items-center space-x-3 text-white">
-                                    <input
-                                        type="checkbox"
-                                        className="form-checkbox h-5 w-5 bg-slate-600 border-slate-500 rounded text-cyan-500 focus:ring-cyan-500"
-                                        checked={selectedItems.includes(item)}
-                                        onChange={() => onToggleItem(category, item)}
-                                    />
-                                    <span>{item}</span>
-                                </label>
-                            </li>
+                            <div 
+                                key={item} 
+                                onClick={() => onToggleItem(category, item)}
+                                className="px-4 py-2.5 hover:bg-slate-800/80 cursor-pointer flex items-center justify-between group/item transition-colors"
+                            >
+                                <span className={`text-sm tracking-wide transition-colors ${selectedItems.includes(item) ? 'text-cyan-400 font-bold' : 'text-slate-300 group-hover/item:text-white'}`}>
+                                    {item}
+                                </span>
+                                <div className={`h-5 w-5 rounded-md border flex items-center justify-center transition-all ${
+                                    selectedItems.includes(item) 
+                                        ? 'bg-cyan-500 border-cyan-500 scale-110 shadow-lg shadow-cyan-500/20' 
+                                        : 'border-slate-700 group-hover/item:border-slate-500'
+                                }`}>
+                                    {selectedItems.includes(item) && <FontAwesomeIcon icon={faCheck} className="text-[10px] text-white" />}
+                                </div>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
             )}
         </div>
     );
 };
 
-const YearRangeInputs = ({ minYear, maxYear, yearRange, onYearRangeChange }) => {
-    const [minVal, setMinVal] = useState(yearRange?.min);
-    const [maxVal, setMaxVal] = useState(yearRange?.max);
+const YearRangeInputs = ({ minYear, maxYear, yearRange, onYearRangeChange }: { minYear: number; maxYear: number; yearRange: { min: number; max: number } | null; onYearRangeChange: (range: { min: number; max: number }) => void }) => {
+    const [minVal, setMinVal] = useState<string>(String(yearRange?.min ?? minYear));
+    const [maxVal, setMaxVal] = useState<string>(String(yearRange?.max ?? maxYear));
 
     useEffect(() => {
-        setMinVal(yearRange?.min);
-        setMaxVal(yearRange?.max);
-    }, [yearRange]);
-
-    if (!yearRange) return null;
+        setMinVal(String(yearRange?.min ?? minYear));
+        setMaxVal(String(yearRange?.max ?? maxYear));
+    }, [yearRange, minYear, maxYear]);
 
     const commitChanges = () => {
-        let newMin = parseInt(String(minVal), 10) || minYear;
-        let newMax = parseInt(String(maxVal), 10) || maxYear;
+        let newMin = parseInt(minVal, 10);
+        let newMax = parseInt(maxVal, 10);
 
-        // Clamp values within the allowed global range
+        if (isNaN(newMin)) newMin = minYear;
+        if (isNaN(newMax)) newMax = maxYear;
+
         newMin = Math.max(minYear, Math.min(newMin, maxYear));
         newMax = Math.max(minYear, Math.min(newMax, maxYear));
 
-        // Ensure min is not greater than max
         if (newMin > newMax) {
-            [newMin, newMax] = [newMax, newMin]; // Swap them
+            [newMin, newMax] = [newMax, newMin];
         }
 
         onYearRangeChange({ min: newMin, max: newMax });
     };
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Enter') {
-            e.target.blur(); // Trigger blur to commit changes
+            (e.target as HTMLInputElement).blur();
         }
     };
 
     return (
-        <div>
-            <h3 className="text-lg font-semibold mb-3 text-gray-300">Fecha de lanzamiento</h3>
-            <div className="flex items-center justify-between gap-4">
-                <input
-                    type="number"
-                    value={minVal}
-                    onInput={(e) => setMinVal(e.currentTarget.value)}
-                    onBlur={commitChanges}
-                    onKeyDown={handleKeyDown}
-                    className="w-full bg-slate-700 border-2 border-slate-600 text-white rounded-lg p-2 text-center focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-                    aria-label="Año mínimo"
-                />
-                <span className="text-gray-400 font-bold">-</span>
-                <input
-                    type="number"
-                    value={maxVal}
-                    onInput={(e) => setMaxVal(e.currentTarget.value)}
-                    onBlur={commitChanges}
-                    onKeyDown={handleKeyDown}
-                    className="w-full bg-slate-700 border-2 border-slate-600 text-white rounded-lg p-2 text-center focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-                    aria-label="Año máximo"
-                />
+        <div className="space-y-3">
+            <div className="flex items-center gap-2 text-slate-400 font-medium text-sm tracking-wider uppercase">
+                <FontAwesomeIcon icon={faCalendarAlt} className="text-xs" />
+                <h3>Lanzamiento</h3>
+            </div>
+            <div className="grid grid-cols-2 gap-3 items-center">
+                <div className="relative group">
+                    <input
+                        type="number"
+                        value={minVal}
+                        onInput={(e) => setMinVal(e.currentTarget.value)}
+                        onBlur={commitChanges}
+                        onKeyDown={handleKeyDown}
+                        className="w-full bg-slate-800/40 border border-slate-700/50 text-white rounded-xl p-3 text-center text-sm font-bold focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all group-hover:border-slate-600"
+                        placeholder={String(minYear)}
+                    />
+                    <div className="absolute -top-2 left-3 bg-slate-900 px-1.5 text-[9px] text-slate-500 font-bold uppercase tracking-widest group-focus-within:text-cyan-500 transition-colors">Desde</div>
+                </div>
+                <div className="relative group">
+                    <input
+                        type="number"
+                        value={maxVal}
+                        onInput={(e) => setMaxVal(e.currentTarget.value)}
+                        onBlur={commitChanges}
+                        onKeyDown={handleKeyDown}
+                        className="w-full bg-slate-800/40 border border-slate-700/50 text-white rounded-xl p-3 text-center text-sm font-bold focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all group-hover:border-slate-600"
+                        placeholder={String(maxYear)}
+                    />
+                    <div className="absolute -top-2 left-3 bg-slate-900 px-1.5 text-[9px] text-slate-500 font-bold uppercase tracking-widest group-focus-within:text-cyan-500 transition-colors">Hasta</div>
+                </div>
             </div>
         </div>
     );
 };
 
-const FilterPanel = ({ genres, platforms, stores, activeFilters, onFilterChange, onClearCategory, onClearAll, clearAllEnabled, minYear, maxYear, yearRange, onYearRangeChange }: FilterPanelProps) => {
-    const hasActiveFilters = !(!(clearAllEnabled ?? Object.values(activeFilters || {}).some(arr => arr && arr.length > 0)) && !(yearRange && (yearRange.min !== minYear || yearRange.max !== maxYear)));
+const FilterPanel = ({ 
+    genres, 
+    platforms, 
+    stores, 
+    activeFilters, 
+    onFilterChange, 
+    onClearCategory, 
+    onClearAll, 
+    clearAllEnabled, 
+    minYear, 
+    maxYear, 
+    yearRange, 
+    onYearRangeChange 
+}: FilterPanelProps) => {
+    
+    const hasActiveFilters = clearAllEnabled || (yearRange && (yearRange.min !== minYear || yearRange.max !== maxYear));
 
     const handleClearAllClick = (e: MouseEvent) => {
         e.preventDefault();
@@ -193,23 +267,41 @@ const FilterPanel = ({ genres, platforms, stores, activeFilters, onFilterChange,
         onClearAll?.();
     };
 
+    const statusColorMap: Record<string, string> = {
+        "Lanzado": "status-released",
+        "En desarrollo": "status-in-development",
+        "Pausado": "status-on-hold",
+        "Cancelado": "status-canceled",
+        "Demo": "status-demo",
+        "Prototipo": "status-prototype",
+        "Perdido": "status-lost",
+        "Acceso anticipado": "status-early",
+        "Recuperado": "status-recovered",
+        "Desconocido": "status-unknown"
+    };
+
     return (
-        <div className="space-y-6">
+        <div className="space-y-8 animate-fade-in">
             <FilterButtons
                 title="Estado"
                 items={Object.values(GameStatus)}
                 category="status"
                 activeItems={activeFilters.status || []}
                 onFilterChange={onFilterChange}
+                icon={faFilter}
+                itemColorMap={statusColorMap}
             />
+
             <MultiSelectDropdown
-                title="Género"
+                title="Géneros"
                 category="genre"
                 items={genres}
                 selectedItems={activeFilters.genre || []}
                 onToggleItem={onFilterChange}
                 onClearCategory={onClearCategory}
+                icon={faTags}
             />
+
             <MultiSelectDropdown
                 title="Tiendas"
                 category="stores"
@@ -217,15 +309,19 @@ const FilterPanel = ({ genres, platforms, stores, activeFilters, onFilterChange,
                 selectedItems={activeFilters.stores || []}
                 onToggleItem={onFilterChange}
                 onClearCategory={onClearCategory}
+                icon={faStore}
             />
+
             <MultiSelectDropdown
-                title="Plataforma"
+                title="Plataformas"
                 category="platform"
                 items={platforms}
                 selectedItems={activeFilters.platform || []}
                 onToggleItem={onFilterChange}
                 onClearCategory={onClearCategory}
+                icon={faDesktop}
             />
+
             <YearRangeInputs
                 minYear={minYear}
                 maxYear={maxYear}
@@ -233,22 +329,43 @@ const FilterPanel = ({ genres, platforms, stores, activeFilters, onFilterChange,
                 onYearRangeChange={onYearRangeChange}
             />
 
-            <hr className="border-t border-slate-700" />
-
-            <div>
+            <div className="pt-4 border-t border-slate-700/50">
                 <button
                     onClick={handleClearAllClick}
                     disabled={!hasActiveFilters}
-                    aria-disabled={!hasActiveFilters}
-                    title="Limpiar todos los filtros"
-                    className={`w-full mt-2 py-2 px-4 rounded-lg font-bold text-white transition-colors duration-200 inline-flex items-center justify-center gap-2 ${
-                        hasActiveFilters ? 'bg-red-400 hover:bg-red-700 cursor-pointer' : 'bg-slate-700 opacity-60 cursor-not-allowed'
+                    className={`w-full group flex items-center justify-center gap-3 py-3.5 px-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 ${
+                        hasActiveFilters 
+                            ? 'bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/20 hover:border-red-500 shadow-lg shadow-red-900/10 hover:shadow-red-500/20' 
+                            : 'bg-slate-800/30 text-slate-600 border border-slate-700/30 cursor-not-allowed opacity-50'
                     }`}
                 >
-                    <span>Limpiar todos los filtros</span>
-                    <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
+                    <FontAwesomeIcon icon={faTrash} className={`transition-transform duration-300 ${hasActiveFilters ? 'group-hover:rotate-12 group-hover:scale-110' : ''}`} />
+                    <span>Reiniciar Filtros</span>
                 </button>
             </div>
+
+            <style>{`
+                @keyframes slide-up {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-slide-up { animation: slide-up 0.3s ease-out forwards; }
+                
+                @keyframes fade-in {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
+
+                @keyframes gradient-half {
+                    0%, 100% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                }
+                .animate-gradient-half {
+                    background-size: 200% 200%;
+                    animation: gradient-half 3s ease infinite;
+                }
+            `}</style>
         </div>
     );
 };
