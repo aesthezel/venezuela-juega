@@ -171,7 +171,7 @@ const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
             <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#020617_100%)]" />
 
             {/* Hero content */}
-            <div className="relative z-10 mx-auto max-w-6xl animate-fade-in-up px-4 text-center -mt-[40vh] md:-mt-60">
+            <div className="relative z-10 mx-auto max-w-6xl animate-fade-in-up px-4 text-center -mt-[50vh] md:-mt-60">
 
                 {/* Badge */}
                 <div className="mb-1.5 md:mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 backdrop-blur-md md:text-sm">

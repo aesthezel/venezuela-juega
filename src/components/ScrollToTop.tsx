@@ -4,6 +4,7 @@ import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { gsap } from 'gsap';
 
 const SCROLL_SHOW_THRESHOLD = 300;
+const FOOTER_OFFSET = 128; // Diferencia en px entre bottom-6 (24px) y bottom-38 (152px)
 
 const ScrollToTop = () => {
     const [visible, setVisible] = useState(false);
@@ -15,21 +16,24 @@ const ScrollToTop = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            const y = window.scrollY || window.pageYOffset;
-            setVisible(y > SCROLL_SHOW_THRESHOLD);
+            const y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
-            // Detectamos dirección del scroll para mover el botón si el footer aparece
-            const currentY = window.scrollY || document.documentElement.scrollTop;
-            const currentDirection = currentY < lastScrollY.current ? 'up' : 'down';
+            // Umbral de visibilidad
+            const isVisibleNow = y > SCROLL_SHOW_THRESHOLD;
+            setVisible(isVisibleNow);
 
-            // Solo nos importa el estado "subiendo" si hemos pasado el umbral de visibilidad
-            if (y > SCROLL_SHOW_THRESHOLD) {
-                setIsScrollingUp(currentDirection === 'up');
+            // Dirección del scroll (solo si estamos lo suficientemente lejos del tope para evitar rebotes)
+            if (isVisibleNow) {
+                const currentDirection = y < lastScrollY.current ? 'up' : 'down';
+                // Solo cambiamos el estado si la diferencia es significativa para evitar jitter
+                if (Math.abs(y - lastScrollY.current) > 5) {
+                    setIsScrollingUp(currentDirection === 'up');
+                }
             } else {
                 setIsScrollingUp(false);
             }
 
-            lastScrollY.current = currentY <= 0 ? 0 : currentY;
+            lastScrollY.current = y <= 0 ? 0 : y;
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -40,60 +44,48 @@ const ScrollToTop = () => {
         };
     }, []);
 
+    // Efecto coordinado de animación (Visibilidad + Posición de evitación del Footer)
     useEffect(() => {
         const desktopEl = desktopBtnRef.current;
         const mobileEl = mobileBtnRef.current;
-
-        const elements = [desktopEl, mobileEl].filter(Boolean) as HTMLElement[];
-        if (elements.length === 0) return;
+        if (!desktopEl || !mobileEl) return;
 
         if (prefersReducedMotion) {
-            elements.forEach(el => {
-                el.style.opacity = visible ? '1' : '0';
-                el.style.transform = visible ? 'translateY(0)' : 'translateY(20px)';
-                el.style.pointerEvents = visible ? 'auto' : 'none';
-            });
+            desktopEl.style.opacity = visible ? '1' : '0';
+            desktopEl.style.transform = visible ? 'translateY(0)' : 'translateY(20px)';
+            desktopEl.style.pointerEvents = visible ? 'auto' : 'none';
+
+            mobileEl.style.opacity = visible ? '1' : '0';
+            // En modo reducido, simplemente saltamos a la posición sin animación
+            const targetY = visible ? (isScrollingUp ? -FOOTER_OFFSET : 0) : 20;
+            mobileEl.style.transform = `translateY(${targetY}px)`;
+            mobileEl.style.pointerEvents = visible ? 'auto' : 'none';
             return;
         }
 
-        if (visible) {
-            gsap.to(elements, {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                duration: 0.5,
-                stagger: 0.05,
-                ease: 'back.out(1.7)',
-                pointerEvents: 'auto'
-            });
-        } else {
-            gsap.to(elements, {
-                opacity: 0,
-                y: 20,
-                scale: 0.95,
-                duration: 0.3,
-                ease: 'power2.in',
-                pointerEvents: 'none'
-            });
-        }
-    }, [visible, prefersReducedMotion]);
+        // ── Animación Desktop ──
+        gsap.to(desktopEl, {
+            opacity: visible ? 1 : 0,
+            y: visible ? 0 : 20,
+            scale: visible ? 1 : 0.95,
+            duration: visible ? 0.5 : 0.3,
+            ease: visible ? 'back.out(1.7)' : 'power2.in',
+            pointerEvents: visible ? 'auto' : 'none'
+        });
 
-    // Efecto específico para el ajuste de posición móvil cuando aparece el Footer
-    useEffect(() => {
-        const mobileEl = mobileBtnRef.current;
-        if (!mobileEl || prefersReducedMotion) return;
+        const targetY = visible ? (isScrollingUp ? -FOOTER_OFFSET : 0) : 20;
 
-        if (visible) {
-            // Si scrolleamos hacia arriba, el footer se vuelve visible (sticky bottom-0)
-            // Por lo que subimos la barra para evitar que se solapen.
-            // bottom-38 (9.5rem) vs bottom-6 (1.5rem)
-            gsap.to(mobileEl, {
-                bottom: isScrollingUp ? '9.5rem' : '1.5rem',
-                duration: 0.4,
-                ease: 'power3.out'
-            });
-        }
-    }, [isScrollingUp, visible, prefersReducedMotion]);
+        gsap.to(mobileEl, {
+            opacity: visible ? 1 : 0,
+            y: targetY,
+            scale: visible ? 1 : 0.95,
+            duration: 0.5,
+            ease: isScrollingUp ? 'power3.out' : 'power2.out',
+            pointerEvents: visible ? 'auto' : 'none',
+            force3D: true
+        });
+
+    }, [visible, isScrollingUp, prefersReducedMotion]);
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -106,7 +98,7 @@ const ScrollToTop = () => {
                 ref={desktopBtnRef}
                 onClick={scrollToTop}
                 aria-label="Ir arriba"
-                className="hidden md:flex fixed right-10 bottom-10 z-[70] w-14 h-14 rounded-full bg-slate-800/80 backdrop-blur-md border border-white/10 shadow-2xl items-center justify-center transition-all duration-300 group hover:border-cyan-500/50 hover:bg-slate-700/90 focus:outline-none"
+                className="hidden md:flex fixed right-10 bottom-30 z-[70] w-14 h-14 rounded-full bg-slate-800/80 backdrop-blur-md border border-white/10 shadow-2xl items-center justify-center transition-all duration-300 group hover:border-cyan-500/50 hover:bg-slate-700/90 focus:outline-none"
                 style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', pointerEvents: 'none' }}
             >
                 <FontAwesomeIcon
@@ -116,10 +108,11 @@ const ScrollToTop = () => {
             </button>
 
             {/* ── Mobile Version (Horizontal Bar) ── */}
+            {/* Mantenemos bottom-6 fijo y usamos GSAP 'y' para desplazarlo hacia arriba si hace falta */}
             <div
                 ref={mobileBtnRef}
-                className="md:hidden fixed left-4 right-4 z-[70]"
-                style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', pointerEvents: 'none' }}
+                className="md:hidden fixed bottom-6 left-4 right-4 z-[70]"
+                style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', pointerEvents: 'none', bottom: '1.5rem' }}
             >
                 <button
                     onClick={scrollToTop}
