@@ -13,6 +13,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 ## 🛠️ Tecnologías utilizadas
 ### Librerías principales
 - **Preact** 10.22.1
+- **SpacetimeDB** 2.1.0
 - **TypeScript** 5.8.2
 - **Preact Router** 4.1.2
 - **Vite** 6.2.0
@@ -89,8 +90,11 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [ ] Conexión a API de IGDB o similar
 - [ ] Terminar formulario para agregar nuevos juegos
 - [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
-- [ ] Mejorar el responsive del calendario en 
-- [ ] Integrar SpacetimeDB y inicio de futuras implementaciones
+- [ ] Mejorar el responsive del calendario en
+
+### Tiempo real
+- [x] Integrar SpacetimeDB y inicio de futuras implementaciones
+- [x] Sistema de me gusta, favoritos y visitas en tiempo real
 
 ## 🤝 Colaboración
 Proyecto libre para colaboraciones, puedes hacer un fork y posteriormente solicitar Pull Request con los cambios, se tomará una revisión de dichos cambios y un chequeo respectivo antes de ser aceptados y mezclados.
