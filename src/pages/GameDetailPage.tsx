@@ -3,10 +3,10 @@ import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
 import { Game, GameDetailPageProps } from "@/src/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-    faArrowLeft, faGamepad, faGlobe, faCog, faTimes, 
-    faChevronLeft, faChevronRight, faShoppingCart, 
-    faHeart as faHeartSolid, faStar as faStarSolid, faEye 
+import {
+    faArrowLeft, faGamepad, faGlobe, faCog, faTimes,
+    faChevronLeft, faChevronRight, faShoppingCart,
+    faHeart as faHeartSolid, faStar as faStarSolid, faEye
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-regular-svg-icons';
 import { BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge } from "@/src/components";
@@ -38,13 +38,13 @@ const DetailSection = ({ title, children, icon }: DetailSectionProps) => (
 const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
     const normalizedSlug = useMemo(() => gameSlug ? decodeURIComponent(gameSlug).trim().toLowerCase() : '', [gameSlug]);
     const { connection, isConnected } = useSpacetimeDB();
-    
-    const { 
-        totalHearts, 
-        totalVisits, 
-        hasLiked, 
-        isFavorite, 
-        toggleLike, 
+
+    const {
+        totalHearts,
+        totalVisits,
+        hasLiked,
+        isFavorite,
+        toggleLike,
         toggleFavorite,
         isReady
     } = useGameStats(normalizedSlug);
@@ -167,7 +167,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-white mb-4">Slug de juego inválido</h1>
                     <p className="text-gray-400 mb-6">No se proporcionó un slug de juego válido.</p>
-                    <button 
+                    <button
                         onClick={handleGoBack}
                         className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2 mx-auto"
                     >
@@ -185,7 +185,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-white mb-4">Juego no encontrado</h1>
                     <p className="text-gray-400 mb-6">El juego que buscas no existe o ha sido eliminado.</p>
-                    <button 
+                    <button
                         onClick={handleGoBack}
                         className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2 mx-auto"
                     >
@@ -209,7 +209,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
 
             <div className="bg-slate-900/60 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] mb-12 relative group/hero animate-in zoom-in-95 duration-700">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent pointer-events-none" />
-                
+
                 <div className="flex flex-col lg:flex-row relative z-10">
                     <div className="lg:w-[60%] relative aspect-video bg-slate-950 overflow-hidden group-hover/hero:shadow-[0_0_30px_rgba(6,182,212,0.1)] transition-all duration-700">
                         {trailerInfo ? (
@@ -241,7 +241,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         )}
                         <div className="absolute inset-0 pointer-events-none border-r border-white/5 hidden lg:block" />
                     </div>
-                    
+
                     <div className="lg:w-[40%] p-6 lg:p-10 flex flex-col justify-start relative">
                         {/* Title & Developer */}
                         <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500">
@@ -252,17 +252,17 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                                 {game.developers.join(' • ')}
                             </p>
                         </div>
-                        
+
                         {/* Description with improved contrast */}
                         <div className="relative group animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-                            <p 
+                            <p
                                 ref={descRef}
                                 className={`text-slate-300 mb-8 leading-relaxed text-base lg:text-lg font-medium opacity-90 ${descLineCount > 10 ? 'line-clamp-[10]' : ''}`}
                             >
                                 {game.description}
                             </p>
                         </div>
- 
+
                         {/* Genres */}
                         <div className="flex flex-wrap gap-2 mb-8 animate-in fade-in duration-1000 delay-300">
                             {game.genre.map(g => (
@@ -271,35 +271,31 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                                 </span>
                             ))}
                         </div>
- 
+
                         {/* Status & Actions - The new interaction hub */}
                         <div className="mt-auto flex flex-col items-center sm:items-start gap-6 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500">
-                            <div className="px-6 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 shadow-lg shadow-cyan-900/10">
-                                <StatusBadge status={game.status} size="md" variant="soft" className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-300" />
-                            </div>
- 
+                            <StatusBadge status={game.status} size="md" variant="soft" className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-300" />
+
                             <div className="flex items-stretch bg-slate-950/40 backdrop-blur-xl rounded-[1.25rem] border border-white/5 divide-x divide-white/10 overflow-hidden shadow-2xl">
                                 <button
                                     onClick={handleToggleLike}
                                     title={hasLiked ? "Quitar me gusta" : "Me gusta"}
-                                    className={`flex items-center gap-3 px-8 py-4 transition-all duration-300 group/like hover:bg-rose-500/5 ${
-                                        hasLiked ? 'text-rose-400' : 'text-slate-400 hover:text-white'
-                                    }`}
+                                    className={`flex items-center gap-3 px-8 py-4 transition-all duration-300 group/like hover:bg-rose-500/5 ${hasLiked ? 'text-rose-400' : 'text-slate-400 hover:text-white'
+                                        }`}
                                 >
                                     <FontAwesomeIcon icon={hasLiked ? faHeartSolid : faHeartReg} className={`transition-transform duration-300 ${hasLiked ? "scale-125 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]" : "group-hover/like:scale-110"}`} />
                                     <span className="font-black text-sm tracking-tight">{totalHearts}</span>
                                 </button>
- 
+
                                 <button
                                     onClick={handleToggleFavorite}
                                     title={isFavorite ? "Quitar de favoritos" : "Añadir de favoritos"}
-                                    className={`flex items-center justify-center px-8 py-4 transition-all duration-300 group/fav hover:bg-amber-500/5 ${
-                                        isFavorite ? 'text-amber-400' : 'text-slate-400 hover:text-white'
-                                    }`}
+                                    className={`flex items-center justify-center px-8 py-4 transition-all duration-300 group/fav hover:bg-amber-500/5 ${isFavorite ? 'text-amber-400' : 'text-slate-400 hover:text-white'
+                                        }`}
                                 >
                                     <FontAwesomeIcon icon={isFavorite ? faStarSolid : faStarReg} className={`transition-transform duration-300 ${isFavorite ? "scale-125 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" : "group-hover/fav:scale-110"}`} />
                                 </button>
- 
+
                                 <div className="flex items-center gap-3 px-8 py-4 bg-white/[0.02] text-slate-400">
                                     <FontAwesomeIcon icon={faEye} className="text-xs opacity-60" />
                                     <span className="font-black text-sm tracking-widest">{totalVisits}</span>
@@ -309,8 +305,8 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     </div>
                 </div>
             </div>
- 
- 
+
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                 <div className="animate-in slide-in-from-left-8 duration-700 delay-200">
                     <DetailSection title="Información General" icon={faGamepad}>
@@ -344,7 +340,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         </div>
                     </DetailSection>
                 </div>
- 
+
                 <div className="flex flex-col gap-10 animate-in slide-in-from-right-8 duration-700 delay-200">
                     {game.stores.length > 0 && (
                         <DetailSection title="Tiendas Oficiales" icon={faShoppingCart}>
@@ -357,7 +353,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                             </div>
                         </DetailSection>
                     )}
- 
+
                     <DetailSection title="Características" icon={faCog}>
                         <div className="space-y-6">
                             <div className="flex items-center justify-between py-2 border-b border-white/5">
@@ -383,7 +379,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         </div>
                     </DetailSection>
                 </div>
- 
+
                 {game.pitch && (
                     <div className="lg:col-span-2 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
                         <DetailSection title="Pitch del Proyecto">
@@ -393,7 +389,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         </DetailSection>
                     </div>
                 )}
- 
+
                 {game.links.length > 0 && (
                     <div className="lg:col-span-2 animate-in fade-in duration-1000 delay-500">
                         <DetailSection title="Enlaces y Presencia" icon={faGlobe}>
@@ -417,16 +413,16 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     </div>
                 )}
             </div>
- 
+
             {game.screenshots && game.screenshots.length > 0 && (
                 <div className="bg-slate-900/40 backdrop-blur-xl border border-white/5 rounded-[2.5rem] p-8 lg:p-12 shadow-2xl mt-12 relative overflow-hidden group/gallery animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
                     <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/5 blur-[120px] pointer-events-none group-hover/gallery:bg-cyan-500/10 transition-all duration-1000" />
-                    
+
                     <h3 className="text-xs font-black text-white mb-10 uppercase tracking-[0.3em] flex items-center gap-4">
                         <div className="w-12 h-[1px] bg-cyan-500/50 shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
                         Galería de Capturas
                     </h3>
-                    
+
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
                         {game.screenshots.map((shot, idx) => (
                             <button
@@ -454,7 +450,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     </div>
                 </div>
             )}
- 
+
             {isLightboxOpen && game.screenshots && game.screenshots.length > 0 && (
                 <div
                     className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
@@ -470,7 +466,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     >
                         <FontAwesomeIcon icon={faTimes} className="text-2xl" />
                     </button>
- 
+
                     {game.screenshots.length > 1 && (
                         <button
                             type="button"
@@ -481,7 +477,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                             <FontAwesomeIcon icon={faChevronLeft} className="text-2xl" />
                         </button>
                     )}
- 
+
                     {game.screenshots.length > 1 && (
                         <button
                             type="button"
@@ -492,7 +488,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                             <FontAwesomeIcon icon={faChevronRight} className="text-2xl" />
                         </button>
                     )}
- 
+
                     <div
                         className="max-w-[95vw] max-h-[90vh] flex items-center justify-center"
                         onClick={(e) => e.stopPropagation()}
@@ -503,7 +499,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                             className="object-contain max-w-full max-h-[90vh] rounded-lg shadow-2xl"
                         />
                     </div>
- 
+
                     <div className="absolute bottom-4 left-0 right-0 text-center text-white/80 text-sm">
                         {currentShotIndex + 1} / {game.screenshots.length}
                     </div>
