@@ -24,3 +24,4 @@ export { default as PromoHeader } from './PromoHeader';
 export { default as LoadingOverlay } from './LoadingOverlay';
 export { default as HeroMosaic } from './HeroMosaic';
 export { default as ContributorCard } from './ContributorCard';
+export * from './UserProfile';

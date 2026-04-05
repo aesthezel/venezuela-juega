@@ -88,9 +88,9 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar
 - [ ] Terminar formulario para agregar nuevos juegos
-- [ ] Añadir un preview animado de los screenshots cuando haces clic en una GameCard
 - [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
-- [ ] Mejorar el responsive del calendario en mobile
+- [ ] Mejorar el responsive del calendario en 
+- [ ] Integrar SpacetimeDB y inicio de futuras implementaciones
 
 ## 🤝 Colaboración
 Proyecto libre para colaboraciones, puedes hacer un fork y posteriormente solicitar Pull Request con los cambios, se tomará una revisión de dichos cambios y un chequeo respectivo antes de ser aceptados y mezclados.
