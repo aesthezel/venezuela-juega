@@ -1,5 +1,7 @@
 import { h } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
 import { Game } from '@/src/types';
 import { GameOrigin } from '@/src/types/enums';
 import { RoutableProps, route } from 'preact-router';
@@ -99,70 +101,7 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
                     <section className="md:col-span-2">
                         <ul className="list-none p-0 m-0 space-y-6">
                             {gameJamPlusGames.map((game) => (
-                                <li
-                                    key={game.id}
-                                    onClick={() => onGameClick(game)}
-                                    className="group flex flex-col md:flex-row items-start gap-4 p-4 bg-slate-800/60 border border-slate-700 rounded-xl hover:border-orange-500 transition-all duration-300 cursor-pointer hover:bg-slate-800 shadow-lg"
-                                >
-                                    {/* Imagen (Miniatura) */}
-                                    <div className="w-full md:w-48 h-32 md:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gradient-to-br from-slate-700 to-slate-900">
-                                        <CoverImage
-                                            src={game.imageHero || game.imageCover || game.imageUrl}
-                                            alt={game.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                            imgClassName="w-full h-full object-cover"
-                                        />
-                                    </div>
-
-                                    {/* Contenido (Info, Equipo, Links) */}
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="text-2xl font-semibold text-white mb-1 group-hover:text-orange-400 transition-colors">
-                                            {game.title}
-                                        </h3>
-
-                                        {game.developers && game.developers.length > 0 && (
-                                            <p className="text-sm text-orange-300 mb-3 font-medium">
-                                                Por: {game.developers.join(', ')}
-                                            </p>
-                                        )}
-
-                                        {game.highlightReason && (
-                                            <p className="text-sm text-amber-300 italic bg-slate-700/50 p-3 rounded-lg mb-3 border-l-4 border-amber-400">
-                                                "{game.highlightReason}"
-                                            </p>
-                                        )}
-
-                                        <p className="text-sm text-gray-300 mb-4 line-clamp-3">
-                                            {game.pitch || game.description || "Este juego aún no tiene una descripción."}
-                                        </p>
-
-                                        {game.links && game.links.length > 0 && (
-                                            <div className="flex flex-wrap gap-2">
-                                                {game.links.map(link => (
-                                                    <a
-                                                        key={link.name}
-                                                        href={link.url}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            trackEvent('game_external_click', {
-                                                                game_slug: game.slug,
-                                                                game_title: game.title,
-                                                                link_name: link.name,
-                                                                url: link.url
-                                                            });
-                                                        }}
-                                                        className="flex items-center gap-1.5 bg-slate-700 hover:bg-cyan-600 text-white font-bold py-1 px-3 rounded-lg text-sm transition-colors z-10 relative"
-                                                        title={`Ir a ${link.name}`}
-                                                    >
-                                                        {link.name} <LinkIcon />
-                                                    </a>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                </li>
+                                <GameJamItem key={game.id} game={game} onGameClick={onGameClick} />
                             ))}
                         </ul>
                     </section>
@@ -172,4 +111,88 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
     );
 };
 
-export default GameJamPlusGallery;
+const GameJamItem = ({ game, onGameClick }: { game: Game; onGameClick: (game: Game) => void }) => {
+    const { ref: containerRef, width: containerWidth } = useMeasure<HTMLLIElement>();
+    
+    // Contenedor de la descripción es flexible
+    const descriptionText = game.pitch || game.description || "Este juego aún no tiene una descripción.";
+    const { lineCount } = useTextLayout(descriptionText, containerWidth > 400 ? containerWidth - 250 : containerWidth - 32, {
+        fontSize: 14,
+        lineHeight: 20
+    });
+
+    return (
+        <li
+            ref={containerRef}
+            onClick={() => {
+                trackEvent('game_jam_click', {
+                    game_slug: game.slug,
+                    game_title: game.title
+                });
+                onGameClick(game);
+            }}
+            className="group flex flex-col md:flex-row items-start gap-4 p-4 bg-slate-800/60 border border-slate-700 rounded-xl hover:border-orange-500 transition-all duration-300 cursor-pointer hover:bg-slate-800 shadow-lg"
+        >
+            {/* Imagen (Miniatura) */}
+            <div className="w-full md:w-48 h-32 md:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gradient-to-br from-slate-700 to-slate-900">
+                <CoverImage
+                    src={game.imageHero || game.imageCover || game.imageUrl}
+                    alt={game.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    imgClassName="w-full h-full object-cover"
+                />
+            </div>
+
+            {/* Contenido (Info, Equipo, Links) */}
+            <div className="flex-1 min-w-0">
+                <h3 className="text-2xl font-semibold text-white mb-1 group-hover:text-orange-400 transition-colors">
+                    {game.title}
+                </h3>
+
+                {game.developers && game.developers.length > 0 && (
+                    <p className="text-sm text-orange-300 mb-3 font-medium">
+                        Por: {game.developers.join(', ')}
+                    </p>
+                )}
+
+                {game.highlightReason && (
+                    <p className="text-sm text-amber-300 italic bg-slate-700/50 p-3 rounded-lg mb-3 border-l-4 border-amber-400">
+                        "{game.highlightReason}"
+                    </p>
+                )}
+
+                <p className={`text-sm text-gray-300 mb-4 ${lineCount > 3 ? 'line-clamp-3' : ''}`}>
+                    {descriptionText}
+                </p>
+
+                {game.links && game.links.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                        {game.links.map(link => (
+                            <a
+                                key={link.name}
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    trackEvent('game_external_click', {
+                                        game_slug: game.slug,
+                                        game_title: game.title,
+                                        link_name: link.name,
+                                        url: link.url
+                                    });
+                                }}
+                                className="flex items-center gap-1.5 bg-slate-700 hover:bg-cyan-600 text-white font-bold py-1 px-3 rounded-lg text-sm transition-colors z-10 relative"
+                                title={`Ir a ${link.name}`}
+                            >
+                                {link.name} <LinkIcon />
+                            </a>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </li>
+    );
+};
+
+export default GameJamPlusGallery;

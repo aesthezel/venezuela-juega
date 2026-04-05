@@ -2,6 +2,8 @@
 import { useState, useRef, useEffect, useMemo } from 'preact/hooks';
 import { Game } from '@/src/types';
 import { JSX } from 'preact/jsx-runtime';
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faWindows,
@@ -77,27 +79,22 @@ const getPlatformIcon = (platform: string) => {
 
 const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [needsExpansion, setNeedsExpansion] = useState(false);
-    const descriptionRef = useRef<HTMLParagraphElement>(null);
-
     const [isHovered, setIsHovered] = useState(false);
-
     const trailerInfo = useMemo(() => getTrailerInfo(game.trailerUrl), [game.trailerUrl]);
+
+    const { ref: containerRef, width: containerWidth } = useMeasure<HTMLDivElement>();
+    
+    // We add a small buffer for padding/margins if needed, 
+    // but here the containerRef will be on the main card or description wrapper.
+    const { lineCount } = useTextLayout(game.description, containerWidth - 40, { // -40 for p-5 padding
+        fontSize: 14,
+        lineHeight: 20
+    });
+
+    const needsExpansion = lineCount > 2;
 
     const handleMouseEnter = () => setIsHovered(true);
     const handleMouseLeave = () => setIsHovered(false);
-
-    useEffect(() => {
-        const element = descriptionRef.current;
-        const id = requestAnimationFrame(() => {
-            if (element && element.scrollHeight > element.clientHeight) {
-                setNeedsExpansion(true);
-            } else {
-                setNeedsExpansion(false);
-            }
-        });
-        return () => cancelAnimationFrame(id);
-    }, [game.description]);
 
     const handleReadMoreClick = (e: MouseEvent) => {
         e.stopPropagation();
@@ -108,6 +105,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
 
     return (
         <div
+            ref={containerRef}
             onClick={onClick}
             className="bg-slate-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col"
             style={{
@@ -250,7 +248,6 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
             <div className="p-5 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold text-white truncate">{game.title}</h3>
                 <p
-                    ref={descriptionRef}
                     className={`text-gray-400 mt-2 text-sm transition-all duration-300 ease-in-out ${isExpanded ? '' : 'line-clamp-2'}`}
                 >
                     {game.description}

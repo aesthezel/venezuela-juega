@@ -30,6 +30,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - **FontAwesome** 7.0.0
 - **Vitest** 3.2.4
 - **Happy DOM** 18.0.1
+- **Pretext** 0.0.4
 
 ## 🚀 Funcionalidades del sitio web
 
@@ -81,6 +82,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Mejoras de accesibilidad, UI/UX y soporte para animaciones
 - [x] Agregar trailers a los juegos interactivos desde YouTube o Steam
 - [x] Ajustar metadatos pre-renderizados para cada juego y página
+- [x] Agregado el paquete @chenglou/pretext para mejor manejo de textos
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar

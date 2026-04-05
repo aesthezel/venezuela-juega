@@ -1,5 +1,8 @@
+import { useMemo } from 'preact/hooks';
 import { Game } from '@/src/types';
-import {StatusBadge} from "@/src/components/index.ts";
+import { StatusBadge } from "@/src/components/index.ts";
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
 
 interface HighlightCardProps {
     game: Game;
@@ -8,8 +11,17 @@ interface HighlightCardProps {
 }
 
 const HighlightCard = ({ game, onClick, fullWidth = false } : HighlightCardProps) => {
+    const { ref: containerRef, width: containerWidth } = useMeasure<HTMLDivElement>();
+    
+    // Measure highlightReason if it exists
+    const { lineCount } = useTextLayout(game.highlightReason, containerWidth * 0.92, {
+        fontSize: 16, // Approx text-base
+        lineHeight: 24
+    });
+
     return (
         <div
+            ref={containerRef}
             onClick={() => onClick(game)}
             className={`relative rounded-lg overflow-hidden shadow-lg cursor-pointer group h-full flex-shrink-0 snap-start ${fullWidth ? 'w-full' : 'w-80'}`}
             aria-label={`Ver detalles de ${game.title}`}

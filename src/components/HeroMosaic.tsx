@@ -4,6 +4,8 @@ import { Game } from '@/src/types';
 import { CoverImage } from '@/src/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGamepad, faUsers, faCodeBranch, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -24,20 +26,31 @@ interface StatCardProps {
     subValue?: string;
 }
 
-const StatCard = ({ value, label, icon, iconClass, subValue }: StatCardProps) => (
-    <div className="flex flex-col items-center px-3 py-2.5 md:px-8 md:py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[110px] md:min-w-[160px] shadow-lg transition-transform duration-300 hover:scale-105 group">
-        <span className="text-2xl md:text-4xl font-bold text-white mb-1">{value}</span>
-        <span className="flex items-center gap-2 text-[10px] md:text-xs font-semibold tracking-widest uppercase text-slate-400 md:text-sm mb-1">
-            <FontAwesomeIcon icon={icon} className={iconClass} />
-            {label}
-        </span>
-        {subValue && (
-            <span className="text-[9px] md:text-[10px] text-slate-500 font-medium bg-white/5 px-2 py-0.5 rounded-full border border-white/5 group-hover:border-white/10 transition-colors line-clamp-1 md:line-clamp-none">
-                {subValue}
+const StatCard = ({ value, label, icon, iconClass, subValue }: StatCardProps) => {
+    const { ref: containerRef, width: containerWidth } = useMeasure<HTMLDivElement>();
+    const { lineCount } = useTextLayout(subValue, containerWidth - 32, { // Approx padding
+        fontSize: 10,
+        lineHeight: 14
+    });
+
+    return (
+        <div 
+            ref={containerRef}
+            className="flex flex-col items-center px-3 py-2.5 md:px-8 md:py-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm min-w-[110px] md:min-w-[160px] shadow-lg transition-transform duration-300 hover:scale-105 group"
+        >
+            <span className="text-2xl md:text-4xl font-bold text-white mb-1">{value}</span>
+            <span className="flex items-center gap-2 text-[10px] md:text-xs font-semibold tracking-widest uppercase text-slate-400 md:text-sm mb-1">
+                <FontAwesomeIcon icon={icon} className={iconClass} />
+                {label}
             </span>
-        )}
-    </div>
-);
+            {subValue && (
+                <span className={`text-[9px] md:text-[10px] text-slate-500 font-medium bg-white/5 px-2 py-0.5 rounded-full border border-white/5 group-hover:border-white/10 transition-colors ${lineCount > 1 ? 'line-clamp-2' : 'line-clamp-1'}`}>
+                    {subValue}
+                </span>
+            )}
+        </div>
+    );
+};
 
 // ─── HeroMosaic ──────────────────────────────────────────────────────────────
 const HeroMosaic = ({ games, jamGames = [] }: HeroMosaicProps) => {
