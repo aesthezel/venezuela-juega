@@ -24,5 +24,5 @@ export function useMeasure<T extends HTMLElement>() {
     return () => observer.disconnect();
   }, [measure]);
 
-  return { ref, rect, width: rect?.width ?? 0 };
+  return { ref, rect, width: rect?.width ?? 0, height: rect?.height ?? 0 };
 }

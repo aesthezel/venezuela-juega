@@ -3,10 +3,10 @@ import { Game } from "@/src/types";
 import { BackButton, CoverImage } from "@/src/components";
 import { CalendarPageProps } from "@/src/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-    faGamepad, 
-    faCalendarDays, 
-    faUsers, 
+import {
+    faGamepad,
+    faCalendarDays,
+    faUsers,
     faClock,
     faCalendarWeek,
     faChartLine,
@@ -109,8 +109,8 @@ const CalendarStats = ({ games }: { games: Game[] }) => {
 
     // Corregir el cálculo del promedio mensual
     const monthsElapsed = currentMonth + 1; // +1 porque los meses van de 0-11
-    const monthlyAverage = monthsElapsed > 0 && gamesThisYear >= 0 
-        ? Math.round((gamesThisYear / monthsElapsed) * 10) / 10 
+    const monthlyAverage = monthsElapsed > 0 && gamesThisYear >= 0
+        ? Math.round((gamesThisYear / monthsElapsed) * 10) / 10
         : 0;
 
     // Buscar el mes con más lanzamientos este año
@@ -121,7 +121,7 @@ const CalendarStats = ({ games }: { games: Game[] }) => {
             return gameDate.getFullYear() === currentYear && gameDate.getMonth() === i;
         }).length;
     });
-    
+
     const maxCount = Math.max(...monthCounts);
     const peakMonth = maxCount > 0 ? monthCounts.indexOf(maxCount) : currentMonth;
     const peakMonthName = new Date(2024, peakMonth, 1).toLocaleDateString('es-ES', { month: 'long' });
@@ -136,12 +136,12 @@ const CalendarStats = ({ games }: { games: Game[] }) => {
         }
         return acc;
     }, {} as Record<number, number>);
-    
+
     const yearEntries = Object.entries(yearCounts);
-    const mostActiveYear = yearEntries.length > 0 
-        ? yearEntries.sort(([,a], [,b]) => b - a)[0] 
+    const mostActiveYear = yearEntries.length > 0
+        ? yearEntries.sort(([, a], [, b]) => b - a)[0]
         : [currentYear.toString(), 0];
-    
+
     const mostActiveYearCount = mostActiveYear[1];
     const mostActiveYearLabel = mostActiveYear[0];
     const currentYearLabel = currentYear.toString();
@@ -215,7 +215,7 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
             <header className="mb-10">
                 <div className="flex items-start gap-4 mb-4">
                     <div className="flex-1">
-                        <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-3">
                             Calendario de
                             <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent"> Eventos</span>
                         </h1>

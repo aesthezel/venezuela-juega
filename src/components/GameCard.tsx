@@ -91,7 +91,8 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
         lineHeight: 20
     });
 
-    const needsExpansion = lineCount > 2;
+    const maskLines = layout === 'masonry' ? 6 : 2;
+    const needsExpansion = lineCount > maskLines;
 
     const handleMouseEnter = () => setIsHovered(true);
     const handleMouseLeave = () => setIsHovered(false);
@@ -119,8 +120,8 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                     <CoverImage
                         src={game.imageUrl}
                         alt={game.title}
-                        className={hasImage ? 'w-full h-auto block' : 'w-full h-[150px] object-cover block'}
-                        imgClassName={hasImage ? 'w-full h-auto block' : 'w-full h-[150px] object-cover block'}
+                        className="w-full h-[250px] object-cover block"
+                        imgClassName="w-full h-[250px] object-cover block"
                     />
                     {isHovered && trailerInfo && (
                         trailerInfo.type === 'youtube' ? (
@@ -248,7 +249,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
             <div className="p-5 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold text-white truncate">{game.title}</h3>
                 <p
-                    className={`text-gray-400 mt-2 text-sm transition-all duration-300 ease-in-out ${isExpanded ? '' : 'line-clamp-2'}`}
+                    className={`text-gray-400 mt-2 text-sm transition-all duration-300 ease-in-out ${isExpanded ? '' : (layout === 'masonry' ? 'line-clamp-[6]' : 'line-clamp-2')}`}
                 >
                     {game.description}
                 </p>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
+import { useMeasure } from '@/src/hooks/useMeasure';
 import { Game } from '@/src/types';
 import { GameCard } from '@/src/components';
 import { gsap } from 'gsap';
@@ -11,6 +12,33 @@ interface GameGridProps {
 
 const INITIAL_GAMES_TO_SHOW = 12;
 const GAMES_TO_LOAD_ON_SCROLL = 8;
+
+const MasonryItem = ({ children }: { children: any }) => {
+    const { ref, height } = useMeasure<HTMLDivElement>();
+    const [span, setSpan] = useState(1);
+
+    useEffect(() => {
+        if (height > 0) {
+            // Usamos un incremento de 10px para las filas del grid.
+            // No sumamos el gap completo porque CSS Grid ya aplica el gap entre celdas,
+            // pero sí una pequeña corrección para redondear hacia arriba.
+            const rowHeight = 10;
+            const gap = 24;
+            const newSpan = Math.ceil((height + gap) / rowHeight);
+            setSpan(newSpan);
+        }
+    }, [height]);
+
+    return (
+        <div 
+            ref={ref} 
+            className="game-card-wrapper h-fit"
+            style={{ gridRowEnd: `span ${span}` }}
+        >
+            {children}
+        </div>
+    );
+};
 
 const GameGrid = ({ games, onGameClick }: GameGridProps) => {
     const [displayedCount, setDisplayedCount] = useState(INITIAL_GAMES_TO_SHOW);
@@ -113,16 +141,16 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
         <>
             <div
                 ref={gridRef}
-                className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
+                className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-0 auto-rows-[10px] items-start"
             >
                 {gamesToShow.map((game, idx) => (
-                    <div key={game.id} className="game-card-wrapper">
+                    <MasonryItem key={game.id}>
                         <GameCard
                             game={game}
                             onClick={() => { trackGameCardClick({ slug: game.slug, title: game.title }, idx, 'grid'); onGameClick(game); }}
-                            layout="grid"
+                            layout="masonry"
                         />
-                    </div>
+                    </MasonryItem>
                 ))}
             </div>
 

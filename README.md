@@ -63,7 +63,6 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Modo lista y búsqueda por #-A-Z para los juegos
 - [x] Burger menu en versión móvil
 - [x] Agregar capturas de pantalla a los juegos
-- [x] ~~Mansory grid view (Intentar nuevamente a ver si se logra)~~ Mansory no sirve adecuadamente
 - [x] Conexión a API de STEAM para obtener datos de los juegos
 - [x] Solucionar los tamaños de los grid, mejorar el responsive
 - [x] Solucionar persistencia del router cuando se cambia de página
@@ -83,6 +82,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Agregar trailers a los juegos interactivos desde YouTube o Steam
 - [x] Ajustar metadatos pre-renderizados para cada juego y página
 - [x] Agregado el paquete @chenglou/pretext para mejor manejo de textos
+- [x] MANSORY GRID VIEW ahora si funciona gracias a pretext
+- [x] Solucionar el problema de los tamaños de las imágenes en el grid
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar

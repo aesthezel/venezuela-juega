@@ -41,9 +41,9 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
             <header className="mb-10">
                 <div className="flex items-start gap-4 mb-4">
                     <div className="flex-1">
-                        <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">
-                            Sobre el
-                            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent"> Proyecto</span>
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-3">
+                            Sobre
+                            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent"> Venezuela Juega</span>
                         </h1>
                         <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
                             Conoce la iniciativa, los colaboradores y el propósito detrás de la base de datos de videojuegos venezolanos más completa.
