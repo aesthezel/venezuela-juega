@@ -1,4 +1,6 @@
 import { useEffect, useState, useMemo } from 'preact/hooks';
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
 import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
 import { Game } from "@/src/types";
@@ -26,6 +28,17 @@ const DetailSection = ({ title, children, icon }: DetailSectionProps) => (
 
 const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
     const [game, setGame] = useState<Game | null>(null);
+    const { ref: descRef, width: descWidth } = useMeasure<HTMLParagraphElement>();
+    const { lineCount: descLineCount } = useTextLayout(game?.description, descWidth, {
+        fontSize: 18,
+        lineHeight: 28
+    });
+
+    const { ref: pitchRef, width: pitchWidth } = useMeasure<HTMLParagraphElement>();
+    const { lineCount: pitchLineCount } = useTextLayout(game?.pitch, pitchWidth, {
+        fontSize: 16,
+        lineHeight: 24
+    });
 
     const trailerInfo = useMemo(() => game ? getTrailerInfo(game.trailerUrl) : null, [game?.trailerUrl]);
 
@@ -191,7 +204,10 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                             {game.developers.join(', ')}
                         </p>
                         
-                        <p className="text-gray-300 mb-8 leading-relaxed text-lg">
+                        <p 
+                            ref={descRef}
+                            className={`text-gray-300 mb-8 leading-relaxed text-lg ${descLineCount > 10 ? 'line-clamp-[12]' : ''}`}
+                        >
                             {game.description}
                         </p>
 
@@ -282,7 +298,9 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                 {game.pitch && (
                     <div className="lg:col-span-2">
                         <DetailSection title="Pitch del Proyecto">
-                            <p className="text-gray-300 leading-relaxed">{game.pitch}</p>
+                            <p ref={pitchRef} className={`text-gray-300 leading-relaxed ${pitchLineCount > 10 ? 'line-clamp-[12]' : ''}`}>
+                                {game.pitch}
+                            </p>
                         </DetailSection>
                     </div>
                 )}

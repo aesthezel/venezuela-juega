@@ -1,7 +1,9 @@
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
 import { Game } from '@/src/types';
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
 import { CloseIcon, LinkIcon } from '@/src/components/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -26,6 +28,11 @@ const DetailItem = ({ label, children }: DetailItemProps) => (
 );
 
 const Modal = ({ game, onClose }: ModalProps) => {
+    const { ref: pitchRef, width: pitchWidth } = useMeasure<HTMLDivElement>();
+    const { lineCount: pitchLineCount } = useTextLayout(game.pitch, pitchWidth, {
+        fontSize: 16,
+        lineHeight: 24
+    });
     useEffect(() => {
         const handleEsc = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
@@ -87,7 +94,15 @@ const Modal = ({ game, onClose }: ModalProps) => {
                         <DetailItem label="Motor">{game.engine}</DetailItem>
                         <DetailItem label="Idiomas">{game.languages.join(', ')}</DetailItem>
                         {game.funding && <DetailItem label="Financiamiento">{game.funding}</DetailItem>}
-                        {game.pitch && <div className="sm:col-span-2"><DetailItem label="Pitch">{game.pitch}</DetailItem></div>}
+                        {game.pitch && (
+                            <div className="sm:col-span-2" ref={pitchRef}>
+                                <DetailItem label="Pitch">
+                                    <div className={pitchLineCount > 6 ? 'line-clamp-6' : ''}>
+                                        {game.pitch}
+                                    </div>
+                                </DetailItem>
+                            </div>
+                        )}
 
                         {game.stores.length > 0 && (
                             <div className="sm:col-span-2">

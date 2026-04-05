@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faInstagram, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { BackButton } from "@/src/components";
+import { BackButton, ContributorCard } from "@/src/components";
 import { AboutPageProps } from "@/src/types";
 
 // Definimos los datos fuera para mantener el componente limpio
@@ -87,37 +87,7 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {CONTRIBUTORS.map((person, idx) => (
-                            <Card key={idx} className="h-full flex flex-col justify-between hover:-translate-y-1 duration-300">
-                                <div>
-                                    <div className="flex items-center gap-4 mb-3">
-                                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-slate-700 to-slate-600 flex items-center justify-center text-xl font-bold text-white shadow-inner">
-                                            {person.name.charAt(0)}
-                                        </div>
-                                        <div>
-                                            <h3 className="text-xl font-bold text-white">{person.name}</h3>
-                                            <p className="text-cyan-400 text-sm font-medium">{person.role}</p>
-                                        </div>
-                                    </div>
-                                    <p className="text-slate-300 mb-6 leading-relaxed">
-                                        {person.description}
-                                    </p>
-                                </div>
-
-                                <div className="pt-4 border-t border-slate-700 flex gap-4">
-                                    {person.socials.map((social, sIdx) => (
-                                        <a
-                                            key={sIdx}
-                                            href={social.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-slate-400 hover:text-white hover:scale-110 transition-all"
-                                            aria-label={`Link a ${social.url}`}
-                                        >
-                                            <FontAwesomeIcon icon={social.icon} size="lg" />
-                                        </a>
-                                    ))}
-                                </div>
-                            </Card>
+                            <ContributorCard key={idx} person={person} />
                         ))}
                     </div>
                 </section>

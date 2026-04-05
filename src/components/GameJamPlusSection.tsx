@@ -1,7 +1,9 @@
 import { h } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
 import { Game, GameOrigin } from '@/src/types';
 import { route } from 'preact-router';
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
 
 interface GameJamPlusSectionProps {
     games: Game[];
@@ -74,72 +76,14 @@ const GameJamPlusSection = ({ games, onGameClick }: GameJamPlusSectionProps) => 
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {displayGames.map((game, index) => {
-                    const isMainCard = index === 0;
-                    const gridClass = isMainCard
-                        ? 'md:col-span-2 md:row-span-2'
-                        : 'md:col-span-1';
-
-                    return (
-                        <div
-                            key={game.id}
-                            onClick={() => onGameClick(game)}
-                            className={`${gridClass} group relative overflow-hidden rounded-xl 
-                                      bg-slate-800 cursor-pointer border border-slate-700 
-                                      hover:border-orange-500 transition-all duration-300 
-                                      transform hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-500/20`}
-                        >
-                            <div className="absolute inset-0">
-                                {game.imageHero || game.imageCover || game.imageUrl ? (
-                                    <img
-                                        src={game.imageHero || game.imageCover || game.imageUrl}
-                                        alt={game.title}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full bg-gradient-to-br from-orange-900/40 to-slate-900/80" />
-                                )}
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
-                            </div>
-
-                            <div className={`relative h-full flex flex-col justify-end p-6 ${isMainCard ? 'md:p-8' : ''}`}>
-                                <div className="mb-3">
-                                    <span className="inline-block px-3 py-1 text-xs font-semibold rounded
-                                                   bg-orange-700/30 text-orange-200 border border-orange-500/50">
-                                        GameJam+ 25/26
-                                    </span>
-                                </div>
-
-                                <h3 className={`font-bold text-white mb-2 group-hover:text-orange-400 transition-colors 
-                                              ${isMainCard ? 'text-2xl md:text-3xl' : 'text-xl'}`}>
-                                    {game.title}
-                                </h3>
-
-                                <p className="text-sm text-gray-300 mb-3">
-                                    Por {game.developers.join(', ')}
-                                </p>
-
-                                {isMainCard && game.pitch && (
-                                    <p className="text-sm text-gray-400 line-clamp-2 mb-4">
-                                        {game.pitch}
-                                    </p>
-                                )}
-
-                                <div className="flex flex-wrap gap-2">
-                                    {game.genre.slice(0, isMainCard ? 4 : 2).map((genre, idx) => (
-                                        <span
-                                            key={idx}
-                                            className="px-2 py-1 text-xs bg-slate-900/60 text-gray-300
-                                                     rounded backdrop-blur-sm border border-slate-700"
-                                        >
-                                            {genre}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+                {displayGames.map((game, index) => (
+                    <GameJamPlusCard 
+                        key={game.id} 
+                        game={game} 
+                        isMainCard={index === 0} 
+                        onGameClick={onGameClick} 
+                    />
+                ))}
             </div>
 
             {gameJamPlusGames.length > 6 && (
@@ -158,4 +102,74 @@ const GameJamPlusSection = ({ games, onGameClick }: GameJamPlusSectionProps) => 
     );
 };
 
-export default GameJamPlusSection;
+const GameJamPlusCard = ({ game, isMainCard, onGameClick }: { game: Game; isMainCard: boolean; onGameClick: (game: Game) => void }) => {
+    const { ref: containerRef, width: containerWidth } = useMeasure<HTMLDivElement>();
+    const { lineCount } = useTextLayout(game.pitch, containerWidth - 64, { // -64 for padding
+        fontSize: 14,
+        lineHeight: 20
+    });
+
+    const gridClass = isMainCard ? 'md:col-span-2 md:row-span-2' : 'md:col-span-1';
+
+    return (
+        <div
+            ref={containerRef}
+            onClick={() => onGameClick(game)}
+            className={`${gridClass} group relative overflow-hidden rounded-xl 
+                        bg-slate-800 cursor-pointer border border-slate-700 
+                        hover:border-orange-500 transition-all duration-300 
+                        transform hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-500/20`}
+        >
+            <div className="absolute inset-0">
+                {game.imageHero || game.imageCover || game.imageUrl ? (
+                    <img
+                        src={game.imageHero || game.imageCover || game.imageUrl}
+                        alt={game.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-orange-900/40 to-slate-900/80" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+            </div>
+
+            <div className={`relative h-full flex flex-col justify-end p-6 ${isMainCard ? 'md:p-8' : ''}`}>
+                <div className="mb-3">
+                    <span className="inline-block px-3 py-1 text-xs font-semibold rounded
+                                    bg-orange-700/30 text-orange-200 border border-orange-500/50">
+                        GameJam+ 25/26
+                    </span>
+                </div>
+
+                <h3 className={`font-bold text-white mb-2 group-hover:text-orange-400 transition-colors 
+                                ${isMainCard ? 'text-2xl md:text-3xl' : 'text-xl'}`}>
+                    {game.title}
+                </h3>
+
+                <p className="text-sm text-gray-300 mb-3">
+                    Por {game.developers.join(', ')}
+                </p>
+
+                {isMainCard && game.pitch && (
+                    <p className={`text-sm text-gray-400 mb-4 ${lineCount > 2 ? 'line-clamp-2' : ''}`}>
+                        {game.pitch}
+                    </p>
+                )}
+
+                <div className="flex flex-wrap gap-2">
+                    {game.genre.slice(0, isMainCard ? 4 : 2).map((genre, idx) => (
+                        <span
+                            key={idx}
+                            className="px-2 py-1 text-xs bg-slate-900/60 text-gray-300
+                                        rounded backdrop-blur-sm border border-slate-700"
+                        >
+                            {genre}
+                        </span>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default GameJamPlusSection;
