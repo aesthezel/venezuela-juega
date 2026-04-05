@@ -8,9 +8,11 @@ import { type Infer as __Infer } from "spacetimedb";
 // Import all reducer arg schemas
 import ToggleFavoriteReducer from "../toggle_favorite_reducer";
 import ToggleLikeReducer from "../toggle_like_reducer";
+import UpdateFireflyReducer from "../update_firefly_reducer";
 import VisitGameReducer from "../visit_game_reducer";
 
 export type ToggleFavoriteParams = __Infer<typeof ToggleFavoriteReducer>;
 export type ToggleLikeParams = __Infer<typeof ToggleLikeReducer>;
+export type UpdateFireflyParams = __Infer<typeof UpdateFireflyReducer>;
 export type VisitGameParams = __Infer<typeof VisitGameReducer>;
 

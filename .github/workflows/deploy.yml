@@ -28,6 +28,8 @@ jobs:
       VITE_GAMEJAMSHEET_NAME_GAMES: ${{ secrets.GAMEJAMSHEET_NAME_GAMES }}
       VITE_GAMEJAMSHEET_NAME_SETTINGS: ${{ secrets.GAMEJAMSHEET_NAME_SETTINGS }}
       VITE_GAMEJAMSHEET_ID: ${{ secrets.GAMEJAMSHEET_ID }}
+      VITE_SPACETIMEDB_URI: ${{ secrets.SPACETIMEDB_URI }}
+      VITE_SPACETIMEDB_MODULE_NAME: ${{ secrets.SPACETIMEDB_MODULE_NAME }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

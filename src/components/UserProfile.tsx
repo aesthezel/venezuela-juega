@@ -3,13 +3,17 @@ import { route } from 'preact-router';
 import { useSpacetimeDB } from '@/src/spacetimedb/connection';
 import { tables } from '@/src/spacetimedb/module_bindings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faStar, faHistory, faClose } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faStar, faHistory, faClose, faExchangeAlt, faMagic, faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
 
-export const UserProfile = () => {
+const UserProfile = () => {
     const { connection, identity, isConnected } = useSpacetimeDB();
     const [profile, setProfile] = useState<{ xp: bigint, level: number } | null>(null);
     const [showHistory, setShowHistory] = useState(false);
     const [favorites, setFavorites] = useState<any[]>([]);
+    const [hasInteracted, setHasInteracted] = useState(() => {
+        if (typeof window === 'undefined') return true;
+        return localStorage.getItem('vj_profile_interacted') === 'true';
+    });
 
     useEffect(() => {
         if (!isConnected || !identity || !connection) return;
@@ -46,19 +50,39 @@ export const UserProfile = () => {
         };
     }, [isConnected, identity, connection]);
 
-    if (!isConnected || !profile) return null;
+    if (!isConnected) return null;
 
-    const nextLevelXP = Number(profile.level) * 100;
-    const progress = Math.min(100, (Number(profile.xp) / nextLevelXP) * 100);
+    const handleToggleHistory = () => {
+        setShowHistory(!showHistory);
+        if (!hasInteracted) {
+            setHasInteracted(true);
+            localStorage.setItem('vj_profile_interacted', 'true');
+        }
+    };
+
+    const displayLevel = profile?.level.toString() || "0";
+    const displayXP = profile?.xp.toString() || "0";
+    const nextLevelXP = (Number(displayLevel) || 1) * 100;
+    const progress = Math.min(100, (Number(displayXP) / nextLevelXP) * 100);
 
     return (
         <div className="relative flex items-center gap-4">
             <div
-                className="flex items-center gap-3 bg-slate-900/80 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 shadow-lg cursor-pointer hover:bg-slate-800 transition-all group"
-                onClick={() => setShowHistory(!showHistory)}
+                className="flex items-center gap-3 bg-slate-900/80 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 shadow-lg cursor-pointer hover:bg-slate-800 transition-all group relative"
+                onClick={handleToggleHistory}
             >
+                {/* Notification Badge (Red Dot) */}
+                {!hasInteracted && (
+                    <div className="absolute -top-1 -left-1 z-50">
+                        <div className="w-3 h-3 bg-red-500 rounded-full border-2 border-slate-950 shadow-[0_0_12px_rgba(239,68,68,0.8)] animate-pulse" />
+                        <div className="absolute inset-0 w-3 h-3 bg-red-400 rounded-full animate-ping opacity-75" />
+                    </div>
+                )}
+
                 <div className="hidden sm:flex flex-col items-end">
-                    <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.1em]">Nivel {profile.level.toString()}</span>
+                    <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.1em]">
+                        {profile ? `Nivel ${displayLevel}` : "Perfil"}
+                    </span>
                     <div className="w-20 h-1.5 bg-slate-800 rounded-full mt-1 overflow-hidden border border-white/5">
                         <div
                             className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-700 ease-out shadow-[0_0_12px_rgba(6,182,212,0.6)]"
@@ -72,7 +96,7 @@ export const UserProfile = () => {
                         <FontAwesomeIcon icon={faUser} className="text-sm" />
                     </div>
                     <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-cyan-500 border-2 border-slate-950 flex items-center justify-center text-[10px] font-black text-slate-950 shadow-lg">
-                        {profile.level.toString()}
+                        {displayLevel}
                     </div>
                 </div>
             </div>
@@ -81,24 +105,27 @@ export const UserProfile = () => {
                 <div className="absolute top-full mt-4 right-0 w-80 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
                     <div className="p-4 border-b border-white/5 flex justify-between items-center bg-slate-800/50">
                         <h3 className="text-sm font-bold flex items-center gap-2 text-white">
-                            <FontAwesomeIcon icon={faStar} className="text-yellow-400" />
-                            Tu Progresión
+                            <FontAwesomeIcon icon={faMagicWandSparkles} className="text-yellow-400" />
+                            {profile ? 'Experiencia del visitante' : 'Misiones del visitante'}
                         </h3>
                         <button onClick={() => setShowHistory(false)} className="text-slate-400 hover:text-white transition-colors">
                             <FontAwesomeIcon icon={faClose} />
                         </button>
                     </div>
+
                     <div className="p-6 text-center">
-                        <div className="text-3xl font-black text-white mb-1">{profile.xp.toString()}</div>
+                        <div className="text-3xl font-black text-white mb-1">{displayXP}</div>
                         <div className="text-[10px] text-cyan-400 uppercase font-bold tracking-widest mb-4">XP Total Acumulada</div>
-                        <p className="text-xs text-slate-400 leading-relaxed italic">
-                            Continúa visitando juegos para ganar más experiencia y subir de nivel.
+                        <p className="text-xs text-slate-400 leading-relaxed italic px-2">
+                            {profile
+                                ? "Continúa visitando juegos para ganar más experiencia y subir de nivel."
+                                : "Visita juegos y interactúa con la comunidad para ganar XP y subir de nivel."}
                         </p>
                     </div>
 
                     <div className="p-4 border-t border-white/5">
                         <h4 className="text-[10px] font-black text-cyan-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <FontAwesomeIcon icon={faUser} className="text-[8px] opacity-0" /> {/* Placeholder spacing */}
+                            <FontAwesomeIcon icon={faStar} className="text-[8px] opacity-100" /> {/* Placeholder spacing */}
                             Juegos Favoritos ({favorites.length})
                         </h4>
                         {favorites.length > 0 ? (
@@ -126,7 +153,9 @@ export const UserProfile = () => {
                             </div>
                         ) : (
                             <p className="text-[10px] text-slate-500 italic text-center py-4">
-                                No tienes juegos marcados como favoritos.
+                                {profile
+                                    ? "No tienes juegos marcados como favoritos."
+                                    : "¡Tus juegos favoritos aparecerán aquí!"}
                             </p>
                         )}
                     </div>
@@ -139,3 +168,5 @@ export const UserProfile = () => {
         </div>
     );
 };
+
+export default UserProfile;

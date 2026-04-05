@@ -1,9 +1,6 @@
-// noinspection JSNonASCIINames
-import { useState, useRef, useEffect, useMemo } from 'preact/hooks';
+import { useState, useRef, useMemo } from 'preact/hooks';
 import { Game } from '@/src/types';
-import { JSX } from 'preact/jsx-runtime';
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
+import { useMeasure, useTextLayout, useGameStats } from '@/src/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faWindows,
@@ -17,9 +14,11 @@ import {
     faDesktop,
     faGamepad,
     faMobile,
-    faGlobe
+    faGlobe,
+    faHeart as faHeartSolid
 } from '@fortawesome/free-solid-svg-icons';
-import {CoverImage, StatusBadge} from '@/src/components';
+import { faHeart as faHeartReg } from '@fortawesome/free-regular-svg-icons';
+import { CoverImage, StatusBadge } from '@/src/components';
 import { getTrailerInfo } from '@/src/utils';
 
 interface GameCardProps {
@@ -78,14 +77,15 @@ const getPlatformIcon = (platform: string) => {
 };
 
 const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
+    // Real-time stats and activity via custom hook (prevents memory leaks and handles sync)
+    const { totalHearts, hasLiked, toggleLike, isReady } = useGameStats(game.slug);
+    
     const [isExpanded, setIsExpanded] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const trailerInfo = useMemo(() => getTrailerInfo(game.trailerUrl), [game.trailerUrl]);
 
     const { ref: containerRef, width: containerWidth } = useMeasure<HTMLDivElement>();
     
-    // We add a small buffer for padding/margins if needed, 
-    // but here the containerRef will be on the main card or description wrapper.
     const { lineCount } = useTextLayout(game.description, containerWidth - 40, { // -40 for p-5 padding
         fontSize: 14,
         lineHeight: 20
@@ -100,6 +100,11 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
     const handleReadMoreClick = (e: MouseEvent) => {
         e.stopPropagation();
         setIsExpanded(prev => !prev);
+    };
+
+    const handleToggleLike = (e: MouseEvent) => {
+        e.stopPropagation();
+        toggleLike();
     };
 
     const hasImage = !!(game.imageUrl && game.imageUrl.trim() !== '');
@@ -159,25 +164,6 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                     <div className="absolute top-2 right-2" style={{ zIndex: 10 }}>
                         <StatusBadge status={game.status} size="xs" variant="solid" className="px-2 py-1" />
                     </div>
-                    <div className="absolute bottom-2 left-2 flex gap-1" style={{ zIndex: 10 }}>
-                        {game.platform.slice(0, 4).map((platform, index) => (
-                            <div
-                                key={`${platform}-${index}`}
-                                className="w-6 h-6 bg-black/70 rounded-full backdrop-blur-sm flex items-center justify-center"
-                                title={platform}
-                            >
-                                <FontAwesomeIcon icon={getPlatformIcon(platform)} className="text-white text-xs" />
-                            </div>
-                        ))}
-                        {game.platform.length > 4 && (
-                            <div
-                                className="w-6 h-6 bg-black/70 rounded-full backdrop-blur-sm flex items-center justify-center"
-                                title={`+${game.platform.length - 4} más`}
-                            >
-                                <span className="text-white text-xs font-bold">+{game.platform.length - 4}</span>
-                            </div>
-                        )}
-                    </div>
                 </div>
             ) : (
                 <div className={`relative overflow-hidden ${hasImage ? 'aspect-[16/9]' : 'h-[250px]'}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -223,31 +209,29 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                     <div className="absolute top-2 right-2" style={{ zIndex: 10 }}>
                         <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1" />
                     </div>
-                    <div className="absolute bottom-2 left-2 flex gap-1" style={{ zIndex: 10 }}>
-                        {game.platform.slice(0, 4).map((platform, index) => (
-                            <div
-                                key={`${platform}-${index}`}
-                                className="w-6 h-6 bg-black/70 rounded-full backdrop-blur-sm flex items-center justify-center"
-                                title={platform}
-                            >
-                                <FontAwesomeIcon icon={getPlatformIcon(platform)} className="text-white text-xs" />
-                            </div>
-                        ))}
-                        {game.platform.length > 4 && (
-                            <div
-                                className="w-6 h-6 bg-black/70 rounded-full backdrop-blur-sm flex items-center justify-center"
-                                title={`+${game.platform.length - 4} más`}
-                            >
-                                <span className="text-white text-xs font-bold">+{game.platform.length - 4}</span>
-                            </div>
-                        )}
-                    </div>
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" style={{ zIndex: 10, pointerEvents: 'none' }} />
                 </div>
             )}
 
             <div className="p-5 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold text-white truncate">{game.title}</h3>
+                <div className="flex justify-between items-start gap-4">
+                    <h3 className="text-xl font-bold text-white truncate flex-1">{game.title}</h3>
+                    <button
+                        onClick={handleToggleLike}
+                        disabled={!isReady}
+                        className={`flex items-center gap-1.5 transition-all duration-300 group/like ${
+                            hasLiked ? 'text-rose-400' : 'text-slate-500 hover:text-white'
+                        } ${!isReady ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        title={!isReady ? "Iniciando conexión..." : (hasLiked ? "Quitar me gusta" : "Me gusta")}
+                    >
+                        <span className="text-xs font-bold">{totalHearts > 0 ? totalHearts : ''}</span>
+                        <FontAwesomeIcon 
+                            icon={hasLiked ? faHeartSolid : faHeartReg} 
+                            className={`text-lg transition-transform duration-300 ${hasLiked ? "scale-110 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]" : "group-hover/like:scale-110"}`} 
+                        />
+                    </button>
+                </div>
+                
                 <p
                     className={`text-gray-400 mt-2 text-sm transition-all duration-300 ease-in-out ${isExpanded ? '' : (layout === 'masonry' ? 'line-clamp-[6]' : 'line-clamp-2')}`}
                 >

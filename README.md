@@ -95,6 +95,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 ### Tiempo real
 - [x] Integrar SpacetimeDB y inicio de futuras implementaciones
 - [x] Sistema de me gusta, favoritos y visitas en tiempo real
+- [x] Sistema de experiencia ganada por el usuario
+- [x] Luciernagas
 
 ## 🤝 Colaboración
 Proyecto libre para colaboraciones, puedes hacer un fork y posteriormente solicitar Pull Request con los cambios, se tomará una revisión de dichos cambios y un chequeo respectivo antes de ser aceptados y mezclados.

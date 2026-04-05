@@ -36,11 +36,14 @@ import {
 // Import all reducer arg schemas
 import ToggleFavoriteReducer from "./toggle_favorite_reducer";
 import ToggleLikeReducer from "./toggle_like_reducer";
+import UpdateFireflyReducer from "./update_firefly_reducer";
 import VisitGameReducer from "./visit_game_reducer";
 
 // Import all procedure arg schemas
+import * as GetFirefliesNearbyProcedure from "./get_fireflies_nearby_procedure";
 
 // Import all table schema definitions
+import FireflyRow from "./firefly_table";
 import GameStatsRow from "./game_stats_table";
 import MyActivityRow from "./my_activity_table";
 import ProfileRow from "./profile_table";
@@ -49,6 +52,20 @@ import ProfileRow from "./profile_table";
 
 /** The schema information for all tables in this module. This is defined the same was as the tables would have been defined in the server. */
 const tablesSchema = __schema({
+  firefly: __table({
+    name: 'firefly',
+    indexes: [
+      { accessor: 'location_idx', name: 'firefly_location_idx_btree', algorithm: 'btree', columns: [
+        'location',
+      ] },
+      { accessor: 'playerId', name: 'firefly_player_id_idx_btree', algorithm: 'btree', columns: [
+        'playerId',
+      ] },
+    ],
+    constraints: [
+      { name: 'firefly_player_id_key', constraint: 'unique', columns: ['playerId'] },
+    ],
+  }, FireflyRow),
   game_stats: __table({
     name: 'game_stats',
     indexes: [
@@ -84,11 +101,13 @@ const tablesSchema = __schema({
 const reducersSchema = __reducers(
   __reducerSchema("toggle_favorite", ToggleFavoriteReducer),
   __reducerSchema("toggle_like", ToggleLikeReducer),
+  __reducerSchema("update_firefly", UpdateFireflyReducer),
   __reducerSchema("visit_game", VisitGameReducer),
 );
 
 /** The schema information for all procedures in this module. This is defined the same way as the procedures would have been defined in the server. */
 const proceduresSchema = __procedures(
+  __procedureSchema("get_fireflies_nearby", GetFirefliesNearbyProcedure.params, GetFirefliesNearbyProcedure.returnType),
 );
 
 /** The remote SpacetimeDB module schema, both runtime and type information. */

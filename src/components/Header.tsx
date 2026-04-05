@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad } from '@fortawesome/free-solid-svg-icons';
 import { route } from 'preact-router';
 import { trackNav } from '@/src/utils/analytics';
-import { UserProfile } from './UserProfile';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import UserProfile from './UserProfile';
 
 gsap.registerPlugin(ScrollTrigger);
 

@@ -6,5 +6,8 @@
 import { type Infer as __Infer } from "spacetimedb";
 
 // Import all procedure arg schemas
+import * as GetFirefliesNearbyProcedure from "../get_fireflies_nearby_procedure";
 
+export type GetFirefliesNearbyArgs = __Infer<typeof GetFirefliesNearbyProcedure.params>;
+export type GetFirefliesNearbyResult = __Infer<typeof GetFirefliesNearbyProcedure.returnType>;
 

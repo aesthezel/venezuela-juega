@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'preact/hooks';
-import { h } from 'preact';
 import { Game } from '@/src/types';
-import { gsap } from 'gsap';
-import {CoverImage, StatusBadge} from '@/src/components';
+import { useGameStats } from '@/src/hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartReg } from '@fortawesome/free-regular-svg-icons';
+import { CoverImage, StatusBadge } from '@/src/components';
 import { trackGameCardClick } from '@/src/utils/analytics';
 import { getTrailerInfo } from '@/src/utils';
+import { gsap } from 'gsap';
 
 interface GameListProps {
   games: Game[];
@@ -108,19 +111,25 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
   const hasMoreGames = displayedCount < games.length;
 
   const GameRowItem = ({ game, idx }: { game: Game; idx: number }) => {
+    const { totalHearts, hasLiked, toggleLike, isReady } = useGameStats(game.slug);
+    
     const [isHovered, setIsHovered] = useState(false);
-
     const trailerInfo = useMemo(() => getTrailerInfo(game.trailerUrl), [game.trailerUrl]);
 
     const handleMouseEnter = () => setIsHovered(true);
     const handleMouseLeave = () => setIsHovered(false);
 
+    const handleToggleLike = (e: MouseEvent) => {
+        e.stopPropagation();
+        toggleLike();
+    };
+
     return (
-      <button
+      <div
         onClick={() => { trackGameCardClick({ slug: game.slug, title: game.title }, idx, 'list'); onGameClick(game); }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="game-list-row w-full text-left bg-slate-800 hover:bg-slate-700 transition-colors rounded-lg p-3 flex gap-3 items-center"
+        className="game-list-row w-full text-left bg-slate-800 hover:bg-slate-700 transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer"
       >
         <div className="relative h-16 w-28 flex-shrink-0 overflow-hidden rounded-md bg-slate-900 border border-slate-700/50">
           <CoverImage
@@ -178,10 +187,24 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
             {(game.platform?.length ? game.platform : ['Plataforma no especificada']).join(' • ')}
           </div>
         </div>
-        <div className="ml-3">
-            <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1" />
+        
+        <div className="flex items-center gap-3 ml-auto mr-1">
+            <div
+                onClick={isReady ? handleToggleLike : undefined}
+                className={`flex items-center gap-1.5 transition-all duration-300 group/like px-2 py-1 rounded-md hover:bg-white/5 ${
+                    hasLiked ? 'text-rose-400' : 'text-slate-500 hover:text-white'
+                } ${!isReady ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                title={!isReady ? "Iniciando conexión..." : (hasLiked ? "Quitar me gusta" : "Me gusta")}
+            >
+                <span className="text-xs font-bold">{totalHearts > 0 ? totalHearts : ''}</span>
+                <FontAwesomeIcon 
+                    icon={hasLiked ? faHeartSolid : faHeartReg} 
+                    className={`text-base transition-transform duration-300 ${hasLiked ? "scale-110 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]" : "group-hover/like:scale-110"}`} 
+                />
+            </div>
+            <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1 shadow-sm" />
         </div>
-      </button>
+      </div>
     );
   };
 

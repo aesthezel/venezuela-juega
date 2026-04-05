@@ -10,6 +10,15 @@ import {
   type Infer as __Infer,
 } from "spacetimedb";
 
+export const Firefly = __t.object("Firefly", {
+  playerId: __t.identity(),
+  x: __t.f32(),
+  y: __t.f32(),
+  location: __t.string(),
+  lastSeen: __t.u64(),
+});
+export type Firefly = __Infer<typeof Firefly>;
+
 export const GameActivity = __t.object("GameActivity", {
   playerId: __t.identity(),
   gameSlug: __t.string(),
