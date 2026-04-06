@@ -9,6 +9,7 @@ const FOOTER_OFFSET = 128; // Diferencia en px entre bottom-6 (24px) y bottom-38
 const ScrollToTop = () => {
     const [visible, setVisible] = useState(false);
     const [isScrollingUp, setIsScrollingUp] = useState(false);
+    const [isAtBottom, setIsAtBottom] = useState(false);
     const lastScrollY = useRef(0);
     const desktopBtnRef = useRef<HTMLButtonElement | null>(null);
     const mobileBtnRef = useRef<HTMLDivElement | null>(null);
@@ -22,15 +23,20 @@ const ScrollToTop = () => {
             const isVisibleNow = y > SCROLL_SHOW_THRESHOLD;
             setVisible(isVisibleNow);
 
-            // Dirección del scroll (solo si estamos lo suficientemente lejos del tope para evitar rebotes)
+            // Dirección del scroll
             if (isVisibleNow) {
                 const currentDirection = y < lastScrollY.current ? 'up' : 'down';
+                const atBottom = y + window.innerHeight >= document.documentElement.scrollHeight - 60;
+
+                setIsAtBottom(atBottom);
+
                 // Solo cambiamos el estado si la diferencia es significativa para evitar jitter
                 if (Math.abs(y - lastScrollY.current) > 5) {
                     setIsScrollingUp(currentDirection === 'up');
                 }
             } else {
                 setIsScrollingUp(false);
+                setIsAtBottom(false);
             }
 
             lastScrollY.current = y <= 0 ? 0 : y;
@@ -73,19 +79,22 @@ const ScrollToTop = () => {
             pointerEvents: visible ? 'auto' : 'none'
         });
 
-        const targetY = visible ? (isScrollingUp ? -FOOTER_OFFSET : 0) : 20;
+        // ── Animación Mobile ──
+        // El botón sube si estamos haciendo scroll up (aparece el footer) o si estamos al final de la página
+        const shouldMoveUp = isScrollingUp || isAtBottom;
+        const targetY = visible ? (shouldMoveUp ? -FOOTER_OFFSET : 0) : 20;
 
         gsap.to(mobileEl, {
             opacity: visible ? 1 : 0,
             y: targetY,
             scale: visible ? 1 : 0.95,
             duration: 0.5,
-            ease: isScrollingUp ? 'power3.out' : 'power2.out',
+            ease: shouldMoveUp ? 'power3.out' : 'power2.out',
             pointerEvents: visible ? 'auto' : 'none',
             force3D: true
         });
 
-    }, [visible, isScrollingUp, prefersReducedMotion]);
+    }, [visible, isScrollingUp, isAtBottom, prefersReducedMotion]);
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });

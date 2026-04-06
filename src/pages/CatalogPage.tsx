@@ -18,24 +18,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const CatalogPage = ({
-                         games,
-                         filteredGames,
-                         allGenres,
-                         allPlatforms,
-                         allStores,
-                         searchTerm,
-                         onSearchChange,
-                         activeFilters,
-                         onFilterChange,
-                         onClearCategory,
-                         onClearAllFilters,
-                         onGameClick,
-                         minYear,
-                         maxYear,
-                         yearRange,
-                         onYearRangeChange,
-                         jamGames,
-                     }: CatalogPageProps) => {
+    games,
+    filteredGames,
+    allGenres,
+    allPlatforms,
+    allStores,
+    searchTerm,
+    onSearchChange,
+    activeFilters,
+    onFilterChange,
+    onClearCategory,
+    onClearAllFilters,
+    onGameClick,
+    minYear,
+    maxYear,
+    yearRange,
+    onYearRangeChange,
+    jamGames,
+}: CatalogPageProps) => {
 
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
     const [alpha, setAlpha] = useState<string | null>(null);
@@ -91,11 +91,11 @@ const CatalogPage = ({
             <main id="catalog-content" className="container mx-auto px-4 py-8">
 
                 <div className="mb-12 space-y-12">
-                    <Highlights games={games} onGameClick={onGameClick}/>
+                    <Highlights games={games} onGameClick={onGameClick} />
                     {/*<GameJamPlusSection games={games} onGameClick={onGameClick}/>*/}
                 </div>
 
-                <div className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md py-4 -mx-4 px-4 border-b border-slate-800 mb-8 shadow-2xl transition-all duration-300">
+                <div className="sticky top-0 z-10 bg-slate-900/95 backdrop-blur-md py-4 -mx-4 px-4 border-b border-slate-800 mb-8 shadow-2xl transition-all duration-300">
                     <div className="container mx-auto flex flex-col gap-4">
                         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
 
@@ -138,7 +138,7 @@ const CatalogPage = ({
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
 
                     <aside className="hidden lg:block lg:col-span-3">
-                        <div className="bg-slate-800/40 rounded-xl p-5 border border-slate-700/50 sticky top-52 backdrop-blur-sm transition-all z-20">
+                        <div className="bg-slate-800/40 rounded-xl p-5 border border-slate-700/50 sticky top-52 backdrop-blur-sm transition-all z-10">
 
                             <FilterPanel
                                 genres={allGenres}

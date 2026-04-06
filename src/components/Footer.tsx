@@ -2,9 +2,6 @@ import { useRef, useEffect } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faTwitter, faYoutube, faInstagram, faTiktok } from '@fortawesome/free-brands-svg-icons';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Footer = () => {
     const footerRef = useRef<HTMLElement | null>(null);
@@ -14,22 +11,46 @@ const Footer = () => {
         if (!el) return;
 
         el.style.willChange = 'transform, opacity';
+        
+        let lastScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
-        const st = ScrollTrigger.create({
-            start: 'top top',
-            onUpdate: (self) => {
-                // Cuando el usuario hace scroll hacia abajo, ocultamos el footer (se asume contenido largo)
-                if (self.direction === 1) {
-                    gsap.to(el, { y: 80, opacity: 0, duration: 0.35, ease: 'power2.out' });
-                } else if (self.direction === -1) {
-                    // Al hacer scroll hacia arriba, lo mostramos
-                    gsap.to(el, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' });
+        const handleScroll = () => {
+            const y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Check if we are at the bottom of the page (with a small 80px threshold)
+            const isAtBottom = y + window.innerHeight >= document.documentElement.scrollHeight - 80;
+            
+            // Determine scroll direction
+            // Only update direction if we scrolled a bit to avoid jitter
+            let direction = 0;
+            if (y > lastScrollY + 5) {
+                direction = 1; // Down
+            } else if (y < lastScrollY - 5) {
+                direction = -1; // Up
+            }
+
+            if (direction !== 0 || isAtBottom) {
+                // Cuando el usuario hace scroll hacia abajo, ocultamos el footer
+                if (direction === 1 && !isAtBottom) {
+                    gsap.to(el, { y: 80, opacity: 0, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
+                } else if (direction === -1 || isAtBottom) {
+                    // Al hacer scroll hacia arriba, o al llegar al final, lo mostramos
+                    gsap.to(el, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
                 }
-            },
-        });
+            }
+            
+            if (Math.abs(y - lastScrollY) > 5) {
+                lastScrollY = y <= 0 ? 0 : y;
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        
+        // Initial check
+        handleScroll();
 
         return () => {
-            st.kill();
+            window.removeEventListener('scroll', handleScroll);
             gsap.killTweensOf(el);
             el.style.willChange = '';
         };

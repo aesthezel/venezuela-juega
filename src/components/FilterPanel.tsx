@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTrash,
@@ -11,7 +11,6 @@ import {
     faStore
 } from '@fortawesome/free-solid-svg-icons';
 import { GameStatus } from "@/src/types";
-import { h } from "preact";
 
 interface FilterPanelProps {
     genres: string[];
