@@ -15,10 +15,28 @@ export const useFireflies = (currentPath: string) => {
     mousePos.current = { x, y };
   }, []);
 
+  const handleTouch = useCallback((e: TouchEvent) => {
+    if (e.touches && e.touches.length > 0) {
+      const scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
+      const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+
+      const x = (e.touches[0].pageX / scrollWidth) * 100;
+      const y = (e.touches[0].pageY / scrollHeight) * 100;
+      mousePos.current = { x, y };
+    }
+  }, []);
+
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [handleMouseMove]);
+    window.addEventListener('touchstart', handleTouch, { passive: true });
+    window.addEventListener('touchmove', handleTouch, { passive: true });
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchstart', handleTouch);
+      window.removeEventListener('touchmove', handleTouch);
+    };
+  }, [handleMouseMove, handleTouch]);
 
   const sendUpdate = useCallback(() => {
     if (!isConnected || !connection) return;
