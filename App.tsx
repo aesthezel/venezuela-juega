@@ -125,7 +125,7 @@ const App = () => {
 
     return (
         <SpacetimeDBProvider>
-            <div className="min-h-screen bg-slate-900 text-gray-200 font-sans flex flex-col">
+            <div className="relative min-h-screen bg-slate-900 text-gray-200 font-sans flex flex-col">
                 <Header currentPath={currentPath} />
                 <div className="flex-grow app-content">
                     <Router onChange={handleRouteChange}>

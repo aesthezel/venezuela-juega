@@ -68,7 +68,7 @@ const Firefly = ({ x, y, id }: FireflyProps) => {
   return (
     <div
       ref={elementRef}
-      className="fixed w-3 h-3 -ml-1.5 -mt-1.5 rounded-full pointer-events-none z-[9999]"
+      className="absolute w-3 h-3 -ml-1.5 -mt-1.5 rounded-full pointer-events-none z-[9999]"
       style={{
         background: 'radial-gradient(circle, #22d3ee 0%, #0891b2 50%, transparent 100%)',
         boxShadow: '0 0 15px #22d3ee, 0 0 30px #22d3ee66',

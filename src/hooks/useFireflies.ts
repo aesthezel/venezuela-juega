@@ -7,8 +7,11 @@ export const useFireflies = (currentPath: string) => {
   const mousePos = useRef({ x: 50, y: 50 });
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    const x = (e.clientX / window.innerWidth) * 100;
-    const y = (e.clientY / window.innerHeight) * 100;
+    const scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
+    const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+
+    const x = (e.pageX / scrollWidth) * 100;
+    const y = (e.pageY / scrollHeight) * 100;
     mousePos.current = { x, y };
   }, []);
 
