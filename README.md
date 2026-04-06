@@ -85,6 +85,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Agregado el paquete @chenglou/pretext para mejor manejo de textos
 - [x] MANSORY GRID VIEW ahora si funciona gracias a pretext
 - [x] Solucionar el problema de los tamaños de las imágenes en el grid
+- [x] Solución de saneamiento y origen mixto que causa error SSL
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar
