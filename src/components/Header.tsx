@@ -155,7 +155,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                     />
                     <div
                         className="fixed left-0 right-0 z-40 md:hidden px-4"
-                        style={{ top: 'var(--header-height)' }}
+                        style={{ top: 'var(--header-height, 5rem)' }}
                     >
                         <div className="container mx-auto">
                             <div className="glass-panel rounded-2xl border border-white/10 shadow-2xl overflow-hidden">

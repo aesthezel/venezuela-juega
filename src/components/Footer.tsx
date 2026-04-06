@@ -57,7 +57,7 @@ const Footer = () => {
     }, []);
 
     return (
-        <footer ref={footerRef} className="bg-slate-800 text-gray-400 py-6 shadow-inner sticky bottom-0 z-20">
+        <footer ref={footerRef} className="bg-slate-800 text-gray-400 py-6 shadow-inner relative z-20">
             <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
                 <div className="flex space-x-6 mb-4 sm:mb-0">
                     <a href="https://github.com/aesthezel/venezuela-juega" target="_blank" rel="noopener noreferrer" aria-label="Repositorio en GitHub">
