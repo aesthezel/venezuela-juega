@@ -96,6 +96,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Integrar SpacetimeDB y inicio de futuras implementaciones
 - [x] Sistema de me gusta, favoritos y visitas en tiempo real
 - [x] Sistema de experiencia ganada por el usuario
+- [x] Solucionado el problema de los contadores de me gusta y visitas
 - [x] Luciernagas
 
 ## 🤝 Colaboración
