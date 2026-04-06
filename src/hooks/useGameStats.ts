@@ -11,7 +11,6 @@ import { generateSlug } from '@/src/utils/gameUtils';
 export const useGameStats = (gameSlugRaw: string) => {
     const gameSlug = useMemo(() => {
         const slug = generateSlug(gameSlugRaw);
-        console.log(`[useGameStats] Hook initialized for: "${gameSlugRaw}" -> "${slug}"`);
         return slug;
     }, [gameSlugRaw]);
 
@@ -58,8 +57,6 @@ export const useGameStats = (gameSlugRaw: string) => {
             
             // Apply optimistic update
             setOptHasLiked(nextLiked);
-            
-            console.log(`[useGameStats] Toggling Like for "${gameSlug}". Sending to server...`);
             connection.reducers.toggleLike({ gameSlug });
         } else if (!identity) {
             console.warn(`[useGameStats] Cannot toggle like for "${gameSlug}" without identity (Guest mode)`);
@@ -70,8 +67,6 @@ export const useGameStats = (gameSlugRaw: string) => {
         if (isConnected && connection && identity) {
             const nextFav = !isFavorite;
             setOptIsFavorite(nextFav);
-            
-            console.log(`[useGameStats] Toggling Favorite for "${gameSlug}". Sending to server...`);
             connection.reducers.toggleFavorite({ gameSlug });
         } else if (!identity) {
             console.warn(`[useGameStats] Cannot toggle favorite for "${gameSlug}" without identity`);

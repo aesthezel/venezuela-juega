@@ -88,7 +88,6 @@ export const SpacetimeDBProvider = ({ children }: { children: any }) => {
     }, [syncStats]);
 
     const onActivityEvt = useCallback(() => {
-        console.log(`[Reactivity] Activity event detected. Rescanning table...`);
         if (connInst) syncActivity(connInst);
     }, [syncActivity]);
 

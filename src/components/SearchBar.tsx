@@ -51,7 +51,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
         const searchLower = debouncedLocalTerm.toLowerCase();
         const results: Game[] = [];
 
-        for (let i = 0; i < searchIndex.length && results.length < 5; i++) {
+        for (let i = 0; i < searchIndex.length && results.length < 10; i++) {
             const game = searchIndex[i];
             if (game.searchText.includes(searchLower)) {
                 results.push(game);
@@ -110,11 +110,11 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
     }, [onSelectGame]);
 
     const selectSuggestion = useCallback((game: Game) => {
+        navigateToGame(game);
         setLocalSearchTerm('');
         onSearchChange('');
         setShowSuggestions(false);
         setActiveSuggestion(-1);
-        navigateToGame(game);
     }, [navigateToGame, onSearchChange]);
 
     const clearSearch = useCallback((e?: MouseEvent) => {
@@ -220,51 +220,57 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
             {showSuggestions && suggestions.length > 0 && (
                 <div
                     ref={dropdownRef}
-                    className="absolute top-full left-0 right-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto"
+                    className="absolute top-full left-0 right-0 mt-2 bg-slate-800/95 backdrop-blur-xl border border-slate-600 rounded-xl shadow-2xl z-50 max-h-[350px] md:max-h-[550px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent"
                 >
                     {suggestions.map((game, index) => (
                         <div
                             key={`${game.id}-${index}`}
-                            onClick={() => selectSuggestion(game)}
-                            className={`px-4 py-3 cursor-pointer transition-colors border-b border-slate-700 last:border-b-0 ${
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                selectSuggestion(game);
+                            }}
+                            className={`px-4 py-4 cursor-pointer transition-all duration-300 border-b border-slate-700/50 last:border-b-0 flex items-center justify-between group ${
                                 index === activeSuggestion
-                                    ? 'bg-cyan-500 bg-opacity-20 border-cyan-400'
-                                    : 'hover:bg-slate-700'
+                                    ? 'bg-cyan-500/20 border-cyan-500/50'
+                                    : 'hover:bg-slate-700/80'
                             }`}
                         >
-                            <div className="flex items-center gap-3">
-                                <CoverImage
-                                    src={game.imageUrl}
-                                    alt={game.title}
-                                    className={'w-12 h-12 object-cover rounded flex-shrink-0'}
-                                    imgClassName={'w-12 h-12 object-cover rounded flex-shrink-0'}
-                                />
+                            <div className="flex items-center gap-4 flex-1 min-w-0">
+                                <div className="relative flex-shrink-0 w-24 h-14 overflow-hidden rounded-md border border-slate-600 group-hover:border-cyan-500/50 transition-colors shadow-lg">
+                                    <CoverImage
+                                        src={game.imageCover || game.imageUrl}
+                                        alt={game.title}
+                                        className={'w-full h-full object-cover'}
+                                        imgClassName={'w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110'}
+                                    />
+                                </div>
                                 <div className="flex-1 min-w-0">
-                                    <div className="text-white font-medium truncate">
+                                    <div className="text-white font-bold truncate text-base mb-0.5 group-hover:text-cyan-400 transition-colors">
                                         {highlightMatch(game.title, debouncedLocalTerm)}
                                     </div>
-                                    <div className="text-gray-400 text-sm truncate">
+                                    <div className="text-gray-400 text-xs truncate font-medium opacity-80">
                                         {renderSuggestionSubtitle ? renderSuggestionSubtitle(game) : game.developers.join(', ')}
                                     </div>
-                                    {game.genre.length > 0 && (
-                                        <div className="flex gap-1 mt-1">
-                                            {game.genre.slice(0, 2).map(genre => (
-                                                <span
-                                                    key={genre}
-                                                    className="bg-slate-600 text-gray-300 text-xs px-1.5 py-0.5 rounded"
-                                                >
-                                                    {genre}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
                                 </div>
                             </div>
+
+                            {game.genre.length > 0 && (
+                                <div className="hidden sm:flex flex-wrap justify-end gap-1.5 ml-4 max-w-[150px]">
+                                    {game.genre.slice(0, 2).map(genre => (
+                                        <span
+                                            key={genre}
+                                            className="bg-slate-900/80 text-cyan-300/90 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-white/5 whitespace-nowrap"
+                                        >
+                                            {genre}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ))}
 
-                    {suggestions.length === 5 && (
-                        <div className="px-4 py-2 text-center text-gray-400 text-sm bg-slate-900">
+                    {suggestions.length === 10 && (
+                        <div className="px-4 py-3 text-center text-gray-400 text-xs bg-slate-900/50 backdrop-blur-sm border-t border-slate-700/50">
                             Escribe más caracteres para refinar la búsqueda
                         </div>
                     )}
