@@ -48,6 +48,11 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - **Previsualización de Videos**: Trailers incrustados en hover (YouTube y Steam)
 - **Modal de detalles**: Vista enriquecida con Hero dinámico y layout 60/40
 
+### 3. Estadísticas en tiempo real
+- **Gráficos en tiempo real**: Gráficos que se actualizan en tiempo real
+- **Contadores en tiempo real**: Contadores que se actualizan en tiempo real
+- **Luciernagas**: Sistema de luciernagas que se actualizan en tiempo real con la posición de los usuarios en el sitio web
+
 ## 📋 TO-DO
 - [x] Scraping de CSV de la lista de videojuegos
 - [x] Parseo de datos de la lista de videojuegos
@@ -86,6 +91,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] MANSORY GRID VIEW ahora si funciona gracias a pretext
 - [x] Solucionar el problema de los tamaños de las imágenes en el grid
 - [x] Solución de saneamiento y origen mixto que causa error SSL
+- [x] Estadísticas rediseñadas
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar
@@ -99,6 +105,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Sistema de experiencia ganada por el usuario
 - [x] Solucionado el problema de los contadores de me gusta y visitas
 - [x] Luciernagas
+- [x] Estadísticas en tiempo real
 
 ## 🤝 Colaboración
 Proyecto libre para colaboraciones, puedes hacer un fork y posteriormente solicitar Pull Request con los cambios, se tomará una revisión de dichos cambios y un chequeo respectivo antes de ser aceptados y mezclados.
