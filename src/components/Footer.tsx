@@ -11,15 +11,15 @@ const Footer = () => {
         if (!el) return;
 
         el.style.willChange = 'transform, opacity';
-        
+
         let lastScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
         const handleScroll = () => {
             const y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-            
+
             // Check if we are at the bottom of the page (with a small 80px threshold)
             const isAtBottom = y + window.innerHeight >= document.documentElement.scrollHeight - 80;
-            
+
             // Determine scroll direction
             // Only update direction if we scrolled a bit to avoid jitter
             let direction = 0;
@@ -38,14 +38,14 @@ const Footer = () => {
                     gsap.to(el, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
                 }
             }
-            
+
             if (Math.abs(y - lastScrollY) > 5) {
                 lastScrollY = y <= 0 ? 0 : y;
             }
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
-        
+
         // Initial check
         handleScroll();
 
@@ -57,7 +57,7 @@ const Footer = () => {
     }, []);
 
     return (
-        <footer ref={footerRef} className="bg-slate-800 text-gray-400 py-6 shadow-inner sticky bottom-0 z-10">
+        <footer ref={footerRef} className="bg-slate-800 text-gray-400 py-6 shadow-inner sticky bottom-0 z-20">
             <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
                 <div className="flex space-x-6 mb-4 sm:mb-0">
                     <a href="https://github.com/aesthezel/venezuela-juega" target="_blank" rel="noopener noreferrer" aria-label="Repositorio en GitHub">

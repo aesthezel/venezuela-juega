@@ -95,7 +95,7 @@ const CatalogPage = ({
                     {/*<GameJamPlusSection games={games} onGameClick={onGameClick}/>*/}
                 </div>
 
-                <div className="sticky top-0 z-10 bg-slate-900/95 backdrop-blur-md py-4 -mx-4 px-4 border-b border-slate-800 mb-8 shadow-2xl transition-all duration-300">
+                <div className="sticky top-0 z-15 bg-slate-900/95 backdrop-blur-md py-4 -mx-4 px-4 border-b border-slate-800 mb-8 shadow-2xl transition-all duration-300">
                     <div className="container mx-auto flex flex-col gap-4">
                         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
 

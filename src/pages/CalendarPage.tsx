@@ -13,14 +13,13 @@ import {
     faTrophy,
     faRocket,
     faFire,
-    faCalendarCheck
+    faCalendarCheck,
+    faChevronDown
 } from '@fortawesome/free-solid-svg-icons';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
-// @ts-ignore
-import { CalendarOptions } from '@fullcalendar/core';
 
 const parseDate = (dateString: string): string | null => {
     if (!dateString || isNaN(new Date(dateString).getTime())) {
@@ -73,65 +72,61 @@ const CalendarTooltip = ({ game, position }: { game: Game; position: { top: numb
     );
 };
 
-const CalendarStats = ({ games }: { games: Game[] }) => {
+const CalendarStats = ({ games, viewYear }: { games: Game[], viewYear: number }) => {
     const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
-    const currentQuarter = Math.floor(currentMonth / 3) + 1;
 
-    // Métricas existentes
+    const isCurrentYear = viewYear === now.getFullYear();
+    const isPastYear = viewYear < now.getFullYear();
+
+    const currentMonthForStats = isCurrentYear ? now.getMonth() : (isPastYear ? 11 : 0);
+    const currentQuarterForStats = Math.floor(currentMonthForStats / 3) + 1;
+
+    // Métricas globales
     const totalGames = games.length;
-    const gamesThisMonth = games.filter(game => {
+
+    // Métricas del año en vista
+    const gamesInViewYear = games.filter(game => {
         if (!game.releaseDate) return false;
-        const gameDate = new Date(game.releaseDate);
-        return gameDate.getMonth() === currentMonth && gameDate.getFullYear() === currentYear;
+        return new Date(game.releaseDate).getFullYear() === viewYear;
+    });
+
+    const gamesThisYear = gamesInViewYear.length;
+
+    const gamesThisQuarter = gamesInViewYear.filter(game => {
+        const gameQuarter = Math.floor(new Date(game.releaseDate!).getMonth() / 3) + 1;
+        return gameQuarter === currentQuarterForStats;
     }).length;
 
-    // Nuevas métricas del año
-    const gamesThisYear = games.filter(game => {
-        if (!game.releaseDate) return false;
-        const gameDate = new Date(game.releaseDate);
-        return gameDate.getFullYear() === currentYear;
+    const gamesThisMonth = gamesInViewYear.filter(game => {
+        return new Date(game.releaseDate!).getMonth() === currentMonthForStats;
     }).length;
 
-    const gamesThisQuarter = games.filter(game => {
-        if (!game.releaseDate) return false;
-        const gameDate = new Date(game.releaseDate);
-        const gameQuarter = Math.floor(gameDate.getMonth() / 3) + 1;
-        return gameDate.getFullYear() === currentYear && gameQuarter === currentQuarter;
+    const upcomingThisYear = gamesInViewYear.filter(game => {
+        const gameDate = new Date(game.releaseDate!);
+        return isPastYear ? false : gameDate > now;
     }).length;
 
-    const upcomingThisYear = games.filter(game => {
-        if (!game.releaseDate) return false;
-        const gameDate = new Date(game.releaseDate);
-        return gameDate > now && gameDate.getFullYear() === currentYear;
-    }).length;
-
-    // Corregir el cálculo del promedio mensual
-    const monthsElapsed = currentMonth + 1; // +1 porque los meses van de 0-11
-    const monthlyAverage = monthsElapsed > 0 && gamesThisYear >= 0
+    const monthsElapsed = isCurrentYear ? (now.getMonth() + 1) : (isPastYear ? 12 : 1);
+    const monthlyAverage = monthsElapsed > 0 && gamesThisYear > 0
         ? Math.round((gamesThisYear / monthsElapsed) * 10) / 10
         : 0;
 
-    // Buscar el mes con más lanzamientos este año
     const monthCounts = Array.from({ length: 12 }, (_, i) => {
-        return games.filter(game => {
-            if (!game.releaseDate) return false;
-            const gameDate = new Date(game.releaseDate);
-            return gameDate.getFullYear() === currentYear && gameDate.getMonth() === i;
+        return gamesInViewYear.filter(game => {
+            return new Date(game.releaseDate!).getMonth() === i;
         }).length;
     });
 
     const maxCount = Math.max(...monthCounts);
-    const peakMonth = maxCount > 0 ? monthCounts.indexOf(maxCount) : currentMonth;
+    const peakMonth = maxCount > 0 ? monthCounts.indexOf(maxCount) : currentMonthForStats;
     const peakMonthName = new Date(2024, peakMonth, 1).toLocaleDateString('es-ES', { month: 'long' });
     const peakMonthCount = maxCount;
 
-    // Años más activos
+    // Años más activos (basado en todos los juegos)
     const yearCounts = games.reduce((acc, game) => {
         if (!game.releaseDate) return acc;
         const gameYear = new Date(game.releaseDate).getFullYear();
-        if (!isNaN(gameYear) && gameYear > 1980 && gameYear <= currentYear + 5) { // Validar año razonable
+        if (!isNaN(gameYear) && gameYear > 1980 && gameYear <= now.getFullYear() + 5) {
             acc[gameYear] = (acc[gameYear] || 0) + 1;
         }
         return acc;
@@ -140,21 +135,21 @@ const CalendarStats = ({ games }: { games: Game[] }) => {
     const yearEntries = Object.entries(yearCounts);
     const mostActiveYear = yearEntries.length > 0
         ? yearEntries.sort(([, a], [, b]) => b - a)[0]
-        : [currentYear.toString(), 0];
+        : [now.getFullYear().toString(), 0];
 
-    const mostActiveYearCount = mostActiveYear[1];
-    const mostActiveYearLabel = mostActiveYear[0];
-    const currentYearLabel = currentYear.toString();
+    const monthLabel = isCurrentYear ? 'Eventos este mes' : isPastYear ? 'Eventos en Dic' : 'Eventos en Ene';
+    const quarterLabel = `Trimestre Q${currentQuarterForStats}`;
+    const upcomingLabel = isCurrentYear ? `Próximos ${viewYear}` : isPastYear ? `Pendientes ${viewYear}` : `Programados ${viewYear}`;
 
     const statItems = [
-        { icon: faGamepad, value: totalGames, label: 'Total de Juegos', color: '#06b6d4' },
-        { icon: faCalendarWeek, value: gamesThisYear, label: `Lanzamientos ${currentYear}`, color: '#a855f7' },
-        { icon: faCalendarCheck, value: gamesThisQuarter, label: `Trimestre Q${currentQuarter}`, color: '#10b981' },
-        { icon: faCalendarDays, value: gamesThisMonth, label: 'Eventos este mes', color: '#f97316' },
-        { icon: faRocket, value: upcomingThisYear, label: `Próximos ${currentYear}`, color: '#f43f5e' },
+        { icon: faGamepad, value: totalGames, label: 'Total Histórico', color: '#06b6d4' },
+        { icon: faCalendarWeek, value: gamesThisYear, label: `Lanzamientos ${viewYear}`, color: '#a855f7' },
+        { icon: faCalendarCheck, value: gamesThisQuarter, label: quarterLabel, color: '#10b981' },
+        { icon: faCalendarDays, value: gamesThisMonth, label: monthLabel, color: '#f97316' },
+        { icon: faRocket, value: upcomingThisYear, label: upcomingLabel, color: '#f43f5e' },
         { icon: faChartLine, value: monthlyAverage, label: 'Promedio mensual', color: '#6366f1' },
         { icon: faFire, value: peakMonthCount, label: `Mes pico (${peakMonthName})`, color: '#ec4899' },
-        { icon: faTrophy, value: mostActiveYearLabel, label: 'Año más activo', color: '#14b8a6', subValue: `(${mostActiveYearCount} juegos)` },
+        { icon: faTrophy, value: mostActiveYear[0], label: 'Año más activo', color: '#14b8a6', subValue: `(${mostActiveYear[1]} juegos)` },
     ];
 
     return (
@@ -184,9 +179,44 @@ const CalendarStats = ({ games }: { games: Game[] }) => {
 };
 
 const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPageProps) => {
-    const calendarRef = useRef<HTMLDivElement>(null);
+    const calendarRef = useRef<any>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const [previewGame, setPreviewGame] = useState<Game | null>(null);
     const [previewPosition, setPreviewPosition] = useState({ top: 0, left: 0 });
+    const [viewYear, setViewYear] = useState<number>(new Date().getFullYear());
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const { availableYears, yearCountsMap } = useMemo(() => {
+        const years = new Set<number>();
+        const counts: Record<number, number> = {};
+        const currentYear = new Date().getFullYear();
+
+        years.add(currentYear);
+
+        games.forEach(game => {
+            if (game.releaseDate) {
+                const year = new Date(game.releaseDate).getFullYear();
+                if (!isNaN(year) && year > 1980 && year <= currentYear + 20) {
+                    years.add(year);
+                    counts[year] = (counts[year] || 0) + 1;
+                }
+            }
+        });
+        return {
+            availableYears: Array.from(years).sort((a, b) => b - a),
+            yearCountsMap: counts
+        };
+    }, [games]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const events = useMemo(() => {
         return games
@@ -213,7 +243,7 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
 
             {/* Page header */}
             <header className="mb-10">
-                <div className="flex items-start gap-4 mb-4">
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
                     <div className="flex-1">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-3">
                             Calendario de
@@ -223,9 +253,83 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
                             Explora las fechas de lanzamiento de los juegos venezolanos, eventos importantes de la industria, y todo el historial que ha acontecido sobre videojuegos en el país.
                         </p>
                     </div>
+
+                    {/* Selector de Año Estilo Dropdown Avanzado */}
+                    <div className="flex items-center gap-3 self-start md:self-auto relative z-20" ref={dropdownRef}>
+                        <FontAwesomeIcon icon={faCalendarDays} className="text-cyan-400 hidden sm:block" />
+                        <span className="text-white font-medium text-sm hidden sm:block">Año:</span>
+
+                        <div className="relative">
+                            {/* Dropdown Trigger */}
+                            <button
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                className="flex items-center justify-between min-w-[210px] bg-slate-800/80 hover:bg-slate-700/90 border border-cyan-500/30 hover:border-cyan-400/50 outline-none rounded-xl px-4 py-2 text-white font-bold transition-all shadow-lg backdrop-blur-md"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <span className="text-lg">{viewYear}</span>
+                                    {yearCountsMap[viewYear] > 0 && (
+                                        <span className="bg-cyan-500/20 text-cyan-300 text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded-full border border-cyan-500/30">
+                                            {yearCountsMap[viewYear]} Juegos
+                                        </span>
+                                    )}
+                                </div>
+                                <FontAwesomeIcon
+                                    icon={faChevronDown}
+                                    className={`text-cyan-500 transition-transform duration-300 ml-3 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                                    strokeWidth={3}
+                                />
+                            </button>
+
+                            {/* Dropdown Menu List */}
+                            {isDropdownOpen && (
+                                <div className="absolute top-full right-0 mt-2 w-full min-w-[220px] max-h-[350px] overflow-y-auto bg-slate-800/95 backdrop-blur-xl border border-slate-600/50 rounded-xl shadow-[0_10px_40px_-5px_rgba(0,0,0,0.6)] z-50 animate-fade-in-fast scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">
+                                    <div className="p-1.5 flex flex-col gap-1">
+                                        {availableYears.map(year => {
+                                            const count = yearCountsMap[year] || 0;
+                                            const isActive = viewYear === year;
+
+                                            return (
+                                                <button
+                                                    key={year}
+                                                    onClick={() => {
+                                                        setViewYear(year);
+                                                        setIsDropdownOpen(false);
+                                                        if (calendarRef.current) {
+                                                            calendarRef.current.getApi().gotoDate(`${year}-01-01`);
+                                                        }
+                                                    }}
+                                                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left ${isActive
+                                                            ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 text-white'
+                                                            : 'text-slate-300 hover:bg-slate-700/50 hover:text-white border border-transparent'
+                                                        }`}
+                                                >
+                                                    <span className={`font-semibold ${isActive ? 'text-cyan-400' : ''}`}>
+                                                        {year}
+                                                    </span>
+
+                                                    {count > 0 ? (
+                                                        <span className={`text-[11px] font-bold px-2 py-1 rounded-md ${isActive
+                                                                ? 'bg-cyan-500 text-white shadow-md'
+                                                                : 'bg-slate-900/80 text-slate-400 border border-slate-700'
+                                                            }`}>
+                                                            {count} {count === 1 ? 'juego' : 'juegos'}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-[11px] text-slate-500 font-medium px-2 py-1">
+                                                            Sin reg.
+                                                        </span>
+                                                    )}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
-                <CalendarStats games={games} />
+                <CalendarStats games={games} viewYear={viewYear} />
             </header>
 
             {/* Divider */}
@@ -233,13 +337,20 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
 
             <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-700/40 rounded-2xl shadow-2xl overflow-hidden">
                 <div className="p-6 sm:p-8">
+
                     <div className="calendar-container">
+                        {/* @ts-ignore - Preact compatibility typing issue */}
                         <FullCalendar
+                            ref={calendarRef}
                             plugins={[dayGridPlugin, interactionPlugin]}
                             initialView="dayGridMonth"
                             events={events}
                             locale={esLocale}
                             height="auto"
+                            datesSet={(arg) => {
+                                const currentMidDate = new Date((arg.start.getTime() + arg.end.getTime()) / 2);
+                                setViewYear(currentMidDate.getFullYear());
+                            }}
                             aspectRatio={1.8}
                             dayHeaderFormat={{ weekday: 'short' }}
                             headerToolbar={{
@@ -427,6 +538,19 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
 
                 .animate-fade-in-fast { 
                     animation: fade-in-fast 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards; 
+                }
+
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                
+                .mask-fade-edges {
+                    mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
+                    -webkit-mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
                 }
 
                 @media (max-width: 768px) {
