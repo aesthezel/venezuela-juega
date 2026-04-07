@@ -133,7 +133,7 @@ const parseSocials = (socialsString?: string): VenueSocialLink[] => {
 
 const processImageUrl = (rawUrl?: string): { url?: string; theme: 'day' | 'night' } => {
     if (!rawUrl) return { url: undefined, theme: 'day' };
-    
+
     let url = rawUrl.trim();
     let theme: 'day' | 'night' = 'day';
 
@@ -150,7 +150,7 @@ const processImageUrl = (rawUrl?: string): { url?: string; theme: 'day' | 'night
     if (driveMatch && driveMatch[1]) {
         return { url: `https://drive.google.com/uc?id=${driveMatch[1]}`, theme };
     }
-    
+
     return { url, theme };
 };
 
@@ -220,13 +220,13 @@ const VenueSocialLinks = ({ socials, limitInHeader }: { socials: VenueSocialLink
                     </a>
                 );
             })}
-            
+
             {socials.length > 1 && (
                 <div className="w-8 h-8 flex sm:hidden items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700 text-slate-400 text-[10px] font-bold flex-shrink-0 cursor-default" title="Más redes disponibles al expandir">
                     +{socials.length - 1}
                 </div>
             )}
-            
+
             {socials.length > 3 && (
                 <div className="w-8 h-8 hidden sm:flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700 text-slate-400 text-[10px] font-bold flex-shrink-0 cursor-default" title="Más redes disponibles al expandir">
                     +{socials.length - 3}
@@ -244,7 +244,7 @@ const GameCard = ({ game, onGameClick, accentColor }: {
     const [hovered, setHovered] = useState(false);
     const trailerInfo = useMemo(() => getTrailerInfo(game.trailerUrl), [game.trailerUrl]);
     const { ref: containerRef, width: containerWidth } = useMeasure<HTMLElement>();
-    
+
     // Medición del título (tamaño 14px, interlineado ajustado)
     const { lineCount: titleLineCount } = useTextLayout(game.title, containerWidth - 32, {
         fontSize: 14,
@@ -398,11 +398,10 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
 
                 {/* Logo or icon */}
                 {venue.logo ? (
-                    <div className={`w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center p-1.5 overflow-hidden transition-transform duration-300 hover:scale-105 ${
-                        venue.logoTheme === 'night' 
-                            ? 'bg-slate-900 border border-slate-700/50 shadow-[0_0_12px_rgba(0,0,0,0.3)] group-hover:shadow-[0_0_15px_rgba(0,0,0,0.5)]' 
-                            : 'bg-white border border-slate-200/50 shadow-[0_0_12px_rgba(255,255,255,0.15)] group-hover:shadow-[0_0_15px_rgba(255,255,255,0.25)]'
-                    }`}>
+                    <div className={`w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center p-1.5 overflow-hidden transition-transform duration-300 hover:scale-105 ${venue.logoTheme === 'night'
+                        ? 'bg-slate-900 border border-slate-700/50 shadow-[0_0_12px_rgba(0,0,0,0.3)] group-hover:shadow-[0_0_15px_rgba(0,0,0,0.5)]'
+                        : 'bg-white border border-slate-200/50 shadow-[0_0_12px_rgba(255,255,255,0.15)] group-hover:shadow-[0_0_15px_rgba(255,255,255,0.25)]'
+                        }`}>
                         <img
                             src={venue.logo}
                             alt={`Logo ${venue.name}`}
@@ -463,11 +462,10 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
                     {/* Resumen de la sede */}
                     <div className="mb-6 flex flex-col md:flex-row gap-6 items-center md:items-start bg-slate-900/40 p-5 rounded-2xl border border-slate-700/50 shadow-inner">
                         {venue.logo ? (
-                            <div className={`w-32 h-32 rounded-2xl flex-shrink-0 flex items-center justify-center p-3 overflow-hidden ${
-                                venue.logoTheme === 'night'
-                                    ? 'bg-slate-900 border border-slate-700/50 shadow-[0_0_20px_rgba(0,0,0,0.4)]'
-                                    : 'bg-white border border-slate-200/50 shadow-[0_0_20px_rgba(255,255,255,0.1)]'
-                            }`}>
+                            <div className={`w-32 h-32 rounded-2xl flex-shrink-0 flex items-center justify-center p-3 overflow-hidden ${venue.logoTheme === 'night'
+                                ? 'bg-slate-900 border border-slate-700/50 shadow-[0_0_20px_rgba(0,0,0,0.4)]'
+                                : 'bg-white border border-slate-200/50 shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+                                }`}>
                                 <img
                                     src={venue.logo}
                                     alt={`Logo ${venue.name}`}
@@ -479,7 +477,7 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
                                 <FontAwesomeIcon icon={faLocationDot} style={{ color: c }} className="text-4xl" />
                             </div>
                         )}
-                        
+
                         <div className="flex-1 text-center md:text-left flex flex-col justify-center h-full">
                             <h3 className="text-2xl font-black text-white mb-2">{venue.name}</h3>
                             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-3">
@@ -491,7 +489,7 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
                             <p className="text-slate-400 text-sm leading-relaxed max-w-2xl mb-4">
                                 Esta sede oficial fue el punto de encuentro en {venue.city} para organizar equipos y darle vida a {venue.games.length} {venue.games.length === 1 ? 'juego asombroso' : 'juegos asombrosos'} durante la maratón de desarrollo.
                             </p>
-                            
+
                             {venue.socials.length > 0 && (
                                 <div className="flex items-center justify-center md:justify-start gap-3 pt-3 border-t border-slate-700/50">
                                     <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider">Redes:</span>
@@ -553,9 +551,6 @@ const EditionSection = ({ edition, onGameClick }: {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                    <p className="text-orange-500 font-semibold text-xs uppercase tracking-widest mb-1">
-                        {edition.orgName}
-                    </p>
                     <div className="flex items-center gap-3 flex-wrap">
                         <h2 className="text-2xl md:text-3xl font-black text-white">
                             Edición <span className="text-orange-400">{edition.year}</span>
@@ -750,7 +745,7 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                             <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent"> Venezuela</span>
                         </h1>
                         <p className="text-slate-400 text-base md:text-lg leading-relaxed">
-                            Videojuegos creados por desarrolladores venezolanos en eventos de 48 horas. 
+                            Videojuegos creados por desarrolladores venezolanos en eventos de 48 horas.
                             Explora ediciones, sedes y el talento detrás de cada juego.
                         </p>
                     </div>
@@ -758,8 +753,8 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                     {/* Stats bar - Dashboard style */}
                     <div className="flex flex-wrap gap-3">
                         {[
-                            { icon: faGamepad, value: totalStats.games, label: 'Juegos', color: '#f97316' },
-                            { icon: faCalendarAlt, value: totalStats.editions, label: 'Ediciones', color: '#a855f7' },
+                            { icon: faGamepad, value: totalStats.games, label: 'Juegos', color: '#a855f7' },
+                            { icon: faCalendarAlt, value: totalStats.editions, label: 'Ediciones', color: '#f97316' },
                             { icon: faLayerGroup, value: totalStats.venues, label: 'Sedes', color: '#06b6d4' },
                             { icon: faLocationDot, value: totalStats.cities, label: 'Ciudades', color: '#10b981' },
                         ].map(({ icon, value, label, color }) => (

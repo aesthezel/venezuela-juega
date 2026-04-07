@@ -109,17 +109,12 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                             onClick={() => navigateTo(item.path)}
                                             className={`relative flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
                                                 active
-                                                ? 'text-cyan-400 bg-cyan-500/10'
+                                                ? 'text-white bg-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/40'
                                                 : 'text-slate-300 hover:text-white hover:bg-white/5'
                                             }`}
                                         >
                                             <FontAwesomeIcon icon={item.icon} className={`text-xs ${active ? 'text-cyan-400' : 'text-slate-500 group-hover/nav:text-slate-300 transition-colors'}`} />
                                             <span>{item.label}</span>
-                                            
-                                            {/* Modern Active Indicator */}
-                                            {active && (
-                                                <div className="absolute -bottom-1 left-4 right-4 h-0.5 bg-gradient-to-r from-yellow-400 via-blue-500 to-red-500 rounded-full" />
-                                            )}
                                         </button>
 
                                         {/* Tooltip Bubble for Home page */}
@@ -191,7 +186,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                     onClick={() => navigateTo(item.path)}
                                     className={`flex items-center gap-4 p-4 rounded-2xl transition-all border ${
                                         active 
-                                        ? 'bg-cyan-500/10 border-cyan-500/20 text-white shadow-lg shadow-cyan-500/5' 
+                                        ? 'bg-cyan-500/20 border-cyan-500/40 text-white shadow-[0_0_20px_rgba(6,182,212,0.15)]' 
                                         : 'bg-white/5 border-transparent text-slate-300'
                                     }`}
                                 >

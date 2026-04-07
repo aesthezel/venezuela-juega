@@ -6,9 +6,12 @@ import { useMeasure } from '@/src/hooks/useMeasure';
 import { useTextLayout } from '@/src/hooks/useTextLayout';
 import { CloseIcon, LinkIcon } from '@/src/components/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faHeart as faHeartSolid, faStar as faStarSolid, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-regular-svg-icons';
 import { StoreButton } from '@/src/components';
 import { trackEvent } from '@/src/utils/analytics';
+import { useGameStats } from '@/src/hooks/useGameStats';
+import { useSpacetimeDB } from '@/src/spacetimedb/connection';
 
 interface ModalProps {
     game: Game;
@@ -47,6 +50,27 @@ const getYoutubeEmbedUrl = (url?: string) => {
 }
 
 const Modal = ({ game, onClose }: ModalProps) => {
+    const { connection, isConnected } = useSpacetimeDB();
+    const {
+        totalHearts,
+        totalVisits,
+        hasLiked,
+        isFavorite,
+        toggleLike,
+        toggleFavorite,
+        isReady
+    } = useGameStats(game.slug);
+
+    const handleToggleLike = () => {
+        if (!isReady) return;
+        toggleLike();
+    };
+
+    const handleToggleFavorite = () => {
+        if (!isReady) return;
+        toggleFavorite();
+    };
+
     const { ref: pitchRef, width: pitchWidth } = useMeasure<HTMLDivElement>();
     const { lineCount: pitchLineCount } = useTextLayout(game.pitch, pitchWidth, {
         fontSize: 16,
@@ -60,6 +84,12 @@ const Modal = ({ game, onClose }: ModalProps) => {
         lineHeight: 24
     });
     const [isDescExpanded, setIsDescExpanded] = useState(false);
+
+    useEffect(() => {
+        if (isConnected && game.slug && connection) {
+            connection.reducers.visitGame({ gameSlug: game.slug });
+        }
+    }, [isConnected, game.slug, connection]);
 
     useEffect(() => {
         const handleEsc = (event: KeyboardEvent) => {
@@ -134,6 +164,31 @@ const Modal = ({ game, onClose }: ModalProps) => {
                             </button>
                         </div>
 
+                        {/* Stats Bar - Quick Interactions */}
+                        <div className="flex items-stretch bg-slate-950/40 backdrop-blur-xl rounded-2xl border border-white/5 divide-x divide-white/10 overflow-hidden shadow-2xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
+                            <button
+                                onClick={handleToggleLike}
+                                title={hasLiked ? "Quitar me gusta" : "Me gusta"}
+                                className={`flex items-center gap-2.5 px-6 py-3.5 transition-all duration-300 group/like hover:bg-rose-500/5 ${hasLiked ? 'text-rose-400' : 'text-slate-400 hover:text-white'}`}
+                            >
+                                <FontAwesomeIcon icon={hasLiked ? faHeartSolid : faHeartReg} className={`transition-transform duration-300 ${hasLiked ? "scale-110 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]" : "group-hover/like:scale-110"}`} />
+                                <span className="font-black text-sm tracking-tight">{totalHearts}</span>
+                            </button>
+
+                            <button
+                                onClick={handleToggleFavorite}
+                                title={isFavorite ? "Quitar de favoritos" : "Añadir de favoritos"}
+                                className={`flex items-center justify-center px-6 py-3.5 transition-all duration-300 group/fav hover:bg-amber-500/5 ${isFavorite ? 'text-amber-400' : 'text-slate-400 hover:text-white'}`}
+                            >
+                                <FontAwesomeIcon icon={isFavorite ? faStarSolid : faStarReg} className={`transition-transform duration-300 ${isFavorite ? "scale-110 drop-shadow-[0_0_8px_rgba(245,158,11,0.4)]" : "group-hover/fav:scale-110"}`} />
+                            </button>
+
+                            <div className="flex items-center gap-2.5 px-6 py-3.5 bg-white/[0.02] text-slate-400 border-r border-white/5">
+                                <FontAwesomeIcon icon={faEye} className="text-xs opacity-60" />
+                                <span className="font-black text-sm tracking-widest">{totalVisits}</span>
+                            </div>
+                        </div>
+
                         {/* Main Content Grid */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
 
@@ -146,8 +201,8 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                             {game.pitch}
                                         </p>
                                         {pitchLineCount > 6 && (
-                                            <button 
-                                                onClick={() => setIsPitchExpanded(!isPitchExpanded)} 
+                                            <button
+                                                onClick={() => setIsPitchExpanded(!isPitchExpanded)}
                                                 className="text-cyan-400 hover:text-cyan-300 text-sm font-bold mt-3 transition-colors flex items-center gap-1"
                                             >
                                                 {isPitchExpanded ? 'Ver menos' : 'Ver más'}
@@ -164,8 +219,8 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                             {game.description}
                                         </div>
                                         {descLineCount > 6 && (
-                                            <button 
-                                                onClick={() => setIsDescExpanded(!isDescExpanded)} 
+                                            <button
+                                                onClick={() => setIsDescExpanded(!isDescExpanded)}
                                                 className="text-cyan-400 hover:text-cyan-300 text-sm font-bold mt-3 transition-colors flex items-center gap-1"
                                             >
                                                 {isDescExpanded ? 'Ver menos' : 'Ver más'}
