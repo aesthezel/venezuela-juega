@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { Game, GameStatus, GameOrigin } from "@/src/types";
-import { BackButton } from "@/src/components";
+import { BackButton, Modal } from "@/src/components";
 import { ChartsPageProps } from "@/src/types";
 import { Chart, registerables } from 'chart.js/auto';
 import { useSpacetimeDB } from '@/src/spacetimedb/connection';
@@ -129,10 +129,11 @@ const ChartsStats = ({ games }: { games: Game[] }) => {
     );
 };
 
-const RealtimeTopVisitsChart = ({ games }: { games: Game[] }) => {
+const RealtimeTopVisitsChart = ({ games, onSelectGame }: { games: Game[], onSelectGame: (game: Game) => void }) => {
     const { gameStatsMap } = useSpacetimeDB();
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstanceRef = useRef<any>(null);
+    const gamesDataRef = useRef<Game[]>([]);
 
     useEffect(() => {
         const statsArray = Object.values(gameStatsMap).sort((a, b) => b.totalVisits - a.totalVisits).slice(0, 10);
@@ -140,6 +141,7 @@ const RealtimeTopVisitsChart = ({ games }: { games: Game[] }) => {
         const labelsData: string[] = [];
         const visitsData: number[] = [];
         const heartsData: number[] = [];
+        const currentGamesData: Game[] = [];
 
         statsArray.forEach(stat => {
             const game = games.find(g => g.slug === stat.gameSlug);
@@ -148,8 +150,11 @@ const RealtimeTopVisitsChart = ({ games }: { games: Game[] }) => {
                 labelsData.push(title.length > 20 ? title.substring(0, 20) + '...' : title);
                 visitsData.push(stat.totalVisits);
                 heartsData.push(stat.totalHearts);
+                currentGamesData.push(game as Game);
             }
         });
+
+        gamesDataRef.current = currentGamesData;
 
         if (!chartInstanceRef.current && chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
@@ -176,6 +181,21 @@ const RealtimeTopVisitsChart = ({ games }: { games: Game[] }) => {
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        onClick: (event, elements) => {
+                            if (elements && elements.length > 0) {
+                                const index = elements[0].index;
+                                const game = gamesDataRef.current[index];
+                                if (game) {
+                                    onSelectGame(game);
+                                }
+                            }
+                        },
+                        onHover: (event, elements) => {
+                            if (event.native && event.native.target) {
+                                const target = event.native.target as HTMLElement;
+                                target.style.cursor = elements && elements.length > 0 ? 'pointer' : 'default';
+                            }
+                        },
                         plugins: {
                             legend: { position: 'top', labels: { color: '#d4cfd6', padding: 20 } }
                         },
@@ -220,6 +240,7 @@ const RealtimeTopVisitsChart = ({ games }: { games: Game[] }) => {
 };
 
 const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
+    const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const platformChartRef = useRef<HTMLCanvasElement>(null);
     const genreChartRef = useRef<HTMLCanvasElement>(null);
     const statusChartRef = useRef<HTMLCanvasElement>(null);
@@ -446,7 +467,8 @@ const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
     }, [games]);
 
     return (
-        <main className="container mx-auto px-4 py-8 animate-fade-in">
+        <>
+            <main className="container mx-auto px-4 py-8 animate-fade-in">
             <BackButton onClick={onNavigateToCatalog} className="mb-6" />
 
             {/* Page Header */}
@@ -473,7 +495,7 @@ const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
 
                 {/* Juegos más visitados en tiempo real */}
                 <div className="xl:col-span-3">
-                    <RealtimeTopVisitsChart games={games} />
+                    <RealtimeTopVisitsChart games={games} onSelectGame={setSelectedGame} />
                 </div>
 
                 {/* Timeline */}
@@ -539,7 +561,11 @@ const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
                 }
                 .animate-fade-in { animation: fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
             `}</style>
-        </main>
+            </main>
+            {selectedGame && (
+                <Modal game={selectedGame} onClose={() => setSelectedGame(null)} />
+            )}
+        </>
     );
 };
 

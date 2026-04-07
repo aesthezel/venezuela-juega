@@ -4,7 +4,7 @@ import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { route } from 'preact-router';
 import { Game } from '@/src/types';
 import { useDebounce } from '@/src/hooks';
-import {CoverImage} from "@/src/components/index.ts";
+import { CoverImage } from "@/src/components/index.ts";
 
 interface SearchBarProps {
     searchTerm: string;
@@ -209,7 +209,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                     <button
                         onClick={(e) => clearSearch(e as any)}
                         type="button"
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors z-20"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors z-30"
                         aria-label="Limpiar búsqueda"
                     >
                         <FontAwesomeIcon icon={faTimes} className="text-sm" />
@@ -229,11 +229,10 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                                 e.preventDefault();
                                 selectSuggestion(game);
                             }}
-                            className={`px-4 py-4 cursor-pointer transition-all duration-300 border-b border-slate-700/50 last:border-b-0 flex items-center justify-between group ${
-                                index === activeSuggestion
-                                    ? 'bg-cyan-500/20 border-cyan-500/50'
-                                    : 'hover:bg-slate-700/80'
-                            }`}
+                            className={`px-4 py-4 cursor-pointer transition-all duration-300 border-b border-slate-700/50 last:border-b-0 flex items-center justify-between group ${index === activeSuggestion
+                                ? 'bg-cyan-500/20 border-cyan-500/50'
+                                : 'hover:bg-slate-700/80'
+                                }`}
                         >
                             <div className="flex items-center gap-4 flex-1 min-w-0">
                                 <div className="relative flex-shrink-0 w-24 h-14 overflow-hidden rounded-md border border-slate-600 group-hover:border-cyan-500/50 transition-colors shadow-lg">

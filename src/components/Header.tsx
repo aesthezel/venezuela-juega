@@ -18,12 +18,21 @@ const LOGO_URL = "https://venezuela-juega.s3.us-east-005.dream.io/brand/Venezuel
 const Header = ({ currentPath = '/' }: HeaderProps) => {
     const headerRef = useRef<HTMLElement | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     const navigateTo = (path: string) => {
         trackNav(path, 'header');
         route(path);
         setIsMenuOpen(false);
     };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         const el = headerRef.current;
@@ -36,7 +45,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
             ScrollTrigger.create({
                 start: 'top top',
                 onUpdate: (self) => {
-                    if (self.direction === 1 && self.scroll() > 50) {
+                    if (self.direction === 1 && self.scroll() > 100) {
                         hideHeader();
                     } else if (self.direction === -1) {
                         showHeader();
@@ -55,144 +64,156 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
         return () => { document.body.style.overflow = overflow; };
     }, [isMenuOpen]);
 
+    const navItems = [
+        { path: '/game-jams', label: 'Game Jams', icon: faGamepad },
+        { path: '/calendar', label: 'Calendario', icon: faCalendarAlt },
+        { path: '/charts', label: 'Estadísticas', icon: faChartBar },
+        { path: '/about', label: 'Créditos', icon: faInfoCircle },
+    ];
+
     return (
         <>
             <header
                 ref={headerRef}
-                className="fixed top-0 left-0 right-0 z-50 h-20 w-full pointer-events-none transition-transform will-change-transform"
+                className={`fixed top-0 left-0 right-0 z-[60] h-20 w-full transition-all duration-500 will-change-transform ${
+                    isScrolled 
+                    ? 'bg-slate-950/80 backdrop-blur-2xl border-b border-white/10 shadow-xl py-0' 
+                    : 'bg-transparent border-b border-transparent py-2'
+                }`}
             >
-                <div className="relative w-full flex justify-center">
-                    <div
-                        className="absolute top-0 h-20 w-full bg-slate-950/70 backdrop-blur-xl border-b border-white/10 shadow-2xl"
-                        style={{
-                            maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
-                            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)'
-                        }}
-                    />
-                    <div
-                        className="absolute inset-x-0 top-0 h-20 pointer-events-none opacity-70"
-                        style={{
-                            background: 'radial-gradient(800px circle at 50% 0%, rgba(34,211,238,0.12), transparent 55%)'
-                        }}
-                    />
+                <div className="container mx-auto px-6 h-full flex items-center justify-between relative">
+                    {/* Logo Section */}
+                    <button
+                        onClick={() => navigateTo('/')}
+                        className="group flex items-center gap-3 hover:opacity-90 transition-opacity"
+                        aria-label="Ir al inicio"
+                    >
+                        <img
+                            src={LOGO_URL}
+                            alt="Venezuela Juega"
+                            className={`w-auto object-contain transition-all duration-500 ${
+                                isScrolled ? 'h-7 md:h-8' : 'h-8 md:h-10'
+                            } drop-shadow-lg`}
+                        />
+                    </button>
 
-                    <div className="container mx-auto px-6 h-20 flex items-center justify-between relative z-10 pointer-events-auto">
-                        <button
-                            onClick={() => navigateTo('/')}
-                            className="group flex-shrink-0 hover:opacity-90 transition-opacity"
-                            aria-label="Ir al inicio"
-                        >
-                            <img
-                                src={LOGO_URL}
-                                alt="Venezuela Juega"
-                                className="h-8 md:h-10 w-auto object-contain drop-shadow-[0_0_18px_rgba(34,211,238,0.10)]"
-                            />
-                        </button>
-
-                        <div className="flex items-center gap-4 lg:gap-8">
-                            <nav className="hidden md:flex items-center gap-2">
-                                {[
-                                    { path: '/game-jams', label: 'Game Jams', icon: faGamepad },
-                                    { path: '/calendar', label: 'Calendario', icon: faCalendarAlt },
-                                    { path: '/charts', label: 'Estadísticas', icon: faChartBar },
-                                    { path: '/about', label: 'Créditos', icon: faInfoCircle },
-                                ].map((item) => {
-                                    const active = currentPath === item.path;
-                                    const isGameJamsOnHome = item.path === '/game-jams' && (currentPath === '/' || currentPath === '');
-                                    return (
-                                        <div key={item.path} className="relative">
-                                            <button
-                                                onClick={() => navigateTo(item.path)}
-                                                className={`relative flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300 border ${active
-                                                    ? 'text-cyan-200 bg-cyan-950/30 border-cyan-500/25 shadow-[0_0_18px_rgba(34,211,238,0.12)]'
-                                                    : 'text-slate-300 border-transparent hover:text-white hover:bg-white/5'
-                                                    }`}
-                                            >
-                                                <FontAwesomeIcon icon={item.icon} className={active ? "animate-pulse" : ""} />
-                                                <span>{item.label}</span>
-                                                {active && (
-                                                    <span className="absolute inset-x-3 -bottom-[9px] h-[2px] bg-gradient-to-r from-yellow-400 via-blue-500 to-red-500 rounded-full" />
-                                                )}
-                                            </button>
-
-                                            {/* Animated Tooltip Bubble */}
-                                            {isGameJamsOnHome && (
-                                                <div className="absolute top-full mt-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-blue-600 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-[0_0_20px_rgba(69,124,214,0.4)] animate-bounce pointer-events-none z-50">
-                                                    <span>¡Revisa los juegos de este año!</span>
-                                                    <div
-                                                        className="absolute -top-[6px] left-1/2 -translate-x-1/2"
-                                                        style={{ borderLeft: '6px solid transparent', borderRight: '6px solid transparent', borderBottom: '6px solid #457cd6' }}
-                                                    />
-                                                </div>
+                    {/* Desktop Navigation & Profile */}
+                    <div className="flex items-center gap-6 lg:gap-10">
+                        <nav className="hidden md:flex items-center gap-1">
+                            {navItems.map((item) => {
+                                const active = currentPath === item.path;
+                                const isGameJamsOnHome = item.path === '/game-jams' && (currentPath === '/' || currentPath === '');
+                                return (
+                                    <div key={item.path} className="relative group/nav">
+                                        <button
+                                            onClick={() => navigateTo(item.path)}
+                                            className={`relative flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                                                active
+                                                ? 'text-cyan-400 bg-cyan-500/10'
+                                                : 'text-slate-300 hover:text-white hover:bg-white/5'
+                                            }`}
+                                        >
+                                            <FontAwesomeIcon icon={item.icon} className={`text-xs ${active ? 'text-cyan-400' : 'text-slate-500 group-hover/nav:text-slate-300 transition-colors'}`} />
+                                            <span>{item.label}</span>
+                                            
+                                            {/* Modern Active Indicator */}
+                                            {active && (
+                                                <div className="absolute -bottom-1 left-4 right-4 h-0.5 bg-gradient-to-r from-yellow-400 via-blue-500 to-red-500 rounded-full" />
                                             )}
-                                        </div>
-                                    );
-                                })}
-                            </nav>
+                                        </button>
 
+                                        {/* Tooltip Bubble for Home page */}
+                                        {isGameJamsOnHome && !isScrolled && (
+                                            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-blue-600 text-white text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xl animate-bounce z-50 pointer-events-none">
+                                                ¡Nuevos juegos!
+                                                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-blue-600 rotate-45" />
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </nav>
+
+                        <div className="flex items-center gap-3">
                             <UserProfile />
-
-                            <div className="md:hidden">
-                                <button
-                                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                    className="p-2 text-slate-200 hover:text-white transition-colors rounded-lg hover:bg-white/5 border border-white/5"
-                                    aria-label="Abrir menú"
-                                >
-                                    <FontAwesomeIcon icon={isMenuOpen ? faXmark : faBars} size="lg" />
-                                </button>
-                            </div>
+                            
+                            {/* Mobile Hamburger Trigger */}
+                            <button
+                                onClick={() => setIsMenuOpen(true)}
+                                className="md:hidden p-2.5 text-slate-200 hover:text-white transition-all rounded-xl hover:bg-white/5 border border-white/5"
+                                aria-label="Abrir menú"
+                            >
+                                <FontAwesomeIcon icon={faBars} size="lg" />
+                            </button>
                         </div>
                     </div>
                 </div>
             </header>
 
-            {isMenuOpen && (
-                <>
-                    <div
-                        className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm md:hidden"
-                        onClick={() => setIsMenuOpen(false)}
-                        aria-hidden="true"
-                    />
-                    <div
-                        className="fixed left-0 right-0 z-40 md:hidden px-4"
-                        style={{ top: 'var(--header-height, 5rem)' }}
-                    >
-                        <div className="container mx-auto">
-                            <div className="glass-panel rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
-                                <div className="p-3 flex flex-col gap-2">
-                                    {[
-                                        { path: '/game-jams', label: 'Game Jams', icon: faGamepad, color: 'text-orange-300', bg: 'bg-orange-500/10' },
-                                        { path: '/calendar', label: 'Calendario', icon: faCalendarAlt, color: 'text-purple-300', bg: 'bg-purple-500/10' },
-                                        { path: '/charts', label: 'Estadísticas', icon: faChartBar, color: 'text-cyan-300', bg: 'bg-cyan-500/10' },
-                                        { path: '/about', label: 'Créditos', icon: faInfoCircle, color: 'text-emerald-300', bg: 'bg-emerald-500/10' },
-                                    ].map((item) => {
-                                        const isGameJamsOnHome = item.path === '/game-jams' && (currentPath === '/' || currentPath === '');
-                                        return (
-                                            <button
-                                                key={item.path}
-                                                onClick={() => navigateTo(item.path)}
-                                                className="w-full flex items-center justify-between text-base font-semibold text-slate-100 p-4 rounded-xl hover:bg-white/5 border border-white/5 transition-colors"
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <div className={`w-10 h-10 rounded-lg ${item.bg} flex items-center justify-center ${item.color} border border-white/10`}>
-                                                        <FontAwesomeIcon icon={item.icon} />
-                                                    </div>
-                                                    {item.label}
-                                                </div>
-                                                {isGameJamsOnHome && (
-                                                    <span className="text-[10px] uppercase font-bold tracking-wider bg-blue-600 text-white px-2 py-1 rounded-full animate-pulse shadow-[0_0_10px_rgba(69,124,214,0.5)]">
-                                                        ¡NUEVO!
-                                                    </span>
-                                                )}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        </div>
+            {/* Mobile Sidebar (Right Side) */}
+            <div 
+                className={`fixed inset-0 z-[110] transition-all duration-300 md:hidden ${
+                    isMenuOpen ? 'visible' : 'invisible'
+                }`}
+            >
+                {/* Backdrop Overlay */}
+                <div 
+                    className={`absolute inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity duration-300 ${
+                        isMenuOpen ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                />
+
+                {/* Sidebar Panel */}
+                <div 
+                    className={`absolute top-0 right-0 h-full w-[280px] sm:w-[320px] bg-slate-900 border-l border-white/10 shadow-2xl transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) flex flex-col ${
+                        isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+                    }`}
+                >
+                    {/* Sidebar Header */}
+                    <div className="p-6 flex items-center justify-between border-b border-white/5">
+                        <img src={LOGO_URL} alt="Logo" className="h-6 w-auto" />
+                        <button 
+                            onClick={() => setIsMenuOpen(false)}
+                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-800 text-slate-300 hover:text-white transition-colors"
+                        >
+                            <FontAwesomeIcon icon={faXmark} />
+                        </button>
                     </div>
-                </>
-            )}
+
+                    {/* Sidebar Nav */}
+                    <nav className="p-4 flex flex-col gap-2">
+                        {navItems.map((item) => {
+                            const active = currentPath === item.path;
+                            return (
+                                <button
+                                    key={item.path}
+                                    onClick={() => navigateTo(item.path)}
+                                    className={`flex items-center gap-4 p-4 rounded-2xl transition-all border ${
+                                        active 
+                                        ? 'bg-cyan-500/10 border-cyan-500/20 text-white shadow-lg shadow-cyan-500/5' 
+                                        : 'bg-white/5 border-transparent text-slate-300'
+                                    }`}
+                                >
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                                        active ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-400'
+                                    }`}>
+                                        <FontAwesomeIcon icon={item.icon} />
+                                    </div>
+                                    <span className="font-bold">{item.label}</span>
+                                </button>
+                            );
+                        })}
+                    </nav>
+
+                    {/* Footer Info */}
+                    <div className="mt-auto p-8 border-t border-white/5 bg-slate-950/30">
+                        <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest text-center">
+                            Hecho con ❤️ en Venezuela
+                        </p>
+                    </div>
+                </div>
+            </div>
         </>
     );
 };

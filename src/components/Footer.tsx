@@ -11,6 +11,16 @@ const Footer = () => {
         if (!el) return;
 
         el.style.willChange = 'transform, opacity';
+        
+        // Initial state: hide off-screen only if we have a Hero to prevent overlap
+        const initialPath = window.location.pathname;
+        const hasHero = initialPath === '/' || initialPath === '/game' || initialPath === '/games';
+        if (hasHero) {
+            gsap.set(el, { y: 150, opacity: 0 });
+        } else {
+            // Otherwise start visible (default state)
+            gsap.set(el, { y: 0, opacity: 1 });
+        }
 
         let lastScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
@@ -19,6 +29,12 @@ const Footer = () => {
 
             // Check if we are at the bottom of the page (with a small 80px threshold)
             const isAtBottom = y + window.innerHeight >= document.documentElement.scrollHeight - 80;
+            
+            // Check if we are on a page that contains the fullscreen Hero
+            const path = window.location.pathname;
+            const hasHero = path === '/' || path === '/game' || path === '/games';
+            // Only hide the footer near the top if we actually have a Hero to protect
+            const isAtTop = hasHero && y < window.innerHeight * 0.5;
 
             // Determine scroll direction
             // Only update direction if we scrolled a bit to avoid jitter
@@ -29,13 +45,16 @@ const Footer = () => {
                 direction = -1; // Up
             }
 
-            if (direction !== 0 || isAtBottom) {
+            if (isAtTop) {
+                // Siempre ocultar cuando estamos al principio de la página (Hero view)
+                gsap.to(el, { y: 150, opacity: 0, duration: 0.35, pointerEvents: 'none', ease: 'power2.out', overwrite: 'auto' });
+            } else if (direction !== 0 || isAtBottom) {
                 // Cuando el usuario hace scroll hacia abajo, ocultamos el footer
                 if (direction === 1 && !isAtBottom) {
-                    gsap.to(el, { y: 80, opacity: 0, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
+                    gsap.to(el, { y: 150, opacity: 0, duration: 0.35, pointerEvents: 'none', ease: 'power2.out', overwrite: 'auto' });
                 } else if (direction === -1 || isAtBottom) {
                     // Al hacer scroll hacia arriba, o al llegar al final, lo mostramos
-                    gsap.to(el, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
+                    gsap.to(el, { y: 0, opacity: 1, duration: 0.35, pointerEvents: 'auto', ease: 'power2.out', overwrite: 'auto' });
                 }
             }
 
@@ -57,7 +76,7 @@ const Footer = () => {
     }, []);
 
     return (
-        <footer ref={footerRef} className="bg-slate-800 text-gray-400 py-6 shadow-inner relative z-20">
+        <footer ref={footerRef} className="bg-slate-800 text-gray-400 py-6 shadow-inner sticky bottom-0 z-40">
             <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
                 <div className="flex space-x-6 mb-4 sm:mb-0">
                     <a href="https://github.com/aesthezel/venezuela-juega" target="_blank" rel="noopener noreferrer" aria-label="Repositorio en GitHub">

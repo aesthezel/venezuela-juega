@@ -783,7 +783,7 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                 </div>
 
                 {/* Discovery Toolbar: Search & Filter */}
-                <div className="relative group">
+                <div className="relative group z-50">
                     <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/10 to-transparent rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition duration-700"></div>
                     <div className="relative bg-slate-900/50 backdrop-blur-xl border border-slate-700/50 rounded-[1.5rem] p-4 md:p-6 shadow-2xl">
                         <div className="flex flex-col lg:flex-row gap-6 items-stretch lg:items-center">

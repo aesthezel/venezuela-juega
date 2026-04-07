@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faInstagram, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faGithub, faInstagram, faLinkedin, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { BackButton, ContributorCard } from "@/src/components";
 import { AboutPageProps } from "@/src/types";
 
@@ -21,7 +21,9 @@ const CONTRIBUTORS = [
         description: "Creador de esta iniciativa, encargado de la recolección de datos y el desarrollo de la plataforma.",
         socials: [
             { icon: faGithub, url: "https://github.com/aesthezel" },
-            { icon: faTwitter, url: "https://x.com/aesthezel" }
+            { icon: faLinkedin, url: "https://linkedin.com/in/aesthezel" },
+            { icon: faTwitter, url: "https://x.com/aesthezel" },
+            { icon: faInstagram, url: "https://instagram.com/aes.thezel" }
         ]
     }
 ];
@@ -59,7 +61,6 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
 
                 <section>
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="w-1 bg-orange-500 self-stretch rounded-full" />
                         <h2 className="text-2xl md:text-3xl font-black text-white">
                             Iniciativa
                         </h2>
@@ -79,7 +80,6 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
 
                 <section>
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="w-1 bg-cyan-500 self-stretch rounded-full" />
                         <h2 className="text-2xl md:text-3xl font-black text-white">
                             Colaboradores
                         </h2>
@@ -97,7 +97,6 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
 
                 <section>
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="w-1 bg-emerald-500 self-stretch rounded-full" />
                         <h2 className="text-2xl md:text-3xl font-black text-white">
                             Patrocinadores
                         </h2>
