@@ -1,12 +1,8 @@
-import { useFireflies } from '../hooks/useFireflies';
+import { useFireflyOverlay } from '../hooks/FireflyContext';
 import Firefly from './Firefly';
 
-interface FireflyOverlayProps {
-  currentPath: string;
-}
-
-const FireflyOverlay = ({ currentPath }: FireflyOverlayProps) => {
-  const { otherFireflies } = useFireflies(currentPath);
+const FireflyOverlay = () => {
+  const { otherFireflies } = useFireflyOverlay();
 
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none z-[9999] overflow-hidden select-none">

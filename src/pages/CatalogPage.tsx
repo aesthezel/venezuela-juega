@@ -95,9 +95,6 @@ const CatalogPage = ({
                     allPlatforms.filter(p => /playstation|xbox|switch|nintendo|consola|ps[0-9]|wii/i.test(p))
                                 .forEach(p => onFilterChange('platform', p));
                     break;
-                case 'highlighted':
-                    onFilterChange('highlighted', 'true');
-                    break;
             }
         }
     }, [onClearAllFilters, onFilterChange]);

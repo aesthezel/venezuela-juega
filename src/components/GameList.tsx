@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'preact/hooks';
 import { Game } from '@/src/types';
 import { useGameStats } from '@/src/hooks';
+import { useFireflyPresence } from '@/src/hooks/FireflyContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg } from '@fortawesome/free-regular-svg-icons';
@@ -112,6 +113,7 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
 
   const GameRowItem = ({ game, idx }: { game: Game; idx: number }) => {
     const { totalHearts, hasLiked, toggleLike, isReady } = useGameStats(game.slug);
+    const fireflyCount = useFireflyPresence(game.slug);
     
     const [isHovered, setIsHovered] = useState(false);
     const trailerInfo = useMemo(() => getTrailerInfo(game.trailerUrl), [game.trailerUrl]);
@@ -129,7 +131,14 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
         onClick={() => { trackGameCardClick({ slug: game.slug, title: game.title }, idx, 'list'); onGameClick(game); }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="game-list-row w-full text-left bg-slate-800 hover:bg-slate-700 transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer"
+        className={`game-list-row w-full text-left transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer relative ${
+          fireflyCount > 0
+            ? 'bg-slate-800 hover:bg-slate-700 border-l-2 border-l-cyan-400/60'
+            : 'bg-slate-800 hover:bg-slate-700'
+        }`}
+        style={fireflyCount > 0 ? {
+          boxShadow: `inset 4px 0 ${Math.min(fireflyCount * 6, 20)}px rgba(34, 211, 238, ${Math.min(fireflyCount * 0.06, 0.15)})`,
+        } : undefined}
       >
         <div className="relative h-16 w-28 flex-shrink-0 overflow-hidden rounded-md bg-slate-900 border border-slate-700/50">
           <CoverImage
@@ -189,6 +198,16 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
         </div>
         
         <div className="flex items-center gap-3 ml-auto mr-1">
+            {/* Firefly presence badge */}
+            {fireflyCount > 0 && (
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/20">
+                    <span className="relative flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-cyan-400 shadow-[0_0_4px_#22d3ee]" />
+                    </span>
+                    <span className="text-[10px] font-bold text-cyan-300">{fireflyCount}</span>
+                </div>
+            )}
             <div
                 onClick={isReady ? handleToggleLike : undefined}
                 className={`flex items-center gap-1.5 transition-all duration-300 group/like px-2 py-1 rounded-md hover:bg-white/5 ${

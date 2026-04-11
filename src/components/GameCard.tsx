@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo } from 'preact/hooks';
 import { Game } from '@/src/types';
 import { useMeasure, useTextLayout, useGameStats } from '@/src/hooks';
+import { useFireflyPresence } from '@/src/hooks/FireflyContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faWindows,
@@ -83,6 +84,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const trailerInfo = useMemo(() => getTrailerInfo(game.trailerUrl), [game.trailerUrl]);
+    const fireflyCount = useFireflyPresence(game.slug);
 
     const { ref: containerRef, width: containerWidth } = useMeasure<HTMLDivElement>();
     
@@ -113,13 +115,30 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
         <div
             ref={containerRef}
             onClick={onClick}
-            className="bg-slate-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col"
+            className={`bg-slate-800 rounded-lg overflow-hidden shadow-lg cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col relative ${
+                fireflyCount > 0
+                    ? 'ring-1 ring-cyan-400/40 hover:shadow-cyan-500/50'
+                    : 'hover:shadow-cyan-500/50'
+            }`}
             style={{
                 contain: 'layout paint',
                 contentVisibility: 'auto',
-                containIntrinsicSize: '600px'
+                containIntrinsicSize: '600px',
+                ...(fireflyCount > 0 ? {
+                    boxShadow: `0 0 ${Math.min(fireflyCount * 8, 30)}px rgba(34, 211, 238, ${Math.min(fireflyCount * 0.08, 0.3)})`,
+                } : {})
             }}
         >
+            {/* Firefly presence indicator */}
+            {fireflyCount > 0 && (
+                <div className="absolute top-2 left-2 z-20 flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-sm rounded-full pl-1.5 pr-2.5 py-1 border border-cyan-400/30 shadow-[0_0_12px_rgba(34,211,238,0.2)]">
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400 shadow-[0_0_6px_#22d3ee]" />
+                    </span>
+                    <span className="text-[10px] font-bold text-cyan-300 tracking-wide">{fireflyCount}</span>
+                </div>
+            )}
             {layout === 'masonry' ? (
                 <div className="relative overflow-hidden" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <CoverImage
