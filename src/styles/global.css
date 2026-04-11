@@ -81,6 +81,8 @@ body {
             radial-gradient(at 100% 0%, var(--color-slate-950) 0, transparent 50%);
     background-attachment: fixed;
     color: var(--color-slate-200);
+    overflow-x: hidden;
+    width: 100%;
 }
 
 ::-webkit-scrollbar {

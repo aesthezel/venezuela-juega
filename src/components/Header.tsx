@@ -67,7 +67,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
     const navItems = [
         { path: '/game-jams', label: 'Game Jams', icon: faGamepad },
         { path: '/calendar', label: 'Calendario', icon: faCalendarAlt },
-        { path: '/charts', label: 'Estadísticas', icon: faChartBar },
+        { path: '/charts', label: 'Métricas', icon: faChartBar },
         { path: '/about', label: 'Créditos', icon: faInfoCircle },
     ];
 
@@ -75,11 +75,10 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
         <>
             <header
                 ref={headerRef}
-                className={`fixed top-0 left-0 right-0 z-[60] h-20 w-full transition-all duration-500 will-change-transform ${
-                    isScrolled 
-                    ? 'bg-slate-950/80 backdrop-blur-2xl border-b border-white/10 shadow-xl py-0' 
-                    : 'bg-transparent border-b border-transparent py-2'
-                }`}
+                className={`fixed top-0 left-0 right-0 z-[60] h-20 w-full transition-all duration-500 will-change-transform ${isScrolled
+                        ? 'bg-slate-950/80 backdrop-blur-2xl border-b border-white/10 shadow-xl py-0'
+                        : 'bg-transparent border-b border-transparent py-2'
+                    }`}
             >
                 <div className="container mx-auto px-6 h-full flex items-center justify-between relative">
                     {/* Logo Section */}
@@ -91,9 +90,8 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                         <img
                             src={LOGO_URL}
                             alt="Venezuela Juega"
-                            className={`w-auto object-contain transition-all duration-500 ${
-                                isScrolled ? 'h-7 md:h-8' : 'h-8 md:h-10'
-                            } drop-shadow-lg`}
+                            className={`w-auto object-contain transition-all duration-500 ${isScrolled ? 'h-7 md:h-8' : 'h-8 md:h-10'
+                                } drop-shadow-lg`}
                         />
                     </button>
 
@@ -107,11 +105,10 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                     <div key={item.path} className="relative group/nav">
                                         <button
                                             onClick={() => navigateTo(item.path)}
-                                            className={`relative flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
-                                                active
-                                                ? 'text-white bg-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/40'
-                                                : 'text-slate-300 hover:text-white hover:bg-white/5'
-                                            }`}
+                                            className={`relative flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${active
+                                                    ? 'text-white bg-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/40'
+                                                    : 'text-slate-300 hover:text-white hover:bg-white/5'
+                                                }`}
                                         >
                                             <FontAwesomeIcon icon={item.icon} className={`text-xs ${active ? 'text-cyan-400' : 'text-slate-500 group-hover/nav:text-slate-300 transition-colors'}`} />
                                             <span>{item.label}</span>
@@ -131,7 +128,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
 
                         <div className="flex items-center gap-3">
                             <UserProfile />
-                            
+
                             {/* Mobile Hamburger Trigger */}
                             <button
                                 onClick={() => setIsMenuOpen(true)}
@@ -146,29 +143,26 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
             </header>
 
             {/* Mobile Sidebar (Right Side) */}
-            <div 
-                className={`fixed inset-0 z-[110] transition-all duration-300 md:hidden ${
-                    isMenuOpen ? 'visible' : 'invisible'
-                }`}
+            <div
+                className={`fixed inset-0 z-[110] transition-all duration-300 md:hidden ${isMenuOpen ? 'visible' : 'invisible'
+                    }`}
             >
                 {/* Backdrop Overlay */}
-                <div 
-                    className={`absolute inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity duration-300 ${
-                        isMenuOpen ? 'opacity-100' : 'opacity-0'
-                    }`}
+                <div
+                    className={`absolute inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0'
+                        }`}
                     onClick={() => setIsMenuOpen(false)}
                 />
 
                 {/* Sidebar Panel */}
-                <div 
-                    className={`absolute top-0 right-0 h-full w-[280px] sm:w-[320px] bg-slate-900 border-l border-white/10 shadow-2xl transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) flex flex-col ${
-                        isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-                    }`}
+                <div
+                    className={`absolute top-0 right-0 h-full w-[280px] sm:w-[320px] bg-slate-900 border-l border-white/10 shadow-2xl transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+                        }`}
                 >
                     {/* Sidebar Header */}
                     <div className="p-6 flex items-center justify-between border-b border-white/5">
                         <img src={LOGO_URL} alt="Logo" className="h-6 w-auto" />
-                        <button 
+                        <button
                             onClick={() => setIsMenuOpen(false)}
                             className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-800 text-slate-300 hover:text-white transition-colors"
                         >
@@ -184,15 +178,13 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                 <button
                                     key={item.path}
                                     onClick={() => navigateTo(item.path)}
-                                    className={`flex items-center gap-4 p-4 rounded-2xl transition-all border ${
-                                        active 
-                                        ? 'bg-cyan-500/20 border-cyan-500/40 text-white shadow-[0_0_20px_rgba(6,182,212,0.15)]' 
-                                        : 'bg-white/5 border-transparent text-slate-300'
-                                    }`}
+                                    className={`flex items-center gap-4 p-4 rounded-2xl transition-all border ${active
+                                            ? 'bg-cyan-500/20 border-cyan-500/40 text-white shadow-[0_0_20px_rgba(6,182,212,0.15)]'
+                                            : 'bg-white/5 border-transparent text-slate-300'
+                                        }`}
                                 >
-                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                                        active ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-400'
-                                    }`}>
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${active ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-400'
+                                        }`}>
                                         <FontAwesomeIcon icon={item.icon} />
                                     </div>
                                     <span className="font-bold">{item.label}</span>

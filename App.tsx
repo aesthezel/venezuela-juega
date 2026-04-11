@@ -31,7 +31,7 @@ const App = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({
-        status: [], genre: [], platform: [], stores: [], origin: [],
+        status: [], genre: [], platform: [], stores: [], origin: [], highlighted: [],
     });
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -53,6 +53,7 @@ const App = () => {
             const platformMatch = activeFilters.platform.length === 0 || activeFilters.platform.some((f: string) => game.platform.includes(f));
             const storeMatch = activeFilters.stores.length === 0 || activeFilters.stores.some((f: string) => game.stores.some((s: any) => s.name === f));
             const originMatch = activeFilters.origin.length === 0 || (game.origin && activeFilters.origin.includes(game.origin));
+            const highlightedMatch = activeFilters.highlighted.length === 0 || (activeFilters.highlighted.includes('true') && !!game.isHighlighted);
 
             const releaseYearMatch = game.releaseDate.match(/\b\d{4}\b/);
             const releaseYear = releaseYearMatch ? parseInt(releaseYearMatch[0], 10) : null;
@@ -62,7 +63,7 @@ const App = () => {
                 yearMatch = releaseYear !== null && releaseYear >= yearRange.min && releaseYear <= yearRange.max;
             }
 
-            return searchMatch && statusMatch && genreMatch && platformMatch && storeMatch && originMatch && yearMatch;
+            return searchMatch && statusMatch && genreMatch && platformMatch && storeMatch && originMatch && yearMatch && highlightedMatch;
         });
     }, [searchTerm, activeFilters, games, yearRange, isYearFilterManuallySet]);
 
@@ -108,7 +109,7 @@ const App = () => {
         onFilterChange: handleFilterChange,
         onClearCategory: (category: string) => setActiveFilters(prev => ({ ...prev, [category]: [] })),
         onClearAllFilters: () => {
-            setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [] });
+            setActiveFilters({ status: [], genre: [], platform: [], stores: [], origin: [], highlighted: [] });
             setYearRange(null);
             setIsYearFilterManuallySet(false);
         },

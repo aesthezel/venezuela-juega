@@ -3,12 +3,6 @@
 ## Package Manager
 Use **npm**: `npm install`, `npm run dev`, `npm run build`
 
-## Commit Attribution
-AI commits MUST include:
-```
-Co-Authored-By: Antigravity <antigravity@google.com>
-```
-
 ## File-Scoped Commands
 | Task | Command |
 |------|---------|

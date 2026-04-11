@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
 import {
     Highlights,
     GameCounter,
@@ -12,10 +12,11 @@ import {
     GameJamPlusSection,
     HeroMosaic
 } from '@/src/components';
-import { ViewMode } from '@/src/types';
+import { ViewMode, GameOrigin } from '@/src/types';
 import { CatalogPageProps } from "@/src/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import type { CategoryPreset } from '@/src/components/hero';
 
 const CatalogPage = ({
     games,
@@ -49,6 +50,57 @@ const CatalogPage = ({
     }, [activeFilters, yearRange, minYear, maxYear]);
 
     const hasActiveFilters = activeFilterCount > 0;
+
+    // ── Category selection handler ──────────────────────────────────────
+    const handleCategorySelect = useCallback((categoryId: string, preset: CategoryPreset) => {
+        // Clear all existing filters first
+        onClearAllFilters();
+
+        // If "all" selected, just clear — done
+        if (categoryId === 'all') return;
+
+        // Apply filterRecord entries (e.g. { platform: ['PC'], status: ['Lanzado'] })
+        if (preset.filterRecord) {
+            Object.entries(preset.filterRecord).forEach(([category, values]) => {
+                values.forEach(value => {
+                    onFilterChange(category, value);
+                });
+            });
+        }
+
+        // For filterFn-based presets, we apply matching status/platform/origin filters
+        // based on the preset id to integrate with the existing FilterPanel system
+        if (preset.filterFn && !preset.filterRecord) {
+            switch (categoryId) {
+                case 'gamejam':
+                    // Game jams filter by origin — no direct FilterPanel match,
+                    // but we can use search term as workaround
+                    onFilterChange('origin', GameOrigin.GAME_JAM);
+                    break;
+                case 'highlighted':
+                    onFilterChange('highlighted', 'true');
+                    break;
+                case 'pc':
+                    // Apply all platforms that match the PC regex
+                    allPlatforms.filter(p => /windows|linux|mac/i.test(p))
+                                .forEach(p => onFilterChange('platform', p));
+                    break;
+                case 'mobile':
+                    // Apply all platforms that match the mobile regex used in presets
+                    allPlatforms.filter(p => /android|ios|móvil|mobile/i.test(p))
+                                .forEach(p => onFilterChange('platform', p));
+                    break;
+                case 'console':
+                    // Apply all platforms that match the console regex used in presets
+                    allPlatforms.filter(p => /playstation|xbox|switch|nintendo|consola|ps[0-9]|wii/i.test(p))
+                                .forEach(p => onFilterChange('platform', p));
+                    break;
+                case 'highlighted':
+                    onFilterChange('highlighted', 'true');
+                    break;
+            }
+        }
+    }, [onClearAllFilters, onFilterChange]);
 
     useEffect(() => {
         const saved = typeof window !== 'undefined' ? (localStorage.getItem('catalog:viewMode') as ViewMode | null) : null;
@@ -86,7 +138,7 @@ const CatalogPage = ({
 
     return (
         <div className="w-full bg-slate-900 min-h-screen">
-            <HeroMosaic games={games} jamGames={jamGames} onGameClick={onGameClick} />
+            <HeroMosaic games={games} jamGames={jamGames} onGameClick={onGameClick} onCategorySelect={handleCategorySelect} />
 
             <main id="catalog-content" className="container mx-auto px-4 py-8">
 
