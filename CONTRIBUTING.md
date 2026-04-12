@@ -6,7 +6,7 @@ Para que podamos trabajar juntos de la mejor manera, por favor sigue estas instr
 
 ## 1. Primeros pasos
 
-### Crear un Fork
+### Crear un fork
 Para contribuir, no puedes subir cambios directamente a este repositorio. Debes crear tu propio **fork**:
 1. Haz clic en el botón "Fork" en la esquina superior derecha de este repositorio.
 2. Clona tu fork localmente:
@@ -14,14 +14,14 @@ Para contribuir, no puedes subir cambios directamente a este repositorio. Debes 
    git clone https://github.com/{tu-usuario}/venezuela-juega.git
    ```
 
-### Entender el Proyecto
+### Para entender el proyecto
 Antes de empezar a codificar, es **obligatorio** leer la carpeta [`docs/`](./docs) para entender la arquitectura, el stack técnico y la lógica de negocio del proyecto:
 - [Documentación Frontend](./docs/frontend)
 - [Documentación Backend](./docs/backend)
 
 ## 2. Flujo de trabajo
 
-### Ramas y Cambios
+### Ramas y cambios
 1. Crea una rama para tu cambio: `git checkout -b feature/mi-nueva-caracteristica`.
 2. Realiza tus cambios siguiendo las convenciones del proyecto.
 3. Asegúrate de que el proyecto compila y no tiene errores de linting.
@@ -47,7 +47,7 @@ npm run dev
 npm run build
 ```
 
-### Comandos Útiles
+### Comandos útiles
 | Tarea | Comando |
 |-------|---------|
 | Validar tipos | `npx tsc --noEmit` |
@@ -64,7 +64,7 @@ Para mantener la consistencia del código, sigue estas reglas:
 - **Modelos**: Todos los modelos compartidos deben estar en `src/types.ts`.
 - **Tests**: Usamos `vitest` + `Testing Library for Preact`. Los tests se encuentran en la carpeta `test/`.
 
-## 5. ¿Necesitas ayuda? 💡
+## 5. ¿Necesitas ayuda?
 
 Si tienes dudas sobre cómo implementar algo o encuentras un error, puedes abrir un **Issue** para discutirlo antes de empezar a trabajar en el código.
 
