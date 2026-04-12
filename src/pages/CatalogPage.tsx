@@ -10,7 +10,8 @@ import {
     ViewModeToggle,
     AlphaFilter,
     GameJamPlusSection,
-    HeroMosaic
+    HeroMosaic,
+    PageTransition
 } from '@/src/components';
 import { ViewMode, GameOrigin } from '@/src/types';
 import { CatalogPageProps } from "@/src/types";
@@ -137,7 +138,8 @@ const CatalogPage = ({
         <div className="w-full bg-slate-900 min-h-screen">
             <HeroMosaic games={games} jamGames={jamGames} onGameClick={onGameClick} onCategorySelect={handleCategorySelect} />
 
-            <main id="catalog-content" className="container mx-auto px-4 py-8">
+            <PageTransition>
+                <main id="catalog-content" className="container mx-auto px-4 py-8">
 
                 <div className="mb-12 space-y-12">
                     <Highlights games={games} onGameClick={onGameClick} />
@@ -267,8 +269,9 @@ const CatalogPage = ({
                     </section>
                 </div>
             </main>
+        </PageTransition>
 
-            <style>{`
+        <style>{`
                 @keyframes slide-in-right {
                     from { transform: translateX(100%); }
                     to { transform: translateX(0); }

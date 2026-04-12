@@ -4,6 +4,7 @@ import { JSX } from 'preact/jsx-runtime';
 import { Game, GameStatus } from "@/src/types";
 import CloseIcon from '../components/icons/CloseIcon.tsx';
 import { AddGamePageProps } from "@/src/types";
+import { PageTransition } from '@/src/components';
 
 const initialGameState: Omit<Game, 'id'> = {
     title: '',
@@ -128,7 +129,8 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
     };
 
     return (
-        <main className="container mx-auto px-4 py-8 animate-fade-in">
+        <PageTransition>
+            <main className="container mx-auto px-4 py-8">
             <h2 className="text-3xl font-bold mb-6 text-white">Añadir Nuevo Juego</h2>
             <form onSubmit={handleSubmit} className="space-y-8">
                 <FormCard title="Información Básica">
@@ -205,16 +207,8 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
                     </button>
                 </div>
             </form>
-            <style>{`
-                @keyframes fade-in {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
-                .form-input-sm { padding: 0.5rem; }
-                .btn-sm { padding: 0.5rem 1rem; }
-            `}</style>
         </main>
+        </PageTransition>
     );
 };
 

@@ -16,11 +16,10 @@ const AlphaFilter = ({ activeAlpha, onAlphaChange, className }: AlphaFilterProps
         <button
           type="button"
           onClick={() => onAlphaChange(null)}
-          className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
-            activeAlpha === null
+          className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${activeAlpha === null
               ? 'bg-cyan-500 border-cyan-500 text-white'
               : 'bg-slate-800 border-slate-600 text-gray-300 hover:bg-slate-700'
-          }`}
+            }`}
           title="Mostrar todos"
           aria-pressed={activeAlpha === null}
         >
@@ -35,11 +34,10 @@ const AlphaFilter = ({ activeAlpha, onAlphaChange, className }: AlphaFilterProps
                 key={k}
                 type="button"
                 onClick={() => onAlphaChange(k)}
-                className={`px-2.5 py-1.5 text-sm rounded-md border transition-colors ${
-                  activeAlpha === k
+                className={`px-2.5 py-1.5 text-sm rounded-md border transition-colors ${activeAlpha === k
                     ? 'bg-cyan-500 border-cyan-500 text-white'
                     : 'bg-slate-800 border-slate-600 text-gray-300 hover:bg-slate-700'
-                }`}
+                  }`}
                 aria-pressed={activeAlpha === k}
                 aria-label={k === '#' ? 'Títulos que comienzan con números o símbolos' : `Títulos que comienzan con ${k}`}
                 title={k === '#' ? 'Números o símbolos' : k}

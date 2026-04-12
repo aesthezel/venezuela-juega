@@ -27,34 +27,32 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
     };
 
     useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    useEffect(() => {
+        let lastScrollY = window.scrollY;
         const el = headerRef.current;
         if (!el) return;
 
-        const ctx = gsap.context(() => {
-            const showHeader = () => gsap.to(el, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' });
-            const hideHeader = () => gsap.to(el, { y: -100, opacity: 0, duration: 0.4, ease: 'power3.out' });
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            const direction = currentScrollY > lastScrollY ? 1 : -1; // 1: down, -1: up
 
-            ScrollTrigger.create({
-                start: 'top top',
-                onUpdate: (self) => {
-                    if (self.direction === 1 && self.scroll() > 100) {
-                        hideHeader();
-                    } else if (self.direction === -1) {
-                        showHeader();
-                    }
-                },
-            });
-        }, el);
+            setIsScrolled(currentScrollY > 20);
 
-        return () => ctx.revert();
+            if (currentScrollY <= 50) {
+                // At the top: Always show
+                gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' });
+            } else if (direction === 1 && currentScrollY > 150) {
+                // Scrolling down: Hide
+                gsap.to(el, { y: -100, opacity: 0, duration: 0.3, ease: 'power2.in' });
+            } else if (direction === -1) {
+                // Scrolling up: Show
+                gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' });
+            }
+
+            lastScrollY = currentScrollY;
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     useEffect(() => {
@@ -75,9 +73,9 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
         <>
             <header
                 ref={headerRef}
-                className={`fixed top-0 left-0 right-0 z-[60] h-20 w-full transition-all duration-500 will-change-transform ${isScrolled
-                        ? 'bg-slate-950/80 backdrop-blur-2xl border-b border-white/10 shadow-xl py-0'
-                        : 'bg-transparent border-b border-transparent py-2'
+                className={`fixed top-0 left-0 right-0 z-[60] h-20 w-full will-change-transform transition-[background-color,border-color,padding,backdrop-filter] duration-500 ${isScrolled
+                    ? 'bg-slate-950/80 backdrop-blur-2xl border-b border-white/10 shadow-xl py-0'
+                    : 'bg-transparent border-b border-transparent py-2'
                     }`}
             >
                 <div className="container mx-auto px-6 h-full flex items-center justify-between relative">
@@ -106,8 +104,8 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                         <button
                                             onClick={() => navigateTo(item.path)}
                                             className={`relative flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${active
-                                                    ? 'text-white bg-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/40'
-                                                    : 'text-slate-300 hover:text-white hover:bg-white/5'
+                                                ? 'text-white bg-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/40'
+                                                : 'text-slate-300 hover:text-white hover:bg-white/5'
                                                 }`}
                                         >
                                             <FontAwesomeIcon icon={item.icon} className={`text-xs ${active ? 'text-cyan-400' : 'text-slate-500 group-hover/nav:text-slate-300 transition-colors'}`} />
@@ -179,8 +177,8 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                     key={item.path}
                                     onClick={() => navigateTo(item.path)}
                                     className={`flex items-center gap-4 p-4 rounded-2xl transition-all border ${active
-                                            ? 'bg-cyan-500/20 border-cyan-500/40 text-white shadow-[0_0_20px_rgba(6,182,212,0.15)]'
-                                            : 'bg-white/5 border-transparent text-slate-300'
+                                        ? 'bg-cyan-500/20 border-cyan-500/40 text-white shadow-[0_0_20px_rgba(6,182,212,0.15)]'
+                                        : 'bg-white/5 border-transparent text-slate-300'
                                         }`}
                                 >
                                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${active ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-400'

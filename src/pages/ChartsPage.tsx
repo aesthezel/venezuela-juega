@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { Game, GameStatus, GameOrigin } from "@/src/types";
-import { BackButton, Modal } from "@/src/components";
+import { BackButton, Modal, PageTransition } from "@/src/components";
 import { ChartsPageProps } from "@/src/types";
 import { Chart, registerables } from 'chart.js/auto';
 import { useSpacetimeDB } from '@/src/spacetimedb/connection';
@@ -230,8 +230,8 @@ const RealtimeTopVisitsChart = ({ games, onSelectGame }: { games: Game[], onSele
             </div>
             <div className="mt-4 flex items-center justify-center gap-2 text-slate-400 text-sm font-medium">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
                 </span>
                 Esta información está siendo tomada en tiempo real
             </div>
@@ -467,94 +467,94 @@ const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
     }, [games]);
 
     return (
-        <>
-            <main className="container mx-auto px-4 py-8 animate-fade-in">
-            <BackButton onClick={onNavigateToCatalog} className="mb-6" />
+        <PageTransition>
+            <main className="container mx-auto px-4 py-8">
+                <BackButton onClick={onNavigateToCatalog} className="mb-6" />
 
-            {/* Page Header */}
-            <header className="mb-10">
-                <div className="flex items-start gap-4 mb-4">
-                    <div className="flex-1">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-3">
-                            Métricas y
-                            <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent"> Estadísticas</span>
-                        </h1>
-                        <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
-                            Analíticas extraídas directamente del catálogo de juegos. Observa las preferencias en plataformas, motores gráficos y el ritmo de publicación a lo largo de los años.
-                        </p>
+                {/* Page Header */}
+                <header className="mb-10">
+                    <div className="flex items-start gap-4 mb-4">
+                        <div className="flex-1">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-3">
+                                Métricas y
+                                <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent"> Estadísticas</span>
+                            </h1>
+                            <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                                Analíticas extraídas directamente del catálogo de juegos. Observa las preferencias en plataformas, motores gráficos y el ritmo de publicación a lo largo de los años.
+                            </p>
+                        </div>
                     </div>
+
+                    <ChartsStats games={games} />
+                </header>
+
+                {/* Divider */}
+                <div className="h-px bg-gradient-to-r from-yellow-500/20 via-slate-700/30 to-transparent mb-12" />
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+
+                    {/* Juegos más visitados en tiempo real */}
+                    <div className="xl:col-span-3">
+                        <RealtimeTopVisitsChart games={games} onSelectGame={setSelectedGame} />
+                    </div>
+
+                    {/* Timeline */}
+                    <div className="xl:col-span-2">
+                        <ChartCard title="Evolución de los lanzamientos por año">
+                            <div className="w-full h-full min-h-[350px]">
+                                <canvas ref={timelineChartRef}></canvas>
+                            </div>
+                        </ChartCard>
+                    </div>
+
+                    {/* Motores Graficos */}
+                    <div className="xl:col-span-1">
+                        <ChartCard title="Motores de videojuegos más utilizados">
+                            <div className="w-full h-full min-h-[350px]">
+                                <canvas ref={engineChartRef}></canvas>
+                            </div>
+                        </ChartCard>
+                    </div>
+
+                    {/* Plataformas */}
+                    <div className="xl:col-span-2">
+                        <ChartCard title="Lanzamientos por plataforma">
+                            <div className="w-full h-full min-h-[350px]">
+                                <canvas ref={platformChartRef}></canvas>
+                            </div>
+                        </ChartCard>
+                    </div>
+
+                    {/* Estados */}
+                    <div className="xl:col-span-1">
+                        <ChartCard title="Estados de desarrollo">
+                            <div className="w-full h-full min-h-[350px]">
+                                <canvas ref={statusChartRef}></canvas>
+                            </div>
+                        </ChartCard>
+                    </div>
+
+                    {/* Generos */}
+                    <div className="xl:col-span-2 lg:col-span-1">
+                        <ChartCard title="Distribución por géneros">
+                            <div className="w-full h-full min-h-[350px]">
+                                <canvas ref={genreChartRef}></canvas>
+                            </div>
+                        </ChartCard>
+                    </div>
+
+                    {/* Origenes */}
+                    <div className="xl:col-span-1 lg:col-span-1">
+                        <ChartCard title="Orígen de los videojuegos">
+                            <div className="w-full h-full min-h-[350px]">
+                                <canvas ref={originChartRef}></canvas>
+                            </div>
+                        </ChartCard>
+                    </div>
+
                 </div>
 
-                <ChartsStats games={games} />
-            </header>
-
-            {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-yellow-500/20 via-slate-700/30 to-transparent mb-12" />
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-
-                {/* Juegos más visitados en tiempo real */}
-                <div className="xl:col-span-3">
-                    <RealtimeTopVisitsChart games={games} onSelectGame={setSelectedGame} />
-                </div>
-
-                {/* Timeline */}
-                <div className="xl:col-span-2">
-                    <ChartCard title="Evolución de los lanzamientos por año">
-                        <div className="w-full h-full min-h-[350px]">
-                            <canvas ref={timelineChartRef}></canvas>
-                        </div>
-                    </ChartCard>
-                </div>
-
-                {/* Motores Graficos */}
-                <div className="xl:col-span-1">
-                    <ChartCard title="Motores de videojuegos más utilizados">
-                        <div className="w-full h-full min-h-[350px]">
-                            <canvas ref={engineChartRef}></canvas>
-                        </div>
-                    </ChartCard>
-                </div>
-
-                {/* Plataformas */}
-                <div className="xl:col-span-2">
-                    <ChartCard title="Lanzamientos por plataforma">
-                        <div className="w-full h-full min-h-[350px]">
-                            <canvas ref={platformChartRef}></canvas>
-                        </div>
-                    </ChartCard>
-                </div>
-
-                {/* Estados */}
-                <div className="xl:col-span-1">
-                    <ChartCard title="Estados de desarrollo">
-                        <div className="w-full h-full min-h-[350px]">
-                            <canvas ref={statusChartRef}></canvas>
-                        </div>
-                    </ChartCard>
-                </div>
-
-                {/* Generos */}
-                <div className="xl:col-span-2 lg:col-span-1">
-                    <ChartCard title="Distribución por géneros">
-                        <div className="w-full h-full min-h-[350px]">
-                            <canvas ref={genreChartRef}></canvas>
-                        </div>
-                    </ChartCard>
-                </div>
-
-                {/* Origenes */}
-                <div className="xl:col-span-1 lg:col-span-1">
-                    <ChartCard title="Orígen de los videojuegos">
-                        <div className="w-full h-full min-h-[350px]">
-                            <canvas ref={originChartRef}></canvas>
-                        </div>
-                    </ChartCard>
-                </div>
-
-            </div>
-
-            <style>{`
+                <style>{`
                 @keyframes fade-in {
                     from { opacity: 0; transform: translateY(15px); }
                     to { opacity: 1; transform: translateY(0); }
@@ -565,7 +565,7 @@ const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
             {selectedGame && (
                 <Modal game={selectedGame} onClose={() => setSelectedGame(null)} />
             )}
-        </>
+        </PageTransition>
     );
 };
 

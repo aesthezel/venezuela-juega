@@ -97,7 +97,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [ ] Conexión a API de IGDB o similar
 - [ ] Terminar formulario para agregar nuevos juegos
 - [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
-- [ ] Mejorar el responsive del calendario en
+- [ ] Mejorar el responsive del calendario en móvil
+- [ ] Mejorar la carga de juegos y secciones, en base a un cache o IndexDB
 
 ### Tiempo real
 - [x] Integrar SpacetimeDB y inicio de futuras implementaciones
@@ -108,5 +109,6 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Estadísticas en tiempo real
 
 ## 🤝 Colaboración
-Proyecto libre para colaboraciones, puedes hacer un fork y posteriormente solicitar Pull Request con los cambios, se tomará una revisión de dichos cambios y un chequeo respectivo antes de ser aceptados y mezclados.
-También se puede efectuar cualquier issue que se detecte.
+¡Toda ayuda es bienvenida! Para colaborar, por favor consulta nuestra [Guía de Contribución](./CONTRIBUTING.md) para conocer el flujo de trabajo, las reglas del proyecto y cómo configurar tu entorno.
+
+También puedes reportar cualquier error o sugerencia abriendo un [Issue](https://github.com/aesthezel/venezuela-juega/issues).

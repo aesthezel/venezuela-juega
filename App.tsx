@@ -21,13 +21,13 @@ import {
 import { SpacetimeDBProvider } from '@/src/spacetimedb/SpacetimeDBProvider';
 
 const App = () => {
-    const { 
-        games, 
-        loading, 
-        error, 
-        jamGames, 
-        jamSettings, 
-        jamLoading 
+    const {
+        games,
+        loading,
+        error,
+        jamGames,
+        jamSettings,
+        jamLoading
     } = useGamesData();
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -76,7 +76,11 @@ const App = () => {
         });
     };
 
-    const handleRouteChange = (e: any) => setCurrentPath(e.url);
+    const handleRouteChange = (e: any) => {
+        setCurrentPath(e.url);
+        window.scrollTo(0, 0); // FIX scroll position to top
+    };
+
     const handleOpenModal = (game: Game) => setSelectedGame(game);
     const handleCloseModal = () => setSelectedGame(null);
     const navigateToCatalog = () => route('/');
@@ -90,7 +94,7 @@ const App = () => {
                 return match ? parseInt(match[0], 10) : null;
             })
             .filter((y): y is number => y !== null);
-        
+
         return {
             minYear: years.length > 0 ? Math.min(...years) : 1980,
             maxYear: years.length > 0 ? Math.max(...years, new Date().getFullYear()) : new Date().getFullYear()
@@ -143,10 +147,10 @@ const App = () => {
                             <ChartsPage path="/charts" games={allGames} onNavigateToCatalog={navigateToCatalog} />
                             <GameDetailPage path="/game/:gameSlug" games={allGames} />
                             <GameDetailPage path="/games/:gameSlug" games={allGames} />
-                            <AddGamePage path="/add-game" onAddNewGame={() => {}} onNavigateToCatalog={navigateToCatalog} />
+                            <AddGamePage path="/add-game" onAddNewGame={() => { }} onNavigateToCatalog={navigateToCatalog} />
                             <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
                             <AboutPage path="/credits" onNavigateToCatalog={navigateToCatalog} />
-                            <NotFoundPage default />
+                            <NotFoundPage default games={allGames} onGameClick={handleOpenModal} />
                         </Router>
                     </div>
                     <Footer />

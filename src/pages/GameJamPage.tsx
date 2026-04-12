@@ -1,7 +1,7 @@
-import {h} from 'preact';
-import {FunctionalComponent} from 'preact';
-import {useState, useEffect } from 'preact/hooks';
-import {ExternalLinkIcon} from '@/src/components/icons';
+import { h } from 'preact';
+import { FunctionalComponent } from 'preact';
+import { useState, useEffect } from 'preact/hooks';
+import { ExternalLinkIcon } from '@/src/components/icons';
 
 interface Talk {
     title: string;
@@ -78,7 +78,7 @@ const GameJamPage: FunctionalComponent = () => {
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            setTimeLeft({days, hours, minutes, seconds});
+            setTimeLeft({ days, hours, minutes, seconds });
         }, 1000);
 
         return () => clearInterval(timer);
@@ -126,7 +126,7 @@ const GameJamPage: FunctionalComponent = () => {
                         </div>
                         <nav className="flex space-x-4">
                             <a href={signUpLink}
-                               className="bg-white/20 backdrop-blur hover:bg-white/30 text-white px-6 py-3 rounded-lg shadow-sm text-base font-medium transition-all">
+                                className="bg-white/20 backdrop-blur hover:bg-white/30 text-white px-6 py-3 rounded-lg shadow-sm text-base font-medium transition-all">
                                 Inscríbete ahora
                             </a>
                         </nav>
@@ -139,7 +139,7 @@ const GameJamPage: FunctionalComponent = () => {
                     <aside className="md:col-span-1">
                         <div className="sticky top-20 space-y-6">
                             <section id="inscripcion"
-                                     className="bg-gradient-to-br from-slate-800 to-slate-700 p-6 rounded-xl shadow-xl border border-slate-600/50 relative overflow-hidden">
+                                className="bg-gradient-to-br from-slate-800 to-slate-700 p-6 rounded-xl shadow-xl border border-slate-600/50 relative overflow-hidden">
                                 <div className="flex items-center gap-3 mb-4">
                                     <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">
                                         Inscríbete ahora
@@ -177,14 +177,13 @@ const GameJamPage: FunctionalComponent = () => {
                                 </div>
                                 <ul className="space-y-3">
                                     <li>
-                                        <a className={`block w-full text-center px-4 py-2 rounded transition-colors ${
-                                            isExpired
-                                                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                                                : 'border border-yellow-500 hover:bg-yellow-500/10 text-yellow-400 hover:text-yellow-300'
-                                        }`}
-                                           href={isExpired ? '#' : signUpLink }
-                                           target={isExpired ? '_self' : '_blank'}
-                                           rel="noopener">
+                                        <a className={`block w-full text-center px-4 py-2 rounded transition-colors ${isExpired
+                                            ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                                            : 'border border-yellow-500 hover:bg-yellow-500/10 text-yellow-400 hover:text-yellow-300'
+                                            }`}
+                                            href={isExpired ? '#' : signUpLink}
+                                            target={isExpired ? '_self' : '_blank'}
+                                            rel="noopener">
                                             {isExpired ? 'Inscripciones cerradas' : '¡Inscribirse!'}
                                         </a>
                                     </li>
@@ -207,9 +206,9 @@ const GameJamPage: FunctionalComponent = () => {
 
                                     <div className="space-y-3">
                                         <a className="group flex items-center gap-4 p-3 bg-slate-700/40 hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 border border-slate-600/30 hover:border-indigo-500/40 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/10"
-                                           href="https://docs.google.com/document/d/1Vli9OsOCoAdRrOOazSjvA5IcdydAP7aWpzaGf6cJSoI/edit?usp=sharing"
-                                           target="_blank"
-                                           rel="noopener">
+                                            href="https://docs.google.com/document/d/1Vli9OsOCoAdRrOOazSjvA5IcdydAP7aWpzaGf6cJSoI/edit?usp=sharing"
+                                            target="_blank"
+                                            rel="noopener">
                                             <div
                                                 className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                                                 🏹
@@ -232,9 +231,9 @@ const GameJamPage: FunctionalComponent = () => {
                                         </a>
 
                                         <a className="group flex items-center gap-4 p-3 bg-slate-700/40 hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-pink-500/20 border border-slate-600/30 hover:border-purple-500/40 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-purple-500/10"
-                                           href="https://docs.google.com/presentation/d/1s3klip-CpG-GoiwOv-rrRjsP1Ylc_HIcnUQQS-dmwuE/edit?usp=sharing"
-                                           target="_blank"
-                                           rel="noopener">
+                                            href="https://docs.google.com/presentation/d/1s3klip-CpG-GoiwOv-rrRjsP1Ylc_HIcnUQQS-dmwuE/edit?usp=sharing"
+                                            target="_blank"
+                                            rel="noopener">
                                             <div
                                                 className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                                                 🤔
@@ -393,8 +392,8 @@ const GameJamPage: FunctionalComponent = () => {
                                                 <div
                                                     className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center group-hover:bg-red-700 transition-colors duration-300">
                                                     <svg className="w-6 h-6 text-white ml-1" fill="currentColor"
-                                                         viewBox="0 0 24 24">
-                                                        <path d="M8 5v14l11-7z"/>
+                                                        viewBox="0 0 24 24">
+                                                        <path d="M8 5v14l11-7z" />
                                                     </svg>
                                                 </div>
                                             </div>
@@ -418,14 +417,14 @@ const GameJamPage: FunctionalComponent = () => {
                                     className="group bg-slate-700/30 border border-slate-600/50 rounded-lg overflow-hidden transition-all duration-300 hover:border-cyan-500/40">
                                     <summary
                                         className="cursor-pointer px-4 py-3 flex items-center justify-between bg-slate-700/20 hover:bg-slate-600/30 transition-colors duration-200">
-                    <span className="font-medium text-cyan-400 group-hover:text-cyan-300">
-                      ¿Puedo participar solo?
-                    </span>
+                                        <span className="font-medium text-cyan-400 group-hover:text-cyan-300">
+                                            ¿Puedo participar solo?
+                                        </span>
                                         <svg
                                             className="w-5 h-5 text-cyan-400 transform transition-transform duration-200 group-open:rotate-180"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                                  d="M19 9l-7 7-7-7"/>
+                                                d="M19 9l-7 7-7-7" />
                                         </svg>
                                     </summary>
                                     <div
@@ -441,14 +440,14 @@ const GameJamPage: FunctionalComponent = () => {
                                     className="group bg-slate-700/30 border border-slate-600/50 rounded-lg overflow-hidden transition-all duration-300 hover:border-cyan-500/40">
                                     <summary
                                         className="cursor-pointer px-4 py-3 flex items-center justify-between bg-slate-700/20 hover:bg-slate-600/30 transition-colors duration-200">
-                    <span className="font-medium text-cyan-400 group-hover:text-cyan-300">
-                      ¿Hay premios?
-                    </span>
+                                        <span className="font-medium text-cyan-400 group-hover:text-cyan-300">
+                                            ¿Hay premios?
+                                        </span>
                                         <svg
                                             className="w-5 h-5 text-cyan-400 transform transition-transform duration-200 group-open:rotate-180"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                                  d="M19 9l-7 7-7-7"/>
+                                                d="M19 9l-7 7-7-7" />
                                         </svg>
                                     </summary>
                                     <div
@@ -465,14 +464,14 @@ const GameJamPage: FunctionalComponent = () => {
                                     className="group bg-slate-700/30 border border-slate-600/50 rounded-lg overflow-hidden transition-all duration-300 hover:border-cyan-500/40">
                                     <summary
                                         className="cursor-pointer px-4 py-3 flex items-center justify-between bg-slate-700/20 hover:bg-slate-600/30 transition-colors duration-200">
-                    <span className="font-medium text-cyan-400 group-hover:text-cyan-300">
-                      ¿Qué necesito para participar?
-                    </span>
+                                        <span className="font-medium text-cyan-400 group-hover:text-cyan-300">
+                                            ¿Qué necesito para participar?
+                                        </span>
                                         <svg
                                             className="w-5 h-5 text-cyan-400 transform transition-transform duration-200 group-open:rotate-180"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                                  d="M19 9l-7 7-7-7"/>
+                                                d="M19 9l-7 7-7-7" />
                                         </svg>
                                     </summary>
                                     <div
@@ -488,14 +487,14 @@ const GameJamPage: FunctionalComponent = () => {
                                     className="group bg-slate-700/30 border border-slate-600/50 rounded-lg overflow-hidden transition-all duration-300 hover:border-cyan-500/40">
                                     <summary
                                         className="cursor-pointer px-4 py-3 flex items-center justify-between bg-slate-700/20 hover:bg-slate-600/30 transition-colors duration-200">
-                    <span className="font-medium text-cyan-400 group-hover:text-cyan-300">
-                      ¿Cuándo es el evento?
-                    </span>
+                                        <span className="font-medium text-cyan-400 group-hover:text-cyan-300">
+                                            ¿Cuándo es el evento?
+                                        </span>
                                         <svg
                                             className="w-5 h-5 text-cyan-400 transform transition-transform duration-200 group-open:rotate-180"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                                  d="M19 9l-7 7-7-7"/>
+                                                d="M19 9l-7 7-7-7" />
                                         </svg>
                                     </summary>
                                     <div
@@ -518,7 +517,7 @@ const GameJamPage: FunctionalComponent = () => {
                                         className={`w-4 h-4 transform transition-transform duration-200 ${showMore ? 'rotate-180' : ''}`}
                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                              d="M19 9l-7 7-7-7"/>
+                                            d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
 
@@ -552,12 +551,20 @@ const GameJamPage: FunctionalComponent = () => {
                         </article>
                     </section>
                 </div>
+
+                <style>{`
+                @keyframes fade-in {
+                    from { opacity: 0; transform: translateY(15px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fade-in { animation: fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+            `}</style>
             </main>
 
             {/* Modal para reproducir videos */}
             {selectedVideo && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-                     onClick={closeVideoModal}>
+                    onClick={closeVideoModal}>
                     <div
                         className="relative max-w-4xl w-full max-h-[90vh] bg-slate-800 rounded-lg overflow-hidden shadow-2xl"
                         onClick={(e) => e.stopPropagation()}>
@@ -569,7 +576,7 @@ const GameJamPage: FunctionalComponent = () => {
                             >
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                          d="M6 18L18 6M6 6l12 12"/>
+                                        d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
                         </div>

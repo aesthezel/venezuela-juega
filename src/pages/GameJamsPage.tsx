@@ -4,7 +4,7 @@ import { useMeasure } from '@/src/hooks/useMeasure';
 import { useTextLayout } from '@/src/hooks/useTextLayout';
 import { Game } from '@/src/types';
 import { RoutableProps, route } from 'preact-router';
-import { SearchBar, AlphaFilter, CoverImage, BackButton } from '@/src/components';
+import { SearchBar, AlphaFilter, CoverImage, BackButton, PageTransition } from '@/src/components';
 import { getTrailerInfo } from '@/src/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -732,7 +732,8 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
     }, [processedData]);
 
     return (
-        <main className="container mx-auto px-4 py-8">
+        <PageTransition>
+            <main className="container mx-auto px-4 py-8">
             <BackButton onClick={() => route('/')} className="mb-6" />
 
             {/* Page header */}
@@ -842,14 +843,8 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                 </div>
             )}
 
-            <style>{`
-                @keyframes jam-fade-in {
-                    from { opacity: 0; transform: translateY(12px); }
-                    to   { opacity: 1; transform: translateY(0); }
-                }
-                .jam-page { animation: jam-fade-in 0.4s ease-out forwards; }
-            `}</style>
-        </main>
+            </main>
+        </PageTransition>
     );
 };
 

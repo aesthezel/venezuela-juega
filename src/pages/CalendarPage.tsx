@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Game } from "@/src/types";
-import { BackButton, CoverImage } from "@/src/components";
+import { BackButton, CoverImage, PageTransition } from "@/src/components";
 import { CalendarPageProps } from "@/src/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -236,7 +236,8 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
     }, [games]);
 
     return (
-        <main className="container mx-auto px-4 py-8">
+        <PageTransition>
+            <main className="container mx-auto px-4 py-8">
             {previewGame && <CalendarTooltip game={previewGame} position={previewPosition} />}
 
             <BackButton onClick={onNavigateToCatalog} className="mb-6" />
@@ -584,7 +585,8 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
                     }
                 }
             `}</style>
-        </main>
+            </main>
+        </PageTransition>
     );
 };
 

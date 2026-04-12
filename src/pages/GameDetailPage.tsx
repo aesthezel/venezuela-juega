@@ -9,7 +9,7 @@ import {
     faHeart as faHeartSolid, faStar as faStarSolid, faEye
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-regular-svg-icons';
-import { BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge } from "@/src/components";
+import { BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge, PageTransition } from "@/src/components";
 import { useSpacetimeDB } from '@/src/spacetimedb/connection';
 import { useGameStats, useMeasure, useTextLayout } from '@/src/hooks';
 import { updateMetadata, getTrailerInfo } from "@/src/utils";
@@ -198,7 +198,8 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
     }
 
     return (
-        <main className="container mx-auto px-4 py-8 relative">
+        <PageTransition>
+            <main className="container mx-auto px-4 py-8 relative">
             {/* Global Decorative Blur Backgrounds */}
             <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/5 blur-[120px] rounded-full -z-10 animate-pulse pointer-events-none" />
             <div className="fixed bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-500/5 blur-[120px] rounded-full -z-10 animate-pulse pointer-events-none" />
@@ -499,13 +500,13 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                             className="object-contain max-w-full max-h-[90vh] rounded-lg shadow-2xl"
                         />
                     </div>
-
                     <div className="absolute bottom-4 left-0 right-0 text-center text-white/80 text-sm">
                         {currentShotIndex + 1} / {game.screenshots.length}
                     </div>
                 </div>
             )}
         </main>
+        </PageTransition>
     );
 };
 
