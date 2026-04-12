@@ -9,15 +9,23 @@ import App from './App';
         const params = new URLSearchParams(l.search);
         const p = params.get('p');
         if (p) {
-            // Replace the current URL with the original path so the router sees the correct route
-            // Extraer y preservar cualquier otro query parameter adicional
+            // Restore original URL from 'p' parameter
+            // p = "/original/path?query=val"
+            const restored = decodeURIComponent(p);
+            // We use a dummy origin to parse the relative path + query
+            const url = new URL(restored, window.location.origin);
+
+            // Merge any OTHER query parameters back into the URL (if any existed besides 'p')
             params.delete('p');
-            const remainingSearch = params.toString() ? '?' + params.toString() : '';
-            const target = p.split('?')[0] + remainingSearch + l.hash;
-            window.history.replaceState({}, '', target);
+            params.forEach((value, key) => {
+                url.searchParams.set(key, value);
+            });
+
+            // Replace the current history entry with the original path
+            window.history.replaceState({}, '', url.pathname + url.search + url.hash);
         }
-    } catch (_) {
-        console.error("Something went wrong with redirect fetching!!!");
+    } catch (e) {
+        console.error("Failed to restore SPA path:", e);
     }
 })();
 

@@ -2,34 +2,51 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Redirecting…</title>
+    <title>Venezuela Juega — Redireccionando...</title>
     <script>
-      /*!
+      /**
        * GitHub Pages SPA redirect
        * Based on https://github.com/rafgraph/spa-github-pages
-       * This version auto-detects if the site is a Project Page (/repo/) or a User/Org Page (/)
+       * This script allows deep-linking in SPAs hosted on GitHub Pages.
        */
       (function() {
         var l = window.location;
-        // Prevent redirect loop: if already has the SPA param, do nothing
+        var pathname = l.pathname;
+        var hostname = l.hostname;
+
+        // Prevent redirect loop
         try {
           var params = new URLSearchParams(l.search);
           if (params.has('p')) return;
         } catch (_) {}
-        var pathParts = l.pathname.split('/').filter(Boolean);
-        // Heuristic: if first segment is an app route, we're likely on a User/Org Page -> base '/'
-        // Otherwise, assume it's a Project Page and the first segment is the repo name -> base '/<repo>/'
+
+        var pathParts = pathname.split('/').filter(Boolean);
         var first = pathParts[0] || '';
-        var knownRoutes = { 'calendar':1, 'charts':1, 'game':1, 'games':1, 'about':1, 'add-game':1, 'gamejam-gallery':1, 'game-jams':1, 'credits':1 };
-        var isUserOrgPage = first === '' || Object.prototype.hasOwnProperty.call(knownRoutes, first);
-        var base = isUserOrgPage ? '/' : '/' + first + '/';
+
+        // Known top-level routes to help distinguish between User/Org pages and Project pages
+        var knownRoutes = {
+          'calendar': 1, 'charts': 1, 'game': 1, 'games': 1,
+          'about': 1, 'add-game': 1, 'gamejam-gallery': 1,
+          'game-jams': 1, 'credits': 1
+        };
+
+        // Determine the base path:
+        // 1. If custom domain (not github.io), base is '/'
+        // 2. If github.io, check if first segment is a known route.
+        //    If it is, we are likely on a User/Org page -> base '/'
+        //    Otherwise, assume first segment is the repo name -> base '/<repo>/'
+        var isGitHubIo = hostname.endsWith('.github.io');
+        var isRootBase = !isGitHubIo || first === '' || Object.prototype.hasOwnProperty.call(knownRoutes, first);
+        var base = isRootBase ? '/' : '/' + first + '/';
+
         var origin = l.protocol + '//' + l.host;
-        var redirectUrl = origin + base + '?p=' + encodeURIComponent(l.pathname + l.search) + l.hash;
+        var redirectUrl = origin + base + '?p=' + encodeURIComponent(pathname + l.search) + l.hash;
+
         window.location.replace(redirectUrl);
       })();
     </script>
   </head>
   <body>
-    Redirecting…
+    Redireccionando...
   </body>
 </html>

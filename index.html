@@ -47,13 +47,16 @@
         // Restore original path for GitHub Pages SPA redirects
         (function() {
             try {
-                var params = new URLSearchParams(window.location.search);
+                var l = window.location;
+                var params = new URLSearchParams(l.search);
                 var p = params.get('p');
                 if (p) {
-                    // Support both encoded and plain paths
-                    var restored = p;
-                    try { restored = decodeURIComponent(p); } catch (e) {}
-                    var url = new URL(restored, window.location.origin);
+                    var restored = decodeURIComponent(p);
+                    var url = new URL(restored, l.origin);
+                    params.delete('p');
+                    params.forEach(function(value, key) {
+                        url.searchParams.set(key, value);
+                    });
                     window.history.replaceState(null, '', url.pathname + url.search + url.hash);
                 }
             } catch (_) {}
