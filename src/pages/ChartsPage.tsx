@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { Game, GameStatus, GameOrigin } from "@/src/types";
-import { BackButton, Modal, PageTransition } from "@/src/components";
+import { BackButton, PageTransition } from "@/src/components";
 import { ChartsPageProps } from "@/src/types";
 import { Chart, registerables } from 'chart.js/auto';
 import { useSpacetimeDB } from '@/src/spacetimedb/connection';
@@ -239,8 +239,7 @@ const RealtimeTopVisitsChart = ({ games, onSelectGame }: { games: Game[], onSele
     );
 };
 
-const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
-    const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+const ChartsPage = ({ games, onNavigateToCatalog, onGameClick }: ChartsPageProps) => {
     const platformChartRef = useRef<HTMLCanvasElement>(null);
     const genreChartRef = useRef<HTMLCanvasElement>(null);
     const statusChartRef = useRef<HTMLCanvasElement>(null);
@@ -495,7 +494,7 @@ const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
 
                     {/* Juegos más visitados en tiempo real */}
                     <div className="xl:col-span-3">
-                        <RealtimeTopVisitsChart games={games} onSelectGame={setSelectedGame} />
+                        <RealtimeTopVisitsChart games={games} onSelectGame={onGameClick} />
                     </div>
 
                     {/* Timeline */}
@@ -562,9 +561,7 @@ const ChartsPage = ({ games, onNavigateToCatalog }: ChartsPageProps) => {
                 .animate-fade-in { animation: fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
             `}</style>
             </main>
-            {selectedGame && (
-                <Modal game={selectedGame} onClose={() => setSelectedGame(null)} />
-            )}
+
         </PageTransition>
     );
 };

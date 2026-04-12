@@ -23,6 +23,8 @@ export interface ChartsPageProps {
     games: Game[];
     /** Function to handle navigation back to the catalog */
     onNavigateToCatalog: () => void;
+    /** Function to handle clicking on a game in the charts */
+    onGameClick: (game: Game) => void;
 }
 
 export interface AboutPageProps {

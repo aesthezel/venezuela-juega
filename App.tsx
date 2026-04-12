@@ -144,7 +144,7 @@ const App = () => {
                             <GameJamsPage path="/game-jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
                             <Redirect path="/game-jams/" to="/game-jams" />
                             <CalendarPage path="/calendar" games={games} onNavigateToCatalog={navigateToCatalog} onEventClick={handleOpenModal} />
-                            <ChartsPage path="/charts" games={allGames} onNavigateToCatalog={navigateToCatalog} />
+                            <ChartsPage path="/charts" games={allGames} onNavigateToCatalog={navigateToCatalog} onGameClick={handleOpenModal} />
                             <GameDetailPage path="/game/:gameSlug" games={allGames} />
                             <GameDetailPage path="/games/:gameSlug" games={allGames} />
                             <AddGamePage path="/add-game" onAddNewGame={() => { }} onNavigateToCatalog={navigateToCatalog} />

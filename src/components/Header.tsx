@@ -16,6 +16,7 @@ interface HeaderProps {
 const LOGO_URL = "https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png";
 
 const Header = ({ currentPath = '/' }: HeaderProps) => {
+    const isVisibleRef = useRef(true);
     const headerRef = useRef<HTMLElement | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -38,14 +39,20 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
             setIsScrolled(currentScrollY > 20);
 
             if (currentScrollY <= 50) {
-                // At the top: Always show
-                gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' });
-            } else if (direction === 1 && currentScrollY > 150) {
-                // Scrolling down: Hide
-                gsap.to(el, { y: -100, opacity: 0, duration: 0.3, ease: 'power2.in' });
+                if (!isVisibleRef.current) {
+                    gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
+                    isVisibleRef.current = true;
+                }
+            } else if (direction === 1 && currentScrollY > 200) {
+                if (isVisibleRef.current) {
+                    gsap.to(el, { y: -100, opacity: 0, duration: 0.3, ease: 'power2.in', overwrite: true });
+                    isVisibleRef.current = false;
+                }
             } else if (direction === -1) {
-                // Scrolling up: Show
-                gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' });
+                if (!isVisibleRef.current) {
+                    gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
+                    isVisibleRef.current = true;
+                }
             }
 
             lastScrollY = currentScrollY;
