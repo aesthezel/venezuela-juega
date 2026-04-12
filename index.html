@@ -1,4 +1,4 @@
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2PXQQ9S5B6"></script>
     <script>
@@ -59,6 +59,17 @@
             } catch (_) {}
         })();
     </script>
+    <script>
+        // Early theme detection to prevent flash of wrong theme
+        (function() {
+            try {
+                var t = localStorage.getItem('vj-theme');
+                if (t === 'light' || t === 'dark') {
+                    document.documentElement.className = t;
+                }
+            } catch(e) {}
+        })();
+    </script>
 
     <script type="application/ld+json">
         {
@@ -75,7 +86,7 @@
         }
     </script>
 </head>
-<body class="bg-slate-900">
+<body>
 <div id="root"></div>
 <script type="module" src="/index.tsx"></script>
 </body>

@@ -51,53 +51,39 @@ const CatalogPage = ({
 
     const hasActiveFilters = activeFilterCount > 0;
 
-    // ── Category selection handler ──────────────────────────────────────
     const handleCategorySelect = useCallback((categoryId: string, preset: CategoryPreset) => {
-        // Clear all existing filters first
         onClearAllFilters();
-
-        // If "all" selected, just clear — done
         if (categoryId === 'all') return;
 
-        // Apply filterRecord entries (e.g. { platform: ['PC'], status: ['Lanzado'] })
         if (preset.filterRecord) {
             Object.entries(preset.filterRecord).forEach(([category, values]) => {
-                values.forEach(value => {
-                    onFilterChange(category, value);
-                });
+                values.forEach(value => { onFilterChange(category, value); });
             });
         }
 
-        // For filterFn-based presets, we apply matching status/platform/origin filters
-        // based on the preset id to integrate with the existing FilterPanel system
         if (preset.filterFn && !preset.filterRecord) {
             switch (categoryId) {
                 case 'gamejam':
-                    // Game jams filter by origin — no direct FilterPanel match,
-                    // but we can use search term as workaround
                     onFilterChange('origin', GameOrigin.GAME_JAM);
                     break;
                 case 'highlighted':
                     onFilterChange('highlighted', 'true');
                     break;
                 case 'pc':
-                    // Apply all platforms that match the PC regex
                     allPlatforms.filter(p => /windows|linux|mac/i.test(p))
                                 .forEach(p => onFilterChange('platform', p));
                     break;
                 case 'mobile':
-                    // Apply all platforms that match the mobile regex used in presets
                     allPlatforms.filter(p => /android|ios|móvil|mobile/i.test(p))
                                 .forEach(p => onFilterChange('platform', p));
                     break;
                 case 'console':
-                    // Apply all platforms that match the console regex used in presets
                     allPlatforms.filter(p => /playstation|xbox|switch|nintendo|consola|ps[0-9]|wii/i.test(p))
                                 .forEach(p => onFilterChange('platform', p));
                     break;
             }
         }
-    }, [onClearAllFilters, onFilterChange]);
+    }, [onClearAllFilters, onFilterChange, allPlatforms]);
 
     useEffect(() => {
         const saved = typeof window !== 'undefined' ? (localStorage.getItem('catalog:viewMode') as ViewMode | null) : null;
@@ -109,11 +95,7 @@ const CatalogPage = ({
     }, [viewMode]);
 
     useEffect(() => {
-        if (isMobileFilterOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        document.body.style.overflow = isMobileFilterOpen ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
     }, [isMobileFilterOpen]);
 
@@ -134,17 +116,17 @@ const CatalogPage = ({
     }, [filteredGames, alpha]);
 
     return (
-        <div className="w-full bg-slate-900 min-h-screen">
+        <div className="w-full min-h-screen bg-slate-950 dark:bg-slate-950 transition-colors duration-300">
             <HeroMosaic games={games} jamGames={jamGames} onGameClick={onGameClick} onCategorySelect={handleCategorySelect} />
 
             <main id="catalog-content" className="container mx-auto px-4 py-8">
 
                 <div className="mb-12 space-y-12">
                     <Highlights games={games} onGameClick={onGameClick} />
-                    {/*<GameJamPlusSection games={games} onGameClick={onGameClick}/>*/}
                 </div>
 
-                <div className="sticky top-0 z-15 bg-slate-900/95 backdrop-blur-md py-4 -mx-4 px-4 border-b border-slate-800 mb-8 shadow-2xl transition-all duration-300">
+                {/* Sticky toolbar */}
+                <div className="sticky top-0 z-15 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md py-4 -mx-4 px-4 border-b border-slate-200 dark:border-slate-800 mb-8 shadow-sm dark:shadow-2xl transition-colors duration-300">
                     <div className="container mx-auto flex flex-col gap-4">
                         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
 
@@ -158,7 +140,7 @@ const CatalogPage = ({
                             <div className="flex items-center gap-3 flex-shrink-0 w-full md:w-auto justify-between md:justify-end">
                                 <button
                                     onClick={() => setIsMobileFilterOpen(true)}
-                                    className="lg:hidden flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-3 rounded-lg transition-colors border border-slate-700 relative shadow-sm"
+                                    className="lg:hidden flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-white px-4 py-3 rounded-lg transition-colors border border-slate-200 dark:border-slate-700 relative shadow-sm"
                                 >
                                     <FontAwesomeIcon icon={faFilter} />
                                     <span>Filtros</span>
@@ -186,9 +168,9 @@ const CatalogPage = ({
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
 
+                    {/* Desktop Sidebar */}
                     <aside className="hidden lg:block lg:col-span-3">
-                        <div className="bg-slate-800/40 rounded-xl p-5 border border-slate-700/50 sticky top-52 backdrop-blur-sm transition-all z-10">
-
+                        <div className="bg-slate-100 dark:bg-slate-800/40 rounded-xl p-5 border border-slate-200 dark:border-slate-700/50 sticky top-52 backdrop-blur-sm transition-colors duration-300 z-10">
                             <FilterPanel
                                 genres={allGenres}
                                 platforms={allPlatforms}
@@ -206,20 +188,21 @@ const CatalogPage = ({
                         </div>
                     </aside>
 
+                    {/* Mobile Filter Drawer */}
                     {isMobileFilterOpen && (
                         <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
                             <div
-                                className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity animate-fade-in"
+                                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
                                 onClick={() => setIsMobileFilterOpen(false)}
                             />
-                            <div className="relative w-[85%] max-w-sm h-full bg-slate-900 border-l border-slate-700 shadow-2xl transform transition-transform duration-300 overflow-y-auto animate-slide-in-right">
+                            <div className="relative w-[85%] max-w-sm h-full bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700 shadow-2xl overflow-y-auto animate-slide-in-right">
                                 <div className="p-6 flex flex-col min-h-full">
-                                    <div className="flex items-center justify-between mb-6 sticky top-0 bg-slate-900 z-10 pb-4 border-b border-slate-800">
-                                        <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                                    <div className="flex items-center justify-between mb-6 sticky top-0 bg-white dark:bg-slate-900 z-10 pb-4 border-b border-slate-200 dark:border-slate-800">
+                                        <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                             <FontAwesomeIcon icon={faFilter} className="text-cyan-500" />
                                             Filtros
                                         </h2>
-                                        <button onClick={() => setIsMobileFilterOpen(false)} className="p-2 text-slate-400 hover:text-white transition-colors bg-slate-800 rounded-full w-10 h-10 flex items-center justify-center">
+                                        <button onClick={() => setIsMobileFilterOpen(false)} className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors bg-slate-100 dark:bg-slate-800 rounded-full w-10 h-10 flex items-center justify-center">
                                             <FontAwesomeIcon icon={faTimes} size="lg" />
                                         </button>
                                     </div>
@@ -239,7 +222,7 @@ const CatalogPage = ({
                                             onYearRangeChange={onYearRangeChange}
                                         />
                                     </div>
-                                    <div className="mt-8 pt-4 border-t border-slate-800 sticky bottom-0 bg-slate-900 pb-4">
+                                    <div className="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800 sticky bottom-0 bg-white dark:bg-slate-900 pb-4">
                                         <button onClick={() => setIsMobileFilterOpen(false)} className="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-bold py-3 px-4 rounded-lg transition-all shadow-lg shadow-cyan-900/50">
                                             Ver {alphaFilteredGames.length} juegos
                                         </button>
@@ -249,11 +232,12 @@ const CatalogPage = ({
                         </div>
                     )}
 
+                    {/* Main content */}
                     <section className="lg:col-span-9 min-h-[50vh]">
-                        <div className="lg:hidden mb-6 flex justify-between items-center text-sm bg-slate-800/50 p-3 rounded-lg border border-slate-700">
-                            <span className="text-slate-300 font-medium">{alphaFilteredGames.length} juegos encontrados</span>
+                        <div className="lg:hidden mb-6 flex justify-between items-center text-sm bg-slate-100 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <span className="text-slate-700 dark:text-slate-300 font-medium">{alphaFilteredGames.length} juegos encontrados</span>
                             {activeFilterCount > 0 && (
-                                <span className="text-cyan-400 font-bold bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-900">
+                                <span className="text-cyan-600 dark:text-cyan-400 font-bold bg-cyan-50 dark:bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-200 dark:border-cyan-900">
                                     {activeFilterCount} filtros activos
                                 </span>
                             )}
@@ -274,6 +258,8 @@ const CatalogPage = ({
                     to { transform: translateX(0); }
                 }
                 .animate-slide-in-right { animation: slide-in-right 0.3s ease-out forwards; }
+                .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+                .scrollbar-hide::-webkit-scrollbar { display: none; }
             `}</style>
         </div>
     );

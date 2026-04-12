@@ -19,6 +19,7 @@ import {
 } from '@/src/pages';
 
 import { SpacetimeDBProvider } from '@/src/spacetimedb/SpacetimeDBProvider';
+import { ThemeProvider } from '@/src/hooks';
 
 const App = () => {
     const { 
@@ -126,36 +127,41 @@ const App = () => {
     if (error) return <div className="text-center text-red-500 text-2xl p-10">{error}</div>;
 
     return (
-        <SpacetimeDBProvider>
-            <FireflyProvider currentPath={currentPath}>
-                <div className="relative min-h-screen bg-slate-900 text-gray-200 font-sans flex flex-col">
-                    <Header currentPath={currentPath} />
-                    <div className="flex-grow app-content">
-                        <Router onChange={handleRouteChange}>
-                            <CatalogPage path="/" {...catalogPageProps} />
-                            <CatalogPage path="/game" {...catalogPageProps} />
-                            <CatalogPage path="/games" {...catalogPageProps} />
-                            <GameJamGalleryPage path="/gamejam-gallery" games={games} onGameClick={handleOpenModal} />
-                            <Redirect path="/gamejam-gallery/" to="/gamejam-gallery" />
-                            <GameJamsPage path="/game-jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
-                            <Redirect path="/game-jams/" to="/game-jams" />
-                            <CalendarPage path="/calendar" games={games} onNavigateToCatalog={navigateToCatalog} onEventClick={handleOpenModal} />
-                            <ChartsPage path="/charts" games={allGames} onNavigateToCatalog={navigateToCatalog} />
-                            <GameDetailPage path="/game/:gameSlug" games={allGames} />
-                            <GameDetailPage path="/games/:gameSlug" games={allGames} />
-                            <AddGamePage path="/add-game" onAddNewGame={() => {}} onNavigateToCatalog={navigateToCatalog} />
-                            <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
-                            <AboutPage path="/credits" onNavigateToCatalog={navigateToCatalog} />
-                            <NotFoundPage default />
-                        </Router>
+        <ThemeProvider>
+            {/* Logo Pre-load for Transitions */}
+            <img src="https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png" className="hidden" aria-hidden="true" />
+            
+            <SpacetimeDBProvider>
+                <FireflyProvider currentPath={currentPath}>
+                    <div className="relative min-h-screen font-sans flex flex-col">
+                        <Header currentPath={currentPath} />
+                        <div className="flex-grow app-content">
+                            <Router onChange={handleRouteChange}>
+                                <CatalogPage path="/" {...catalogPageProps} />
+                                <CatalogPage path="/game" {...catalogPageProps} />
+                                <CatalogPage path="/games" {...catalogPageProps} />
+                                <GameJamGalleryPage path="/gamejam-gallery" games={games} onGameClick={handleOpenModal} />
+                                <Redirect path="/gamejam-gallery/" to="/gamejam-gallery" />
+                                <GameJamsPage path="/game-jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
+                                <Redirect path="/game-jams/" to="/game-jams" />
+                                <CalendarPage path="/calendar" games={games} onNavigateToCatalog={navigateToCatalog} onEventClick={handleOpenModal} />
+                                <ChartsPage path="/charts" games={allGames} onNavigateToCatalog={navigateToCatalog} />
+                                <GameDetailPage path="/game/:gameSlug" games={allGames} />
+                                <GameDetailPage path="/games/:gameSlug" games={allGames} />
+                                <AddGamePage path="/add-game" onAddNewGame={() => {}} onNavigateToCatalog={navigateToCatalog} />
+                                <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
+                                <AboutPage path="/credits" onNavigateToCatalog={navigateToCatalog} />
+                                <NotFoundPage default />
+                            </Router>
+                        </div>
+                        <Footer />
+                        <ScrollToTop />
+                        <FireflyOverlay />
+                        {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
                     </div>
-                    <Footer />
-                    <ScrollToTop />
-                    <FireflyOverlay />
-                    {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
-                </div>
-            </FireflyProvider>
-        </SpacetimeDBProvider>
+                </FireflyProvider>
+            </SpacetimeDBProvider>
+        </ThemeProvider>
     );
 };
 

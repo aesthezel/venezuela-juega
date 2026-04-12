@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useTheme } from '@/src/hooks/ThemeContext';
 
 import { CategoryCard, TabButton, ProgressDots, CompactStat, CATEGORY_PRESETS } from './hero';
 import type { CategoryPreset } from './hero';
@@ -34,12 +35,14 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
     const categoryScrollRef = useRef<HTMLDivElement>(null);
     const [showHint, setShowHint] = useState(false);
     const [showcaseTab, setShowcaseTab] = useState<'stats' | 'explore'>('explore');
-    const [statIndex, setStatIndex] = useState(0); // For mobile stat carousel
+    const [statIndex, setStatIndex] = useState(0); 
     const [progress, setProgress] = useState(0);
     const progressStartRef = useRef(Date.now());
     const isPausedRef = useRef(false);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
+
+    const { theme } = useTheme();
 
     // ── Category scroll helpers ─────────────────────────────────────────
     const updateScrollArrows = useCallback(() => {
@@ -52,7 +55,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
     const scrollCategories = useCallback((dir: 'left' | 'right') => {
         const el = categoryScrollRef.current;
         if (!el) return;
-        const amount = dir === 'left' ? -260 : 260;
+        const amount = dir === 'left' ? -280 : 280;
         el.scrollBy({ left: amount, behavior: 'smooth' });
         setTimeout(updateScrollArrows, 350);
     }, [updateScrollArrows]);
@@ -88,13 +91,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
     // ── Category data ──────────────────────────────────────────────────────
     const categoryData = useMemo(() => {
         return CATEGORY_PRESETS.map(preset => {
-            // Pick correct data pool based on preset.dataSource
-            const pool = preset.dataSource === 'jams'
-                ? jamGames
-                : preset.dataSource === 'games'
-                    ? games
-                    : allGames;
-
+            const pool = preset.dataSource === 'jams' ? jamGames : preset.dataSource === 'games' ? games : allGames;
             let matchingGames: Game[];
             if (preset.filterFn) {
                 matchingGames = pool.filter(preset.filterFn);
@@ -109,16 +106,11 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             } else {
                 matchingGames = [];
             }
-
-            // Pick representative background image
             const withCover = matchingGames.filter(g => {
                 const src = g.imageHero || g.imageCover || g.imageUrl;
                 return src && src.length > 5;
             });
-            const bgGame = withCover.length > 0
-                ? withCover[Math.floor(Math.random() * Math.min(withCover.length, 8))]
-                : null;
-
+            const bgGame = withCover.length > 0 ? withCover[Math.floor(Math.random() * Math.min(withCover.length, 8))] : null;
             return {
                 preset,
                 count: matchingGames.length,
@@ -141,12 +133,8 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
         const el = gridRef.current;
         const container = containerRef.current;
         if (!el || !container) return;
-
         const ctx = gsap.context(() => {
-            gsap.fromTo(el,
-                { opacity: 0, scale: 1.1 },
-                { opacity: 0.35, scale: 1, duration: 1.5, ease: 'power2.out' },
-            );
+            gsap.fromTo(el, { opacity: 0, scale: 1.1 }, { opacity: 0.35, scale: 1, duration: 1.5, ease: 'power2.out' });
             ScrollTrigger.create({
                 trigger: container,
                 start: 'top top',
@@ -155,30 +143,24 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                 animation: gsap.to(el, { y: 150, ease: 'none' }),
             });
         }, container);
-
         return () => ctx.revert();
     }, []);
-
-
 
     // ── Auto-rotate tabs ───────────────────────────────────────────────────
     useEffect(() => {
         progressStartRef.current = Date.now();
         setProgress(0);
-
         const progressInterval = setInterval(() => {
             if (isPausedRef.current) return;
             const elapsed = Date.now() - progressStartRef.current;
             const pct = Math.min((elapsed / AUTO_ROTATE_MS) * 100, 100);
             setProgress(pct);
-
             if (pct >= 100) {
                 setShowcaseTab(prev => prev === 'stats' ? 'explore' : 'stats');
                 progressStartRef.current = Date.now();
                 setProgress(0);
             }
         }, 50);
-
         return () => clearInterval(progressInterval);
     }, [showcaseTab]);
 
@@ -198,13 +180,11 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
     // ── Scroll hint ────────────────────────────────────────────────────────
     useEffect(() => {
         let timer: NodeJS.Timeout | null = null;
-
         const startTimer = () => {
             if (timer) clearTimeout(timer);
             timer = setTimeout(() => setShowHint(true), 2000);
         };
         startTimer();
-
         const handleScroll = () => {
             if (window.scrollY > 300) {
                 setShowHint(false);
@@ -213,7 +193,6 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                 setShowHint(prev => { if (!prev && !timer) startTimer(); return prev; });
             }
         };
-
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => { if (timer) clearTimeout(timer); window.removeEventListener('scroll', handleScroll); };
     }, []);
@@ -224,13 +203,8 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
         if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 20, behavior: 'smooth' });
     };
 
-    // ── Category click handler ─────────────────────────────────────────────
     const handleCategoryClick = useCallback((preset: CategoryPreset) => {
-        if (preset.dataSource === 'jams') {
-            route('/game-jams');
-            return;
-        }
-
+        if (preset.dataSource === 'jams') { route('/game-jams'); return; }
         onCategorySelect?.(preset.id, preset);
         setTimeout(() => {
             const el = document.getElementById('catalog-content');
@@ -238,38 +212,40 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
         }, 100);
     }, [onCategorySelect]);
 
-    // ── Render ─────────────────────────────────────────────────────────────
     return (
         <div
             ref={containerRef}
-            className="relative w-full min-h-screen overflow-hidden bg-slate-950"
+            className={`relative w-full min-h-screen overflow-hidden transition-colors duration-700
+                       ${theme === 'dark' ? 'bg-slate-950 hero-always-dark' : 'bg-slate-50'}`}
         >
-            {/* Background mosaic grid */}
-            <div
-                ref={gridRef}
-                className="pointer-events-none absolute inset-[-10%] -rotate-3 grid h-[120%] w-[120%] select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7"
-            >
+            {/* Background grid */}
+            <div ref={gridRef} className="pointer-events-none absolute inset-[-10%] -rotate-3 grid h-[120%] w-[120%] select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7">
                 {mosaicGames.map((game) => (
                     <div key={game.id} className="relative h-full w-full overflow-hidden rounded-lg bg-slate-800 shadow-xl">
                         <CoverImage
                             src={game.imageCover || game.imageUrl}
                             alt=""
-                            className="h-full w-full object-cover brightness-75 grayscale transition-all duration-700 hover:grayscale-0"
+                            className={`h-full w-full object-cover transition-all duration-700
+                                       ${theme === 'dark' ? 'brightness-75 grayscale' : 'brightness-110 opacity-30 grayscale'}`}
                         />
-                        <div className="absolute inset-0 bg-slate-950/20" />
                     </div>
                 ))}
             </div>
 
-            {/* Gradient overlays */}
-            <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-slate-950/90 via-slate-950/60 to-slate-950" />
-            <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0d0a11_100%)]" />
+            {/* Overlays */}
+            <div className={`pointer-events-none absolute inset-0 z-0 transition-opacity duration-1000
+                            ${theme === 'dark' 
+                                ? 'bg-gradient-to-b from-slate-950/90 via-slate-950/60 to-slate-950' 
+                                : 'bg-gradient-to-b from-slate-50/80 via-white/40 to-slate-50'}`} />
+            
+            <div className={`pointer-events-none absolute inset-0 z-0 transition-opacity duration-1000
+                            ${theme === 'dark' 
+                                ? 'bg-[radial-gradient(circle_at_center,transparent_0%,#0d0a11_100%)]' 
+                                : 'bg-[radial-gradient(circle_at_center,transparent_0%,#f8f7f9_100%)]'}`} />
 
-            {/* Hero content */}
             <div className="relative z-10 w-full flex flex-col items-center px-4 pt-24 pb-8 md:pt-28 md:pb-12 mx-auto max-w-6xl hero-fade-in">
-
                 {/* Badge */}
-                <div className="mb-3 md:mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-400 backdrop-blur-md md:text-sm shadow-xl">
+                <div className="mb-3 md:mb-5 inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 backdrop-blur-md md:text-sm shadow-sm dark:shadow-xl transition-colors">
                     <span className="h-1.5 w-1.5 md:h-2 md:w-2 animate-pulse rounded-full bg-emerald-500" />
                     Base de datos colaborativa
                 </div>
@@ -278,246 +254,90 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                 <h1
                     className="mb-2 md:mb-4 text-center text-4xl sm:text-6xl md:text-8xl font-extrabold leading-[1.1] md:leading-none tracking-tight drop-shadow-2xl bg-clip-text text-transparent"
                     style={{
-                        backgroundImage: 'linear-gradient(to right, #f2b63d 0%, #457cd6 50%, #e34262 100%)',
+                        backgroundImage: theme === 'dark' 
+                            ? 'linear-gradient(to right, #f2b63d 0%, #457cd6 50%, #e34262 100%)'
+                            : 'linear-gradient(to right, #d46e33 0%, #4b3b9c 50%, #94353d 100%)',
                         WebkitBackgroundClip: 'text',
                         backgroundClip: 'text',
                     }}
                 >
-                    VENEZUELA
-                    <br className="md:hidden" />
-                    <span className="ml-0 md:ml-4">JUEGA</span>
+                    VENEZUELA<br className="md:hidden" /><span className="ml-0 md:ml-4">JUEGA</span>
                 </h1>
 
                 {/* Subtitle */}
-                <p className="mb-6 md:mb-8 text-center max-w-[280px] sm:max-w-2xl text-sm sm:text-base font-light leading-relaxed text-slate-400 md:text-xl drop-shadow-lg">
+                <p className="mb-6 md:mb-8 text-center max-w-[280px] sm:max-w-2xl text-sm sm:text-base font-medium md:font-light leading-relaxed text-slate-600 dark:text-slate-400 md:text-xl drop-shadow-lg transition-colors">
                     La documentación digital que preserva y conecta la historia del desarrollo de videojuegos en el país
                 </p>
 
-                {/* ── Showcase Tabs ── */}
-                <div className="flex items-center gap-1 mb-5 md:mb-6 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
-                    <TabButton
-                        icon={faCompass}
-                        label="Explorar"
-                        isActive={showcaseTab === 'explore'}
-                        onClick={() => handleTabChange('explore')}
-                    />
-                    <TabButton
-                        icon={faChartBar}
-                        label="Métricas"
-                        isActive={showcaseTab === 'stats'}
-                        onClick={() => handleTabChange('stats')}
-                    />
+                {/* Tabs */}
+                <div className="flex items-center gap-1 mb-5 md:mb-6 p-1 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.06] transition-colors">
+                    <TabButton icon={faCompass} label="Explorar" isActive={showcaseTab === 'explore'} onClick={() => handleTabChange('explore')} />
+                    <TabButton icon={faChartBar} label="Métricas" isActive={showcaseTab === 'stats'} onClick={() => handleTabChange('stats')} />
                 </div>
 
-                <div
-                    className="relative w-full max-w-5xl"
-                    onMouseEnter={() => handleShowcaseHover(true)}
-                    onMouseLeave={() => handleShowcaseHover(false)}
-                    style={{ minHeight: showcaseTab === 'explore' ? '460px' : '280px', transition: 'min-height 0.4s ease' }}
-                >
+                <div className="relative w-full max-w-5xl" style={{ minHeight: showcaseTab === 'explore' ? '460px' : '280px', transition: 'min-height 0.4s ease' }}>
+                    
                     {/* Stats Panel */}
-                    <div className={`
-                        w-full transition-transform duration-500 ease-out
-                        ${showcaseTab === 'stats'
-                            ? 'opacity-100 translate-y-0 relative'
-                            : 'opacity-0 -translate-y-4 absolute inset-x-0 top-0 pointer-events-none'
-                        }
-                    `}>
+                    <div className={`w-full transition-all duration-500 ${showcaseTab === 'stats' ? 'opacity-100 translate-y-0 relative' : 'opacity-0 -translate-y-4 absolute inset-x-0 top-0 pointer-events-none'}`}>
                         <div className="flex flex-col items-center gap-6 w-full max-w-5xl mx-auto">
-                            {/* Responsive Stats Container */}
-                            <div className="relative w-full p-4">
-                                <div className="relative">
-                                    {/* Mobile Arrows */}
-                                    <div className="sm:hidden absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2 z-20 pointer-events-none">
-                                        <button
-                                            onClick={() => setStatIndex(prev => (prev - 1 + stats.length) % stats.length)}
-                                            className="w-10 h-10 rounded-full bg-slate-900/80 border border-white/10 flex items-center justify-center text-white pointer-events-auto active:scale-95 transition-transform"
-                                        >
-                                            <FontAwesomeIcon icon={faChevronLeft} />
-                                        </button>
-                                        <button
-                                            onClick={() => setStatIndex(prev => (prev + 1) % stats.length)}
-                                            className="w-10 h-10 rounded-full bg-slate-900/80 border border-white/10 flex items-center justify-center text-white pointer-events-auto active:scale-95 transition-transform"
-                                        >
-                                            <FontAwesomeIcon icon={faChevronRight} />
-                                        </button>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 w-full px-4">
+                                {stats.map((stat) => (
+                                    <div key={stat.id} className="transition-all duration-300">
+                                        <CompactStat value={stat.value} label={stat.label} icon={stat.icon} accentColor={stat.color} />
                                     </div>
-
-                                    {/* Stats Display Grid */}
-                                    <div
-                                        className="grid transition-all duration-500 gap-4
-                                                   grid-cols-1 sm:grid-cols-3 lg:grid-cols-5"
-                                    >
-                                        {/* Mobile/Carouselled items */}
-                                        {stats.map((stat, i) => {
-                                            const isVisibleMobile = i === statIndex;
-                                            return (
-                                                <div key={stat.id} className={`
-                                                    ${isVisibleMobile ? 'block' : 'hidden sm:block'}
-                                                    ${i >= 3 ? 'sm:hidden lg:block' : ''}
-                                                    transition-all duration-300
-                                                `}>
-                                                    <CompactStat
-                                                        value={stat.value}
-                                                        label={stat.label}
-                                                        icon={stat.icon}
-                                                        accentColor={stat.color}
-                                                    />
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-
-                                {/* Mobile Pagination Dots */}
-                                <div className="flex sm:hidden justify-center gap-2 mt-4">
-                                    {stats.map((_, i) => (
-                                        <div
-                                            key={i}
-                                            className={`h-1.5 rounded-full transition-all duration-300 ${i === statIndex ? 'w-4 bg-white/40' : 'w-1.5 bg-white/10'}`}
-                                        />
-                                    ))}
-                                </div>
+                                ))}
                             </div>
-
-                            {/* CTA to Charts */}
-                            <button
-                                onClick={() => route('/charts')}
-                                className="group flex items-center gap-3 px-6 py-3 md:px-8 md:py-4 rounded-xl
-                                           bg-gradient-to-r from-yellow-500/10 via-blue-500/10 to-rose-500/10
-                                           border border-white/[0.08] hover:border-white/[0.2]
-                                           backdrop-blur-sm shadow-lg
-                                           transition-all duration-300 hover:scale-[1.03] hover:shadow-xl
-                                           cursor-pointer"
-                            >
-                                <FontAwesomeIcon icon={faChartBar} className="text-yellow-400 text-base md:text-lg" />
-                                <div className="flex flex-col items-start">
-                                    <span className="text-white font-bold text-sm md:text-base tracking-wide">Explorar métricas completas</span>
-                                    <span className="text-slate-400 text-[10px] md:text-xs">Plataformas, motores, géneros y más estadísticas</span>
+                            <button onClick={() => route('/charts')} className="group flex items-center gap-3 px-6 py-3 md:px-8 md:py-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-xl transition-all hover:scale-[1.03] cursor-pointer">
+                                <FontAwesomeIcon icon={faChartBar} className="text-yellow-600 dark:text-yellow-400" />
+                                <div className="flex flex-col items-start text-left">
+                                    <span className="text-slate-800 dark:text-white font-bold text-sm">Explorar métricas completas</span>
+                                    <span className="text-slate-500 dark:text-slate-400 text-[10px]">Plataformas, motores y más estadísticas</span>
                                 </div>
-                                <FontAwesomeIcon icon={faArrowRight} className="text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all duration-300 text-sm md:text-base ml-2" />
+                                <FontAwesomeIcon icon={faArrowRight} className="text-slate-400 ml-2" />
                             </button>
                         </div>
                     </div>
 
-                    {/* Categories Panel */}
-                    <div className={`
-                        w-full transition-transform duration-500 ease-out
-                        ${showcaseTab === 'explore'
-                            ? 'opacity-100 translate-y-0 relative'
-                            : 'opacity-0 translate-y-4 absolute inset-x-0 top-0 pointer-events-none'
-                        }
-                    `}>
-                        <div className="relative">
-                            {/* Left arrow */}
+                    {/* Explore Panel */}
+                    <div className={`w-full transition-all duration-500 ${showcaseTab === 'explore' ? 'opacity-100 translate-y-0 relative' : 'opacity-0 translate-y-4 absolute inset-x-0 top-0 pointer-events-none'}`}>
+                         <div className="relative group/scroll">
                             {canScrollLeft && (
-                                <button
-                                    onClick={() => scrollCategories('left')}
-                                    className="absolute left-2 top-1/2 -translate-y-1/2 z-20
-                                               w-10 h-10 md:w-12 md:h-12 rounded-full
-                                               bg-slate-900/90 border border-white/10
-                                               flex items-center justify-center
-                                               text-white/70 hover:text-white hover:bg-slate-800
-                                               transition-all duration-200 shadow-xl
-                                               backdrop-blur-md cursor-pointer"
-                                    aria-label="Scroll left"
-                                >
+                                <button onClick={() => scrollCategories('left')} className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-white shadow-xl cursor-pointer">
                                     <FontAwesomeIcon icon={faChevronLeft} />
                                 </button>
                             )}
-                            {/* Right arrow */}
                             {canScrollRight && (
-                                <button
-                                    onClick={() => scrollCategories('right')}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20
-                                               w-10 h-10 md:w-12 md:h-12 rounded-full
-                                               bg-slate-900/90 border border-white/10
-                                               flex items-center justify-center
-                                               text-white/70 hover:text-white hover:bg-slate-800
-                                               transition-all duration-200 shadow-xl
-                                               backdrop-blur-md cursor-pointer"
-                                    aria-label="Scroll right"
-                                >
+                                <button onClick={() => scrollCategories('right')} className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-white shadow-xl cursor-pointer">
                                     <FontAwesomeIcon icon={faChevronRight} />
                                 </button>
                             )}
-
-                            {/* Scrollable row */}
-                            <div
-                                ref={categoryScrollRef}
-                                className="flex gap-4 md:gap-5 overflow-x-auto
-                                           scrollbar-hide scroll-smooth
-                                           snap-x snap-mandatory
-                                           px-6 md:px-8 py-6"
-                            >
+                            <div ref={categoryScrollRef} className="flex gap-4 md:gap-5 overflow-x-auto scrollbar-hide px-8 py-6 snap-x">
                                 {categoryData.map((cat, i) => (
                                     <div key={cat.preset.id} className="snap-center">
-                                        <CategoryCard
-                                            preset={cat.preset}
-                                            gameCount={cat.count}
-                                            backgroundSrc={cat.backgroundSrc}
-                                            onClick={() => handleCategoryClick(cat.preset)}
-                                            index={i}
-                                        />
+                                        <CategoryCard preset={cat.preset} gameCount={cat.count} backgroundSrc={cat.backgroundSrc} onClick={() => handleCategoryClick(cat.preset)} index={i} />
                                     </div>
                                 ))}
                             </div>
-
-                            {/* Fade edges */}
-                            {canScrollLeft && (
-                                <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-slate-950/80 to-transparent z-10" />
-                            )}
-                            {canScrollRight && (
-                                <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-slate-950/80 to-transparent z-10" />
-                            )}
                         </div>
                     </div>
                 </div>
 
-                {/* Progress dots */}
-                <ProgressDots
-                    activeTab={showcaseTab}
-                    onTabChange={handleTabChange}
-                    progress={progress}
-                />
+                <ProgressDots activeTab={showcaseTab} onTabChange={handleTabChange} progress={progress} />
 
-                {/* ── Scroll Hint ── */}
+                {/* Scroll Hint */}
                 <div className={`mt-6 md:mt-8 transition-all duration-1000 ${showHint ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-                    <button
-                        onClick={scrollDown}
-                        className="group flex flex-col items-center gap-2 p-2 transition-opacity duration-300 hover:opacity-80 cursor-pointer"
-                        aria-label="Desplazar hacia abajo"
-                    >
-                        <span className="text-slate-500 text-xs md:text-sm font-medium tracking-wide transition-colors group-hover:text-slate-300">
-                            Descubre el catálogo completo
-                        </span>
-                        <FontAwesomeIcon icon={faArrowDown} className="animate-bounce text-slate-600 group-hover:text-slate-400 md:text-xl transition-colors mt-1" />
+                    <button onClick={scrollDown} className="group flex flex-col items-center gap-2 p-2 cursor-pointer">
+                        <span className="text-slate-400 dark:text-slate-500 text-xs font-medium">Descubre el catálogo completo</span>
+                        <FontAwesomeIcon icon={faArrowDown} className="animate-bounce text-slate-400 dark:text-slate-600" />
                     </button>
                 </div>
             </div>
 
             <style>{`
-                .hero-fade-in {
-                    animation: heroFadeIn 1s ease-out forwards;
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-                @keyframes heroFadeIn {
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-                .snap-x {
-                    scroll-snap-type: x mandatory;
-                }
-                .snap-center {
-                    scroll-snap-align: center;
-                }
+                .hero-fade-in { animation: heroFadeIn 1s ease-out forwards; opacity: 0; transform: translateY(20px); }
+                @keyframes heroFadeIn { to { opacity: 1; transform: translateY(0); } }
+                .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+                .scrollbar-hide::-webkit-scrollbar { display: none; }
             `}</style>
         </div>
     );

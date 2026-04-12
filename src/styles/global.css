@@ -1,113 +1,137 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ——————————————————————————————————————————————————————————————————————————
+   Design Tokens (Dark = Default)
+   —————————————————————————————————————————————————————————————————————————— */
 @theme {
   --font-sans: 'Inter', 'SF Pro', system-ui, sans-serif;
-  
-  /* Deep Dark Backgrounds for Legibility */
-  --color-slate-950: #0d0a11;
-  --color-slate-900: #18131e;
-  --color-slate-800: #221a2a;
-  --color-slate-700: #2c1b2e; /* Palette's darkest shade as base border/accent */
-  --color-slate-600: #3b2a3d;
-  --color-slate-500: #5b4a5d;
-  --color-slate-400: #9c8a9d;
-  --color-slate-300: #d4cfd6;
-  --color-slate-200: #eae7ec;
-  --color-slate-100: #fff4e0; /* Palette's warm white */
-  --color-slate-50:  #ffffff;
-  --color-white: #fff4e0;
 
-  /* Venezuelan Flag / Core Highlights */
-  --color-yellow-300: #f2b63d;
-  --color-yellow-400: #f2b63d;
-  --color-yellow-500: #f2b63d;
+  /* Surface */
+  --color-bg-base:    #0d0a11;
+  --color-bg-surface: #18131e;
+  --color-bg-muted:   #221a2a;
+  --color-bg-subtle:  #2c1b2e;
 
-  --color-blue-400: #457cd6;
-  --color-blue-500: #457cd6;
-  --color-blue-600: #457cd6;
+  /* Text */
+  --color-text-primary:   #eae7ec;
+  --color-text-secondary: #9c8a9d;
+  --color-text-muted:     #5b4a5d;
 
-  --color-red-400: #e34262;
-  --color-red-500: #e34262;
-  --color-red-600: #94353d;
+  /* Border */
+  --color-border:       #2c1b2e;
+  --color-border-muted: #221a2a;
 
-  /* Supplemental Highlights mapped from the 17 Custom Colors */
-  --color-cyan-200: #8fcccb;
-  --color-cyan-300: #8fcccb;
-  --color-cyan-400: #8fcccb;
-  --color-cyan-500: #449489;
-  --color-cyan-950: #285763;
-  
-  --color-indigo-400: #4b3b9c;
-  --color-indigo-500: #4b3b9c;
-  --color-indigo-600: #2f2b5c;
+  /* Accent */
+  --color-accent: #06b6d4;
+}
 
-  --color-emerald-300: #b4ba47;
-  --color-emerald-400: #b4ba47;
-  --color-emerald-500: #6d8c32;
-  --color-emerald-600: #6d8c32;
-  
-  --color-orange-300: #d46e33;
-  --color-orange-400: #d46e33;
-  --color-orange-500: #d46e33;
+/* Light Mode Override */
+:root.light, .light {
+  --color-bg-base:    #f8f8fc;
+  --color-bg-surface: #ffffff;
+  --color-bg-muted:   #f0eef5;
+  --color-bg-subtle:  #e8e4f0;
 
-  --color-purple-300: #9c656c;
-  --color-purple-400: #9c656c;
-  --color-purple-500: #57253b;
-  --color-purple-600: #2c1b2e;
+  --color-text-primary:   #1a1523;
+  --color-text-secondary: #5b4a5d;
+  --color-text-muted:     #9c8a9d;
 
-  /* Status Colors */
-  --color-status-released: #16a34a;
-  --color-status-in-development: #f2b63d;
-  --color-status-on-hold: #71717a;
-  --color-status-canceled: #94353d;
-  --color-status-demo: #4ade80;
-  --color-status-prototype: #e4e4e7;
-  --color-status-lost: #fecaca;
-  --color-status-early: #449489;
-  --color-status-recovered: #457cd6;
-  --color-status-unknown: #18181b;
+  --color-border:       #ddd8e8;
+  --color-border-muted: #eae7ec;
+}
+
+/* Apply tokens to Tailwind's css vars (so dark: variants work via .dark class) */
+@layer theme {
+  .dark {
+    --color-slate-950: #0d0a11;
+    --color-slate-900: #18131e;
+    --color-slate-800: #221a2a;
+    --color-slate-700: #2c1b2e;
+    --color-slate-600: #3b2a3d;
+    --color-slate-500: #5b4a5d;
+    --color-slate-400: #9c8a9d;
+    --color-slate-300: #d4cfd6;
+    --color-slate-200: #eae7ec;
+    --color-slate-100: #fff4e0;
+    --color-slate-50:  #ffffff;
+  }
+  .light {
+    --color-slate-950: #f8f8fc;
+    --color-slate-900: #ffffff;
+    --color-slate-800: #f0eef5;
+    --color-slate-700: #e8e4f0;
+    --color-slate-600: #ddd8e8;
+    --color-slate-500: #9c8a9d;
+    --color-slate-400: #5b4a5d;
+    --color-slate-300: #2c1b2e;
+    --color-slate-200: #1a1523;
+    --color-slate-100: #100d16;
+    --color-slate-50:  #0d0a11;
+  }
 }
 
 :root {
-    --header-height: 80px;
-    --primary-glow: conic-gradient(from 180deg at 50% 50%, #457cd6 0deg, #e34262 180deg, #f2b63d 360deg);
+  --expo-in: linear(
+    0 0%, 0.0085 31.26%, 0.0167 40.94%, 0.0289 48.86%, 0.0471 55.92%,
+    0.0717 61.99%, 0.1038 67.32%, 0.1443 72.07%, 0.1989 76.7%,
+    0.2659 80.89%, 0.3465 84.71%, 0.4419 88.22%, 0.554 91.48%,
+    0.6835 94.51%, 0.8316 97.34%, 1 100%
+  );
+  --expo-out: linear(
+    0 0%, 0.1684 2.66%, 0.3165 5.49%, 0.446 8.52%, 0.5581 11.78%,
+    0.6535 15.29%, 0.7341 19.11%, 0.8011 23.3%, 0.8557 27.93%,
+    0.8962 32.68%, 0.9283 38.01%, 0.9529 44.08%, 0.9711 51.14%,
+    0.9833 59.06%, 0.9915 68.74%, 1 100%
+  );
 }
 
 body {
-    background-color: var(--color-slate-950);
-    background-image:
-            radial-gradient(at 0% 0%, var(--color-slate-900) 0, transparent 50%),
-            radial-gradient(at 50% 0%, var(--color-slate-800) 0, transparent 50%),
-            radial-gradient(at 100% 0%, var(--color-slate-950) 0, transparent 50%);
-    background-attachment: fixed;
-    color: var(--color-slate-200);
-    overflow-x: hidden;
-    width: 100%;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #0d0a11; /* slate-950 */
-}
-::-webkit-scrollbar-thumb {
-    background: #2c1b2e; /* slate-700 / palette's darkest */
-    border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #4b3b9c; /* nice palette highlight */
+/* ——————————————————————————————————————————————————————————————————————————
+   View Transition API — Logo Reveal (Working Pattern)
+   Exact pattern from working examples. Single mask layer only.
+   —————————————————————————————————————————————————————————————————————————— */
+
+::view-transition-group(root) {
+  animation-timing-function: var(--expo-out);
+  z-index: 2147483647;
 }
 
-.glass-panel {
-    background: rgba(24, 19, 30, 0.7); /* slate-900 eq */
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 244, 224, 0.05); /* very faint white */
+/* Old always sits behind */
+::view-transition-old(root),
+.dark::view-transition-old(root) {
+  animation: none;
+  animation-fill-mode: both;
+  z-index: -1;
 }
 
-/* Layout helper para que el contenido NO quede debajo del header fijo */
-.app-content {
-    padding-top: var(--header-height);
+/* New layer: logo mask that scales out from center */
+::view-transition-new(root) {
+  mask: url('https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png') center / 0 no-repeat;
+  -webkit-mask: url('https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png') center / 0 no-repeat;
+  animation: vj-logo-scale 1.2s;
+  animation-fill-mode: both;
+  animation-timing-function: var(--expo-in);
 }
+
+/* 3-phase: appear → hold logo → full expand */
+@keyframes vj-logo-scale {
+  0%   { mask-size: 0;       -webkit-mask-size: 0; }
+  12%  { mask-size: 70vmin;  -webkit-mask-size: 70vmin; }
+  80%  { mask-size: 70vmin;  -webkit-mask-size: 70vmin; }
+  100% { mask-size: 200vmax; -webkit-mask-size: 200vmax; }
+}
+
+/* ——————————————————————————————————————————————————————————————————————————
+   Scrollbar
+   —————————————————————————————————————————————————————————————————————————— */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--color-bg-base); }
+::-webkit-scrollbar-thumb { background: var(--color-bg-subtle); border-radius: 10px; }
