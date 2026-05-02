@@ -28,3 +28,4 @@ export { default as Firefly } from './Firefly';
 export { default as FireflyOverlay } from './FireflyOverlay';
 export { default as UserProfile } from './UserProfile';
 export { default as PageTransition } from './PageTransition';
+export { default as ScreenshotLightbox } from './ScreenshotLightbox';

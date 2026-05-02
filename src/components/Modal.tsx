@@ -8,7 +8,8 @@ import { CloseIcon, LinkIcon } from '@/src/components/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faHeart as faHeartSolid, faStar as faStarSolid, faEye } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-regular-svg-icons';
-import { StoreButton } from '@/src/components';
+import StoreButton from './StoreButton';
+import ScreenshotLightbox from './ScreenshotLightbox';
 import { trackEvent } from '@/src/utils/analytics';
 import { useGameStats } from '@/src/hooks/useGameStats';
 import { useSpacetimeDB } from '@/src/spacetimedb/connection';
@@ -84,6 +85,13 @@ const Modal = ({ game, onClose }: ModalProps) => {
         lineHeight: 24
     });
     const [isDescExpanded, setIsDescExpanded] = useState(false);
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+    const [currentShotIndex, setCurrentShotIndex] = useState(0);
+
+    const openLightbox = (index: number) => {
+        setCurrentShotIndex(index);
+        setIsLightboxOpen(true);
+    };
 
     useEffect(() => {
         if (isConnected && game.slug && connection) {
@@ -123,7 +131,6 @@ const Modal = ({ game, onClose }: ModalProps) => {
                 className="bg-slate-900 border border-slate-700/50 shadow-2xl rounded-2xl w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] flex flex-col overflow-hidden relative animate-slide-up"
                 onClick={e => e.stopPropagation()}
             >
-                {/* Close Button Top Right */}
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-slate-950/60 text-slate-300 hover:text-white hover:bg-red-500/80 backdrop-blur-md transition-all border border-slate-700/50 hover:border-transparent"
@@ -132,24 +139,19 @@ const Modal = ({ game, onClose }: ModalProps) => {
                     <CloseIcon />
                 </button>
 
-                {/* Scrollable Container */}
                 <div className="overflow-y-auto flex-1 w-full relative custom-scrollbar">
 
-                    {/* Hero Section */}
                     <div className="relative w-full h-56 md:h-80 flex-shrink-0 bg-slate-950">
                         <img
                             src={game.imageHero || game.imageCover || game.imageUrl}
                             alt={game.title}
                             className="w-full h-full object-cover opacity-80"
                         />
-                        {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
                     </div>
 
-                    {/* Content Area */}
                     <div className="px-6 md:px-10 pb-10 -mt-20 md:-mt-24 relative z-10 w-full flex flex-col gap-8">
 
-                        {/* Header (Title & Buttons) */}
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                             <div>
                                 <h2 className="text-3xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight leading-tight">{game.title}</h2>
@@ -164,7 +166,6 @@ const Modal = ({ game, onClose }: ModalProps) => {
                             </button>
                         </div>
 
-                        {/* Stats Bar - Quick Interactions */}
                         <div className="flex items-stretch bg-slate-950/40 backdrop-blur-xl rounded-2xl border border-white/5 divide-x divide-white/10 overflow-hidden shadow-2xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
                             <button
                                 onClick={handleToggleLike}
@@ -189,10 +190,8 @@ const Modal = ({ game, onClose }: ModalProps) => {
                             </div>
                         </div>
 
-                        {/* Main Content Grid */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
 
-                            {/* Left Column: Media & Pitch */}
                             <div className="lg:col-span-2 flex flex-col gap-8">
                                 {game.pitch && (
                                     <div className="bg-slate-800/40 p-6 rounded-2xl border border-slate-700/40" ref={pitchRef}>
@@ -211,7 +210,6 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                     </div>
                                 )}
 
-                                {/* Descripción completa */}
                                 {!embedUrl && game.description && (
                                     <div className="bg-slate-800/20 p-6 rounded-2xl border border-slate-700/30" ref={descRef}>
                                         <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Descripción General</h3>
@@ -229,7 +227,6 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                     </div>
                                 )}
 
-                                {/* Trailer */}
                                 {embedUrl && (
                                     <div className="flex flex-col gap-3">
                                         <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -248,7 +245,6 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                     </div>
                                 )}
 
-                                {/* Screenshots */}
                                 {game.screenshots && game.screenshots.length > 0 && (
                                     <div className="flex flex-col gap-3">
                                         <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -256,23 +252,27 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                         </h3>
                                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                                             {game.screenshots.slice(0, 6).map((shot, idx) => (
-                                                <img
+                                                <button
                                                     key={`${shot}-${idx}`}
-                                                    src={shot}
-                                                    alt={`Screenshot ${idx + 1}`}
-                                                    className="w-full h-24 md:h-32 object-cover rounded-xl border border-slate-700/50 hover:border-cyan-500/50 transition-colors"
-                                                    loading="lazy"
-                                                />
+                                                    onClick={() => openLightbox(idx)}
+                                                    className="relative group/shot overflow-hidden rounded-xl border border-slate-700/50 hover:border-cyan-500/50 transition-all duration-300 hover:scale-[1.02]"
+                                                >
+                                                    <img
+                                                        src={shot}
+                                                        alt={`Screenshot ${idx + 1}`}
+                                                        className="w-full h-24 md:h-32 object-cover cursor-zoom-in group-hover/shot:scale-110 transition-transform duration-700"
+                                                        loading="lazy"
+                                                    />
+                                                    <div className="absolute inset-0 bg-cyan-500/10 opacity-0 group-hover/shot:opacity-100 transition-opacity" />
+                                                </button>
                                             ))}
                                         </div>
                                     </div>
                                 )}
                             </div>
 
-                            {/* Right Column: Metadata */}
                             <div className="flex flex-col gap-6">
 
-                                {/* Stores */}
                                 {game.stores.length > 0 && (
                                     <div className="flex flex-col gap-2">
                                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Disponible en</h3>
@@ -284,7 +284,6 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                     </div>
                                 )}
 
-                                {/* Links */}
                                 {game.links.length > 0 && (
                                     <div className="flex flex-col gap-2">
                                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Enlaces y Redes</h3>
@@ -305,7 +304,6 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                     </div>
                                 )}
 
-                                {/* Game Meta Detail List */}
                                 <div className="bg-slate-800/30 p-5 rounded-2xl border border-slate-700/40">
                                     <dl className="grid grid-cols-1 gap-y-4">
                                         <DetailItem label="Estado">{game.status}</DetailItem>
@@ -326,34 +324,12 @@ const Modal = ({ game, onClose }: ModalProps) => {
                 </div>
             </div>
 
-            <style>{`
-                @keyframes fade-in {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-                .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
-                
-                @keyframes slide-up {
-                    from { transform: translateY(20px) scale(0.98); opacity: 0; }
-                    to { transform: translateY(0) scale(1); opacity: 1; }
-                }
-                .animate-slide-up { animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
-                /* Custom Scrollbar specifically for the modal body */
-                .custom-scrollbar::-webkit-scrollbar {
-                    width: 6px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-track {
-                    background: transparent;
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: rgba(156, 138, 157, 0.3); /* slate-400 with opacity */
-                    border-radius: 10px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: rgba(156, 138, 157, 0.6);
-                }
-            `}</style>
+            <ScreenshotLightbox
+                isOpen={isLightboxOpen}
+                onClose={() => setIsLightboxOpen(false)}
+                screenshots={game.screenshots || []}
+                initialIndex={currentShotIndex}
+            />
         </div>
     );
 };
