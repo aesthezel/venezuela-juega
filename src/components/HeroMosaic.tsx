@@ -242,15 +242,15 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
     return (
         <div
             ref={containerRef}
-            className="relative w-full min-h-screen overflow-hidden bg-slate-950"
+            className="relative w-full min-h-screen overflow-hidden"
         >
             {/* Background mosaic grid */}
             <div
                 ref={gridRef}
-                className="pointer-events-none absolute inset-[-10%] -rotate-3 grid h-[120%] w-[120%] select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7"
+                className="pointer-events-none absolute inset-[-10%] -rotate-3 grid h-[120%] w-[120%] select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7 z-[-10]"
             >
                 {mosaicGames.map((game) => (
-                    <div key={game.id} className="relative h-full w-full overflow-hidden rounded-lg bg-slate-800 shadow-xl">
+                    <div key={game.id} className="relative h-full w-full overflow-hidden rounded-lg bg-white/5 border border-white/10 backdrop-blur-[2px] shadow-xl">
                         <CoverImage
                             src={game.imageCover || game.imageUrl}
                             alt=""

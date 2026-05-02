@@ -170,7 +170,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
     return (
         <>
             <PageTransition>
-                <main className="container mx-auto px-4 py-8 relative">
+                <main className="container mx-auto px-4 py-8 relative z-10">
                     {/* Global Decorative Blur Backgrounds */}
                     <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/5 blur-[120px] rounded-full -z-10 animate-pulse pointer-events-none" />
                     <div className="fixed bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-500/5 blur-[120px] rounded-full -z-10 animate-pulse pointer-events-none" />

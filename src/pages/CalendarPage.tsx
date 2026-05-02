@@ -237,7 +237,7 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
 
     return (
         <PageTransition>
-            <main className="container mx-auto px-4 py-8">
+            <main className="container mx-auto px-4 py-8 relative z-10">
             {previewGame && <CalendarTooltip game={previewGame} position={previewPosition} />}
 
             <BackButton onClick={onNavigateToCatalog} className="mb-6" />

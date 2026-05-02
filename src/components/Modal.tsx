@@ -124,11 +124,11 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
     return (
         <div
-            className="fixed inset-0 z-[100] flex justify-center items-center p-2 sm:p-4 md:p-6 bg-slate-950/80 backdrop-blur-sm animate-fade-in"
+            className="fixed inset-0 z-[100] flex justify-center items-center p-2 sm:p-4 md:p-6 bg-black/60 backdrop-blur-md animate-fade-in"
             onClick={onClose}
         >
             <div
-                className="bg-slate-900 border border-slate-700/50 shadow-2xl rounded-2xl w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] flex flex-col overflow-hidden relative animate-slide-up"
+                className="glass-panel shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] rounded-3xl w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] flex flex-col overflow-hidden relative animate-slide-up"
                 onClick={e => e.stopPropagation()}
             >
                 <button

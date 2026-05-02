@@ -115,7 +115,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
         <div
             ref={containerRef}
             onClick={onClick}
-            className={`bg-slate-800 rounded-lg overflow-hidden shadow-lg cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col relative ${
+            className={`glass-card overflow-hidden shadow-lg cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col relative ${
                 fireflyCount > 0
                     ? 'ring-1 ring-cyan-400/40 hover:shadow-cyan-500/50'
                     : 'hover:shadow-cyan-500/50'
@@ -270,7 +270,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
 
                 <div className="mt-auto pt-4 flex flex-wrap gap-2">
                     {game.genre.slice(0, 2).map(g => (
-                        <span key={g} className="bg-slate-700 text-cyan-400 text-xs font-semibold px-2.5 py-1 rounded-full">{g}</span>
+                        <span key={g} className="bg-white/5 border border-white/10 backdrop-blur-md text-cyan-400 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full">{g}</span>
                     ))}
                 </div>
             </div>

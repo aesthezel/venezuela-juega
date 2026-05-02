@@ -135,18 +135,18 @@ const CatalogPage = ({
     }, [filteredGames, alpha]);
 
     return (
-        <div className="w-full bg-slate-900 min-h-screen">
+        <div className="w-full min-h-screen">
             <HeroMosaic games={games} jamGames={jamGames} onGameClick={onGameClick} onCategorySelect={handleCategorySelect} />
 
             <PageTransition>
-                <main id="catalog-content" className="container mx-auto px-4 py-8">
+                <main id="catalog-content" className="container mx-auto px-4 py-8 relative z-10">
 
                 <div className="mb-12 space-y-12">
                     <Highlights games={games} onGameClick={onGameClick} />
                     {/*<GameJamPlusSection games={games} onGameClick={onGameClick}/>*/}
                 </div>
 
-                <div className="sticky top-0 z-15 bg-slate-900/95 backdrop-blur-md py-4 -mx-4 px-4 border-b border-slate-800 mb-8 shadow-2xl transition-all duration-300">
+                <div className="sticky top-0 z-15 bg-slate-950/40 backdrop-blur-xl py-4 -mx-4 px-4 border-b border-white/5 mb-8 shadow-2xl transition-all duration-300">
                     <div className="container mx-auto flex flex-col gap-4">
                         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
 
@@ -189,7 +189,7 @@ const CatalogPage = ({
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
 
                     <aside className="hidden lg:block lg:col-span-3">
-                        <div className="bg-slate-800/40 rounded-xl p-5 border border-slate-700/50 sticky top-52 backdrop-blur-sm transition-all z-10">
+                        <div className="glass-panel rounded-2xl p-6 sticky top-52 transition-all z-10">
 
                             <FilterPanel
                                 genres={allGenres}

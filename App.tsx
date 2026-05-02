@@ -132,31 +132,43 @@ const App = () => {
     return (
         <SpacetimeDBProvider>
             <FireflyProvider currentPath={currentPath}>
-                <div className="relative min-h-screen bg-slate-900 text-gray-200 font-sans flex flex-col">
-                    <Header currentPath={currentPath} />
-                    <div className="flex-grow app-content">
-                        <Router onChange={handleRouteChange}>
-                            <CatalogPage path="/" {...catalogPageProps} />
-                            <CatalogPage path="/game" {...catalogPageProps} />
-                            <CatalogPage path="/games" {...catalogPageProps} />
-                            <GameJamGalleryPage path="/gamejam-gallery" games={games} onGameClick={handleOpenModal} />
-                            <Redirect path="/gamejam-gallery/" to="/gamejam-gallery" />
-                            <GameJamsPage path="/game-jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
-                            <Redirect path="/game-jams/" to="/game-jams" />
-                            <CalendarPage path="/calendar" games={games} onNavigateToCatalog={navigateToCatalog} onEventClick={handleOpenModal} />
-                            <ChartsPage path="/charts" games={allGames} onNavigateToCatalog={navigateToCatalog} onGameClick={handleOpenModal} />
-                            <GameDetailPage path="/game/:gameSlug" games={allGames} />
-                            <GameDetailPage path="/games/:gameSlug" games={allGames} />
-                            <AddGamePage path="/add-game" onAddNewGame={() => { }} onNavigateToCatalog={navigateToCatalog} />
-                            <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
-                            <AboutPage path="/credits" onNavigateToCatalog={navigateToCatalog} />
-                            <NotFoundPage default games={allGames} onGameClick={handleOpenModal} />
-                        </Router>
-                    </div>
-                    <Footer />
-                    <ScrollToTop />
+                <div className="relative min-h-screen text-gray-200 font-sans flex flex-col overflow-hidden">
+                    {/* Deep Layers */}
+                    <div className="fixed inset-0 bg-slate-950 -z-[100] pointer-events-none" />
                     <FireflyOverlay />
-                    {selectedGame && <Modal game={selectedGame} onClose={handleCloseModal} />}
+                    
+                    {/* Main Content Layers */}
+                    <div className="relative flex flex-col min-h-screen">
+                        <Header currentPath={currentPath} />
+                        <div className="flex-grow app-content">
+                            <Router onChange={handleRouteChange}>
+                                <CatalogPage path="/" {...catalogPageProps} />
+                                <CatalogPage path="/game" {...catalogPageProps} />
+                                <CatalogPage path="/games" {...catalogPageProps} />
+                                <GameJamGalleryPage path="/gamejam-gallery" games={games} onGameClick={handleOpenModal} />
+                                <Redirect path="/gamejam-gallery/" to="/gamejam-gallery" />
+                                <GameJamsPage path="/game-jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
+                                <Redirect path="/game-jams/" to="/game-jams" />
+                                <CalendarPage path="/calendar" games={games} onNavigateToCatalog={navigateToCatalog} onEventClick={handleOpenModal} />
+                                <ChartsPage path="/charts" games={allGames} onNavigateToCatalog={navigateToCatalog} onGameClick={handleOpenModal} />
+                                <GameDetailPage path="/game/:gameSlug" games={allGames} />
+                                <GameDetailPage path="/games/:gameSlug" games={allGames} />
+                                <AddGamePage path="/add-game" onAddNewGame={() => { }} onNavigateToCatalog={navigateToCatalog} />
+                                <AddGamePage path="/add-game/" onAddNewGame={() => { }} onNavigateToCatalog={navigateToCatalog} />
+                                <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
+                                <AboutPage path="/credits" onNavigateToCatalog={navigateToCatalog} />
+                                <NotFoundPage default games={allGames} onGameClick={handleOpenModal} />
+                            </Router>
+                        </div>
+                        <Footer />
+                    </div>
+
+                    <ScrollToTop />
+                    {selectedGame && (
+                        <div className="relative z-[100]">
+                            <Modal game={selectedGame} onClose={handleCloseModal} />
+                        </div>
+                    )}
                 </div>
             </FireflyProvider>
         </SpacetimeDBProvider>

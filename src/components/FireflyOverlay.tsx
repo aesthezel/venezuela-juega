@@ -5,7 +5,7 @@ const FireflyOverlay = () => {
   const { otherFireflies } = useFireflyOverlay();
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none z-[9999] overflow-hidden select-none">
+    <div className="absolute inset-0 w-full h-full pointer-events-none z-[-5] overflow-hidden select-none">
       {otherFireflies.map((f) => (
         <Firefly 
           key={f.playerId.toHexString()} 

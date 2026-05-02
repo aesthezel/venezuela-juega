@@ -467,7 +467,7 @@ const ChartsPage = ({ games, onNavigateToCatalog, onGameClick }: ChartsPageProps
 
     return (
         <PageTransition>
-            <main className="container mx-auto px-4 py-8">
+            <main className="container mx-auto px-4 py-8 relative z-10">
                 <BackButton onClick={onNavigateToCatalog} className="mb-6" />
 
                 {/* Page Header */}

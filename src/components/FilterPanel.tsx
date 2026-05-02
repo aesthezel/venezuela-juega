@@ -35,7 +35,7 @@ const AccordionItem = ({ title, icon, isOpen, onClick, children, badgeCount }: {
                 className="w-full flex items-center justify-between py-3 group cursor-pointer outline-none"
             >
                 <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20' : 'bg-slate-800/60 text-slate-400 group-hover:bg-slate-700/80 group-hover:text-slate-200'}`}>
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20' : 'bg-white/5 text-slate-400 group-hover:bg-white/10 group-hover:text-slate-200'}`}>
                         <FontAwesomeIcon icon={icon} className="text-sm" />
                     </div>
                     <div className="flex flex-col items-start translate-y-[1px]">
@@ -85,7 +85,7 @@ const FilterList = ({ items, selectedItems, onToggleItem, category, onClear }: {
                         <div
                             key={item}
                             onClick={() => onToggleItem(category, item)}
-                            className={`px-3 py-2.5 rounded-xl cursor-pointer flex items-center justify-between group/item transition-all duration-200 ${isSelected ? 'bg-cyan-500/10 border border-cyan-500/20' : 'hover:bg-slate-800/40 border border-transparent'
+                            className={`px-3 py-2.5 rounded-xl cursor-pointer flex items-center justify-between group/item transition-all duration-200 ${isSelected ? 'bg-cyan-500/10 border border-cyan-500/20' : 'hover:bg-white/5 border border-transparent'
                                 }`}
                         >
                             <span className={`text-sm tracking-wide transition-colors ${isSelected ? 'text-cyan-400 font-bold' : 'text-slate-400 group-hover/item:text-slate-200'}`}>
@@ -123,7 +123,7 @@ const FilterButtons = ({ items, category, activeItems, onFilterChange, itemColor
                     onClick={() => onFilterChange(category, item)}
                     className={`group relative px-4 py-2 text-[11px] font-black rounded-xl transition-all duration-300 border uppercase tracking-wider ${isActive
                         ? 'text-white border-transparent'
-                        : 'bg-slate-800/40 hover:bg-slate-800/80 text-slate-500 hover:text-slate-200 border-slate-700/30'
+                        : 'bg-white/5 hover:bg-white/10 text-slate-500 hover:text-slate-200 border-white/5'
                         }`}
                     style={isActive && statusColorBase ? {
                         backgroundColor: `var(--color-${statusColorBase})`,
@@ -184,7 +184,7 @@ const YearRangeInputs = ({ minYear, maxYear, yearRange, onYearRangeChange }: { m
                     onInput={(e) => setMinVal(e.currentTarget.value)}
                     onBlur={commitChanges}
                     onKeyDown={handleKeyDown}
-                    className="w-full bg-slate-800/30 border border-slate-700/40 text-white rounded-xl py-3.5 px-3 text-center text-sm font-black focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none transition-all group-hover:border-slate-600"
+                    className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3.5 px-3 text-center text-sm font-black focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none transition-all group-hover:border-white/20 backdrop-blur-md"
                     placeholder={String(minYear)}
                 />
                 <div className="absolute -top-2 left-3 bg-slate-900 px-2 text-[9px] text-slate-500 font-black uppercase tracking-[0.2em] group-focus-within:text-cyan-400 transition-colors">Desde</div>
@@ -196,7 +196,7 @@ const YearRangeInputs = ({ minYear, maxYear, yearRange, onYearRangeChange }: { m
                     onInput={(e) => setMaxVal(e.currentTarget.value)}
                     onBlur={commitChanges}
                     onKeyDown={handleKeyDown}
-                    className="w-full bg-slate-800/30 border border-slate-700/40 text-white rounded-xl py-3.5 px-3 text-center text-sm font-black focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none transition-all group-hover:border-slate-600"
+                    className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3.5 px-3 text-center text-sm font-black focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 outline-none transition-all group-hover:border-white/20 backdrop-blur-md"
                     placeholder={String(maxYear)}
                 />
                 <div className="absolute -top-2 left-3 bg-slate-900 px-2 text-[9px] text-slate-500 font-black uppercase tracking-[0.2em] group-focus-within:text-cyan-400 transition-colors">Hasta</div>
