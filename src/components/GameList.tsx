@@ -114,7 +114,7 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
   const GameRowItem = ({ game, idx }: { game: Game; idx: number }) => {
     const { totalHearts, hasLiked, toggleLike, isReady } = useGameStats(game.slug);
     const fireflyCount = useFireflyPresence(game.slug);
-    
+
     const [isHovered, setIsHovered] = useState(false);
     const trailerInfo = useMemo(() => getTrailerInfo(game.trailerUrl), [game.trailerUrl]);
 
@@ -122,8 +122,8 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
     const handleMouseLeave = () => setIsHovered(false);
 
     const handleToggleLike = (e: MouseEvent) => {
-        e.stopPropagation();
-        toggleLike();
+      e.stopPropagation();
+      toggleLike();
     };
 
     return (
@@ -131,11 +131,10 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
         onClick={() => { trackGameCardClick({ slug: game.slug, title: game.title }, idx, 'list'); onGameClick(game); }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className={`game-list-row w-full text-left transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer relative ${
-          fireflyCount > 0
-            ? 'bg-surface-800 hover:bg-surface-700 border-l-2 border-l-accent-teal/60'
-            : 'bg-surface-800 hover:bg-surface-700'
-        }`}
+        className={`game-list-row w-full text-left transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer relative ${fireflyCount > 0
+          ? 'bg-surface-800 hover:bg-surface-700 border-l-2 border-l-accent-teal/60'
+          : 'bg-surface-800 hover:bg-surface-700'
+          }`}
         style={fireflyCount > 0 ? {
           boxShadow: `inset 4px 0 ${Math.min(fireflyCount * 6, 20)}px rgba(34, 211, 238, ${Math.min(fireflyCount * 0.06, 0.15)})`,
         } : undefined}
@@ -148,36 +147,36 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
             imgClassName="w-full h-full object-cover"
           />
           {isHovered && trailerInfo && (
-              trailerInfo.type === 'youtube' ? (
-                  <iframe
-                      src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] pointer-events-none opacity-0 transition-opacity duration-700"
-                      style={{ maxWidth: 'none' }}
-                      allow="autoplay; encrypted-media"
-                      title={`${game.title} trailer`}
-                      onLoad={(e) => {
-                          if (e.target instanceof HTMLIFrameElement) {
-                              e.target.classList.remove('opacity-0');
-                              e.target.classList.add('opacity-100');
-                          }
-                      }}
-                  />
-              ) : (
-                  <video
-                      src={trailerInfo.url}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700"
-                      onCanPlay={(e) => {
-                          if (e.target instanceof HTMLVideoElement) {
-                              e.target.classList.remove('opacity-0');
-                              e.target.classList.add('opacity-100');
-                          }
-                      }}
-                  />
-              )
+            trailerInfo.type === 'youtube' ? (
+              <iframe
+                src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] pointer-events-none opacity-0 transition-opacity duration-700"
+                style={{ maxWidth: 'none' }}
+                allow="autoplay; encrypted-media"
+                title={`${game.title} trailer`}
+                onLoad={(e) => {
+                  if (e.target instanceof HTMLIFrameElement) {
+                    e.target.classList.remove('opacity-0');
+                    e.target.classList.add('opacity-100');
+                  }
+                }}
+              />
+            ) : (
+              <video
+                src={trailerInfo.url}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700"
+                onCanPlay={(e) => {
+                  if (e.target instanceof HTMLVideoElement) {
+                    e.target.classList.remove('opacity-0');
+                    e.target.classList.add('opacity-100');
+                  }
+                }}
+              />
+            )
           )}
         </div>
         <div className="min-w-0 flex-1">
@@ -196,32 +195,31 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
             {(game.platform?.length ? game.platform : ['Plataforma no especificada']).join(' • ')}
           </div>
         </div>
-        
+
         <div className="flex items-center gap-3 ml-auto mr-1">
-            {/* Firefly presence badge */}
-            {fireflyCount > 0 && (
-                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-accent-teal-dark/10 border border-accent-teal/20">
-                    <span className="relative flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-teal opacity-75" />
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent-teal shadow-[0_0_4px_#22d3ee]" />
-                    </span>
-                    <span className="text-[10px] font-bold text-accent-teal">{fireflyCount}</span>
-                </div>
-            )}
-            <div
-                onClick={isReady ? handleToggleLike : undefined}
-                className={`flex items-center gap-1.5 transition-all duration-300 group/like px-2 py-1 rounded-md hover:bg-white/5 ${
-                    hasLiked ? 'text-rose-400' : 'text-surface-500 hover:text-white'
-                } ${!isReady ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                title={!isReady ? "Iniciando conexión..." : (hasLiked ? "Quitar me gusta" : "Me gusta")}
-            >
-                <span className="text-xs font-bold">{totalHearts > 0 ? totalHearts : ''}</span>
-                <FontAwesomeIcon 
-                    icon={hasLiked ? faHeartSolid : faHeartReg} 
-                    className={`text-base transition-transform duration-300 ${hasLiked ? "scale-110 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]" : "group-hover/like:scale-110"}`} 
-                />
+          {/* Firefly presence badge */}
+          {fireflyCount > 0 && (
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-accent-teal-dark/10 border border-accent-teal/20">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-teal opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent-teal shadow-[0_0_4px_#22d3ee]" />
+              </span>
+              <span className="text-[10px] font-bold text-accent-teal">{fireflyCount}</span>
             </div>
-            <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1 shadow-sm" />
+          )}
+          <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-md px-2 py-1 shadow-sm" />
+          <div
+            onClick={isReady ? handleToggleLike : undefined}
+            className={`flex items-center gap-1.5 transition-all duration-300 group/like px-2 py-1 rounded-md hover:bg-white/5 ${hasLiked ? 'text-rose-400' : 'text-surface-500 hover:text-white'
+              } ${!isReady ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            title={!isReady ? "Iniciando conexión..." : (hasLiked ? "Quitar me gusta" : "Me gusta")}
+          >
+            <span className="text-xs font-bold">{totalHearts > 0 ? totalHearts : ''}</span>
+            <FontAwesomeIcon
+              icon={hasLiked ? faHeartSolid : faHeartReg}
+              className={`text-base transition-transform duration-300 ${hasLiked ? "scale-110 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]" : "group-hover/like:scale-110"}`}
+            />
+          </div>
         </div>
       </div>
     );
