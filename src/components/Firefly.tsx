@@ -75,7 +75,7 @@ const Firefly = ({ x, y, id }: FireflyProps) => {
       }}
     >
       {/* Outer glow ring */}
-      <div className="absolute inset-0 w-full h-full animate-pulse opacity-30 bg-cyan-400 rounded-full blur-[2px]" />
+      <div className="absolute inset-0 w-full h-full animate-pulse opacity-30 bg-accent-teal rounded-full blur-[2px]" />
       
       {/* Core point */}
       <div className="absolute inset-1 w-1 h-1 bg-white rounded-full shadow-[0_0_10px_white]" />

@@ -67,8 +67,8 @@ const GameJamPlusSection = ({ games, onGameClick }: GameJamPlusSectionProps) => 
                 {gameJamPlusGames.length > 6 && (
                     <button
                         onClick={() => route('/gamejam-gallery')}
-                        className="hidden md:block px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30
-                                 text-orange-400 rounded-lg transition-colors border border-orange-500/30"
+                        className="hidden md:block px-4 py-2 bg-accent-orange/20 hover:bg-accent-orange/30
+                                 text-accent-orange rounded-lg transition-colors border border-accent-orange/30"
                     >
                         Ver todos ({gameJamPlusGames.length})
                     </button>
@@ -90,8 +90,8 @@ const GameJamPlusSection = ({ games, onGameClick }: GameJamPlusSectionProps) => 
                 <div className="md:hidden mt-6 text-center">
                     <button
                         onClick={() => route('/gamejam-gallery')}
-                        className="px-6 py-3 bg-orange-500/20 hover:bg-orange-500/30
-                                 text-orange-400 rounded-lg transition-colors border border-orange-500/30
+                        className="px-6 py-3 bg-accent-orange/20 hover:bg-accent-orange/30
+                                 text-accent-orange rounded-lg transition-colors border border-accent-orange/30
                                  font-semibold"
                     >
                         Ver todos los juegos ({gameJamPlusGames.length})
@@ -116,9 +116,9 @@ const GameJamPlusCard = ({ game, isMainCard, onGameClick }: { game: Game; isMain
             ref={containerRef}
             onClick={() => onGameClick(game)}
             className={`${gridClass} group relative overflow-hidden rounded-xl 
-                        bg-slate-800 cursor-pointer border border-slate-700 
-                        hover:border-orange-500 transition-all duration-300 
-                        transform hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-500/20`}
+                        bg-surface-800 cursor-pointer border border-surface-700 
+                        hover:border-accent-orange transition-all duration-300 
+                        transform hover:-translate-y-1 hover:shadow-xl hover:shadow-accent-orange/20`}
         >
             <div className="absolute inset-0">
                 {game.imageHero || game.imageCover || game.imageUrl ? (
@@ -128,20 +128,20 @@ const GameJamPlusCard = ({ game, isMainCard, onGameClick }: { game: Game; isMain
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                 ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-orange-900/40 to-slate-900/80" />
+                    <div className="w-full h-full bg-gradient-to-br from-accent-orange/40 to-surface-900/80" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-900 via-surface-900/60 to-transparent" />
             </div>
 
             <div className={`relative h-full flex flex-col justify-end p-6 ${isMainCard ? 'md:p-8' : ''}`}>
                 <div className="mb-3">
                     <span className="inline-block px-3 py-1 text-xs font-semibold rounded
-                                    bg-orange-700/30 text-orange-200 border border-orange-500/50">
+                                    bg-accent-orange/30 text-accent-orange border border-accent-orange/50">
                         GameJam+ 25/26
                     </span>
                 </div>
 
-                <h3 className={`font-bold text-white mb-2 group-hover:text-orange-400 transition-colors 
+                <h3 className={`font-bold text-white mb-2 group-hover:text-accent-orange transition-colors 
                                 ${isMainCard ? 'text-2xl md:text-3xl' : 'text-xl'}`}>
                     {game.title}
                 </h3>
@@ -160,8 +160,8 @@ const GameJamPlusCard = ({ game, isMainCard, onGameClick }: { game: Game; isMain
                     {game.genre.slice(0, isMainCard ? 4 : 2).map((genre, idx) => (
                         <span
                             key={idx}
-                            className="px-2 py-1 text-xs bg-slate-900/60 text-gray-300
-                                        rounded backdrop-blur-sm border border-slate-700"
+                            className="px-2 py-1 text-xs bg-surface-900/60 text-gray-300
+                                        rounded backdrop-blur-sm border border-surface-700"
                         >
                             {genre}
                         </span>

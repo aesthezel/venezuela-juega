@@ -92,6 +92,9 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Solucionar el problema de los tamaños de las imágenes en el grid
 - [x] Solución de saneamiento y origen mixto que causa error SSL
 - [x] Estadísticas rediseñadas
+- [x] Optimización de renderizado de juegos mediante pre-renderizado estático en build time
+- [x] Design tokens y tailwind mejorados
+- [ ] Agregar DaisyUI y mejorar el Tailwind
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar

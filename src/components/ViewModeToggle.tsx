@@ -12,15 +12,15 @@ interface ViewModeToggleProps {
 const ViewModeToggle = ({ mode, onChange, className }: ViewModeToggleProps) => {
   return (
     <div
-      className={`inline-flex rounded-lg overflow-hidden border border-slate-600 bg-slate-800 ${className || ''}`}
+      className={`inline-flex rounded-lg overflow-hidden border border-surface-600 bg-surface-800 ${className || ''}`}
       role="group"
       aria-label="Cambiar modo de vista"
     >
       <button
         type="button"
         onClick={() => onChange('grid')}
-        className={`px-2.5 py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
-          mode === 'grid' ? 'bg-cyan-500 text-white' : 'text-gray-300 hover:bg-slate-700'
+        className={`px-2.5 py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal-dark ${
+          mode === 'grid' ? 'bg-accent-teal-dark text-white' : 'text-gray-300 hover:bg-surface-700'
         }`}
         aria-pressed={mode === 'grid'}
         aria-label="Ver en cuadrícula"
@@ -33,8 +33,8 @@ const ViewModeToggle = ({ mode, onChange, className }: ViewModeToggleProps) => {
       <button
         type="button"
         onClick={() => onChange('list')}
-        className={`px-2.5 py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
-          mode === 'list' ? 'bg-cyan-500 text-white' : 'text-gray-300 hover:bg-slate-700'
+        className={`px-2.5 py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal-dark ${
+          mode === 'list' ? 'bg-accent-teal-dark text-white' : 'text-gray-300 hover:bg-surface-700'
         }`}
         aria-pressed={mode === 'list'}
         aria-label="Ver en lista"

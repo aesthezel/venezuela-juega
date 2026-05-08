@@ -34,7 +34,7 @@ const CategoryCard = ({ preset, gameCount, backgroundSrc, overrideImageUrl, onCl
                 transition-all duration-500 ease-out
                 hover:scale-[1.04] hover:border-white/[0.2]
                 hover:shadow-2xl hover:shadow-black/60
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300/50
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50
                 text-left
             `}
             style={{ animationDelay: `${index * 80}ms` }}

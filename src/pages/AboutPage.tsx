@@ -29,7 +29,7 @@ const CONTRIBUTORS = [
 ];
 
 const Card = ({ children, className = "" }: { children: preact.ComponentChildren, className?: string }) => (
-    <div className={`bg-slate-800/30 backdrop-blur-sm p-6 rounded-2xl border border-slate-700/40 hover:border-slate-600/60 transition-all duration-300 ${className}`}>
+    <div className={`bg-surface-800/30 backdrop-blur-sm p-6 rounded-2xl border border-surface-700/40 hover:border-surface-600/60 transition-all duration-300 ${className}`}>
         {children}
     </div>
 );
@@ -46,9 +46,9 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                         <div className="flex-1">
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-3">
                                 Sobre
-                                <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent"> Venezuela Juega</span>
+                                <span className="bg-gradient-to-r from-accent-orange to-amber-300 bg-clip-text text-transparent"> Venezuela Juega</span>
                             </h1>
-                            <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                            <p className="text-surface-400 text-base md:text-lg max-w-2xl leading-relaxed">
                                 Conoce la iniciativa, los colaboradores y el propósito detrás de la base de datos de videojuegos venezolanos más completa.
                             </p>
                         </div>
@@ -56,7 +56,7 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                 </header>
 
                 {/* Divider */}
-                <div className="h-px bg-gradient-to-r from-orange-500/20 via-slate-700/30 to-transparent mb-12" />
+                <div className="h-px bg-gradient-to-r from-accent-orange/20 via-surface-700/30 to-transparent mb-12" />
 
                 <div className="space-y-12">
 
@@ -77,7 +77,7 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                     </section>
 
                     {/* Section Divider */}
-                    <div className="h-px bg-slate-800/50 w-full" />
+                    <div className="h-px bg-surface-800/50 w-full" />
 
                     <section>
                         <div className="flex items-center gap-3 mb-6">
@@ -94,7 +94,7 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                     </section>
 
                     {/* Section Divider */}
-                    <div className="h-px bg-slate-800/50 w-full" />
+                    <div className="h-px bg-surface-800/50 w-full" />
 
                     <section>
                         <div className="flex items-center gap-3 mb-6">
@@ -105,7 +105,7 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                         <Card>
                             <p className="text-sm text-gray-400 mb-4">Gracias a quienes apoyan este proyecto:</p>
                             <div className="flex flex-wrap gap-4 items-center">
-                                <div className="bg-slate-700/50 border border-slate-600 p-4 rounded-lg text-center min-w-[100px]">
+                                <div className="bg-surface-700/50 border border-surface-600 p-4 rounded-lg text-center min-w-[100px]">
                                     <span className="text-gray-400 font-mono text-xs">Próximamente</span>
                                 </div>
                             </div>

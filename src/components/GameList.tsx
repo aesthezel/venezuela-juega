@@ -102,7 +102,7 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
 
   if (games.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full bg-slate-800 rounded-lg p-12 text-center">
+      <div className="flex flex-col items-center justify-center h-full bg-surface-800 rounded-lg p-12 text-center">
         <h2 className="text-2xl font-bold text-white mb-2">No se encontraron juegos</h2>
         <p className="text-gray-400">Intenta ajustar tus filtros de búsqueda.</p>
       </div>
@@ -133,14 +133,14 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
         onMouseLeave={handleMouseLeave}
         className={`game-list-row w-full text-left transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer relative ${
           fireflyCount > 0
-            ? 'bg-slate-800 hover:bg-slate-700 border-l-2 border-l-cyan-400/60'
-            : 'bg-slate-800 hover:bg-slate-700'
+            ? 'bg-surface-800 hover:bg-surface-700 border-l-2 border-l-accent-teal/60'
+            : 'bg-surface-800 hover:bg-surface-700'
         }`}
         style={fireflyCount > 0 ? {
           boxShadow: `inset 4px 0 ${Math.min(fireflyCount * 6, 20)}px rgba(34, 211, 238, ${Math.min(fireflyCount * 0.06, 0.15)})`,
         } : undefined}
       >
-        <div className="relative h-16 w-28 flex-shrink-0 overflow-hidden rounded-md bg-slate-900 border border-slate-700/50">
+        <div className="relative h-16 w-28 flex-shrink-0 overflow-hidden rounded-md bg-surface-900 border border-surface-700/50">
           <CoverImage
             src={game.imageUrl}
             alt={game.title}
@@ -200,18 +200,18 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
         <div className="flex items-center gap-3 ml-auto mr-1">
             {/* Firefly presence badge */}
             {fireflyCount > 0 && (
-                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/20">
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-accent-teal-dark/10 border border-accent-teal/20">
                     <span className="relative flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-cyan-400 shadow-[0_0_4px_#22d3ee]" />
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-teal opacity-75" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent-teal shadow-[0_0_4px_#22d3ee]" />
                     </span>
-                    <span className="text-[10px] font-bold text-cyan-300">{fireflyCount}</span>
+                    <span className="text-[10px] font-bold text-accent-teal">{fireflyCount}</span>
                 </div>
             )}
             <div
                 onClick={isReady ? handleToggleLike : undefined}
                 className={`flex items-center gap-1.5 transition-all duration-300 group/like px-2 py-1 rounded-md hover:bg-white/5 ${
-                    hasLiked ? 'text-rose-400' : 'text-slate-500 hover:text-white'
+                    hasLiked ? 'text-rose-400' : 'text-surface-500 hover:text-white'
                 } ${!isReady ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                 title={!isReady ? "Iniciando conexión..." : (hasLiked ? "Quitar me gusta" : "Me gusta")}
             >
@@ -237,7 +237,7 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
 
       {hasMoreGames && (
         <div ref={loadMoreRef} className="text-center p-8">
-          <p className="text-cyan-400 animate-pulse">Cargando más juegos...</p>
+          <p className="text-accent-teal animate-pulse">Cargando más juegos...</p>
         </div>
       )}
     </>

@@ -21,7 +21,7 @@ const sizeClasses: Record<Size, string> = {
 
 const BackButton = ({ onClick, children = 'Volver a la lista', className = '', icon, size = 'md', ...rest }: BackButtonProps) => {
   const base =
-    'inline-flex items-center gap-2 bg-slate-800 hover:bg-cyan-600 text-white font-bold rounded-lg transition-colors duration-300';
+    'inline-flex items-center gap-2 bg-surface-800 hover:bg-accent-teal-dark text-white font-bold rounded-lg transition-colors duration-300';
   return (
     <button onClick={onClick} className={`${base} ${sizeClasses[size]} ${className}`} {...rest}>
       {icon ?? <ArrowLeftIcon />}

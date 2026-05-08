@@ -23,7 +23,7 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
     );
 
     return (
-        <div className="min-h-screen bg-slate-900 text-gray-200">
+        <div className="min-h-screen bg-surface-900 text-gray-200">
             {/* 1. Encabezado Reutilizado de GameJamPage.tsx */}
             <PromoHeader
                 title="GameJamPlus 10th Edition - 25/26"
@@ -44,15 +44,15 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
                     <aside className="md:col-span-1">
                         <div className="sticky top-20 space-y-6">
 
-                            <section className="bg-gradient-to-br from-slate-800 to-slate-700 p-6 rounded-xl shadow-xl border border-slate-600/50">
+                            <section className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-600/50">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">
+                                    <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent-teal to-accent-indigo">
                                         Resultados del Jam
                                     </h3>
                                 </div>
-                                <div className="p-4 bg-slate-700/50 rounded-lg text-center border border-slate-600">
+                                <div className="p-4 bg-surface-700/50 rounded-lg text-center border border-surface-600">
                                     <div className="text-5xl font-bold text-white mb-1 flex items-center justify-center gap-2">
-                                        <FontAwesomeIcon icon={faTrophy} className="text-yellow-400" />
+                                        <FontAwesomeIcon icon={faTrophy} className="text-brand-gold" />
                                         {gameJamPlusGames.length}
                                     </div>
                                     <div className="text-sm text-gray-300">Juegos Creados</div>
@@ -62,9 +62,9 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
                                 </p>
                             </section>
 
-                            <section className="bg-gradient-to-br from-slate-800 to-slate-700 p-6 rounded-xl shadow-xl border border-slate-600/50">
+                            <section className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-600/50">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">
+                                    <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent-teal to-accent-indigo">
                                         Únete a la comunidad
                                     </h3>
                                 </div>
@@ -73,11 +73,11 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
                                         href="https://link.venezuelajuega.com/discord"
                                         target="_blank"
                                         rel="noopener"
-                                        className="flex items-center gap-3 px-3 py-2 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 rounded-lg transition-colors group"
+                                        className="flex items-center gap-3 px-3 py-2 bg-accent-indigo-dark/20 hover:bg-accent-indigo-dark/30 border border-accent-indigo/40 rounded-lg transition-colors group"
                                     >
-                                        <div className="w-8 h-8 bg-indigo-500 rounded flex items-center justify-center text-white text-sm group-hover:bg-indigo-400 transition-colors">💬</div>
+                                        <div className="w-8 h-8 bg-accent-indigo rounded flex items-center justify-center text-white text-sm group-hover:bg-accent-indigo transition-colors">💬</div>
                                         <div>
-                                            <p className="text-indigo-300 font-medium text-sm">Discord</p>
+                                            <p className="text-accent-indigo font-medium text-sm">Discord</p>
                                             <p className="text-gray-400 text-xs">Únete a la conversación</p>
                                         </div>
                                     </a>
@@ -87,7 +87,7 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
                                         rel="noopener"
                                         className="flex items-center gap-3 px-3 py-2 bg-pink-600/20 hover:bg-pink-600/30 border border-pink-500/40 rounded-lg transition-colors group"
                                     >
-                                        <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded flex items-center justify-center text-white text-sm group-hover:scale-105 transition-transform">📸</div>
+                                        <div className="w-8 h-8 bg-gradient-to-br from-accent-mauve-dark to-pink-500 rounded flex items-center justify-center text-white text-sm group-hover:scale-105 transition-transform">📸</div>
                                         <div>
                                             <p className="text-pink-300 font-medium text-sm">Instagram</p>
                                             <p className="text-gray-400 text-xs">Síguenos para updates</p>
@@ -131,10 +131,10 @@ const GameJamItem = ({ game, onGameClick }: { game: Game; onGameClick: (game: Ga
                 });
                 onGameClick(game);
             }}
-            className="group flex flex-col md:flex-row items-start gap-4 p-4 bg-slate-800/60 border border-slate-700 rounded-xl hover:border-orange-500 transition-all duration-300 cursor-pointer hover:bg-slate-800 shadow-lg"
+            className="group flex flex-col md:flex-row items-start gap-4 p-4 bg-surface-800/60 border border-surface-700 rounded-xl hover:border-accent-orange transition-all duration-300 cursor-pointer hover:bg-surface-800 shadow-lg"
         >
             {/* Imagen (Miniatura) */}
-            <div className="w-full md:w-48 h-32 md:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gradient-to-br from-slate-700 to-slate-900">
+            <div className="w-full md:w-48 h-32 md:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gradient-to-br from-surface-700 to-surface-900">
                 <CoverImage
                     src={game.imageHero || game.imageCover || game.imageUrl}
                     alt={game.title}
@@ -145,18 +145,18 @@ const GameJamItem = ({ game, onGameClick }: { game: Game; onGameClick: (game: Ga
 
             {/* Contenido (Info, Equipo, Links) */}
             <div className="flex-1 min-w-0">
-                <h3 className="text-2xl font-semibold text-white mb-1 group-hover:text-orange-400 transition-colors">
+                <h3 className="text-2xl font-semibold text-white mb-1 group-hover:text-accent-orange transition-colors">
                     {game.title}
                 </h3>
 
                 {game.developers && game.developers.length > 0 && (
-                    <p className="text-sm text-orange-300 mb-3 font-medium">
+                    <p className="text-sm text-accent-orange mb-3 font-medium">
                         Por: {game.developers.join(', ')}
                     </p>
                 )}
 
                 {game.highlightReason && (
-                    <p className="text-sm text-amber-300 italic bg-slate-700/50 p-3 rounded-lg mb-3 border-l-4 border-amber-400">
+                    <p className="text-sm text-amber-300 italic bg-surface-700/50 p-3 rounded-lg mb-3 border-l-4 border-amber-400">
                         "{game.highlightReason}"
                     </p>
                 )}
@@ -182,7 +182,7 @@ const GameJamItem = ({ game, onGameClick }: { game: Game; onGameClick: (game: Ga
                                         url: link.url
                                     });
                                 }}
-                                className="flex items-center gap-1.5 bg-slate-700 hover:bg-cyan-600 text-white font-bold py-1 px-3 rounded-lg text-sm transition-colors z-10 relative"
+                                className="flex items-center gap-1.5 bg-surface-700 hover:bg-accent-teal-dark text-white font-bold py-1 px-3 rounded-lg text-sm transition-colors z-10 relative"
                                 title={`Ir a ${link.name}`}
                             >
                                 {link.name} <LinkIcon />

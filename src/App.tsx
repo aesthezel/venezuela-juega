@@ -127,14 +127,14 @@ const App = () => {
     };
 
     if (loading) return <LoadingSpinner />;
-    if (error) return <div className="text-center text-red-500 text-2xl p-10">{error}</div>;
+    if (error) return <div className="text-center text-brand-red text-2xl p-10">{error}</div>;
 
     return (
         <SpacetimeDBProvider>
             <FireflyProvider currentPath={currentPath}>
-                <div className="relative min-h-screen text-gray-200 font-sans flex flex-col overflow-hidden">
+                <div className="relative min-h-screen text-gray-200 font-sans flex flex-col overflow-x-clip">
                     {/* Deep Layers */}
-                    <div className="fixed inset-0 bg-slate-950 -z-[100] pointer-events-none" />
+                    <div className="fixed inset-0 bg-surface-950 -z-[100] pointer-events-none" />
                     <FireflyOverlay />
                     
                     {/* Main Content Layers */}

@@ -49,7 +49,7 @@ const CalendarTooltip = ({ game, position }: { game: Game; position: { top: numb
     return (
         <div
             style={{ top: `${position.top}px`, left: `${position.left}px` }}
-            className="absolute z-50 w-72 bg-gradient-to-br from-slate-800 to-slate-900 border border-cyan-500/30 rounded-xl shadow-2xl p-4 pointer-events-none animate-fade-in-fast backdrop-blur-sm"
+            className="absolute z-50 w-72 bg-gradient-to-br from-surface-800 to-surface-900 border border-accent-teal-dark/30 rounded-xl shadow-2xl p-4 pointer-events-none animate-fade-in-fast backdrop-blur-sm"
         >
             <div className="relative overflow-hidden rounded-lg mb-3">
                 <CoverImage
@@ -61,9 +61,9 @@ const CalendarTooltip = ({ game, position }: { game: Game; position: { top: numb
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
             </div>
             <h3 className="font-bold text-white text-lg mb-1 leading-tight">{game.title}</h3>
-            <p className="text-sm text-cyan-300 mb-2">{game.developers.join(', ')}</p>
+            <p className="text-sm text-accent-teal mb-2">{game.developers.join(', ')}</p>
             {game.releaseDate && (
-                <p className="text-xs text-slate-400 flex items-center">
+                <p className="text-xs text-surface-400 flex items-center">
                     <FontAwesomeIcon icon={faCalendarDays} className="w-3 h-3 mr-1" />
                     {new Date(game.releaseDate).toLocaleDateString('es-ES')}
                 </p>
@@ -157,7 +157,7 @@ const CalendarStats = ({ games, viewYear }: { games: Game[], viewYear: number })
             {statItems.map(({ icon, value, label, color, subValue }) => (
                 <div
                     key={label}
-                    className="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/40 rounded-xl px-4 py-2.5"
+                    className="flex items-center gap-2.5 bg-surface-800/60 border border-surface-700/40 rounded-xl px-4 py-2.5"
                 >
                     <div
                         className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
@@ -168,9 +168,9 @@ const CalendarStats = ({ games, viewYear }: { games: Game[], viewYear: number })
                     <div>
                         <div className="flex items-baseline gap-1.5">
                             <p className="text-white font-black text-lg leading-none">{value}</p>
-                            {subValue && <span className="text-[10px] text-slate-500 font-medium">{subValue}</span>}
+                            {subValue && <span className="text-[10px] text-surface-500 font-medium">{subValue}</span>}
                         </div>
-                        <p className="text-slate-500 text-[10px] font-medium uppercase tracking-wide">{label}</p>
+                        <p className="text-surface-500 text-[10px] font-medium uppercase tracking-wide">{label}</p>
                     </div>
                 </div>
             ))}
@@ -248,42 +248,42 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
                     <div className="flex-1">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-3">
                             Calendario de
-                            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent"> Eventos</span>
+                            <span className="bg-gradient-to-r from-accent-teal to-brand-blue bg-clip-text text-transparent"> Eventos</span>
                         </h1>
-                        <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                        <p className="text-surface-400 text-base md:text-lg max-w-2xl leading-relaxed">
                             Explora las fechas de lanzamiento de los juegos venezolanos, eventos importantes de la industria, y todo el historial que ha acontecido sobre videojuegos en el país.
                         </p>
                     </div>
 
                     {/* Selector de Año Estilo Dropdown Avanzado */}
                     <div className="flex items-center gap-3 self-start md:self-auto relative z-20" ref={dropdownRef}>
-                        <FontAwesomeIcon icon={faCalendarDays} className="text-cyan-400 hidden sm:block" />
+                        <FontAwesomeIcon icon={faCalendarDays} className="text-accent-teal hidden sm:block" />
                         <span className="text-white font-medium text-sm hidden sm:block">Año:</span>
 
                         <div className="relative">
                             {/* Dropdown Trigger */}
                             <button
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                className="flex items-center justify-between min-w-[210px] bg-slate-800/80 hover:bg-slate-700/90 border border-cyan-500/30 hover:border-cyan-400/50 outline-none rounded-xl px-4 py-2 text-white font-bold transition-all shadow-lg backdrop-blur-md"
+                                className="flex items-center justify-between min-w-[210px] bg-surface-800/80 hover:bg-surface-700/90 border border-accent-teal-dark/30 hover:border-accent-teal/50 outline-none rounded-xl px-4 py-2 text-white font-bold transition-all shadow-lg backdrop-blur-md"
                             >
                                 <div className="flex items-center gap-2">
                                     <span className="text-lg">{viewYear}</span>
                                     {yearCountsMap[viewYear] > 0 && (
-                                        <span className="bg-cyan-500/20 text-cyan-300 text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded-full border border-cyan-500/30">
+                                        <span className="bg-accent-teal-dark/20 text-accent-teal text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded-full border border-accent-teal-dark/30">
                                             {yearCountsMap[viewYear]} Juegos
                                         </span>
                                     )}
                                 </div>
                                 <FontAwesomeIcon
                                     icon={faChevronDown}
-                                    className={`text-cyan-500 transition-transform duration-300 ml-3 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                                    className={`text-accent-teal-dark transition-transform duration-300 ml-3 ${isDropdownOpen ? 'rotate-180' : ''}`}
                                     strokeWidth={3}
                                 />
                             </button>
 
                             {/* Dropdown Menu List */}
                             {isDropdownOpen && (
-                                <div className="absolute top-full right-0 mt-2 w-full min-w-[220px] max-h-[350px] overflow-y-auto bg-slate-800/95 backdrop-blur-xl border border-slate-600/50 rounded-xl shadow-[0_10px_40px_-5px_rgba(0,0,0,0.6)] z-50 animate-fade-in-fast scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">
+                                <div className="absolute top-full right-0 mt-2 w-full min-w-[220px] max-h-[350px] overflow-y-auto bg-surface-800/95 backdrop-blur-xl border border-surface-600/50 rounded-xl shadow-[0_10px_40px_-5px_rgba(0,0,0,0.6)] z-50 animate-fade-in-fast scrollbar-thin scrollbar-thumb-surface-600 scrollbar-track-transparent">
                                     <div className="p-1.5 flex flex-col gap-1">
                                         {availableYears.map(year => {
                                             const count = yearCountsMap[year] || 0;
@@ -300,23 +300,23 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
                                                         }
                                                     }}
                                                     className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left ${isActive
-                                                            ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 text-white'
-                                                            : 'text-slate-300 hover:bg-slate-700/50 hover:text-white border border-transparent'
+                                                            ? 'bg-gradient-to-r from-accent-teal-dark/20 to-brand-blue/10 border border-accent-teal-dark/30 text-white'
+                                                            : 'text-surface-300 hover:bg-surface-700/50 hover:text-white border border-transparent'
                                                         }`}
                                                 >
-                                                    <span className={`font-semibold ${isActive ? 'text-cyan-400' : ''}`}>
+                                                    <span className={`font-semibold ${isActive ? 'text-accent-teal' : ''}`}>
                                                         {year}
                                                     </span>
 
                                                     {count > 0 ? (
                                                         <span className={`text-[11px] font-bold px-2 py-1 rounded-md ${isActive
-                                                                ? 'bg-cyan-500 text-white shadow-md'
-                                                                : 'bg-slate-900/80 text-slate-400 border border-slate-700'
+                                                                ? 'bg-accent-teal-dark text-white shadow-md'
+                                                                : 'bg-surface-900/80 text-surface-400 border border-surface-700'
                                                             }`}>
                                                             {count} {count === 1 ? 'juego' : 'juegos'}
                                                         </span>
                                                     ) : (
-                                                        <span className="text-[11px] text-slate-500 font-medium px-2 py-1">
+                                                        <span className="text-[11px] text-surface-500 font-medium px-2 py-1">
                                                             Sin reg.
                                                         </span>
                                                     )}
@@ -334,9 +334,9 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
             </header>
 
             {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-cyan-500/20 via-slate-700/30 to-transparent mb-12" />
+            <div className="h-px bg-gradient-to-r from-accent-teal-dark/20 via-surface-700/30 to-transparent mb-12" />
 
-            <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-700/40 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="bg-surface-800/30 backdrop-blur-sm border border-surface-700/40 rounded-2xl shadow-2xl overflow-hidden">
                 <div className="p-6 sm:p-8">
 
                     <div className="calendar-container">

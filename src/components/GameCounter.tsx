@@ -14,7 +14,7 @@ const GameCounter = ({ filteredCount, totalCount }: GameCounterProps) => {
 
     return (
         <div className="text-center my-8">
-        <p className="text-lg text-cyan-400 bg-slate-800/50 inline-block px-4 py-2 rounded-full">
+        <p className="text-lg text-accent-teal bg-surface-800/50 inline-block px-4 py-2 rounded-full">
             {message}
             </p>
             </div>

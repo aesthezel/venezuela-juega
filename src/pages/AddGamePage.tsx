@@ -34,8 +34,8 @@ interface FormCardProps {
 }
 
 const FormCard = ({ title, children }: FormCardProps) => (
-    <div className="bg-slate-800 p-6 rounded-lg shadow-lg">
-        <h3 className="text-xl font-bold text-cyan-400 mb-4 border-l-4 border-cyan-400 pl-3">{title}</h3>
+    <div className="bg-surface-800 p-6 rounded-lg shadow-lg">
+        <h3 className="text-xl font-bold text-accent-teal mb-4 border-l-4 border-accent-teal pl-3">{title}</h3>
         <div className="space-y-4">{children}</div>
     </div>
 );
@@ -47,7 +47,7 @@ const FormInput = ({ label, ...props }: FormInputProps) => (
         <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
         <input
             {...props}
-            className="w-full bg-slate-700 border-2 border-slate-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition-colors duration-300"
+            className="w-full bg-surface-700 border-2 border-surface-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-accent-teal-dark focus:outline-none transition-colors duration-300"
         />
     </div>
 );
@@ -59,7 +59,7 @@ const FormTextarea = ({ label, ...props }: FormTextareaProps) => (
         <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
         <textarea
             {...props}
-            className="w-full bg-slate-700 border-2 border-slate-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition-colors duration-300"
+            className="w-full bg-surface-700 border-2 border-surface-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-accent-teal-dark focus:outline-none transition-colors duration-300"
         ></textarea>
     </div>
 );
@@ -71,7 +71,7 @@ const FormSelect = ({ label, children, ...props }: FormSelectProps) => (
         <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
         <select
             {...props}
-            className="w-full bg-slate-700 border-2 border-slate-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition-colors duration-300"
+            className="w-full bg-surface-700 border-2 border-surface-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-accent-teal-dark focus:outline-none transition-colors duration-300"
         >
             {children}
         </select>
@@ -167,16 +167,16 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
                         <h4 className="text-lg font-semibold text-gray-300 mb-2">Tiendas</h4>
                         <div className="space-y-2">
                             {game.stores.map((store, index) => (
-                                <div key={index} className="flex items-center gap-2 bg-slate-700 p-2 rounded">
+                                <div key={index} className="flex items-center gap-2 bg-surface-700 p-2 rounded">
                                     <span className="flex-1 text-white truncate">{store.name}: {store.url}</span>
-                                    <button type="button" onClick={() => handleRemoveStore(index)} className="text-red-400 hover:text-red-300"><CloseIcon /></button>
+                                    <button type="button" onClick={() => handleRemoveStore(index)} className="text-brand-red hover:text-brand-red"><CloseIcon /></button>
                                 </div>
                             ))}
                         </div>
                         <div className="flex items-end gap-4 mt-2">
                             <FormInput label="Nombre de Tienda" value={storeName} onInput={(e) => setStoreName(e.currentTarget.value)} />
                             <FormInput label="URL de Tienda" value={storeUrl} onInput={(e) => setStoreUrl(e.currentTarget.value)} />
-                            <button type="button" onClick={handleAddStore} className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-lg transition-colors h-12">Añadir</button>
+                            <button type="button" onClick={handleAddStore} className="bg-accent-teal-dark hover:bg-accent-teal-dark text-white font-bold py-3 px-4 rounded-lg transition-colors h-12">Añadir</button>
                         </div>
                     </div>
 
@@ -184,22 +184,22 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
                         <h4 className="text-lg font-semibold text-gray-300 mb-2">Enlaces y Redes</h4>
                         <div className="space-y-2">
                             {game.links.map((link, index) => (
-                                <div key={index} className="flex items-center gap-2 bg-slate-700 p-2 rounded">
+                                <div key={index} className="flex items-center gap-2 bg-surface-700 p-2 rounded">
                                     <span className="flex-1 text-white truncate">{link.name}: {link.url}</span>
-                                    <button type="button" onClick={() => handleRemoveLink(index)} className="text-red-400 hover:text-red-300"><CloseIcon/></button>
+                                    <button type="button" onClick={() => handleRemoveLink(index)} className="text-brand-red hover:text-brand-red"><CloseIcon/></button>
                                 </div>
                             ))}
                         </div>
                         <div className="flex items-end gap-4 mt-2">
                             <FormInput label="Nombre del Enlace" value={linkName} onInput={(e) => setLinkName(e.currentTarget.value)} />
                             <FormInput label="URL del Enlace" value={linkUrl} onInput={(e) => setLinkUrl(e.currentTarget.value)} />
-                            <button type="button" onClick={handleAddLink} className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-lg transition-colors h-12">Añadir</button>
+                            <button type="button" onClick={handleAddLink} className="bg-accent-teal-dark hover:bg-accent-teal-dark text-white font-bold py-3 px-4 rounded-lg transition-colors h-12">Añadir</button>
                         </div>
                     </div>
                 </FormCard>
 
                 <div className="flex justify-end gap-4">
-                    <button type="button" onClick={onNavigateToCatalog} className="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                    <button type="button" onClick={onNavigateToCatalog} className="bg-surface-600 hover:bg-surface-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
                         Cancelar
                     </button>
                     <button type="submit" className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">

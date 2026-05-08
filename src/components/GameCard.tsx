@@ -117,8 +117,8 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
             onClick={onClick}
             className={`glass-card overflow-hidden shadow-lg cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col relative ${
                 fireflyCount > 0
-                    ? 'ring-1 ring-cyan-400/40 hover:shadow-cyan-500/50'
-                    : 'hover:shadow-cyan-500/50'
+                    ? 'ring-1 ring-accent-teal/40 hover:shadow-accent-teal-dark/50'
+                    : 'hover:shadow-accent-teal-dark/50'
             }`}
             style={{
                 contain: 'layout paint',
@@ -131,12 +131,12 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
         >
             {/* Firefly presence indicator */}
             {fireflyCount > 0 && (
-                <div className="absolute top-2 left-2 z-20 flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-sm rounded-full pl-1.5 pr-2.5 py-1 border border-cyan-400/30 shadow-[0_0_12px_rgba(34,211,238,0.2)]">
+                <div className="absolute top-2 left-2 z-20 flex items-center gap-1.5 bg-surface-900/80 backdrop-blur-sm rounded-full pl-1.5 pr-2.5 py-1 border border-accent-teal/30 shadow-[0_0_12px_rgba(34,211,238,0.2)]">
                     <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400 shadow-[0_0_6px_#22d3ee]" />
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-teal opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-teal shadow-[0_0_6px_#22d3ee]" />
                     </span>
-                    <span className="text-[10px] font-bold text-cyan-300 tracking-wide">{fireflyCount}</span>
+                    <span className="text-[10px] font-bold text-accent-teal tracking-wide">{fireflyCount}</span>
                 </div>
             )}
             {layout === 'masonry' ? (
@@ -239,7 +239,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                         onClick={handleToggleLike}
                         disabled={!isReady}
                         className={`flex items-center gap-1.5 transition-all duration-300 group/like ${
-                            hasLiked ? 'text-rose-400' : 'text-slate-500 hover:text-white'
+                            hasLiked ? 'text-rose-400' : 'text-surface-500 hover:text-white'
                         } ${!isReady ? 'opacity-50 cursor-not-allowed' : ''}`}
                         title={!isReady ? "Iniciando conexión..." : (hasLiked ? "Quitar me gusta" : "Me gusta")}
                     >
@@ -261,7 +261,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                     {needsExpansion && (
                         <button
                             onClick={handleReadMoreClick}
-                            className="text-cyan-400 hover:underline text-sm self-start focus:outline-none"
+                            className="text-accent-teal hover:underline text-sm self-start focus:outline-none"
                         >
                             {isExpanded ? 'Leer menos' : 'Leer más'}
                         </button>
@@ -270,7 +270,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
 
                 <div className="mt-auto pt-4 flex flex-wrap gap-2">
                     {game.genre.slice(0, 2).map(g => (
-                        <span key={g} className="bg-white/5 border border-white/10 backdrop-blur-md text-cyan-400 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full">{g}</span>
+                        <span key={g} className="bg-white/5 border border-white/10 backdrop-blur-md text-accent-teal text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full">{g}</span>
                     ))}
                 </div>
             </div>

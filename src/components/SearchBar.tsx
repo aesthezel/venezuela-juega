@@ -179,7 +179,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
         const parts = text.split(regex);
         return parts.map((part, index) =>
             regex.test(part) ? (
-                <mark key={index} className="bg-cyan-400 text-slate-900 px-1 rounded">
+                <mark key={index} className="bg-accent-teal text-surface-900 px-1 rounded">
                     {part}
                 </mark>
             ) : part
@@ -202,7 +202,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                     onKeyDown={handleKeyDown}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    className="w-full pl-10 pr-10 py-3 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-50 transition-all duration-200 placeholder-gray-400"
+                    className="w-full pl-10 pr-10 py-3 bg-surface-700 text-white rounded-lg border border-surface-600 focus:border-accent-teal focus:ring-2 focus:ring-accent-teal focus:ring-opacity-50 transition-all duration-200 placeholder-gray-400"
                     autoComplete="off"
                 />
                 {localSearchTerm && (
@@ -220,7 +220,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
             {showSuggestions && suggestions.length > 0 && (
                 <div
                     ref={dropdownRef}
-                    className="absolute top-full left-0 right-0 mt-2 bg-slate-800/95 backdrop-blur-xl border border-slate-600 rounded-xl shadow-2xl z-50 max-h-[350px] md:max-h-[550px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent"
+                    className="absolute top-full left-0 right-0 mt-2 bg-surface-800/95 backdrop-blur-xl border border-surface-600 rounded-xl shadow-2xl z-50 max-h-[350px] md:max-h-[550px] overflow-y-auto scrollbar-thin scrollbar-thumb-surface-600 scrollbar-track-transparent"
                 >
                     {suggestions.map((game, index) => (
                         <div
@@ -229,13 +229,13 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                                 e.preventDefault();
                                 selectSuggestion(game);
                             }}
-                            className={`px-4 py-4 cursor-pointer transition-all duration-300 border-b border-slate-700/50 last:border-b-0 flex items-center justify-between group ${index === activeSuggestion
-                                ? 'bg-cyan-500/20 border-cyan-500/50'
-                                : 'hover:bg-slate-700/80'
+                            className={`px-4 py-4 cursor-pointer transition-all duration-300 border-b border-surface-700/50 last:border-b-0 flex items-center justify-between group ${index === activeSuggestion
+                                ? 'bg-accent-teal-dark/20 border-accent-teal-dark/50'
+                                : 'hover:bg-surface-700/80'
                                 }`}
                         >
                             <div className="flex items-center gap-4 flex-1 min-w-0">
-                                <div className="relative flex-shrink-0 w-24 h-14 overflow-hidden rounded-md border border-slate-600 group-hover:border-cyan-500/50 transition-colors shadow-lg">
+                                <div className="relative flex-shrink-0 w-24 h-14 overflow-hidden rounded-md border border-surface-600 group-hover:border-accent-teal-dark/50 transition-colors shadow-lg">
                                     <CoverImage
                                         src={game.imageCover || game.imageUrl}
                                         alt={game.title}
@@ -244,7 +244,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                                     />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <div className="text-white font-bold truncate text-base mb-0.5 group-hover:text-cyan-400 transition-colors">
+                                    <div className="text-white font-bold truncate text-base mb-0.5 group-hover:text-accent-teal transition-colors">
                                         {highlightMatch(game.title, debouncedLocalTerm)}
                                     </div>
                                     <div className="text-gray-400 text-xs truncate font-medium opacity-80">
@@ -258,7 +258,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                                     {game.genre.slice(0, 2).map(genre => (
                                         <span
                                             key={genre}
-                                            className="bg-slate-900/80 text-cyan-300/90 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-white/5 whitespace-nowrap"
+                                            className="bg-surface-900/80 text-accent-teal/90 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-white/5 whitespace-nowrap"
                                         >
                                             {genre}
                                         </span>
@@ -269,7 +269,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                     ))}
 
                     {suggestions.length === 10 && (
-                        <div className="px-4 py-3 text-center text-gray-400 text-xs bg-slate-900/50 backdrop-blur-sm border-t border-slate-700/50">
+                        <div className="px-4 py-3 text-center text-gray-400 text-xs bg-surface-900/50 backdrop-blur-sm border-t border-surface-700/50">
                             Escribe más caracteres para refinar la búsqueda
                         </div>
                     )}

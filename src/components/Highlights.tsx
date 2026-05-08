@@ -57,7 +57,7 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
                     <>
                         <button
                             onClick={goToPrevious}
-                            className="absolute top-1/2 left-0 md:-left-4 transform -translate-y-1/2 z-10 bg-slate-800/60 hover:bg-slate-800/90 rounded-full p-2 transition-all text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
+                            className="absolute top-1/2 left-0 md:-left-4 transform -translate-y-1/2 z-10 bg-surface-800/60 hover:bg-surface-800/90 rounded-full p-2 transition-all text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
                             aria-label="Juego anterior"
                         >
                             <IndicatorLeftIcon />
@@ -65,7 +65,7 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
 
                         <button
                             onClick={goToNext}
-                            className="absolute top-1/2 right-0 md:-right-4 transform -translate-y-1/2 z-10 bg-slate-800/60 hover:bg-slate-800/90 rounded-full p-2 transition-all text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
+                            className="absolute top-1/2 right-0 md:-right-4 transform -translate-y-1/2 z-10 bg-surface-800/60 hover:bg-surface-800/90 rounded-full p-2 transition-all text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
                             aria-label="Siguiente juego"
                         >
                             <IndicatorRightIcon />
@@ -76,7 +76,7 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
                                 <button
                                     key={index}
                                     onClick={() => setCurrentIndex(index)}
-                                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${currentIndex === index ? 'bg-cyan-400' : 'bg-slate-500/80 hover:bg-slate-400'}`}
+                                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${currentIndex === index ? 'bg-accent-teal' : 'bg-surface-500/80 hover:bg-surface-400'}`}
                                     aria-current={currentIndex === index}
                                     aria-label={`Ir al juego ${index + 1}`}
                                 />

@@ -26,8 +26,8 @@ interface DetailItemProps {
 
 const DetailItem = ({ label, children }: DetailItemProps) => (
     <div className="flex flex-col">
-        <dt className="text-xs font-bold text-slate-400 uppercase tracking-wider">{label}</dt>
-        <dd className="mt-1 text-sm font-medium text-slate-200">{children}</dd>
+        <dt className="text-xs font-bold text-surface-400 uppercase tracking-wider">{label}</dt>
+        <dd className="mt-1 text-sm font-medium text-surface-200">{children}</dd>
     </div>
 );
 
@@ -133,7 +133,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
             >
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-slate-950/60 text-slate-300 hover:text-white hover:bg-red-500/80 backdrop-blur-md transition-all border border-slate-700/50 hover:border-transparent"
+                    className="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-surface-950/60 text-surface-300 hover:text-white hover:bg-brand-red/80 backdrop-blur-md transition-all border border-surface-700/50 hover:border-transparent"
                     title="Cerrar"
                 >
                     <CloseIcon />
@@ -141,13 +141,13 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
                 <div className="overflow-y-auto flex-1 w-full relative custom-scrollbar">
 
-                    <div className="relative w-full h-56 md:h-80 flex-shrink-0 bg-slate-950">
+                    <div className="relative w-full h-56 md:h-80 flex-shrink-0 bg-surface-950">
                         <img
                             src={game.imageHero || game.imageCover || game.imageUrl}
                             alt={game.title}
                             className="w-full h-full object-cover opacity-80"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-surface-900 via-surface-900/60 to-transparent"></div>
                     </div>
 
                     <div className="px-6 md:px-10 pb-10 -mt-20 md:-mt-24 relative z-10 w-full flex flex-col gap-8">
@@ -155,22 +155,22 @@ const Modal = ({ game, onClose }: ModalProps) => {
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                             <div>
                                 <h2 className="text-3xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight leading-tight">{game.title}</h2>
-                                <p className="text-cyan-400 font-medium md:text-lg mt-1">{game.developers.join(', ')}</p>
+                                <p className="text-accent-teal font-medium md:text-lg mt-1">{game.developers.join(', ')}</p>
                             </div>
                             <button
                                 onClick={handleViewFullInfo}
-                                className="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-yellow-500/20 flex items-center justify-center gap-2 flex-shrink-0"
+                                className="bg-brand-gold hover:bg-brand-gold text-surface-950 font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-brand-gold/20 flex items-center justify-center gap-2 flex-shrink-0"
                             >
                                 <span>Ver más sobre el juego</span>
                                 <FontAwesomeIcon icon={faArrowRight} />
                             </button>
                         </div>
 
-                        <div className="flex items-stretch bg-slate-950/40 backdrop-blur-xl rounded-2xl border border-white/5 divide-x divide-white/10 overflow-hidden shadow-2xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
+                        <div className="flex items-stretch bg-surface-950/40 backdrop-blur-xl rounded-2xl border border-white/5 divide-x divide-white/10 overflow-hidden shadow-2xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
                             <button
                                 onClick={handleToggleLike}
                                 title={hasLiked ? "Quitar me gusta" : "Me gusta"}
-                                className={`flex items-center gap-2.5 px-6 py-3.5 transition-all duration-300 group/like hover:bg-rose-500/5 ${hasLiked ? 'text-rose-400' : 'text-slate-400 hover:text-white'}`}
+                                className={`flex items-center gap-2.5 px-6 py-3.5 transition-all duration-300 group/like hover:bg-rose-500/5 ${hasLiked ? 'text-rose-400' : 'text-surface-400 hover:text-white'}`}
                             >
                                 <FontAwesomeIcon icon={hasLiked ? faHeartSolid : faHeartReg} className={`transition-transform duration-300 ${hasLiked ? "scale-110 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]" : "group-hover/like:scale-110"}`} />
                                 <span className="font-black text-sm tracking-tight">{totalHearts}</span>
@@ -179,12 +179,12 @@ const Modal = ({ game, onClose }: ModalProps) => {
                             <button
                                 onClick={handleToggleFavorite}
                                 title={isFavorite ? "Quitar de favoritos" : "Añadir de favoritos"}
-                                className={`flex items-center justify-center px-6 py-3.5 transition-all duration-300 group/fav hover:bg-amber-500/5 ${isFavorite ? 'text-amber-400' : 'text-slate-400 hover:text-white'}`}
+                                className={`flex items-center justify-center px-6 py-3.5 transition-all duration-300 group/fav hover:bg-amber-500/5 ${isFavorite ? 'text-amber-400' : 'text-surface-400 hover:text-white'}`}
                             >
                                 <FontAwesomeIcon icon={isFavorite ? faStarSolid : faStarReg} className={`transition-transform duration-300 ${isFavorite ? "scale-110 drop-shadow-[0_0_8px_rgba(245,158,11,0.4)]" : "group-hover/fav:scale-110"}`} />
                             </button>
 
-                            <div className="flex items-center gap-2.5 px-6 py-3.5 bg-white/[0.02] text-slate-400 border-r border-white/5">
+                            <div className="flex items-center gap-2.5 px-6 py-3.5 bg-white/[0.02] text-surface-400 border-r border-white/5">
                                 <FontAwesomeIcon icon={faEye} className="text-xs opacity-60" />
                                 <span className="font-black text-sm tracking-widest">{totalVisits}</span>
                             </div>
@@ -194,15 +194,15 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
                             <div className="lg:col-span-2 flex flex-col gap-8">
                                 {game.pitch && (
-                                    <div className="bg-slate-800/40 p-6 rounded-2xl border border-slate-700/40" ref={pitchRef}>
-                                        <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-wider mb-2">Acerca del juego</h3>
-                                        <p className={`text-slate-300 text-base md:text-lg leading-relaxed whitespace-pre-wrap transition-all ${!isPitchExpanded && pitchLineCount > 6 ? 'line-clamp-6' : ''}`}>
+                                    <div className="bg-surface-800/40 p-6 rounded-2xl border border-surface-700/40" ref={pitchRef}>
+                                        <h3 className="text-sm font-bold text-accent-teal uppercase tracking-wider mb-2">Acerca del juego</h3>
+                                        <p className={`text-surface-300 text-base md:text-lg leading-relaxed whitespace-pre-wrap transition-all ${!isPitchExpanded && pitchLineCount > 6 ? 'line-clamp-6' : ''}`}>
                                             {game.pitch}
                                         </p>
                                         {pitchLineCount > 6 && (
                                             <button
                                                 onClick={() => setIsPitchExpanded(!isPitchExpanded)}
-                                                className="text-cyan-400 hover:text-cyan-300 text-sm font-bold mt-3 transition-colors flex items-center gap-1"
+                                                className="text-accent-teal hover:text-accent-teal text-sm font-bold mt-3 transition-colors flex items-center gap-1"
                                             >
                                                 {isPitchExpanded ? 'Ver menos' : 'Ver más'}
                                             </button>
@@ -211,15 +211,15 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                 )}
 
                                 {!embedUrl && game.description && (
-                                    <div className="bg-slate-800/20 p-6 rounded-2xl border border-slate-700/30" ref={descRef}>
-                                        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Descripción General</h3>
-                                        <div className={`text-slate-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap transition-all ${!isDescExpanded && descLineCount > 6 ? 'line-clamp-6' : ''}`}>
+                                    <div className="bg-surface-800/20 p-6 rounded-2xl border border-surface-700/30" ref={descRef}>
+                                        <h3 className="text-sm font-bold text-surface-400 uppercase tracking-wider mb-3">Descripción General</h3>
+                                        <div className={`text-surface-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap transition-all ${!isDescExpanded && descLineCount > 6 ? 'line-clamp-6' : ''}`}>
                                             {game.description}
                                         </div>
                                         {descLineCount > 6 && (
                                             <button
                                                 onClick={() => setIsDescExpanded(!isDescExpanded)}
-                                                className="text-cyan-400 hover:text-cyan-300 text-sm font-bold mt-3 transition-colors flex items-center gap-1"
+                                                className="text-accent-teal hover:text-accent-teal text-sm font-bold mt-3 transition-colors flex items-center gap-1"
                                             >
                                                 {isDescExpanded ? 'Ver menos' : 'Ver más'}
                                             </button>
@@ -232,7 +232,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                         <h3 className="text-lg font-bold text-white flex items-center gap-2">
                                             Trailer
                                         </h3>
-                                        <div className="aspect-video w-full rounded-2xl overflow-hidden border border-slate-700/60 shadow-xl bg-slate-950">
+                                        <div className="aspect-video w-full rounded-2xl overflow-hidden border border-surface-700/60 shadow-xl bg-surface-950">
                                             <iframe
                                                 src={embedUrl}
                                                 title={`${game.title} Trailer`}
@@ -255,7 +255,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                                 <button
                                                     key={`${shot}-${idx}`}
                                                     onClick={() => openLightbox(idx)}
-                                                    className="relative group/shot overflow-hidden rounded-xl border border-slate-700/50 hover:border-cyan-500/50 transition-all duration-300 hover:scale-[1.02]"
+                                                    className="relative group/shot overflow-hidden rounded-xl border border-surface-700/50 hover:border-accent-teal-dark/50 transition-all duration-300 hover:scale-[1.02]"
                                                 >
                                                     <img
                                                         src={shot}
@@ -263,7 +263,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                                         className="w-full h-24 md:h-32 object-cover cursor-zoom-in group-hover/shot:scale-110 transition-transform duration-700"
                                                         loading="lazy"
                                                     />
-                                                    <div className="absolute inset-0 bg-cyan-500/10 opacity-0 group-hover/shot:opacity-100 transition-opacity" />
+                                                    <div className="absolute inset-0 bg-accent-teal-dark/10 opacity-0 group-hover/shot:opacity-100 transition-opacity" />
                                                 </button>
                                             ))}
                                         </div>
@@ -275,7 +275,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
                                 {game.stores.length > 0 && (
                                     <div className="flex flex-col gap-2">
-                                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Disponible en</h3>
+                                        <h3 className="text-xs font-bold text-surface-400 uppercase tracking-wider mb-1">Disponible en</h3>
                                         <div className="flex flex-col gap-2">
                                             {game.stores.map(store => (
                                                 <StoreButton key={store.name} store={store} gameSlug={game.slug} gameTitle={game.title} />
@@ -286,7 +286,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
                                 {game.links.length > 0 && (
                                     <div className="flex flex-col gap-2">
-                                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Enlaces y Redes</h3>
+                                        <h3 className="text-xs font-bold text-surface-400 uppercase tracking-wider mb-1">Enlaces y Redes</h3>
                                         <div className="flex flex-wrap gap-2">
                                             {game.links.map(link => (
                                                 <a
@@ -294,7 +294,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                                     href={link.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-cyan-500 text-slate-300 hover:text-white py-2 px-3 rounded-lg text-sm transition-all shadow-sm"
+                                                    className="flex items-center gap-2 bg-surface-800 hover:bg-surface-700 border border-surface-700 hover:border-accent-teal-dark text-surface-300 hover:text-white py-2 px-3 rounded-lg text-sm transition-all shadow-sm"
                                                     onClick={() => trackEvent('game_external_click', { game_slug: game.slug, game_title: game.title, link_name: link.name, url: link.url })}
                                                 >
                                                     {link.name} <LinkIcon />
@@ -304,7 +304,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                     </div>
                                 )}
 
-                                <div className="bg-slate-800/30 p-5 rounded-2xl border border-slate-700/40">
+                                <div className="bg-surface-800/30 p-5 rounded-2xl border border-surface-700/40">
                                     <dl className="grid grid-cols-1 gap-y-4">
                                         <DetailItem label="Estado">{game.status}</DetailItem>
                                         <DetailItem label="Lanzamiento">{game.releaseDate}</DetailItem>

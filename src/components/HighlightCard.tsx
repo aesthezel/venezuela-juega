@@ -39,7 +39,7 @@ const HighlightCard = ({ game, onClick, fullWidth = false } : HighlightCardProps
                     <h3 className="text-2xl md:text-3xl font-bold text-white truncate drop-shadow">
                         {game.title}
                     </h3>
-                    <p className="text-base md:text-lg text-cyan-200 truncate drop-shadow">
+                    <p className="text-base md:text-lg text-accent-teal truncate drop-shadow">
                         Realizado por {game.developers.join(', ')}
                     </p>
                     {game.highlightReason && (

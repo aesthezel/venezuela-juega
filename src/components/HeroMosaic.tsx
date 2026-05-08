@@ -256,21 +256,21 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                             alt=""
                             className="h-full w-full object-cover brightness-75 grayscale transition-all duration-700 hover:grayscale-0"
                         />
-                        <div className="absolute inset-0 bg-slate-950/20" />
+                        <div className="absolute inset-0 bg-surface-950/20" />
                     </div>
                 ))}
             </div>
 
             {/* Gradient overlays */}
-            <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-slate-950/90 via-slate-950/60 to-slate-950" />
+            <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-surface-950/90 via-surface-950/60 to-surface-950" />
             <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0d0a11_100%)]" />
 
             {/* Hero content */}
             <div className="relative z-10 w-full flex flex-col items-center px-4 pt-24 pb-8 md:pt-28 md:pb-12 mx-auto max-w-6xl hero-fade-in">
 
                 {/* Badge */}
-                <div className="mb-3 md:mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-400 backdrop-blur-md md:text-sm shadow-xl">
-                    <span className="h-1.5 w-1.5 md:h-2 md:w-2 animate-pulse rounded-full bg-emerald-500" />
+                <div className="mb-3 md:mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-surface-400 backdrop-blur-md md:text-sm shadow-xl">
+                    <span className="h-1.5 w-1.5 md:h-2 md:w-2 animate-pulse rounded-full bg-accent-lime-dark" />
                     Base de datos colaborativa
                 </div>
 
@@ -289,7 +289,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                 </h1>
 
                 {/* Subtitle */}
-                <p className="mb-6 md:mb-8 text-center max-w-[280px] sm:max-w-2xl text-sm sm:text-base font-light leading-relaxed text-slate-400 md:text-xl drop-shadow-lg">
+                <p className="mb-6 md:mb-8 text-center max-w-[280px] sm:max-w-2xl text-sm sm:text-base font-light leading-relaxed text-surface-400 md:text-xl drop-shadow-lg">
                     La documentación digital que preserva y conecta la historia del desarrollo de videojuegos en el país
                 </p>
 
@@ -331,13 +331,13 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                                     <div className="sm:hidden absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2 z-20 pointer-events-none">
                                         <button
                                             onClick={() => setStatIndex(prev => (prev - 1 + stats.length) % stats.length)}
-                                            className="w-10 h-10 rounded-full bg-slate-900/80 border border-white/10 flex items-center justify-center text-white pointer-events-auto active:scale-95 transition-transform"
+                                            className="w-10 h-10 rounded-full bg-surface-900/80 border border-white/10 flex items-center justify-center text-white pointer-events-auto active:scale-95 transition-transform"
                                         >
                                             <FontAwesomeIcon icon={faChevronLeft} />
                                         </button>
                                         <button
                                             onClick={() => setStatIndex(prev => (prev + 1) % stats.length)}
-                                            className="w-10 h-10 rounded-full bg-slate-900/80 border border-white/10 flex items-center justify-center text-white pointer-events-auto active:scale-95 transition-transform"
+                                            className="w-10 h-10 rounded-full bg-surface-900/80 border border-white/10 flex items-center justify-center text-white pointer-events-auto active:scale-95 transition-transform"
                                         >
                                             <FontAwesomeIcon icon={faChevronRight} />
                                         </button>
@@ -384,18 +384,18 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                             <button
                                 onClick={() => route('/charts')}
                                 className="group flex items-center gap-3 px-6 py-3 md:px-8 md:py-4 rounded-xl
-                                           bg-gradient-to-r from-yellow-500/10 via-blue-500/10 to-rose-500/10
+                                           bg-gradient-to-r from-brand-gold/10 via-brand-blue/10 to-rose-500/10
                                            border border-white/[0.08] hover:border-white/[0.2]
                                            backdrop-blur-sm shadow-lg
                                            transition-all duration-300 hover:scale-[1.03] hover:shadow-xl
                                            cursor-pointer"
                             >
-                                <FontAwesomeIcon icon={faChartBar} className="text-yellow-400 text-base md:text-lg" />
+                                <FontAwesomeIcon icon={faChartBar} className="text-brand-gold text-base md:text-lg" />
                                 <div className="flex flex-col items-start">
                                     <span className="text-white font-bold text-sm md:text-base tracking-wide">Explorar métricas completas</span>
-                                    <span className="text-slate-400 text-[10px] md:text-xs">Plataformas, motores, géneros y más estadísticas</span>
+                                    <span className="text-surface-400 text-[10px] md:text-xs">Plataformas, motores, géneros y más estadísticas</span>
                                 </div>
-                                <FontAwesomeIcon icon={faArrowRight} className="text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all duration-300 text-sm md:text-base ml-2" />
+                                <FontAwesomeIcon icon={faArrowRight} className="text-surface-400 group-hover:text-white group-hover:translate-x-1 transition-all duration-300 text-sm md:text-base ml-2" />
                             </button>
                         </div>
                     </div>
@@ -415,9 +415,9 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                                     onClick={() => scrollCategories('left')}
                                     className="absolute left-2 top-1/2 -translate-y-1/2 z-20
                                                w-10 h-10 md:w-12 md:h-12 rounded-full
-                                               bg-slate-900/90 border border-white/10
+                                               bg-surface-900/90 border border-white/10
                                                flex items-center justify-center
-                                               text-white/70 hover:text-white hover:bg-slate-800
+                                               text-white/70 hover:text-white hover:bg-surface-800
                                                transition-all duration-200 shadow-xl
                                                backdrop-blur-md cursor-pointer"
                                     aria-label="Scroll left"
@@ -431,9 +431,9 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                                     onClick={() => scrollCategories('right')}
                                     className="absolute right-2 top-1/2 -translate-y-1/2 z-20
                                                w-10 h-10 md:w-12 md:h-12 rounded-full
-                                               bg-slate-900/90 border border-white/10
+                                               bg-surface-900/90 border border-white/10
                                                flex items-center justify-center
-                                               text-white/70 hover:text-white hover:bg-slate-800
+                                               text-white/70 hover:text-white hover:bg-surface-800
                                                transition-all duration-200 shadow-xl
                                                backdrop-blur-md cursor-pointer"
                                     aria-label="Scroll right"
@@ -465,10 +465,10 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
 
                             {/* Fade edges */}
                             {canScrollLeft && (
-                                <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-slate-950/80 to-transparent z-10" />
+                                <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-surface-950/80 to-transparent z-10" />
                             )}
                             {canScrollRight && (
-                                <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-slate-950/80 to-transparent z-10" />
+                                <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-surface-950/80 to-transparent z-10" />
                             )}
                         </div>
                     </div>
@@ -488,10 +488,10 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                         className="group flex flex-col items-center gap-2 p-2 transition-opacity duration-300 hover:opacity-80 cursor-pointer"
                         aria-label="Desplazar hacia abajo"
                     >
-                        <span className="text-slate-500 text-xs md:text-sm font-medium tracking-wide transition-colors group-hover:text-slate-300">
+                        <span className="text-surface-500 text-xs md:text-sm font-medium tracking-wide transition-colors group-hover:text-surface-300">
                             Descubre el catálogo completo
                         </span>
-                        <FontAwesomeIcon icon={faArrowDown} className="animate-bounce text-slate-600 group-hover:text-slate-400 md:text-xl transition-colors mt-1" />
+                        <FontAwesomeIcon icon={faArrowDown} className="animate-bounce text-surface-600 group-hover:text-surface-400 md:text-xl transition-colors mt-1" />
                     </button>
                 </div>
             </div>

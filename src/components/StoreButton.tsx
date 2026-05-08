@@ -22,43 +22,43 @@ interface StoreButtonProps {
 const storeStyles: Record<string, { icon: any; className: string }> = {
     'Steam': {
         icon: faSteam,
-        className: 'bg-[#172337] hover:bg-[#2a475e] text-white',
+        className: 'bg-store-steam hover:bg-store-steam-hover text-white',
     },
     'Itch': {
         icon: faItchIo,
-        className: 'bg-[#fa5c5c] hover:bg-[#ff7f7f] text-white',
+        className: 'bg-store-itch hover:bg-store-itch-hover text-white',
     },
     'Nintendo Shop': {
         icon: faGamepad,
-        className: 'bg-[#e60012] hover:bg-[#ff334f] text-white',
+        className: 'bg-store-nintendo hover:bg-store-nintendo-hover text-white',
     },
     'PlayStation Store': {
         icon: faPlaystation,
-        className: 'bg-[#0070d1] hover:bg-[#0084f7] text-white',
+        className: 'bg-store-playstation hover:bg-store-playstation-hover text-white',
     },
     'Microsoft Store': {
         icon: faXbox,
-        className: 'bg-[#107b10] hover:bg-[#00bfff] text-white',
+        className: 'bg-store-xbox hover:bg-store-xbox-hover text-white',
     },
     'Play Store': {
         icon: faGooglePlay,
-        className: 'bg-[#00a185] hover:bg-[#00c9a6] text-white',
+        className: 'bg-store-google-play hover:bg-store-google-play-hover text-white',
     },
     'App Store': {
         icon: faApple,
-        className: 'bg-[#000000] hover:bg-[#333333] text-white',
+        className: 'bg-store-apple hover:bg-store-apple-hover text-white',
     },
     'Meta': {
         icon: faMeta,
-        className: 'bg-[#0078ff] hover:bg-[#3391ff] text-white',
+        className: 'bg-store-meta hover:bg-store-meta-hover text-white',
     },
     'GOG': {
         icon: faGamepad,
-        className: 'bg-[#c99aff] hover:bg-[#3391ff] text-white',
+        className: 'bg-store-gog hover:bg-store-gog-hover text-white',
     },
     'Default': {
         icon: faGlobe,
-        className: 'bg-cyan-500 hover:bg-cyan-600 text-white',
+        className: 'bg-accent-teal-dark hover:bg-accent-teal-deep text-white',
     },
 };
 

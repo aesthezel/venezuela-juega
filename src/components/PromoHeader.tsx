@@ -12,7 +12,7 @@ interface PromoHeaderProps {
 
 // Valores por defecto para mantener el estilo de GameJam+
 const DEFAULT_LOGO = "https://venezuela-juega.s3.us-east-005.dream.io/gamejamplus/gj%2B_white.png";
-const DEFAULT_GRADIENT = "bg-gradient-to-r from-yellow-500 via-red-600 to-yellow-500";
+const DEFAULT_GRADIENT = "bg-gradient-to-r from-brand-gold via-brand-red-dark to-brand-gold";
 
 const PromoHeader = ({
                            title,

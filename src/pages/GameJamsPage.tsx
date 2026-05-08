@@ -80,17 +80,17 @@ const getSocialIcon = (redName: string): IconDefinition => {
 
 const getSocialHoverColor = (redName: string): string => {
     const colorMap: Record<string, string> = {
-        discord: 'hover:text-indigo-400 hover:border-indigo-400/40',
+        discord: 'hover:text-accent-indigo hover:border-accent-indigo/40',
         instagram: 'hover:text-pink-400 hover:border-pink-400/40',
         twitter: 'hover:text-sky-400 hover:border-sky-400/40',
-        x: 'hover:text-slate-200 hover:border-slate-400/40',
-        youtube: 'hover:text-red-500 hover:border-red-500/40',
+        x: 'hover:text-surface-200 hover:border-surface-400/40',
+        youtube: 'hover:text-brand-red hover:border-brand-red/40',
         tiktok: 'hover:text-pink-500 hover:border-pink-500/40',
-        facebook: 'hover:text-blue-500 hover:border-blue-500/40',
-        twitch: 'hover:text-purple-400 hover:border-purple-400/40',
-        linkedin: 'hover:text-blue-400 hover:border-blue-400/40',
+        facebook: 'hover:text-brand-blue hover:border-brand-blue/40',
+        twitch: 'hover:text-accent-mauve hover:border-accent-mauve/40',
+        linkedin: 'hover:text-brand-blue hover:border-brand-blue/40',
     };
-    return colorMap[redName.toLowerCase()] || 'hover:text-cyan-400 hover:border-cyan-400/40';
+    return colorMap[redName.toLowerCase()] || 'hover:text-accent-teal hover:border-accent-teal/40';
 };
 
 const parseSocials = (socialsString?: string): VenueSocialLink[] => {
@@ -156,14 +156,14 @@ const processImageUrl = (rawUrl?: string): { url?: string; theme: 'day' | 'night
 
 // Each city/venue gets a unique accent color pair (gradient + solid)
 const VENUE_PALETTES = [
-    { grad: 'from-orange-500 to-amber-400', solid: '#f97316' },
-    { grad: 'from-cyan-500 to-blue-500', solid: '#06b6d4' },
-    { grad: 'from-purple-500 to-fuchsia-500', solid: '#a855f7' },
-    { grad: 'from-emerald-500 to-teal-500', solid: '#10b981' },
+    { grad: 'from-accent-orange to-amber-400', solid: '#f97316' },
+    { grad: 'from-accent-teal-dark to-brand-blue', solid: '#06b6d4' },
+    { grad: 'from-accent-mauve-dark to-fuchsia-500', solid: '#a855f7' },
+    { grad: 'from-accent-lime-dark to-teal-500', solid: '#10b981' },
     { grad: 'from-rose-500 to-pink-500', solid: '#f43f5e' },
-    { grad: 'from-indigo-500 to-violet-500', solid: '#6366f1' },
-    { grad: 'from-yellow-500 to-orange-400', solid: '#eab308' },
-    { grad: 'from-teal-500 to-cyan-400', solid: '#14b8a6' },
+    { grad: 'from-accent-indigo to-violet-500', solid: '#6366f1' },
+    { grad: 'from-brand-gold to-accent-orange', solid: '#eab308' },
+    { grad: 'from-teal-500 to-accent-teal', solid: '#14b8a6' },
 ];
 
 const getVenuePalette = (seed: string) => {
@@ -189,7 +189,7 @@ const VenueSocialLinks = ({ socials, limitInHeader }: { socials: VenueSocialLink
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className={`w-8 h-8 flex items-center justify-center rounded-lg bg-slate-700/60 border border-slate-600/50 text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-slate-700 ${getSocialHoverColor(social.red)}`}
+                        className={`w-8 h-8 flex items-center justify-center rounded-lg bg-surface-700/60 border border-surface-600/50 text-surface-400 transition-all duration-200 hover:scale-110 hover:bg-surface-700 ${getSocialHoverColor(social.red)}`}
                         title={social.red.charAt(0).toUpperCase() + social.red.slice(1)}
                     >
                         <FontAwesomeIcon icon={getSocialIcon(social.red)} className="text-xs" />
@@ -213,7 +213,7 @@ const VenueSocialLinks = ({ socials, limitInHeader }: { socials: VenueSocialLink
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className={`w-8 h-8 items-center justify-center rounded-lg bg-slate-700/60 border border-slate-600/50 text-slate-400 transition-all duration-200 hover:scale-110 hover:bg-slate-700 flex-shrink-0 ${getSocialHoverColor(social.red)} ${displayClass}`}
+                        className={`w-8 h-8 items-center justify-center rounded-lg bg-surface-700/60 border border-surface-600/50 text-surface-400 transition-all duration-200 hover:scale-110 hover:bg-surface-700 flex-shrink-0 ${getSocialHoverColor(social.red)} ${displayClass}`}
                         title={social.red.charAt(0).toUpperCase() + social.red.slice(1)}
                     >
                         <FontAwesomeIcon icon={getSocialIcon(social.red)} className="text-xs" />
@@ -222,13 +222,13 @@ const VenueSocialLinks = ({ socials, limitInHeader }: { socials: VenueSocialLink
             })}
 
             {socials.length > 1 && (
-                <div className="w-8 h-8 flex sm:hidden items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700 text-slate-400 text-[10px] font-bold flex-shrink-0 cursor-default" title="Más redes disponibles al expandir">
+                <div className="w-8 h-8 flex sm:hidden items-center justify-center rounded-lg bg-surface-800/80 border border-surface-700 text-surface-400 text-[10px] font-bold flex-shrink-0 cursor-default" title="Más redes disponibles al expandir">
                     +{socials.length - 1}
                 </div>
             )}
 
             {socials.length > 3 && (
-                <div className="w-8 h-8 hidden sm:flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700 text-slate-400 text-[10px] font-bold flex-shrink-0 cursor-default" title="Más redes disponibles al expandir">
+                <div className="w-8 h-8 hidden sm:flex items-center justify-center rounded-lg bg-surface-800/80 border border-surface-700 text-surface-400 text-[10px] font-bold flex-shrink-0 cursor-default" title="Más redes disponibles al expandir">
                     +{socials.length - 3}
                 </div>
             )}
@@ -264,10 +264,10 @@ const GameCard = ({ game, onGameClick, accentColor }: {
             onClick={() => onGameClick(game)}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            className="group relative bg-slate-800/60 rounded-xl overflow-hidden border border-slate-700/40 hover:border-slate-600/60 transition-all duration-300 cursor-pointer hover:shadow-xl hover:-translate-y-0.5 flex flex-col"
+            className="group relative bg-surface-800/60 rounded-xl overflow-hidden border border-surface-700/40 hover:border-surface-600/60 transition-all duration-300 cursor-pointer hover:shadow-xl hover:-translate-y-0.5 flex flex-col"
         >
             {/* Cover image */}
-            <div className="relative aspect-video overflow-hidden bg-slate-900/80 flex-shrink-0">
+            <div className="relative aspect-video overflow-hidden bg-surface-900/80 flex-shrink-0">
                 <CoverImage
                     src={game.imageHero || game.imageCover || game.imageUrl}
                     alt={game.title}
@@ -309,7 +309,7 @@ const GameCard = ({ game, onGameClick, accentColor }: {
                     )
                 )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-800/80 via-transparent to-transparent" style={{ zIndex: 10, pointerEvents: 'none' }} />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-800/80 via-transparent to-transparent" style={{ zIndex: 10, pointerEvents: 'none' }} />
 
                 {game.isHighlighted && (
                     <div className="absolute top-2.5 right-2.5 bg-amber-500 px-2.5 py-1 rounded-full flex items-center gap-1 text-xs font-bold text-white shadow-lg" style={{ zIndex: 10 }}>
@@ -330,15 +330,15 @@ const GameCard = ({ game, onGameClick, accentColor }: {
 
                 {game.developers?.length > 0 && (
                     <div className="flex items-center gap-1.5 min-w-0">
-                        <FontAwesomeIcon icon={faUsers} className="text-slate-500 text-[10px] flex-shrink-0" />
-                        <p className="text-xs text-slate-400 truncate">
+                        <FontAwesomeIcon icon={faUsers} className="text-surface-500 text-[10px] flex-shrink-0" />
+                        <p className="text-xs text-surface-400 truncate">
                             {Array.isArray(game.developers) ? game.developers.join(', ') : game.developers}
                         </p>
                     </div>
                 )}
 
                 {descriptionText ? (
-                    <p className={`text-xs text-slate-500 leading-relaxed flex-1 ${descLineCount > 2 ? 'line-clamp-2' : ''}`}>
+                    <p className={`text-xs text-surface-500 leading-relaxed flex-1 ${descLineCount > 2 ? 'line-clamp-2' : ''}`}>
                         {descriptionText}
                     </p>
                 ) : <div className="flex-1" />}
@@ -346,7 +346,7 @@ const GameCard = ({ game, onGameClick, accentColor }: {
                 {game.genre?.length > 0 && (
                     <div className="flex flex-wrap gap-1 pt-1">
                         {game.genre.slice(0, 3).map((genre) => (
-                            <span key={genre} className="text-[10px] px-1.5 py-0.5 bg-slate-700/50 text-slate-400 rounded border border-slate-600/30">
+                            <span key={genre} className="text-[10px] px-1.5 py-0.5 bg-surface-700/50 text-surface-400 rounded border border-surface-600/30">
                                 {genre}
                             </span>
                         ))}
@@ -377,7 +377,7 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
 
     return (
         <div
-            className="rounded-2xl overflow-hidden border border-slate-700/40 bg-slate-800/30 backdrop-blur-sm transition-all duration-300"
+            className="rounded-2xl overflow-hidden border border-surface-700/40 bg-surface-800/30 backdrop-blur-sm transition-all duration-300"
             style={isExpanded ? {
                 boxShadow: `0 0 0 1px ${c}30, 0 8px 32px -4px ${c}20`,
             } : {}}
@@ -399,8 +399,8 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
                 {/* Logo or icon */}
                 {venue.logo ? (
                     <div className={`w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center p-1.5 overflow-hidden transition-transform duration-300 hover:scale-105 ${venue.logoTheme === 'night'
-                        ? 'bg-slate-900 border border-slate-700/50 shadow-[0_0_12px_rgba(0,0,0,0.3)] group-hover:shadow-[0_0_15px_rgba(0,0,0,0.5)]'
-                        : 'bg-white border border-slate-200/50 shadow-[0_0_12px_rgba(255,255,255,0.15)] group-hover:shadow-[0_0_15px_rgba(255,255,255,0.25)]'
+                        ? 'bg-surface-900 border border-surface-700/50 shadow-[0_0_12px_rgba(0,0,0,0.3)] group-hover:shadow-[0_0_15px_rgba(0,0,0,0.5)]'
+                        : 'bg-white border border-surface-200/50 shadow-[0_0_12px_rgba(255,255,255,0.15)] group-hover:shadow-[0_0_15px_rgba(255,255,255,0.25)]'
                         }`}>
                         <img
                             src={venue.logo}
@@ -428,8 +428,8 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
                         </h3>
                     </div>
                     <div className="flex items-center gap-3 flex-wrap">
-                        <span className="flex items-center gap-1 text-xs text-slate-400">
-                            <FontAwesomeIcon icon={faMapMarkerAlt} className="text-slate-500 text-[10px]" />
+                        <span className="flex items-center gap-1 text-xs text-surface-400">
+                            <FontAwesomeIcon icon={faMapMarkerAlt} className="text-surface-500 text-[10px]" />
                             {venue.city}
                         </span>
                         <span
@@ -460,11 +460,11 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
             {isExpanded && (
                 <div className="px-5 pb-6 pt-1 animate-[jam-fade-in_0.3s_ease-out]">
                     {/* Resumen de la sede */}
-                    <div className="mb-6 flex flex-col md:flex-row gap-6 items-center md:items-start bg-slate-900/40 p-5 rounded-2xl border border-slate-700/50 shadow-inner">
+                    <div className="mb-6 flex flex-col md:flex-row gap-6 items-center md:items-start bg-surface-900/40 p-5 rounded-2xl border border-surface-700/50 shadow-inner">
                         {venue.logo ? (
                             <div className={`w-32 h-32 rounded-2xl flex-shrink-0 flex items-center justify-center p-3 overflow-hidden ${venue.logoTheme === 'night'
-                                ? 'bg-slate-900 border border-slate-700/50 shadow-[0_0_20px_rgba(0,0,0,0.4)]'
-                                : 'bg-white border border-slate-200/50 shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+                                ? 'bg-surface-900 border border-surface-700/50 shadow-[0_0_20px_rgba(0,0,0,0.4)]'
+                                : 'bg-white border border-surface-200/50 shadow-[0_0_20px_rgba(255,255,255,0.1)]'
                                 }`}>
                                 <img
                                     src={venue.logo}
@@ -481,18 +481,18 @@ const VenueSection = ({ venue, onGameClick, isExpanded, onToggle }: {
                         <div className="flex-1 text-center md:text-left flex flex-col justify-center h-full">
                             <h3 className="text-2xl font-black text-white mb-2">{venue.name}</h3>
                             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-3">
-                                <span className="flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full text-slate-300 bg-slate-800 border border-slate-700">
-                                    <FontAwesomeIcon icon={faMapMarkerAlt} className="text-slate-400" />
+                                <span className="flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full text-surface-300 bg-surface-800 border border-surface-700">
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} className="text-surface-400" />
                                     {venue.city}
                                 </span>
                             </div>
-                            <p className="text-slate-400 text-sm leading-relaxed max-w-2xl mb-4">
+                            <p className="text-surface-400 text-sm leading-relaxed max-w-2xl mb-4">
                                 Esta sede oficial fue el punto de encuentro en {venue.city} para organizar equipos y darle vida a {venue.games.length} {venue.games.length === 1 ? 'juego asombroso' : 'juegos asombrosos'} durante la maratón de desarrollo.
                             </p>
 
                             {venue.socials.length > 0 && (
-                                <div className="flex items-center justify-center md:justify-start gap-3 pt-3 border-t border-slate-700/50">
-                                    <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider">Redes:</span>
+                                <div className="flex items-center justify-center md:justify-start gap-3 pt-3 border-t border-surface-700/50">
+                                    <span className="text-xs text-surface-500 font-semibold uppercase tracking-wider">Redes:</span>
                                     <VenueSocialLinks socials={venue.socials} />
                                 </div>
                             )}
@@ -545,22 +545,22 @@ const EditionSection = ({ edition, onGameClick }: {
             {/* Edition header */}
             <div className="flex items-start gap-5 mb-6">
                 {/* Year accent block */}
-                <div className="hidden md:flex flex-col items-center justify-center bg-slate-800 border border-slate-700/60 rounded-2xl px-4 py-3 shadow-lg flex-shrink-0">
-                    <FontAwesomeIcon icon={faCalendarAlt} className="text-orange-500 text-xl mb-1" />
-                    <span className="text-orange-400 font-black text-lg leading-none">{edition.year}</span>
+                <div className="hidden md:flex flex-col items-center justify-center bg-surface-800 border border-surface-700/60 rounded-2xl px-4 py-3 shadow-lg flex-shrink-0">
+                    <FontAwesomeIcon icon={faCalendarAlt} className="text-accent-orange text-xl mb-1" />
+                    <span className="text-accent-orange font-black text-lg leading-none">{edition.year}</span>
                 </div>
 
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 flex-wrap">
                         <h2 className="text-2xl md:text-3xl font-black text-white">
-                            Edición <span className="text-orange-400">{edition.year}</span>
+                            Edición <span className="text-accent-orange">{edition.year}</span>
                         </h2>
                         <div className="flex items-center gap-2">
-                            <span className="inline-flex items-center gap-1.5 bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold px-3 py-1 rounded-full">
+                            <span className="inline-flex items-center gap-1.5 bg-accent-orange/10 border border-accent-orange/20 text-accent-orange text-xs font-bold px-3 py-1 rounded-full">
                                 <FontAwesomeIcon icon={faGamepad} className="text-[10px]" />
                                 {totalGamesInEdition} juegos
                             </span>
-                            <span className="inline-flex items-center gap-1.5 bg-slate-700/50 border border-slate-600/40 text-slate-400 text-xs font-medium px-3 py-1 rounded-full">
+                            <span className="inline-flex items-center gap-1.5 bg-surface-700/50 border border-surface-600/40 text-surface-400 text-xs font-medium px-3 py-1 rounded-full">
                                 <FontAwesomeIcon icon={faLayerGroup} className="text-[10px]" />
                                 {edition.venues.length} {edition.venues.length === 1 ? 'sede' : 'sedes'}
                             </span>
@@ -590,7 +590,7 @@ const EditionSection = ({ edition, onGameClick }: {
                 {edition.venues.length > 1 && (
                     <button
                         onClick={allExpanded ? collapseAll : expandAll}
-                        className="hidden sm:flex items-center gap-2 text-xs text-slate-400 hover:text-slate-200 transition-colors bg-slate-800/60 border border-slate-700/50 px-3 py-2 rounded-lg flex-shrink-0 mt-1"
+                        className="hidden sm:flex items-center gap-2 text-xs text-surface-400 hover:text-surface-200 transition-colors bg-surface-800/60 border border-surface-700/50 px-3 py-2 rounded-lg flex-shrink-0 mt-1"
                     >
                         <FontAwesomeIcon icon={allExpanded ? faChevronUp : faChevronDown} className="text-[10px]" />
                         {allExpanded ? 'Colapsar todo' : 'Expandir todo'}
@@ -599,7 +599,7 @@ const EditionSection = ({ edition, onGameClick }: {
             </div>
 
             {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-orange-500/30 via-slate-700/50 to-transparent mb-6" />
+            <div className="h-px bg-gradient-to-r from-accent-orange/30 via-surface-700/50 to-transparent mb-6" />
 
             {/* Venues list */}
             <div className="flex flex-col gap-3">
@@ -743,9 +743,9 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                     <div className="max-w-3xl">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-4">
                             Game Jams
-                            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent"> Venezuela</span>
+                            <span className="bg-gradient-to-r from-accent-orange to-amber-300 bg-clip-text text-transparent"> Venezuela</span>
                         </h1>
-                        <p className="text-slate-400 text-base md:text-lg leading-relaxed">
+                        <p className="text-surface-400 text-base md:text-lg leading-relaxed">
                             Videojuegos creados por desarrolladores venezolanos en eventos de 48 horas.
                             Explora ediciones, sedes y el talento detrás de cada juego.
                         </p>
@@ -761,7 +761,7 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                         ].map(({ icon, value, label, color }) => (
                             <div
                                 key={label}
-                                className="flex items-center gap-3 bg-slate-800/40 backdrop-blur-sm border border-slate-700/30 rounded-2xl px-5 py-3 shadow-lg hover:border-slate-600/50 transition-colors"
+                                className="flex items-center gap-3 bg-surface-800/40 backdrop-blur-sm border border-surface-700/30 rounded-2xl px-5 py-3 shadow-lg hover:border-surface-600/50 transition-colors"
                             >
                                 <div
                                     className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner"
@@ -771,7 +771,7 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                                 </div>
                                 <div>
                                     <p className="text-white font-black text-xl leading-none mb-0.5">{value}</p>
-                                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{label}</p>
+                                    <p className="text-surface-500 text-[10px] font-bold uppercase tracking-widest">{label}</p>
                                 </div>
                             </div>
                         ))}
@@ -780,8 +780,8 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
 
                 {/* Discovery Toolbar: Search & Filter */}
                 <div className="relative group z-50">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/10 to-transparent rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition duration-700"></div>
-                    <div className="relative bg-slate-900/50 backdrop-blur-xl border border-slate-700/50 rounded-[1.5rem] p-4 md:p-6 shadow-2xl">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-accent-orange/10 to-transparent rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition duration-700"></div>
+                    <div className="relative bg-surface-900/50 backdrop-blur-xl border border-surface-700/50 rounded-[1.5rem] p-4 md:p-6 shadow-2xl">
                         <div className="flex flex-col lg:flex-row gap-6 items-stretch lg:items-center">
                             {/* Search area */}
                             <div className="flex-1 lg:flex-[1.2]">
@@ -796,9 +796,9 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                                         const org = setting?.Organization || 'Jam';
                                         return (
                                             <span className="flex items-center gap-1.5 text-[11px] mt-0.5">
-                                                <span className="text-orange-400 font-semibold">{venue}</span>
-                                                <span className="text-slate-500">•</span>
-                                                <span className="text-slate-400">{org} {game.Jam_Edition}</span>
+                                                <span className="text-accent-orange font-semibold">{venue}</span>
+                                                <span className="text-surface-500">•</span>
+                                                <span className="text-surface-400">{org} {game.Jam_Edition}</span>
                                             </span>
                                         );
                                     }}
@@ -806,7 +806,7 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                             </div>
 
                             {/* Separator for desktop */}
-                            <div className="hidden lg:block w-px h-10 bg-slate-700/50"></div>
+                            <div className="hidden lg:block w-px h-10 bg-surface-700/50"></div>
 
                             {/* Alpha Filter area */}
                             <div className="flex-1 overflow-x-auto scrollbar-hide">
@@ -822,7 +822,7 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
             </header>
 
             {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-orange-500/20 via-slate-700/30 to-transparent mb-12" />
+            <div className="h-px bg-gradient-to-r from-accent-orange/20 via-surface-700/30 to-transparent mb-12" />
 
             {/* Editions */}
             {processedData.length > 0 ? (
@@ -834,10 +834,10 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                     />
                 ))
             ) : (
-                <div className="flex flex-col items-center justify-center py-32 bg-slate-800/30 border border-slate-700/40 rounded-2xl text-center">
+                <div className="flex flex-col items-center justify-center py-32 bg-surface-800/30 border border-surface-700/40 rounded-2xl text-center">
                     <div className="text-6xl mb-6 opacity-40">👾</div>
                     <h3 className="text-xl font-bold text-white mb-2">Sin datos de Game Jams</h3>
-                    <p className="text-slate-500 max-w-sm text-sm leading-relaxed">
+                    <p className="text-surface-500 max-w-sm text-sm leading-relaxed">
                         No se encontraron juegos o aún estamos cargando los datos de las jams.
                     </p>
                 </div>

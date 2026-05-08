@@ -76,7 +76,7 @@ const Footer = () => {
     }, []);
 
     return (
-        <footer ref={footerRef} className="bg-slate-800 text-gray-400 py-6 shadow-inner sticky bottom-0 z-40">
+        <footer ref={footerRef} className="bg-surface-800 text-gray-400 py-6 shadow-inner sticky bottom-0 z-40">
             <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
                 <div className="flex space-x-6 mb-4 sm:mb-0">
                     <a href="https://github.com/aesthezel/venezuela-juega" target="_blank" rel="noopener noreferrer" aria-label="Repositorio en GitHub">
@@ -97,7 +97,7 @@ const Footer = () => {
                 </div>
                 <div className="text-center sm:text-right">
                     <p className="text-sm">
-                        Desarrollado con ❤️ por <a href="https://github.com/aesthezel" target="_blank" rel="noopener noreferrer" className="font-semibold text-cyan-400 hover:underline">David Pino</a>
+                        Desarrollado con ❤️ por <a href="https://github.com/aesthezel" target="_blank" rel="noopener noreferrer" className="font-semibold text-accent-teal hover:underline">David Pino</a>
                     </p>
                     <p className="text-xs mt-2">
                         Venezuela Juega, documenta la industria de videojuegos en Venezuela desde el año 2020

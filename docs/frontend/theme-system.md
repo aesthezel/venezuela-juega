@@ -53,12 +53,12 @@ Para habilitar el modo oscuro basado en clases (requerido por Tailwind v4), se u
 ```
 
 ### Inversión de Escala
-Definimos los colores base de la aplicación (Escala Slate) en el bloque `@theme`. Cuando la clase `.light` está activa, re-definimos esas mismas variables en el `@layer theme`:
+Definimos los colores base de la aplicación (Escala Surface) en el bloque `@theme`. Cuando la clase `.light` está activa, re-definimos esas mismas variables en el `@layer theme`:
 
-- **Oscuro (Default)**: `slate-950` es negro profundo (#0d0a11).
-- **Claro (.light)**: `slate-950` se convierte en un gris muy claro (#f5f3f7).
+- **Oscuro (Default)**: `surface-950` es negro profundo (#0d0a11).
+- **Claro (.light)**: `surface-950` se convierte en un gris muy claro (#f5f3f7).
 
-Este enfoque garantiza que cualquier componente que use clases estándar de Tailwind como `bg-slate-950` o `text-slate-200` se adapte **automáticamente** sin cambios en el código del componente.
+Este enfoque garantiza que cualquier componente que use tokens como `bg-surface-950` o `text-surface-200` se adapte **automáticamente** sin cambios en el código del componente.
 
 ### Secciones Scoped (`hero-always-dark`)
 Para mantener la estética cinematográfica de la sección Hero (mosaico de juegos), se utiliza la clase `.hero-always-dark`. Esta clase restaura los tokens oscuros dentro de ese contenedor, incluso si el sitio está en modo claro.
@@ -90,7 +90,7 @@ Este script se ejecuta antes de que el navegador renderice el cuerpo de la pági
 
 El sistema adapta dinámicamente:
 - **Scrollbars**: Cambian de color y opacidad según el tema.
-- **Glass Panel**: La utilidad `.glass-panel` ajusta su desenfoque y opacidad de fondo (`white/75` en claro vs `slate-950/70` en oscuro).
+- **Glass Panel**: La utilidad `.glass-panel` ajusta su desenfoque y opacidad de fondo (`white/75` en claro vs `surface-950/70` en oscuro). Los valores de glass están tokenizados en `:root` como `--glass-*`.
 - **Logos**: Se aplica un filtro `invert` condicional mediante CSS para asegurar la visibilidad del logo blanco sobre fondos claros.
 
 ---
@@ -98,6 +98,7 @@ El sistema adapta dinámicamente:
 ## 5. Mejores Prácticas para Desarrolladores
 
 Para mantener la compatibilidad con el sistema de temas:
-1. **Usa Tokens de Slate**: Prefiere `bg-slate-900` sobre colores hexadecimales fijos.
-2. **Evita Hardcoding**: Si necesitas un color específico para un tema, usa las variantes de Tailwind: `bg-white dark:bg-slate-950`.
-3. **Semántica**: Los tokens están invertidos. Recuerda que `slate-50` es el texto más oscuro en el tema claro.
+1. **Usa Tokens Surface**: Prefiere `bg-surface-900` sobre colores hexadecimales fijos. Ver [design-tokens.md](./design-tokens.md) para el inventario completo.
+2. **Evita Hardcoding**: Si necesitas un color específico para un tema, usa las variantes de Tailwind: `bg-white dark:bg-surface-950`.
+3. **Semántica**: Los tokens están invertidos. Recuerda que `surface-50` es el texto más oscuro en el tema claro.
+4. **No sobrescribas Tailwind**: Nunca uses `--color-slate-*` o `--color-cyan-*` en `@theme`. Usa los nombres propios (`surface-*`, `accent-*`, `brand-*`).

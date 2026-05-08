@@ -1,61 +1,56 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   DESIGN TOKENS — Venezuela Juega
+   Architecture: Primitive → Semantic → Component (via Tailwind utilities)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 @theme {
+  /* ─── Typography ─── */
   --font-sans: 'Inter', 'SF Pro', system-ui, sans-serif;
-  
-  /* Deep Dark Backgrounds for Legibility */
-  --color-slate-950: #0d0a11;
-  --color-slate-900: #18131e;
-  --color-slate-800: #221a2a;
-  --color-slate-700: #2c1b2e; /* Palette's darkest shade as base border/accent */
-  --color-slate-600: #3b2a3d;
-  --color-slate-500: #5b4a5d;
-  --color-slate-400: #9c8a9d;
-  --color-slate-300: #d4cfd6;
-  --color-slate-200: #eae7ec;
-  --color-slate-100: #fff4e0; /* Palette's warm white */
-  --color-slate-50:  #ffffff;
-  --color-white: #fff4e0;
 
-  /* Venezuelan Flag / Core Highlights */
-  --color-yellow-300: #f2b63d;
-  --color-yellow-400: #f2b63d;
-  --color-yellow-500: #f2b63d;
+  /* ─── Surface Scale (deep purple-dark tones) ─── */
+  --color-surface-950: #0d0a11;
+  --color-surface-900: #18131e;
+  --color-surface-800: #221a2a;
+  --color-surface-700: #2c1b2e;
+  --color-surface-600: #3b2a3d;
+  --color-surface-500: #5b4a5d;
+  --color-surface-400: #9c8a9d;
+  --color-surface-300: #d4cfd6;
+  --color-surface-200: #eae7ec;
+  --color-surface-100: #fff4e0;
+  --color-surface-50:  #ffffff;
 
-  --color-blue-400: #457cd6;
-  --color-blue-500: #457cd6;
-  --color-blue-600: #457cd6;
+  /* ─── Brand Colors (Venezuelan Flag) ─── */
+  --color-brand-gold: #f2b63d;
+  --color-brand-blue: #457cd6;
+  --color-brand-red: #e34262;
+  --color-brand-red-dark: #94353d;
+  --color-brand-warm-white: #fff4e0;
 
-  --color-red-400: #e34262;
-  --color-red-500: #e34262;
-  --color-red-600: #94353d;
+  /* ─── Accent: Teal ─── */
+  --color-accent-teal: #8fcccb;
+  --color-accent-teal-dark: #449489;
+  --color-accent-teal-deep: #285763;
 
-  /* Supplemental Highlights mapped from the 17 Custom Colors */
-  --color-cyan-200: #8fcccb;
-  --color-cyan-300: #8fcccb;
-  --color-cyan-400: #8fcccb;
-  --color-cyan-500: #449489;
-  --color-cyan-950: #285763;
-  
-  --color-indigo-400: #4b3b9c;
-  --color-indigo-500: #4b3b9c;
-  --color-indigo-600: #2f2b5c;
+  /* ─── Accent: Indigo ─── */
+  --color-accent-indigo: #4b3b9c;
+  --color-accent-indigo-dark: #2f2b5c;
 
-  --color-emerald-300: #b4ba47;
-  --color-emerald-400: #b4ba47;
-  --color-emerald-500: #6d8c32;
-  --color-emerald-600: #6d8c32;
-  
-  --color-orange-300: #d46e33;
-  --color-orange-400: #d46e33;
-  --color-orange-500: #d46e33;
+  /* ─── Accent: Lime ─── */
+  --color-accent-lime: #b4ba47;
+  --color-accent-lime-dark: #6d8c32;
 
-  --color-purple-300: #9c656c;
-  --color-purple-400: #9c656c;
-  --color-purple-500: #57253b;
-  --color-purple-600: #2c1b2e;
+  /* ─── Accent: Orange ─── */
+  --color-accent-orange: #d46e33;
 
-  /* Status Colors */
+  /* ─── Accent: Mauve ─── */
+  --color-accent-mauve: #9c656c;
+  --color-accent-mauve-dark: #57253b;
+  --color-accent-mauve-deep: #2c1b2e;
+
+  /* ─── Status Colors ─── */
   --color-status-released: #16a34a;
   --color-status-in-development: #f2b63d;
   --color-status-on-hold: #71717a;
@@ -66,60 +61,98 @@
   --color-status-early: #449489;
   --color-status-recovered: #457cd6;
   --color-status-unknown: #18181b;
+
+  /* ─── Store Brand Colors ─── */
+  --color-store-steam: #172337;
+  --color-store-steam-hover: #2a475e;
+  --color-store-itch: #fa5c5c;
+  --color-store-itch-hover: #ff7f7f;
+  --color-store-nintendo: #e60012;
+  --color-store-nintendo-hover: #ff334f;
+  --color-store-playstation: #0070d1;
+  --color-store-playstation-hover: #0084f7;
+  --color-store-xbox: #107b10;
+  --color-store-xbox-hover: #00bfff;
+  --color-store-google-play: #00a185;
+  --color-store-google-play-hover: #00c9a6;
+  --color-store-apple: #000000;
+  --color-store-apple-hover: #333333;
+  --color-store-meta: #0078ff;
+  --color-store-meta-hover: #3391ff;
+  --color-store-gog: #c99aff;
+  --color-store-gog-hover: #3391ff;
 }
 
+/* ─── Semantic Tokens (CSS Custom Properties) ─── */
 :root {
     --header-height: 80px;
-    --primary-glow: conic-gradient(from 180deg at 50% 50%, #457cd6 0deg, #e34262 180deg, #f2b63d 360deg);
+    --primary-glow: conic-gradient(
+        from 180deg at 50% 50%,
+        var(--color-brand-blue) 0deg,
+        var(--color-brand-red) 180deg,
+        var(--color-brand-gold) 360deg
+    );
+
+    /* Glass effect tokens */
+    --glass-bg: rgba(24, 19, 30, 0.4);
+    --glass-border: rgba(255, 244, 224, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --glass-card-bg: rgba(255, 255, 255, 0.03);
+    --glass-card-border: rgba(255, 255, 255, 0.05);
+    --glass-card-bg-hover: rgba(255, 255, 255, 0.05);
+    --glass-card-border-hover: rgba(68, 148, 137, 0.3);
 }
 
+/* ─── Base Styles ─── */
 body {
-    background-color: var(--color-slate-950);
+    background-color: var(--color-surface-950);
     background-image:
-            radial-gradient(at 0% 0%, var(--color-slate-900) 0, transparent 50%),
-            radial-gradient(at 50% 0%, var(--color-slate-800) 0, transparent 50%),
-            radial-gradient(at 100% 0%, var(--color-slate-950) 0, transparent 50%);
+            radial-gradient(at 0% 0%, var(--color-surface-900) 0, transparent 50%),
+            radial-gradient(at 50% 0%, var(--color-surface-800) 0, transparent 50%),
+            radial-gradient(at 100% 0%, var(--color-surface-950) 0, transparent 50%);
     background-attachment: fixed;
-    color: var(--color-slate-200);
+    color: var(--color-surface-200);
     overflow-x: hidden;
     width: 100%;
 }
 
+/* ─── Global Scrollbar ─── */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: #0d0a11; /* slate-950 */
+    background: var(--color-surface-950);
 }
 ::-webkit-scrollbar-thumb {
-    background: #2c1b2e; /* slate-700 / palette's darkest */
+    background: var(--color-surface-700);
     border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #4b3b9c; /* nice palette highlight */
+    background: var(--color-accent-indigo);
 }
 
+/* ─── Glassmorphism Utilities ─── */
 .glass-panel {
-    background: rgba(24, 19, 30, 0.4);
+    background: var(--glass-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 244, 224, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
 }
 
 .glass-card {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-card-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-card-border);
     border-radius: 1.5rem;
     transition: all 0.3s ease;
 }
 
 .glass-card:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(6, 182, 212, 0.3);
+    background: var(--glass-card-bg-hover);
+    border-color: var(--glass-card-border-hover);
     transform: translateY(-4px);
 }
 
@@ -128,7 +161,7 @@ body {
     padding-top: var(--header-height);
 }
 
-/* Common Animations */
+/* ─── Common Animations ─── */
 @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -157,7 +190,7 @@ body {
 .slide-in-up { animation-name: slide-up; }
 .zoom-in-95 { animation-name: zoom-in; }
 
-/* Custom Scrollbar utility */
+/* ─── Custom Scrollbar Utility ─── */
 .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
 }
@@ -165,9 +198,9 @@ body {
     background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(156, 138, 157, 0.3); /* slate-400 with opacity */
+    background: color-mix(in srgb, var(--color-surface-400) 30%, transparent);
     border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(156, 138, 157, 0.6);
+    background: color-mix(in srgb, var(--color-surface-400) 60%, transparent);
 }
