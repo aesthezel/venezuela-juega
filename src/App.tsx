@@ -140,7 +140,7 @@ const App = () => {
                     {/* Main Content Layers */}
                     <div className="relative flex flex-col min-h-screen">
                         <Header currentPath={currentPath} />
-                        <div className="flex-grow app-content">
+                        <div className="flex-grow app-content pb-24">
                             <Router onChange={handleRouteChange}>
                                 <CatalogPage path="/" {...catalogPageProps} />
                                 <CatalogPage path="/game" {...catalogPageProps} />
@@ -160,8 +160,10 @@ const App = () => {
                                 <NotFoundPage default games={allGames} onGameClick={handleOpenModal} />
                             </Router>
                         </div>
-                        <Footer />
                     </div>
+
+                    {/* Fixed Footer — lives outside flex flow */}
+                    <Footer />
 
                     <ScrollToTop />
                     {selectedGame && (

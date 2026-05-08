@@ -124,11 +124,11 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
     return (
         <div
-            className="fixed inset-0 z-[100] flex justify-center items-center p-2 sm:p-4 md:p-6 bg-black/60 backdrop-blur-md animate-fade-in"
+            className="fixed inset-0 z-[100] flex justify-center items-center p-2 sm:p-4 md:p-6 bg-black/70 backdrop-blur-md animate-fade-in"
             onClick={onClose}
         >
             <div
-                className="glass-panel shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] rounded-3xl w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] flex flex-col overflow-hidden relative animate-slide-up"
+                className="glass-panel shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)] rounded-3xl w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] flex flex-col overflow-hidden relative animate-slide-up"
                 onClick={e => e.stopPropagation()}
             >
                 <button
@@ -148,25 +148,24 @@ const Modal = ({ game, onClose }: ModalProps) => {
                             className="w-full h-full object-cover opacity-80"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-surface-900 via-surface-900/60 to-transparent"></div>
+
+                        <button
+                            onClick={handleViewFullInfo}
+                            className="absolute bottom-0 right-6 md:right-10 translate-y-1/2 z-20 bg-brand-gold hover:brightness-110 text-surface-950 font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-brand-gold/30 hover:-translate-y-[-40%] flex items-center gap-2"
+                        >
+                            <span>Ver más sobre el juego</span>
+                            <FontAwesomeIcon icon={faArrowRight} />
+                        </button>
                     </div>
 
-                    <div className="px-6 md:px-10 pb-10 -mt-20 md:-mt-24 relative z-10 w-full flex flex-col gap-8">
+                    <div className="px-6 md:px-10 pb-10 -mt-28 md:-mt-32 relative z-10 w-full flex flex-col gap-8">
 
-                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                            <div>
-                                <h2 className="text-3xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight leading-tight">{game.title}</h2>
-                                <p className="text-accent-teal font-medium md:text-lg mt-1">{game.developers.join(', ')}</p>
-                            </div>
-                            <button
-                                onClick={handleViewFullInfo}
-                                className="bg-brand-gold hover:bg-brand-gold text-surface-950 font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-brand-gold/20 flex items-center justify-center gap-2 flex-shrink-0"
-                            >
-                                <span>Ver más sobre el juego</span>
-                                <FontAwesomeIcon icon={faArrowRight} />
-                            </button>
+                        <div className="flex flex-col md:pr-56">
+                            <h2 className="text-3xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight leading-tight">{game.title}</h2>
+                            <p className="text-accent-teal font-medium md:text-lg mt-1">{game.developers.join(', ')}</p>
                         </div>
 
-                        <div className="flex items-stretch bg-surface-950/40 backdrop-blur-xl rounded-2xl border border-white/5 divide-x divide-white/10 overflow-hidden shadow-2xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
+                        <div className="flex items-stretch bg-surface-950/40 backdrop-blur-xl rounded-2xl border border-white/5 divide-x divide-white/10 overflow-hidden shadow-2xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200 mt-8">
                             <button
                                 onClick={handleToggleLike}
                                 title={hasLiked ? "Quitar me gusta" : "Me gusta"}
