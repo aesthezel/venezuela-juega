@@ -75,7 +75,7 @@ const UserProfile = () => {
     const progress = Math.min(100, (Number(displayXP) / nextLevelXP) * 100);
 
     return (
-        <div className="relative flex items-center">
+        <div className={`dropdown dropdown-end ${showHistory ? 'dropdown-open' : ''}`}>
             {/* User Badge Trigger */}
             <div
                 className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 backdrop-blur-md px-1.5 py-1.5 md:pl-4 md:pr-1.5 md:py-1.5 rounded-full md:rounded-2xl border border-surface-700 hover:border-surface-700 shadow-lg cursor-pointer transition-all group relative"
@@ -104,7 +104,7 @@ const UserProfile = () => {
 
             {/* Dropdown Menu */}
             {showHistory && (
-                <div className="dropdown-content menu p-0 mt-8 md:mt-14 absolute right-0 w-[320px] max-w-[calc(100vw-32px)] bg-base-200 border border-base-300 rounded-box shadow-2xl z-[100] overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top md:origin-top-right">
+                <div className="dropdown-content menu p-0 mt-5 w-[320px] max-w-[calc(100vw-32px)] bg-base-200 border border-base-300 rounded-box shadow-2xl z-[100] overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                     {/* Header */}
                     <div className="p-5 border-b border-surface-700 flex justify-between items-center bg-base-300/20">
                         <div className="flex items-center gap-3">
@@ -141,44 +141,43 @@ const UserProfile = () => {
                             </h4>
 
                             {favorites.length > 0 ? (
-                                <ul className="menu p-0 space-y-1.5 max-h-48 overflow-y-auto pr-1 custom-scrollbar flex-nowrap">
+                                <ul className="flex flex-col p-0 space-y-1.5 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
                                     {favorites.map(fav => {
                                         const game = allGamesMap.get(fav.gameSlug);
                                         return (
-                                            <li key={fav.gameSlug}>
+                                            <li key={fav.gameSlug} className="w-full">
                                                 <button
                                                     onClick={() => {
-                                                    setShowHistory(false);
-                                                    route(`/game/${fav.gameSlug}`);
-                                                }}
-                                                className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] hover:translate-x-1 border border-surface-700 transition-all text-left group/item"
-                                            >
-                                                {/* Game Thumbnail */}
-                                                <div className="w-10 h-10 rounded-lg overflow-hidden bg-base-300 flex-shrink-0 border border-surface-700">
-                                                    {game?.imageUrl ? (
-                                                        <img
-                                                            src={game.imageUrl}
-                                                            alt={game.title}
-                                                            className="w-full h-full object-cover transition-transform group-hover/item:scale-110"
-                                                        />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-base-content/70">
-                                                            <FontAwesomeIcon icon={faStar} size="xs" />
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                        setShowHistory(false);
+                                                        route(`/game/${fav.gameSlug}`);
+                                                    }}
+                                                    className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] hover:translate-x-1 border border-surface-700 transition-all text-left group/item"
+                                                >
+                                                    {/* Game Thumbnail */}
+                                                    <div className="w-10 h-10 rounded-lg overflow-hidden bg-base-300 flex-shrink-0 border border-surface-700">
+                                                        {game?.imageUrl ? (
+                                                            <img
+                                                                src={game.imageUrl}
+                                                                alt={game.title}
+                                                                className="w-full h-full object-cover transition-transform group-hover/item:scale-110"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-full h-full flex items-center justify-center text-base-content/70">
+                                                                <FontAwesomeIcon icon={faGamepad} size="xs" />
+                                                            </div>
+                                                        )}
+                                                    </div>
 
-                                                <div className="flex flex-col flex-1 min-w-0">
-                                                    <span className="text-xs font-bold text-base-content group-hover/item:text-accent-teal transition-colors capitalize truncate">
-                                                        {game?.title || fav.gameSlug.replace(/-/g, ' ')}
-                                                    </span>
-                                                    <span className="text-[9px] text-base-content/50">
-                                                        {fav.visitCount} visitas
-                                                    </span>
-                                                </div>
-                                                <FontAwesomeIcon icon={faStar} className="text-[10px] text-warning/50 group-hover/item:text-warning transition-colors" />
-                                            </button>
-                                        </li>
+                                                    <div className="flex flex-col flex-1 min-w-0">
+                                                        <span className="text-xs font-bold text-base-content group-hover/item:text-accent-teal transition-colors capitalize truncate">
+                                                            {game?.title || fav.gameSlug.replace(/-/g, ' ')}
+                                                        </span>
+                                                        <span className="text-[9px] text-base-content/50">
+                                                            {fav.visitCount} visitas
+                                                        </span>
+                                                    </div>
+                                                </button>
+                                            </li>
                                         );
                                     })}
                                 </ul>
