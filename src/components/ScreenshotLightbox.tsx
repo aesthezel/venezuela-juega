@@ -56,59 +56,63 @@ const ScreenshotLightbox = ({ isOpen, onClose, screenshots, initialIndex = 0 }: 
 
     const lightboxContent = (
         <div
-            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8 animate-in fade-in duration-300"
+            className="modal modal-open z-[9999] bg-black/95 backdrop-blur-xl animate-in fade-in duration-300"
             role="dialog"
             aria-modal="true"
             onClick={onClose}
         >
-            {/* Close Button */}
-            <button
-                type="button"
-                onClick={onClose}
-                className="absolute top-6 right-6 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-3 transition-all duration-300 z-[10001] shadow-xl border border-white/5"
-                aria-label="Cerrar"
-            >
-                <FontAwesomeIcon icon={faTimes} className="text-2xl" />
-            </button>
-
-            {/* Navigation Arrows */}
-            {screenshots.length > 1 && (
-                <>
-                    <button
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); showPrev(); }}
-                        className="absolute left-4 sm:left-8 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-4 transition-all duration-300 z-[10001] shadow-xl border border-white/5"
-                        aria-label="Anterior"
-                    >
-                        <FontAwesomeIcon icon={faChevronLeft} className="text-2xl" />
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); showNext(); }}
-                        className="absolute right-4 sm:right-8 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-4 transition-all duration-300 z-[10001] shadow-xl border border-white/5"
-                        aria-label="Siguiente"
-                    >
-                        <FontAwesomeIcon icon={faChevronRight} className="text-2xl" />
-                    </button>
-                </>
-            )}
-
-            {/* Image Container */}
-            <div
-                className="relative w-[85vw] h-[80vh] flex items-center justify-center animate-in zoom-in-95 duration-500 pointer-events-none"
+            <div 
+                className="modal-box max-w-5xl w-[90vw] h-[85vh] bg-transparent shadow-none p-0 flex items-center justify-center overflow-visible"
                 onClick={(e) => e.stopPropagation()}
             >
-                <img
-                    src={screenshots[currentIndex]}
-                    alt={`Screenshot ampliada ${currentIndex + 1}`}
-                    className="max-w-full max-h-full object-contain rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.9)] border border-white/10 pointer-events-auto"
-                />
+                {/* Close Button */}
+                <button
+                    type="button"
+                    onClick={onClose}
+                    className="btn btn-circle btn-ghost absolute -top-4 sm:-top-12 -right-4 sm:-right-12 text-white/70 hover:text-white bg-black/50 hover:bg-white/20 z-[10001] shadow-xl border border-surface-700"
+                    aria-label="Cerrar"
+                >
+                    <FontAwesomeIcon icon={faTimes} className="text-xl" />
+                </button>
+
+                {/* Navigation Arrows */}
+                {screenshots.length > 1 && (
+                    <>
+                        <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); showPrev(); }}
+                            className="btn btn-circle btn-ghost absolute left-0 sm:-left-16 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-black/50 hover:bg-white/20 z-[10001] shadow-xl border border-surface-700"
+                            aria-label="Anterior"
+                        >
+                            <FontAwesomeIcon icon={faChevronLeft} className="text-xl" />
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); showNext(); }}
+                            className="btn btn-circle btn-ghost absolute right-0 sm:-right-16 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-black/50 hover:bg-white/20 z-[10001] shadow-xl border border-surface-700"
+                            aria-label="Siguiente"
+                        >
+                            <FontAwesomeIcon icon={faChevronRight} className="text-xl" />
+                        </button>
+                    </>
+                )}
+
+                {/* Image Container */}
+                <div
+                    className="w-full h-full flex items-center justify-center animate-in zoom-in-95 duration-500 pointer-events-none"
+                >
+                    <img
+                        src={screenshots[currentIndex]}
+                        alt={`Screenshot ampliada ${currentIndex + 1}`}
+                        className="max-w-full max-h-full object-contain rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.9)] border border-surface-700 pointer-events-auto"
+                    />
+                </div>
             </div>
 
             {/* Counter */}
-            <div className="absolute bottom-8 left-0 right-0 text-center pointer-events-none">
-                <span className="bg-white/10 backdrop-blur-md px-6 py-2.5 rounded-full text-white/80 text-[10px] font-black tracking-[0.2em] uppercase border border-white/5">
+            <div className="fixed bottom-8 left-0 right-0 text-center pointer-events-none">
+                <span className="badge badge-lg bg-black/50 text-white/80 border border-surface-700 backdrop-blur-md px-6 py-4 uppercase tracking-[0.2em] font-black">
                     {currentIndex + 1} / {screenshots.length}
                 </span>
             </div>

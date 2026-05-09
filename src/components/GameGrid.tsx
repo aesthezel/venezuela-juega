@@ -128,9 +128,9 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
 
     if (games.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center h-full bg-surface-800 rounded-lg p-12 text-center">
+            <div className="flex flex-col items-center justify-center h-full bg-base-300 rounded-lg p-12 text-center">
                 <h2 className="text-2xl font-bold text-white mb-2">No se encontraron juegos</h2>
-                <p className="text-gray-400">Intenta ajustar tus filtros de búsqueda.</p>
+                <p className="text-base-content/70">Intenta ajustar tus filtros de búsqueda.</p>
             </div>
         );
     }

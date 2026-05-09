@@ -13,7 +13,7 @@ const LoadingSpinner: FunctionComponent<LoadingSpinnerProps> = ({logoSrc = DEFAU
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-surface-950/95"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-base-100/95"
             role="status"
             aria-live="polite"
             aria-label="Cargando la lista de Venezuela Juega"
@@ -27,12 +27,12 @@ const LoadingSpinner: FunctionComponent<LoadingSpinnerProps> = ({logoSrc = DEFAU
                     style={{transform: 'scale(1)', opacity: 1}}
                 />
 
-                <div
-                    className="mt-5 md:mt-6 h-1 w-24 rounded-full bg-accent-teal/70 motion-reduce:animate-none animate-pulse"
+                <span
+                    className="loading loading-dots loading-lg text-accent mt-5 md:mt-6"
                     aria-hidden="true"
                 />
 
-                <p className="mt-6 text-base md:text-lg text-accent-teal bg-surface-800/50 px-4 py-2 rounded-full">
+                <p className="mt-6 text-base md:text-lg text-accent-teal badge badge-lg badge-ghost">
                     La lista de videojuegos está cargando...
                 </p>
             </div>

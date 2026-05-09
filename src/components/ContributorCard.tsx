@@ -16,8 +16,10 @@ export interface Contributor {
 }
 
 const Card = ({ children, className = "" }: { children: ComponentChildren, className?: string }) => (
-    <div className={`bg-surface-800/30 backdrop-blur-sm p-6 rounded-2xl border border-surface-700/40 hover:border-surface-600/60 transition-all duration-300 ${className}`}>
-        {children}
+    <div className={`card bg-base-200 shadow-xl border border-base-300 hover:border-surface-700 transition-all duration-300 ${className}`}>
+        <div className="card-body p-6 flex flex-col justify-between">
+            {children}
+        </div>
     </div>
 );
 
@@ -36,8 +38,10 @@ const ContributorCard = ({ person }: ContributorCardProps) => {
         <Card className="h-full flex flex-col justify-between hover:-translate-y-1 duration-300">
             <div>
                 <div className="flex items-center gap-4 mb-3">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-surface-700 to-surface-600 flex items-center justify-center text-xl font-bold text-white shadow-inner">
-                        {person.name.charAt(0)}
+                    <div className="avatar placeholder">
+                        <div className="w-12 h-12 rounded-full bg-neutral text-neutral-content flex items-center justify-center text-xl font-bold shadow-inner">
+                            <span>{person.name.charAt(0)}</span>
+                        </div>
                     </div>
                     <div>
                         <h3 className="text-xl font-bold text-white">{person.name}</h3>
@@ -46,20 +50,20 @@ const ContributorCard = ({ person }: ContributorCardProps) => {
                 </div>
                 <p 
                     ref={descRef}
-                    className={`text-surface-300 mb-6 leading-relaxed ${lineCount > 4 ? 'line-clamp-4' : ''}`}
+                    className={`text-base-content/70 mb-6 leading-relaxed ${lineCount > 4 ? 'line-clamp-4' : ''}`}
                 >
                     {person.description}
                 </p>
             </div>
 
-            <div className="pt-4 border-t border-surface-700 flex gap-4">
+            <div className="card-actions pt-4 border-t border-base-300 flex gap-2">
                 {person.socials.map((social: ContributorSocial, sIdx: number) => (
                     <a
                         key={sIdx}
                         href={social.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-surface-400 hover:text-white hover:scale-110 transition-all"
+                        className="btn btn-ghost btn-circle btn-sm text-base-content/70 hover:text-base-content transition-all"
                         aria-label={`Link a ${social.url}`}
                     >
                         <FontAwesomeIcon icon={social.icon} size="lg" />

@@ -115,7 +115,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
         <div
             ref={containerRef}
             onClick={onClick}
-            className={`glass-card overflow-hidden shadow-lg cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col relative ${
+            className={`card bg-base-200 overflow-hidden shadow-xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col relative ${
                 fireflyCount > 0
                     ? 'ring-1 ring-accent-teal/40 hover:shadow-accent-teal-dark/50'
                     : 'hover:shadow-accent-teal-dark/50'
@@ -131,7 +131,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
         >
             {/* Firefly presence indicator */}
             {fireflyCount > 0 && (
-                <div className="absolute top-2 left-2 z-20 flex items-center gap-1.5 bg-surface-900/80 backdrop-blur-sm rounded-full pl-1.5 pr-2.5 py-1 border border-accent-teal/30 shadow-[0_0_12px_rgba(34,211,238,0.2)]">
+                <div className="absolute top-2 left-2 z-20 flex items-center gap-1.5 bg-base-200/80 backdrop-blur-sm rounded-full pl-1.5 pr-2.5 py-1 border border-accent-teal/30 shadow-[0_0_12px_rgba(34,211,238,0.2)]">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-teal opacity-75" />
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-teal shadow-[0_0_6px_#22d3ee]" />
@@ -228,14 +228,14 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                 </div>
             )}
 
-            <div className="p-5 flex flex-col flex-grow">
+            <div className="card-body p-5 flex flex-col flex-grow">
                 <div className="flex justify-between items-start gap-4">
                     <h3 className="text-xl font-bold text-white truncate flex-1">{game.title}</h3>
                     <button
                         onClick={handleToggleLike}
                         disabled={!isReady}
-                        className={`flex items-center gap-1.5 transition-all duration-300 group/like ${
-                            hasLiked ? 'text-rose-400' : 'text-surface-500 hover:text-white'
+                        className={`btn btn-ghost btn-sm flex items-center gap-1.5 transition-all duration-300 group/like ${
+                            hasLiked ? 'text-rose-400' : 'text-base-content/70 hover:text-base-content'
                         } ${!isReady ? 'opacity-50 cursor-not-allowed' : ''}`}
                         title={!isReady ? "Iniciando conexión..." : (hasLiked ? "Quitar me gusta" : "Me gusta")}
                     >
@@ -248,7 +248,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                 </div>
                 
                 <p
-                    className={`text-gray-400 mt-2 text-sm transition-all duration-300 ease-in-out ${isExpanded ? '' : (layout === 'masonry' ? 'line-clamp-[6]' : 'line-clamp-2')}`}
+                    className={`text-base-content/70 mt-2 text-sm transition-all duration-300 ease-in-out ${isExpanded ? '' : (layout === 'masonry' ? 'line-clamp-[6]' : 'line-clamp-2')}`}
                 >
                     {game.description}
                 </p>
@@ -257,16 +257,16 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                     {needsExpansion && (
                         <button
                             onClick={handleReadMoreClick}
-                            className="text-accent-teal hover:underline text-sm self-start focus:outline-none"
+                            className="btn btn-link btn-sm text-accent hover:text-accent-focus p-0 h-auto min-h-0 self-start no-underline hover:underline"
                         >
                             {isExpanded ? 'Leer menos' : 'Leer más'}
                         </button>
                     )}
                 </div>
 
-                <div className="mt-auto pt-4 flex flex-wrap gap-2">
+                <div className="card-actions mt-auto pt-4 flex flex-wrap gap-2">
                     {game.genre.slice(0, 2).map(g => (
-                        <span key={g} className="bg-white/5 border border-white/10 backdrop-blur-md text-accent-teal text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full">{g}</span>
+                        <span key={g} className="badge badge-sm badge-outline border-surface-700 text-accent text-[10px] font-bold uppercase tracking-wider">{g}</span>
                     ))}
                 </div>
             </div>

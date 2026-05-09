@@ -34,48 +34,56 @@ interface FormCardProps {
 }
 
 const FormCard = ({ title, children }: FormCardProps) => (
-    <div className="bg-surface-800 p-6 rounded-lg shadow-lg">
-        <h3 className="text-xl font-bold text-accent-teal mb-4 border-l-4 border-accent-teal pl-3">{title}</h3>
-        <div className="space-y-4">{children}</div>
+    <div className="card bg-base-200 shadow-xl border border-surface-700 mb-8">
+        <div className="card-body">
+            <h3 className="card-title text-primary border-l-4 border-primary pl-3 mb-2">{title}</h3>
+            <div className="space-y-4">{children}</div>
+        </div>
     </div>
 );
 
 type FormInputProps = { label: string } & ComponentProps<'input'>;
 
 const FormInput = ({ label, ...props }: FormInputProps) => (
-    <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
+    <label className="form-control w-full">
+        <div className="label">
+            <span className="label-text font-medium">{label}</span>
+        </div>
         <input
             {...props}
-            className="w-full bg-surface-700 border-2 border-surface-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-accent-teal-dark focus:outline-none transition-colors duration-300"
+            className="input input-bordered w-full focus:input-primary transition-colors duration-300"
         />
-    </div>
+    </label>
 );
 
 type FormTextareaProps = { label: string } & ComponentProps<'textarea'>;
 
 const FormTextarea = ({ label, ...props }: FormTextareaProps) => (
-    <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
+    <label className="form-control w-full">
+        <div className="label">
+            <span className="label-text font-medium">{label}</span>
+        </div>
         <textarea
             {...props}
-            className="w-full bg-surface-700 border-2 border-surface-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-accent-teal-dark focus:outline-none transition-colors duration-300"
+            className="textarea textarea-bordered w-full focus:textarea-primary transition-colors duration-300 min-h-[100px]"
         ></textarea>
-    </div>
+    </label>
 );
 
 type FormSelectProps = { label: string } & ComponentProps<'select'>;
 
 const FormSelect = ({ label, children, ...props }: FormSelectProps) => (
-    <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
+    <label className="form-control w-full">
+        <div className="label">
+            <span className="label-text font-medium">{label}</span>
+        </div>
         <select
             {...props}
-            className="w-full bg-surface-700 border-2 border-surface-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-accent-teal-dark focus:outline-none transition-colors duration-300"
+            className="select select-bordered w-full focus:select-primary transition-colors duration-300"
         >
             {children}
         </select>
-    </div>
+    </label>
 );
 
 const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) => {
@@ -131,7 +139,7 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
     return (
         <PageTransition>
             <main className="container mx-auto px-4 py-8">
-            <h2 className="text-3xl font-bold mb-6 text-white">Añadir Nuevo Juego</h2>
+            <h2 className="text-3xl font-bold mb-6 text-base-content">Añadir Nuevo Juego</h2>
             <form onSubmit={handleSubmit} className="space-y-8">
                 <FormCard title="Información Básica">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -164,45 +172,49 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
                     <FormInput label="URL del Presskit" name="presskitUrl" value={game.pressKitUrl || ''} onInput={handleChange} />
 
                     <div>
-                        <h4 className="text-lg font-semibold text-gray-300 mb-2">Tiendas</h4>
-                        <div className="space-y-2">
+                        <h4 className="text-lg font-semibold text-base-content mb-2 mt-4">Tiendas</h4>
+                        <div className="space-y-2 mb-4">
                             {game.stores.map((store, index) => (
-                                <div key={index} className="flex items-center gap-2 bg-surface-700 p-2 rounded">
-                                    <span className="flex-1 text-white truncate">{store.name}: {store.url}</span>
-                                    <button type="button" onClick={() => handleRemoveStore(index)} className="text-brand-red hover:text-brand-red"><CloseIcon /></button>
+                                <div key={index} className="flex items-center gap-2 bg-base-300 p-3 rounded-lg border border-surface-700">
+                                    <span className="flex-1 text-base-content truncate">{store.name}: {store.url}</span>
+                                    <button type="button" onClick={() => handleRemoveStore(index)} className="btn btn-error btn-sm btn-ghost btn-square">
+                                        <CloseIcon />
+                                    </button>
                                 </div>
                             ))}
                         </div>
-                        <div className="flex items-end gap-4 mt-2">
+                        <div className="flex flex-col md:flex-row items-end gap-4 mt-2">
                             <FormInput label="Nombre de Tienda" value={storeName} onInput={(e) => setStoreName(e.currentTarget.value)} />
                             <FormInput label="URL de Tienda" value={storeUrl} onInput={(e) => setStoreUrl(e.currentTarget.value)} />
-                            <button type="button" onClick={handleAddStore} className="bg-accent-teal-dark hover:bg-accent-teal-dark text-white font-bold py-3 px-4 rounded-lg transition-colors h-12">Añadir</button>
+                            <button type="button" onClick={handleAddStore} className="btn btn-primary">Añadir</button>
                         </div>
                     </div>
 
-                    <div>
-                        <h4 className="text-lg font-semibold text-gray-300 mb-2">Enlaces y Redes</h4>
-                        <div className="space-y-2">
+                    <div className="mt-6">
+                        <h4 className="text-lg font-semibold text-base-content mb-2">Enlaces y Redes</h4>
+                        <div className="space-y-2 mb-4">
                             {game.links.map((link, index) => (
-                                <div key={index} className="flex items-center gap-2 bg-surface-700 p-2 rounded">
-                                    <span className="flex-1 text-white truncate">{link.name}: {link.url}</span>
-                                    <button type="button" onClick={() => handleRemoveLink(index)} className="text-brand-red hover:text-brand-red"><CloseIcon/></button>
+                                <div key={index} className="flex items-center gap-2 bg-base-300 p-3 rounded-lg border border-surface-700">
+                                    <span className="flex-1 text-base-content truncate">{link.name}: {link.url}</span>
+                                    <button type="button" onClick={() => handleRemoveLink(index)} className="btn btn-error btn-sm btn-ghost btn-square">
+                                        <CloseIcon/>
+                                    </button>
                                 </div>
                             ))}
                         </div>
-                        <div className="flex items-end gap-4 mt-2">
+                        <div className="flex flex-col md:flex-row items-end gap-4 mt-2">
                             <FormInput label="Nombre del Enlace" value={linkName} onInput={(e) => setLinkName(e.currentTarget.value)} />
                             <FormInput label="URL del Enlace" value={linkUrl} onInput={(e) => setLinkUrl(e.currentTarget.value)} />
-                            <button type="button" onClick={handleAddLink} className="bg-accent-teal-dark hover:bg-accent-teal-dark text-white font-bold py-3 px-4 rounded-lg transition-colors h-12">Añadir</button>
+                            <button type="button" onClick={handleAddLink} className="btn btn-primary">Añadir</button>
                         </div>
                     </div>
                 </FormCard>
 
-                <div className="flex justify-end gap-4">
-                    <button type="button" onClick={onNavigateToCatalog} className="bg-surface-600 hover:bg-surface-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                <div className="flex justify-end gap-4 mb-12">
+                    <button type="button" onClick={onNavigateToCatalog} className="btn btn-ghost">
                         Cancelar
                     </button>
-                    <button type="submit" className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                    <button type="submit" className="btn btn-success">
                         Guardar Juego
                     </button>
                 </div>

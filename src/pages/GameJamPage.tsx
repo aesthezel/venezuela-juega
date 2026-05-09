@@ -93,7 +93,7 @@ const GameJamPage: FunctionalComponent = () => {
     };
 
     return (
-        <div className="min-h-screen bg-surface-900 text-gray-200">
+        <div className="min-h-screen bg-base-200 text-base-content">
             <header
                 className="w-full bg-gradient-to-r from-brand-gold via-brand-red-dark to-brand-gold text-white py-8 px-6 md:px-12 shadow-lg">
                 <div className="max-w-6xl mx-auto">
@@ -139,7 +139,7 @@ const GameJamPage: FunctionalComponent = () => {
                     <aside className="md:col-span-1">
                         <div className="sticky top-20 space-y-6">
                             <section id="inscripcion"
-                                className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-600/50 relative overflow-hidden">
+                                className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-700 relative overflow-hidden">
                                 <div className="flex items-center gap-3 mb-4">
                                     <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent-teal to-accent-indigo">
                                         Inscríbete ahora
@@ -147,39 +147,39 @@ const GameJamPage: FunctionalComponent = () => {
                                 </div>
 
                                 <div
-                                    className="mb-4 p-4 bg-gradient-to-r from-brand-gold/70 to-accent-orange/50 border border-brand-red/50 rounded-lg">
-                                    <p className="text-xs text-brand-red mb-2 font-medium">TIEMPO RESTANTE</p>
+                                    className="mb-4 p-4 bg-gradient-to-r from-brand-gold/70 to-accent-orange/50 border border-secondary/50 rounded-lg">
+                                    <p className="text-xs text-secondary mb-2 font-medium">TIEMPO RESTANTE</p>
                                     {isExpired ? (
-                                        <p className="text-brand-red font-bold text-lg">¡INSCRIPCIONES CERRADAS!</p>
+                                        <p className="text-secondary font-bold text-lg">¡INSCRIPCIONES CERRADAS!</p>
                                     ) : (
                                         <div className="grid grid-cols-2 gap-2 text-center">
-                                            <div className="bg-surface-700/50 rounded p-2">
+                                            <div className="bg-base-300/50 rounded p-2">
                                                 <div className="text-xl font-bold text-white">{timeLeft.days}</div>
-                                                <div className="text-xs text-gray-300">Días</div>
+                                                <div className="text-xs text-base-content/70">Días</div>
                                             </div>
-                                            <div className="bg-surface-700/50 rounded p-2">
+                                            <div className="bg-base-300/50 rounded p-2">
                                                 <div className="text-xl font-bold text-white">{timeLeft.hours}</div>
-                                                <div className="text-xs text-gray-300">Horas</div>
+                                                <div className="text-xs text-base-content/70">Horas</div>
                                             </div>
-                                            <div className="bg-surface-700/50 rounded p-2">
+                                            <div className="bg-base-300/50 rounded p-2">
                                                 <div className="text-xl font-bold text-white">{timeLeft.minutes}</div>
-                                                <div className="text-xs text-gray-300">Min</div>
+                                                <div className="text-xs text-base-content/70">Min</div>
                                             </div>
-                                            <div className="bg-surface-700/50 rounded p-2">
+                                            <div className="bg-base-300/50 rounded p-2">
                                                 <div className="text-xl font-bold text-white">{timeLeft.seconds}</div>
-                                                <div className="text-xs text-gray-300">Seg</div>
+                                                <div className="text-xs text-base-content/70">Seg</div>
                                             </div>
                                         </div>
                                     )}
-                                    <p className="text-xs text-gray-300 mt-2 text-center">
+                                    <p className="text-xs text-base-content/70 mt-2 text-center">
                                         Fecha límite: 16 de Octubre del 2025
                                     </p>
                                 </div>
                                 <ul className="space-y-3">
                                     <li>
                                         <a className={`block w-full text-center px-4 py-2 rounded transition-colors ${isExpired
-                                            ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                                            : 'border border-brand-gold hover:bg-brand-gold/10 text-brand-gold hover:text-brand-gold'
+                                            ? 'bg-base-200 text-base-content/70 cursor-not-allowed'
+                                            : 'border border-accent hover:bg-accent/10 text-accent hover:text-accent'
                                             }`}
                                             href={isExpired ? '#' : signUpLink}
                                             target={isExpired ? '_self' : '_blank'}
@@ -191,7 +191,7 @@ const GameJamPage: FunctionalComponent = () => {
                             </section>
 
                             <section
-                                className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-600/50 relative overflow-hidden">
+                                className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-700 relative overflow-hidden">
 
                                 <div className="relative z-10">
                                     <div className="flex items-center gap-3 mb-4">
@@ -200,12 +200,12 @@ const GameJamPage: FunctionalComponent = () => {
                                         </h3>
                                     </div>
 
-                                    <p className="text-gray-300 text-sm mb-4 opacity-90">
+                                    <p className="text-base-content/70 text-sm mb-4 opacity-90">
                                         Recursos esenciales para prepararte y tener éxito en la GameJam+
                                     </p>
 
                                     <div className="space-y-3">
-                                        <a className="group flex items-center gap-4 p-3 bg-surface-700/40 hover:bg-gradient-to-r hover:from-accent-indigo/20 hover:to-accent-mauve-dark/20 border border-surface-600/30 hover:border-accent-indigo/40 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-accent-indigo/10"
+                                        <a className="group flex items-center gap-4 p-3 bg-base-300/40 hover:bg-gradient-to-r hover:from-accent-indigo/20 hover:to-accent-mauve-dark/20 border border-surface-700 hover:border-accent-indigo/40 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-accent-indigo/10"
                                             href="https://docs.google.com/document/d/1Vli9OsOCoAdRrOOazSjvA5IcdydAP7aWpzaGf6cJSoI/edit?usp=sharing"
                                             target="_blank"
                                             rel="noopener">
@@ -217,20 +217,20 @@ const GameJamPage: FunctionalComponent = () => {
                                                 <h4 className="font-semibold text-white group-hover:text-accent-lime transition-colors">
                                                     Guía de supervivencia en la GJ+
                                                 </h4>
-                                                <p className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
+                                                <p className="text-xs text-base-content/70 group-hover:text-base-content/70 transition-colors">
                                                     Cómo participar y disfrutar de una game jam
                                                 </p>
                                             </div>
                                             <div
                                                 className="flex-shrink-0 opacity-50 group-hover:opacity-100 transition-opacity">
                                                 <ExternalLinkIcon
-                                                    className="text-gray-400 group-hover:text-accent-mauve transition-colors"
+                                                    className="text-base-content/70 group-hover:text-accent-mauve transition-colors"
                                                     size="sm"
                                                 />
                                             </div>
                                         </a>
 
-                                        <a className="group flex items-center gap-4 p-3 bg-surface-700/40 hover:bg-gradient-to-r hover:from-accent-mauve-dark/20 hover:to-pink-500/20 border border-surface-600/30 hover:border-accent-mauve-dark/40 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-accent-mauve-dark/10"
+                                        <a className="group flex items-center gap-4 p-3 bg-base-300/40 hover:bg-gradient-to-r hover:from-accent-mauve-dark/20 hover:to-pink-500/20 border border-surface-700 hover:border-accent-mauve-dark/40 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-accent-mauve-dark/10"
                                             href="https://docs.google.com/presentation/d/1s3klip-CpG-GoiwOv-rrRjsP1Ylc_HIcnUQQS-dmwuE/edit?usp=sharing"
                                             target="_blank"
                                             rel="noopener">
@@ -242,14 +242,14 @@ const GameJamPage: FunctionalComponent = () => {
                                                 <h4 className="font-semibold text-white group-hover:text-accent-mauve transition-colors">
                                                     Cómo funciona la GJ+
                                                 </h4>
-                                                <p className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
+                                                <p className="text-xs text-base-content/70 group-hover:text-base-content/70 transition-colors">
                                                     Presentación completa del formato y las reglas a seguir
                                                 </p>
                                             </div>
                                             <div
                                                 className="flex-shrink-0 opacity-50 group-hover:opacity-100 transition-opacity">
                                                 <ExternalLinkIcon
-                                                    className="text-gray-400 group-hover:text-accent-mauve transition-colors"
+                                                    className="text-base-content/70 group-hover:text-accent-mauve transition-colors"
                                                     size="sm"
                                                 />
                                             </div>
@@ -257,8 +257,8 @@ const GameJamPage: FunctionalComponent = () => {
                                     </div>
 
                                     {/* Call to action */}
-                                    <div className="mt-5 pt-4 border-t border-surface-600/30">
-                                        <div className="flex items-center gap-2 text-xs text-gray-400">
+                                    <div className="mt-5 pt-4 border-t border-surface-700">
+                                        <div className="flex items-center gap-2 text-xs text-base-content/70">
                                             <div
                                                 className="w-2 h-2 bg-gradient-to-r from-accent-teal to-accent-indigo rounded-full animate-pulse"></div>
                                             <span>Recursos actualizados regularmente</span>
@@ -267,7 +267,7 @@ const GameJamPage: FunctionalComponent = () => {
                                 </div>
                             </section>
 
-                            <section className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-600/50 relative overflow-hidden">
+                            <section className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-700 relative overflow-hidden">
 
                                 <div className="flex items-center gap-3 mb-4">
                                     <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent-teal to-accent-indigo">
@@ -288,7 +288,7 @@ const GameJamPage: FunctionalComponent = () => {
                                         </div>
                                         <div>
                                             <p className="text-accent-indigo font-medium text-sm">Discord</p>
-                                            <p className="text-gray-400 text-xs">Únete a la conversación</p>
+                                            <p className="text-base-content/70 text-xs">Únete a la conversación</p>
                                         </div>
                                     </a>
 
@@ -304,7 +304,7 @@ const GameJamPage: FunctionalComponent = () => {
                                         </div>
                                         <div>
                                             <p className="text-pink-300 font-medium text-sm">Instagram</p>
-                                            <p className="text-gray-400 text-xs">Síguenos para updates</p>
+                                            <p className="text-base-content/70 text-xs">Síguenos para updates</p>
                                         </div>
                                     </a>
 
@@ -312,15 +312,15 @@ const GameJamPage: FunctionalComponent = () => {
                                         href="https://tiktok.com/@venezuelajuega"
                                         target="_blank"
                                         rel="noopener"
-                                        className="flex items-center gap-3 px-3 py-2 bg-surface-700/50 hover:bg-surface-600/50 border border-surface-600 rounded-lg transition-colors group"
+                                        className="flex items-center gap-3 px-3 py-2 bg-base-300/50 hover:bg-base-300/50 border border-surface-700 rounded-lg transition-colors group"
                                     >
                                         <div
-                                            className="w-8 h-8 bg-black rounded flex items-center justify-center text-white text-sm group-hover:bg-gray-800 transition-colors">
+                                            className="w-8 h-8 bg-black rounded flex items-center justify-center text-white text-sm group-hover:bg-base-300 transition-colors">
                                             🎵
                                         </div>
                                         <div>
-                                            <p className="text-gray-200 font-medium text-sm">TikTok</p>
-                                            <p className="text-gray-400 text-xs">Contenido divertido</p>
+                                            <p className="text-base-content font-medium text-sm">TikTok</p>
+                                            <p className="text-base-content/70 text-xs">Contenido divertido</p>
                                         </div>
                                     </a>
                                 </div>
@@ -331,7 +331,7 @@ const GameJamPage: FunctionalComponent = () => {
                     <section className="md:col-span-2 space-y-6">
                         <article id="info" className="p-6 rounded-lg shadow-lg border border-surface-700 bg-gradient-to-br from-surface-800 to-surface-700 rounded-xl shadow-xl relative overflow-hidden">
                             <h2 className="text-2xl font-semibold mb-4 text-white flex items-center gap-2">¿Qué es una Game Jam?</h2>
-                            <p className="text-gray-300 mb-4">
+                            <p className="text-base-content/70 mb-4">
                                 Una Game Jam es un evento donde desarrolladores, artistas, diseñadores y músicos se
                                 reúnen para crear uno o varios juegos en un tiempo limitado — en este caso, 48 horas.
                                 El objetivo es fomentar la creatividad, el aprendizaje y la colaboración. Las Jam son
@@ -344,7 +344,7 @@ const GameJamPage: FunctionalComponent = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <h3 className="font-medium mb-1 text-accent-teal">Estructura típica</h3>
-                                    <ul className="list-disc list-inside text-gray-300 space-y-1">
+                                    <ul className="list-disc list-inside text-base-content/70 space-y-1">
                                         <li>Presentación del tema en el cual se basará la jam</li>
                                         <li>Formación de equipos y planificación</li>
                                         <li>48 horas de desarrollo</li>
@@ -353,7 +353,7 @@ const GameJamPage: FunctionalComponent = () => {
                                 </div>
                                 <div>
                                     <h3 className="font-medium mb-1 text-accent-teal">Consejos</h3>
-                                    <ul className="list-disc list-inside text-gray-300 space-y-1">
+                                    <ul className="list-disc list-inside text-base-content/70 space-y-1">
                                         <li>Define un alcance realista</li>
                                         <li>Prioriza prototipo jugable</li>
                                         <li>Hidrátate, descansa y continúa desarrollando</li>
@@ -367,7 +367,7 @@ const GameJamPage: FunctionalComponent = () => {
                             <h2 className="text-2xl font-semibold mb-4 text-white flex items-center gap-2">
                                 Charlas de GameJam+ 25/26
                             </h2>
-                            <p className="text-gray-300 mb-6 text-sm">
+                            <p className="text-base-content/70 mb-6 text-sm">
                                 ¡Prepárate para participar en la Game Jam con estas charlas especializadas sobre
                                 desarrollo de videojuegos, diseño y la industria en general!
                             </p>
@@ -376,11 +376,11 @@ const GameJamPage: FunctionalComponent = () => {
                                 {talks.map((talk, index) => (
                                     <div
                                         key={index}
-                                        className="group cursor-pointer bg-surface-700/30 border border-surface-600 rounded-lg overflow-hidden hover:border-accent-teal-dark/40 transition-all duration-300 hover:shadow-lg hover:shadow-accent-teal-dark/10"
+                                        className="group cursor-pointer bg-base-300/30 border border-surface-700 rounded-lg overflow-hidden hover:border-accent-teal-dark/40 transition-all duration-300 hover:shadow-lg hover:shadow-accent-teal-dark/10"
                                         onClick={() => openVideoModal(talk)}
                                     >
                                         <div
-                                            className="relative aspect-video bg-surface-700 flex items-center justify-center overflow-hidden">
+                                            className="relative aspect-video bg-base-300 flex items-center justify-center overflow-hidden">
                                             <img
                                                 src={`https://img.youtube.com/vi/${talk.videoId}/maxresdefault.jpg`}
                                                 alt={talk.title}
@@ -390,7 +390,7 @@ const GameJamPage: FunctionalComponent = () => {
                                             <div
                                                 className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
                                                 <div
-                                                    className="w-12 h-12 bg-brand-red-dark rounded-full flex items-center justify-center group-hover:bg-brand-red transition-colors duration-300">
+                                                    className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center group-hover:bg-secondary transition-colors duration-300">
                                                     <svg className="w-6 h-6 text-white ml-1" fill="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path d="M8 5v14l11-7z" />
@@ -402,7 +402,7 @@ const GameJamPage: FunctionalComponent = () => {
                                             <h4 className="text-sm font-medium text-white group-hover:text-accent-teal transition-colors duration-200 line-clamp-2">
                                                 {talk.title}
                                             </h4>
-                                            <p className="text-xs text-gray-400 mt-1">Click para reproducir</p>
+                                            <p className="text-xs text-base-content/70 mt-1">Click para reproducir</p>
                                         </div>
                                     </div>
                                 ))}
@@ -414,9 +414,9 @@ const GameJamPage: FunctionalComponent = () => {
 
                             <div className="space-y-3">
                                 <details
-                                    className="group bg-surface-700/30 border border-surface-600/50 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent-teal-dark/40">
+                                    className="group bg-base-300/30 border border-surface-700 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent-teal-dark/40">
                                     <summary
-                                        className="cursor-pointer px-4 py-3 flex items-center justify-between bg-surface-700/20 hover:bg-surface-600/30 transition-colors duration-200">
+                                        className="cursor-pointer px-4 py-3 flex items-center justify-between bg-base-300/20 hover:bg-base-300/30 transition-colors duration-200">
                                         <span className="font-medium text-accent-teal group-hover:text-accent-teal">
                                             ¿Puedo participar solo?
                                         </span>
@@ -428,7 +428,7 @@ const GameJamPage: FunctionalComponent = () => {
                                         </svg>
                                     </summary>
                                     <div
-                                        className="px-4 py-3 text-sm text-gray-300 bg-surface-800/50 border-t border-surface-600/30">
+                                        className="px-4 py-3 text-sm text-base-content/70 bg-base-300/50 border-t border-surface-700">
                                         <p>Sí, absolutamente. Hay modalidades tanto individuales como por equipos. Si
                                             participas solo, tendrás la libertad total sobre tu proyecto, pero también
                                             puedes unirte a otros participantes durante el evento para formar equipos
@@ -437,9 +437,9 @@ const GameJamPage: FunctionalComponent = () => {
                                 </details>
 
                                 <details
-                                    className="group bg-surface-700/30 border border-surface-600/50 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent-teal-dark/40">
+                                    className="group bg-base-300/30 border border-surface-700 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent-teal-dark/40">
                                     <summary
-                                        className="cursor-pointer px-4 py-3 flex items-center justify-between bg-surface-700/20 hover:bg-surface-600/30 transition-colors duration-200">
+                                        className="cursor-pointer px-4 py-3 flex items-center justify-between bg-base-300/20 hover:bg-base-300/30 transition-colors duration-200">
                                         <span className="font-medium text-accent-teal group-hover:text-accent-teal">
                                             ¿Hay premios?
                                         </span>
@@ -451,7 +451,7 @@ const GameJamPage: FunctionalComponent = () => {
                                         </svg>
                                     </summary>
                                     <div
-                                        className="px-4 py-3 text-sm text-gray-300 bg-surface-800/50 border-t border-surface-600/30">
+                                        className="px-4 py-3 text-sm text-base-content/70 bg-base-300/50 border-t border-surface-700">
                                         <p>En muchas ediciones hay menciones y premios especiales. Normalmente la GJ+ se
                                             basa en un proceso de multiples etapas luego de participar en las 48H de la
                                             jam, en lo cual se evalua el trabajo y se entra en una fase de selección
@@ -461,9 +461,9 @@ const GameJamPage: FunctionalComponent = () => {
                                 </details>
 
                                 <details
-                                    className="group bg-surface-700/30 border border-surface-600/50 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent-teal-dark/40">
+                                    className="group bg-base-300/30 border border-surface-700 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent-teal-dark/40">
                                     <summary
-                                        className="cursor-pointer px-4 py-3 flex items-center justify-between bg-surface-700/20 hover:bg-surface-600/30 transition-colors duration-200">
+                                        className="cursor-pointer px-4 py-3 flex items-center justify-between bg-base-300/20 hover:bg-base-300/30 transition-colors duration-200">
                                         <span className="font-medium text-accent-teal group-hover:text-accent-teal">
                                             ¿Qué necesito para participar?
                                         </span>
@@ -475,7 +475,7 @@ const GameJamPage: FunctionalComponent = () => {
                                         </svg>
                                     </summary>
                                     <div
-                                        className="px-4 py-3 text-sm text-gray-300 bg-surface-800/50 border-t border-surface-600/30">
+                                        className="px-4 py-3 text-sm text-base-content/70 bg-base-300/50 border-t border-surface-700">
                                         <p>Solo necesitas ganas de crear y una computadora con acceso a internet. Puedes
                                             usar cualquier herramienta de desarrollo que prefieras: Unity, Godot,
                                             GameMaker, o incluso herramientas web. La creatividad es más importante que
@@ -484,9 +484,9 @@ const GameJamPage: FunctionalComponent = () => {
                                 </details>
 
                                 <details
-                                    className="group bg-surface-700/30 border border-surface-600/50 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent-teal-dark/40">
+                                    className="group bg-base-300/30 border border-surface-700 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent-teal-dark/40">
                                     <summary
-                                        className="cursor-pointer px-4 py-3 flex items-center justify-between bg-surface-700/20 hover:bg-surface-600/30 transition-colors duration-200">
+                                        className="cursor-pointer px-4 py-3 flex items-center justify-between bg-base-300/20 hover:bg-base-300/30 transition-colors duration-200">
                                         <span className="font-medium text-accent-teal group-hover:text-accent-teal">
                                             ¿Cuándo es el evento?
                                         </span>
@@ -498,7 +498,7 @@ const GameJamPage: FunctionalComponent = () => {
                                         </svg>
                                     </summary>
                                     <div
-                                        className="px-4 py-3 text-sm text-gray-300 bg-surface-800/50 border-t border-surface-600/30">
+                                        className="px-4 py-3 text-sm text-base-content/70 bg-base-300/50 border-t border-surface-700">
                                         <p>La GameJam+ 25/26 se realizará durante 48 horas consecutivas. Nuestra sede
                                             dara inicio a la jam el dia 17 de Octubre y finalizarian el 19 de Octubre
                                             del 2025. Mantente atento a nuestras redes sociales para conocer todos los
@@ -507,7 +507,7 @@ const GameJamPage: FunctionalComponent = () => {
                                 </details>
                             </div>
 
-                            <div className="mt-6 pt-4 border-t border-surface-600/30">
+                            <div className="mt-6 pt-4 border-t border-surface-700">
                                 <button
                                     className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-accent-indigo-dark to-accent-mauve-deep hover:from-accent-indigo hover:to-accent-mauve-dark text-white rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg"
                                     onClick={() => setShowMore((s) => !s)}
@@ -523,15 +523,15 @@ const GameJamPage: FunctionalComponent = () => {
 
                                 {showMore && (
                                     <div
-                                        className="mt-4 p-4 bg-gradient-to-r from-surface-800/80 to-surface-700/80 rounded-lg border border-surface-600/50 backdrop-blur-sm">
+                                        className="mt-4 p-4 bg-gradient-to-r from-surface-800/80 to-surface-700/80 rounded-lg border border-surface-700 backdrop-blur-sm">
                                         <div className="space-y-3">
                                             <div className="flex items-start gap-3">
                                                 <div
                                                     className="w-2 h-2 bg-accent-teal rounded-full mt-2 flex-shrink-0"></div>
                                                 <div>
                                                     <span className="text-accent-teal font-semibold">Contacto del organizador:</span>
-                                                    <p className="text-gray-300">David Pino</p>
-                                                    <p className="text-gray-300">hola@venezuelajuega.com</p>
+                                                    <p className="text-base-content/70">David Pino</p>
+                                                    <p className="text-base-content/70">hola@venezuelajuega.com</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-start gap-3">
@@ -540,7 +540,7 @@ const GameJamPage: FunctionalComponent = () => {
                                                 <div>
                                                     <span
                                                         className="text-accent-mauve font-semibold">Horario de soporte:</span>
-                                                    <p className="text-gray-300">Lunes a Viernes, 9:00 AM - 6:00 PM
+                                                    <p className="text-base-content/70">Lunes a Viernes, 9:00 AM - 6:00 PM
                                                         (hora Venezuela)</p>
                                                 </div>
                                             </div>
@@ -560,13 +560,13 @@ const GameJamPage: FunctionalComponent = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
                     onClick={closeVideoModal}>
                     <div
-                        className="relative max-w-4xl w-full max-h-[90vh] bg-surface-800 rounded-lg overflow-hidden shadow-2xl"
+                        className="relative max-w-4xl w-full max-h-[90vh] bg-base-300 rounded-lg overflow-hidden shadow-2xl"
                         onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-between p-4 border-b border-surface-700">
                             <h3 className="text-lg font-semibold text-white pr-8">{selectedVideo.title}</h3>
                             <button
                                 onClick={closeVideoModal}
-                                className="text-gray-400 hover:text-white transition-colors p-1"
+                                className="text-base-content/70 hover:text-white transition-colors p-1"
                             >
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}

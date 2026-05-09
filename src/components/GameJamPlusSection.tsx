@@ -60,7 +60,7 @@ const GameJamPlusSection = ({ games, onGameClick }: GameJamPlusSectionProps) => 
                     <h2 className="text-3xl font-bold text-white mb-2">
                         GameJam+ 25/26
                     </h2>
-                    <p className="text-gray-400">
+                    <p className="text-base-content/70">
                         Todos los juegos creados en 48H durante la gamejam de Venezuela
                     </p>
                 </div>
@@ -116,7 +116,7 @@ const GameJamPlusCard = ({ game, isMainCard, onGameClick }: { game: Game; isMain
             ref={containerRef}
             onClick={() => onGameClick(game)}
             className={`${gridClass} group relative overflow-hidden rounded-xl 
-                        bg-surface-800 cursor-pointer border border-surface-700 
+                        bg-base-300 cursor-pointer border border-surface-700 
                         hover:border-accent-orange transition-all duration-300 
                         transform hover:-translate-y-1 hover:shadow-xl hover:shadow-accent-orange/20`}
         >
@@ -146,12 +146,12 @@ const GameJamPlusCard = ({ game, isMainCard, onGameClick }: { game: Game; isMain
                     {game.title}
                 </h3>
 
-                <p className="text-sm text-gray-300 mb-3">
+                <p className="text-sm text-base-content/70 mb-3">
                     Por {game.developers.join(', ')}
                 </p>
 
                 {isMainCard && game.pitch && (
-                    <p className={`text-sm text-gray-400 mb-4 ${lineCount > 2 ? 'line-clamp-2' : ''}`}>
+                    <p className={`text-sm text-base-content/70 mb-4 ${lineCount > 2 ? 'line-clamp-2' : ''}`}>
                         {game.pitch}
                     </p>
                 )}
@@ -160,7 +160,7 @@ const GameJamPlusCard = ({ game, isMainCard, onGameClick }: { game: Game; isMain
                     {game.genre.slice(0, isMainCard ? 4 : 2).map((genre, idx) => (
                         <span
                             key={idx}
-                            className="px-2 py-1 text-xs bg-surface-900/60 text-gray-300
+                            className="px-2 py-1 text-xs bg-base-200/60 text-base-content/70
                                         rounded backdrop-blur-sm border border-surface-700"
                         >
                             {genre}
@@ -172,4 +172,4 @@ const GameJamPlusCard = ({ game, isMainCard, onGameClick }: { game: Game; isMain
     );
 };
 
-export default GameJamPlusSection;
+export default GameJamPlusSection;

@@ -19,11 +19,11 @@ const TabButton = ({ icon, label, isActive, onClick }: TabButtonProps) => (
             focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50
             ${isActive
                 ? 'bg-white/[0.1] border-white/[0.15] text-white shadow-lg'
-                : 'bg-transparent border-transparent text-surface-500 hover:text-surface-300 hover:bg-white/[0.04]'
+                : 'bg-transparent border-transparent text-base-content/70 hover:text-base-content/70 hover:bg-white/[0.04]'
             }
         `}
     >
-        <FontAwesomeIcon icon={icon} className={`text-xs ${isActive ? 'text-brand-gold' : ''}`} />
+        <FontAwesomeIcon icon={icon} className={`text-xs ${isActive ? 'text-accent' : ''}`} />
         <span className="hidden sm:inline">{label}</span>
     </button>
 );

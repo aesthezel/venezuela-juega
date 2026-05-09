@@ -1,117 +1,105 @@
 @import "tailwindcss";
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   DESIGN TOKENS — Venezuela Juega
-   Architecture: Primitive → Semantic → Component (via Tailwind utilities)
-   ═══════════════════════════════════════════════════════════════════════════ */
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "vj-dark";
+  default: true;
+  prefersdark: true;
+  color-scheme: "dark";
+  /* Mapped to Surface 950, 900, 800 */
+  --color-base-100: #0d0a11;
+  --color-base-200: #18131e;
+  --color-base-300: #221a2a;
+  /* Mapped to Surface 200 */
+  --color-base-content: #eae7ec;
+  
+  /* Brand Colors */
+  --color-primary: #457cd6;
+  --color-primary-content: #ffffff;
+  --color-secondary: #e34262;
+  --color-secondary-content: #ffffff;
+  --color-accent: #f2b63d;
+  --color-accent-content: #0d0a11;
+  
+  /* Status / Accents */
+  --color-info: #00a185;
+  --color-info-content: #ffffff;
+  --color-success: #16a34a;
+  --color-success-content: #ffffff;
+  --color-warning: #f2b63d;
+  --color-warning-content: #0d0a11;
+  --color-error: #e34262;
+  --color-error-content: #ffffff;
+  
+  --radius-selector: 0.25rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.25rem;
+  --border: 1.5px; /* Reducido de 1.5px para bordes menos bruscos */
+  --depth: 1;
+  --noise: 0;
+
+  --glass-blur: 16px;
+  --glass-opacity: 20%;
+  --glass-border-opacity: 5%;
+  --glass-reflex-opacity: 0;
+  --glass-text-shadow-opacity: 0;
+}
+
+@layer utilities {
+  .glass, .glass:hover {
+    background-image: none;
+    background-color: color-mix(in srgb, var(--color-base-100) var(--glass-opacity, 30%), transparent);
+    backdrop-filter: blur(var(--glass-blur, 16px));
+    -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
+    border-color: var(--color-surface-700);
+  }
+}
 
 @theme {
   /* ─── Typography ─── */
   --font-sans: 'Inter', 'SF Pro', system-ui, sans-serif;
 
-  /* ─── Surface Scale (deep purple-dark tones) ─── */
-  --color-surface-950: #0d0a11;
-  --color-surface-900: #18131e;
-  --color-surface-800: #221a2a;
-  --color-surface-700: #2c1b2e;
-  --color-surface-600: #3b2a3d;
-  --color-surface-500: #5b4a5d;
-  --color-surface-400: #9c8a9d;
-  --color-surface-300: #d4cfd6;
-  --color-surface-200: #eae7ec;
-  --color-surface-100: #fff4e0;
-  --color-surface-50:  #ffffff;
-
-  /* ─── Brand Colors (Venezuelan Flag) ─── */
+  /* ─── Custom Colors (Legacy Tokens) ─── */
+  --color-brand-red: #e34262;
+  --color-brand-red-dark: #b91c1c;
   --color-brand-gold: #f2b63d;
   --color-brand-blue: #457cd6;
-  --color-brand-red: #e34262;
-  --color-brand-red-dark: #94353d;
-  --color-brand-warm-white: #fff4e0;
+  
+  --color-accent-orange: #f97316;
+  --color-accent-teal: #00a185;
+  --color-accent-teal-dark: #0f766e;
+  --color-accent-indigo: #6366f1;
+  --color-accent-indigo-dark: #4338ca;
+  --color-accent-mauve: #d946ef;
+  --color-accent-mauve-dark: #c026d3;
+  --color-accent-mauve-deep: #86198f;
 
-  /* ─── Accent: Teal ─── */
-  --color-accent-teal: #8fcccb;
-  --color-accent-teal-dark: #449489;
-  --color-accent-teal-deep: #285763;
-
-  /* ─── Accent: Indigo ─── */
-  --color-accent-indigo: #4b3b9c;
-  --color-accent-indigo-dark: #2f2b5c;
-
-  /* ─── Accent: Lime ─── */
-  --color-accent-lime: #b4ba47;
-  --color-accent-lime-dark: #6d8c32;
-
-  /* ─── Accent: Orange ─── */
-  --color-accent-orange: #d46e33;
-
-  /* ─── Accent: Mauve ─── */
-  --color-accent-mauve: #9c656c;
-  --color-accent-mauve-dark: #57253b;
-  --color-accent-mauve-deep: #2c1b2e;
-
-  /* ─── Status Colors ─── */
-  --color-status-released: #16a34a;
-  --color-status-in-development: #f2b63d;
-  --color-status-on-hold: #71717a;
-  --color-status-canceled: #94353d;
-  --color-status-demo: #4ade80;
-  --color-status-prototype: #e4e4e7;
-  --color-status-lost: #fecaca;
-  --color-status-early: #449489;
-  --color-status-recovered: #457cd6;
-  --color-status-unknown: #18181b;
-
-  /* ─── Store Brand Colors ─── */
-  --color-store-steam: #172337;
-  --color-store-steam-hover: #2a475e;
-  --color-store-itch: #fa5c5c;
-  --color-store-itch-hover: #ff7f7f;
-  --color-store-nintendo: #e60012;
-  --color-store-nintendo-hover: #ff334f;
-  --color-store-playstation: #0070d1;
-  --color-store-playstation-hover: #0084f7;
-  --color-store-xbox: #107b10;
-  --color-store-xbox-hover: #00bfff;
-  --color-store-google-play: #00a185;
-  --color-store-google-play-hover: #00c9a6;
-  --color-store-apple: #000000;
-  --color-store-apple-hover: #333333;
-  --color-store-meta: #0078ff;
-  --color-store-meta-hover: #3391ff;
-  --color-store-gog: #c99aff;
-  --color-store-gog-hover: #3391ff;
+  --color-surface-950: #0a080d;
+  --color-surface-900: #0d0a11;
+  --color-surface-800: #18131e;
+  --color-surface-700: #221a2a;
+  --color-surface-400: #5f4e6d;
 }
 
-/* ─── Semantic Tokens (CSS Custom Properties) ─── */
+
 :root {
     --header-height: 80px;
     --primary-glow: conic-gradient(
         from 180deg at 50% 50%,
-        var(--color-brand-blue) 0deg,
-        var(--color-brand-red) 180deg,
-        var(--color-brand-gold) 360deg
+        var(--color-primary) 0deg,
+        var(--color-secondary) 180deg,
+        var(--color-accent) 360deg
     );
-
-    /* Glass effect tokens */
-    --glass-bg: rgba(24, 19, 30, 0.4);
-    --glass-border: rgba(255, 244, 224, 0.1);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    --glass-card-bg: rgba(255, 255, 255, 0.03);
-    --glass-card-border: rgba(255, 255, 255, 0.05);
-    --glass-card-bg-hover: rgba(255, 255, 255, 0.05);
-    --glass-card-border-hover: rgba(68, 148, 137, 0.3);
 }
 
-/* ─── Base Styles ─── */
 body {
-    background-color: var(--color-surface-950);
     background-image:
-            radial-gradient(at 0% 0%, var(--color-surface-900) 0, transparent 50%),
-            radial-gradient(at 50% 0%, var(--color-surface-800) 0, transparent 50%),
-            radial-gradient(at 100% 0%, var(--color-surface-950) 0, transparent 50%);
+            radial-gradient(at 0% 0%, var(--color-base-200) 0, transparent 50%),
+            radial-gradient(at 50% 0%, var(--color-base-300) 0, transparent 50%),
+            radial-gradient(at 100% 0%, var(--color-base-100) 0, transparent 50%);
     background-attachment: fixed;
-    color: var(--color-surface-200);
     overflow-x: hidden;
     width: 100%;
 }
@@ -132,29 +120,7 @@ body {
     background: var(--color-accent-indigo);
 }
 
-/* ─── Glassmorphism Utilities ─── */
-.glass-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-}
 
-.glass-card {
-    background: var(--glass-card-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid var(--glass-card-border);
-    border-radius: 1.5rem;
-    transition: all 0.3s ease;
-}
-
-.glass-card:hover {
-    background: var(--glass-card-bg-hover);
-    border-color: var(--glass-card-border-hover);
-    transform: translateY(-4px);
-}
 
 /* Layout helper para que el contenido NO quede debajo del header fijo */
 .app-content {

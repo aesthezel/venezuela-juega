@@ -12,14 +12,11 @@ const keys = ['#', ...letters];
 const AlphaFilter = ({ activeAlpha, onAlphaChange, className }: AlphaFilterProps) => {
   return (
     <div className="w-full">
-      <div className={`flex items-center justify-between gap-2 ${className || ''}`}>
+      <div className={`flex flex-col md:flex-row items-start md:items-center justify-between gap-4 ${className || ''}`}>
         <button
           type="button"
           onClick={() => onAlphaChange(null)}
-          className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${activeAlpha === null
-              ? 'bg-accent-teal-dark border-accent-teal-dark text-white'
-              : 'bg-surface-800 border-surface-600 text-gray-300 hover:bg-surface-700'
-            }`}
+          className={`btn btn-sm ${activeAlpha === null ? 'btn-accent' : 'btn-ghost border border-surface-700'}`}
           title="Mostrar todos"
           aria-pressed={activeAlpha === null}
         >
@@ -27,17 +24,14 @@ const AlphaFilter = ({ activeAlpha, onAlphaChange, className }: AlphaFilterProps
         </button>
 
         {/* Sin barras de desplazamiento visibles */}
-        <div className="flex-1 overflow-hidden [scrollbar-width:none] [ms-overflow-style:none] [&_*::-webkit-scrollbar]:hidden">
-          <div className="flex flex-wrap gap-1">
+        <div className="flex-1 overflow-x-auto pb-1 w-full [scrollbar-width:none] [ms-overflow-style:none] [&_*::-webkit-scrollbar]:hidden">
+          <div className="join flex">
             {keys.map((k) => (
               <button
                 key={k}
                 type="button"
                 onClick={() => onAlphaChange(k)}
-                className={`px-2.5 py-1.5 text-sm rounded-md border transition-colors ${activeAlpha === k
-                    ? 'bg-accent-teal-dark border-accent-teal-dark text-white'
-                    : 'bg-surface-800 border-surface-600 text-gray-300 hover:bg-surface-700'
-                  }`}
+                className={`btn btn-sm join-item ${activeAlpha === k ? 'btn-accent' : 'btn-ghost border border-surface-700 hover:bg-base-200'}`}
                 aria-pressed={activeAlpha === k}
                 aria-label={k === '#' ? 'Títulos que comienzan con números o símbolos' : `Títulos que comienzan con ${k}`}
                 title={k === '#' ? 'Números o símbolos' : k}

@@ -141,7 +141,7 @@ const CatalogPage = ({
             <PageTransition>
                 <main id="catalog-content" className="container mx-auto px-4 py-8 relative z-10">
 
-                <div className="sticky top-0 z-30 bg-surface-950/40 backdrop-blur-xl py-4 -mx-4 px-4 border-b border-white/5 mb-8 shadow-2xl transition-all duration-300">
+                <div className="sticky top-0 z-30 bg-base-100/40 backdrop-blur-xl py-4 -mx-4 px-4 border-b border-surface-700 mb-8 shadow-2xl transition-all duration-300">
                     <div className="container mx-auto flex flex-col gap-4">
                         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
 
@@ -155,12 +155,12 @@ const CatalogPage = ({
                             <div className="flex items-center gap-3 flex-shrink-0 w-full md:w-auto justify-between md:justify-end">
                                 <button
                                     onClick={() => setIsMobileFilterOpen(true)}
-                                    className="lg:hidden flex items-center gap-2 bg-surface-800 hover:bg-surface-700 text-white px-4 py-3 rounded-lg transition-colors border border-surface-700 relative shadow-sm"
+                                    className="lg:hidden btn btn-outline btn-neutral relative"
                                 >
                                     <FontAwesomeIcon icon={faFilter} />
                                     <span>Filtros</span>
                                     {activeFilterCount > 0 && (
-                                        <span className="absolute -top-2 -right-2 bg-accent-teal-dark text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full animate-pulse">
+                                        <span className="badge badge-primary badge-sm absolute -top-2 -right-2 animate-pulse">
                                             {activeFilterCount}
                                         </span>
                                     )}
@@ -189,7 +189,7 @@ const CatalogPage = ({
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
 
                     <aside className="hidden lg:block lg:col-span-3">
-                        <div className="glass-panel rounded-2xl p-6 sticky top-52 transition-all z-10">
+                        <div className="card bg-base-200/50 shadow-xl border border-surface-700 p-6 sticky top-52 transition-all z-10">
 
                             <FilterPanel
                                 genres={allGenres}
@@ -211,17 +211,17 @@ const CatalogPage = ({
                     {isMobileFilterOpen && (
                         <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
                             <div
-                                className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity animate-fade-in"
+                                className="absolute inset-0 bg-base-300/80 backdrop-blur-sm transition-opacity animate-fade-in"
                                 onClick={() => setIsMobileFilterOpen(false)}
                             />
-                            <div className="relative w-[85%] max-w-sm h-full bg-surface-900 border-l border-surface-700 shadow-2xl transform transition-transform duration-300 overflow-y-auto animate-slide-in-right">
+                            <div className="relative w-[85%] max-w-sm h-full bg-base-100 border-l border-surface-700 shadow-2xl transform transition-transform duration-300 overflow-y-auto animate-slide-in-right">
                                 <div className="p-6 flex flex-col min-h-full">
-                                    <div className="flex items-center justify-between mb-6 sticky top-0 bg-surface-900 z-10 pb-4 border-b border-surface-800">
-                                        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                                            <FontAwesomeIcon icon={faFilter} className="text-accent-teal-dark" />
+                                    <div className="flex items-center justify-between mb-6 sticky top-0 bg-base-100 z-10 pb-4 border-b border-surface-700">
+                                        <h2 className="text-xl font-bold text-base-content flex items-center gap-2">
+                                            <FontAwesomeIcon icon={faFilter} className="text-primary" />
                                             Filtros
                                         </h2>
-                                        <button onClick={() => setIsMobileFilterOpen(false)} className="p-2 text-surface-400 hover:text-white transition-colors bg-surface-800 rounded-full w-10 h-10 flex items-center justify-center">
+                                        <button onClick={() => setIsMobileFilterOpen(false)} className="btn btn-circle btn-ghost btn-sm">
                                             <FontAwesomeIcon icon={faTimes} size="lg" />
                                         </button>
                                     </div>
@@ -241,8 +241,8 @@ const CatalogPage = ({
                                             onYearRangeChange={onYearRangeChange}
                                         />
                                     </div>
-                                    <div className="mt-8 pt-4 border-t border-surface-800 sticky bottom-0 bg-surface-900 pb-4">
-                                        <button onClick={() => setIsMobileFilterOpen(false)} className="w-full bg-gradient-to-r from-accent-teal-dark to-accent-teal-dark hover:from-accent-teal-dark hover:to-accent-teal text-white font-bold py-3 px-4 rounded-lg transition-all shadow-lg shadow-accent-teal-deep/50">
+                                    <div className="mt-8 pt-4 border-t border-surface-700 sticky bottom-0 bg-base-100 pb-4">
+                                        <button onClick={() => setIsMobileFilterOpen(false)} className="btn btn-primary w-full shadow-lg shadow-primary/50">
                                             Ver {alphaFilteredGames.length} juegos
                                         </button>
                                     </div>
@@ -252,10 +252,10 @@ const CatalogPage = ({
                     )}
 
                     <section className="lg:col-span-9 min-h-[50vh]">
-                        <div className="lg:hidden mb-6 flex justify-between items-center text-sm bg-surface-800/50 p-3 rounded-lg border border-surface-700">
-                            <span className="text-surface-300 font-medium">{alphaFilteredGames.length} juegos encontrados</span>
+                        <div className="lg:hidden mb-6 flex justify-between items-center text-sm bg-base-200/50 p-3 rounded-lg border border-surface-700">
+                            <span className="text-base-content/70 font-medium">{alphaFilteredGames.length} juegos encontrados</span>
                             {activeFilterCount > 0 && (
-                                <span className="text-accent-teal font-bold bg-accent-teal-deep/50 px-2 py-0.5 rounded border border-accent-teal-deep">
+                                <span className="badge badge-primary font-bold">
                                     {activeFilterCount} filtros activos
                                 </span>
                             )}

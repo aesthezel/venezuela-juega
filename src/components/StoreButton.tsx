@@ -19,50 +19,51 @@ interface StoreButtonProps {
     gameTitle?: string;
 }
 
+// Colores custom de tienda migrados a utilidades de Tailwind arbitrarias
 const storeStyles: Record<string, { icon: any; className: string }> = {
     'Steam': {
         icon: faSteam,
-        className: 'bg-store-steam hover:bg-store-steam-hover text-white',
+        className: 'bg-[#172337] hover:bg-[#2a475e] text-white border-transparent',
     },
     'Itch': {
         icon: faItchIo,
-        className: 'bg-store-itch hover:bg-store-itch-hover text-white',
+        className: 'bg-[#fa5c5c] hover:bg-[#ff7f7f] text-white border-transparent',
     },
     'Nintendo Shop': {
         icon: faGamepad,
-        className: 'bg-store-nintendo hover:bg-store-nintendo-hover text-white',
+        className: 'bg-[#e60012] hover:bg-[#ff334f] text-white border-transparent',
     },
     'PlayStation Store': {
         icon: faPlaystation,
-        className: 'bg-store-playstation hover:bg-store-playstation-hover text-white',
+        className: 'bg-[#0070d1] hover:bg-[#0084f7] text-white border-transparent',
     },
     'Microsoft Store': {
         icon: faXbox,
-        className: 'bg-store-xbox hover:bg-store-xbox-hover text-white',
+        className: 'bg-[#107b10] hover:bg-[#00bfff] text-white border-transparent',
     },
     'Play Store': {
         icon: faGooglePlay,
-        className: 'bg-store-google-play hover:bg-store-google-play-hover text-white',
+        className: 'bg-[#00a185] hover:bg-[#00c9a6] text-white border-transparent',
     },
     'App Store': {
         icon: faApple,
-        className: 'bg-store-apple hover:bg-store-apple-hover text-white',
+        className: 'bg-[#000000] hover:bg-[#333333] text-white border-transparent',
     },
     'Meta': {
         icon: faMeta,
-        className: 'bg-store-meta hover:bg-store-meta-hover text-white',
+        className: 'bg-[#0078ff] hover:bg-[#3391ff] text-white border-transparent',
     },
     'GOG': {
         icon: faGamepad,
-        className: 'bg-store-gog hover:bg-store-gog-hover text-white',
+        className: 'bg-[#c99aff] hover:bg-[#3391ff] text-white border-transparent',
     },
     'Default': {
         icon: faGlobe,
-        className: 'bg-accent-teal-dark hover:bg-accent-teal-deep text-white',
+        className: 'bg-primary hover:bg-primary/80 text-white border-transparent',
     },
 };
 
-const StoreButton = ({ store }: StoreButtonProps) => {
+const StoreButton = ({ store, gameSlug, gameTitle }: StoreButtonProps) => {
     const style = storeStyles[store.name] || storeStyles['Default'];
 
     return (
@@ -70,7 +71,7 @@ const StoreButton = ({ store }: StoreButtonProps) => {
             href={store.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex items-center gap-2 font-bold py-2 px-4 rounded-lg text-sm transition-colors ${style.className}`}
+            className={`btn btn-sm gap-2 no-animation ${style.className}`}
             onClick={() => {
                 if (gameSlug && gameTitle) {
                     trackExternalStore({ slug: gameSlug, title: gameTitle }, store.name, store.url);

@@ -107,12 +107,12 @@ const ScrollToTop = () => {
                 ref={desktopBtnRef}
                 onClick={scrollToTop}
                 aria-label="Ir arriba"
-                className="hidden md:flex fixed right-10 bottom-30 z-[70] w-14 h-14 rounded-full bg-surface-800/80 backdrop-blur-md border border-white/10 shadow-2xl items-center justify-center transition-all duration-300 group hover:border-accent-teal-dark/50 hover:bg-surface-700/90 focus:outline-none"
+                className="hidden md:flex fixed right-10 bottom-30 z-[70] w-14 h-14 rounded-full bg-base-300/80 backdrop-blur-md border border-surface-700 shadow-2xl items-center justify-center transition-all duration-300 group hover:border-accent-teal-dark/50 hover:bg-base-300/90 focus:outline-none"
                 style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', pointerEvents: 'none' }}
             >
                 <FontAwesomeIcon
                     icon={faChevronUp}
-                    className="text-surface-100 text-lg group-hover:text-accent-teal group-hover:-translate-y-1 transition-all duration-300"
+                    className="text-base-content text-lg group-hover:text-accent-teal group-hover:-translate-y-1 transition-all duration-300"
                 />
             </button>
 
@@ -125,20 +125,20 @@ const ScrollToTop = () => {
             >
                 <button
                     onClick={scrollToTop}
-                    className="flex items-center justify-between w-full px-6 py-4 bg-surface-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] active:scale-[0.98] transition-all duration-200 group"
+                    className="flex items-center justify-between w-full px-6 py-4 bg-base-200/95 backdrop-blur-2xl border border-surface-700 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] active:scale-[0.98] transition-all duration-200 group"
                 >
                     <div className="flex items-center gap-4">
                         <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-accent-teal-dark/20 text-accent-teal group-hover:bg-accent-teal-dark/30 transition-colors">
                             <FontAwesomeIcon icon={faChevronUp} className="text-sm" />
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-surface-50/90">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/90">
                             Ir hacia arriba
                         </span>
                     </div>
 
                     {/* Decorative line/indicator */}
                     <div className="flex items-center gap-2">
-                        <div className="h-1 w-12 rounded-full bg-surface-800 overflow-hidden">
+                        <div className="h-1 w-12 rounded-full bg-base-300 overflow-hidden">
                             <div className="h-full w-full bg-gradient-to-r from-accent-teal-dark to-accent-teal animate-pulse" />
                         </div>
                     </div>

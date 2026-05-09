@@ -20,6 +20,12 @@
       "source": "JuliusBrussee/caveman",
       "sourceType": "github",
       "computedHash": "368a26f2b079ffe0d584f48006524f65cf997cb9369411aa8c6ead216dee22eb"
+    },
+    "daisyui": {
+      "source": "jream/ai-skills",
+      "sourceType": "github",
+      "skillPath": "skills/daisyui/SKILL.md",
+      "computedHash": "b2091889972be9af5d116530a4f6c7d7abfa41be3224802e73ace3bb175f8370"
     }
   }
 }

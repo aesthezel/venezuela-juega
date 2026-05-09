@@ -2,7 +2,7 @@ import { GameStatus } from '@/src/types';
 import { JSX } from 'preact/jsx-runtime';
 
 type Variant = 'solid' | 'soft' | 'outline';
-type Size = 'xs' | 'sm' | 'md';
+type Size = 'xs' | 'sm' | 'md' | 'lg';
 
 export interface StatusBadgeProps {
   status: GameStatus;
@@ -12,36 +12,39 @@ export interface StatusBadgeProps {
   colorMap?: Partial<Record<GameStatus, string>>;
 }
 
+// DaisyUI badge with arbitrary tailwind colors to preserve exact status identity
 const defaultBgMap: Record<GameStatus, string> = {
-  [GameStatus.RELEASED]: "bg-status-released",
-  [GameStatus.IN_DEVELOPMENT]: "bg-status-in-development",
-  [GameStatus.ON_HOLD]: "bg-status-on-hold",
-  [GameStatus.CANCELED]: "bg-status-canceled",
-  [GameStatus.RELEASED_DEMO]: "bg-status-demo",
-  [GameStatus.PROTOTYPE]: "bg-status-prototype",
-  [GameStatus.LOST_MEDIA]: "bg-status-lost",
-  [GameStatus.EARLY_ACCESS]: "bg-status-early",
-  [GameStatus.RECOVERED]: "bg-status-recovered",
-  [GameStatus.UNKNOWN]: "bg-status-unknown"
+  [GameStatus.RELEASED]: "bg-[#16a34a]",
+  [GameStatus.IN_DEVELOPMENT]: "bg-[#f2b63d]",
+  [GameStatus.ON_HOLD]: "bg-[#71717a]",
+  [GameStatus.CANCELED]: "bg-[#94353d]",
+  [GameStatus.RELEASED_DEMO]: "bg-[#4ade80]",
+  [GameStatus.PROTOTYPE]: "bg-[#e4e4e7]",
+  [GameStatus.LOST_MEDIA]: "bg-[#fecaca]",
+  [GameStatus.EARLY_ACCESS]: "bg-[#449489]",
+  [GameStatus.RECOVERED]: "bg-[#457cd6]",
+  [GameStatus.UNKNOWN]: "bg-[#18181b]"
 };
 
 const defaultTextMap: Record<GameStatus, string> = {
-  [GameStatus.RELEASED]: "text-status-released",
-  [GameStatus.IN_DEVELOPMENT]: "text-status-in-development",
-  [GameStatus.ON_HOLD]: "text-status-on-hold",
-  [GameStatus.CANCELED]: "text-status-canceled",
-  [GameStatus.RELEASED_DEMO]: "text-status-demo",
-  [GameStatus.PROTOTYPE]: "text-status-prototype",
-  [GameStatus.LOST_MEDIA]: "text-status-lost",
-  [GameStatus.EARLY_ACCESS]: "text-status-early",
-  [GameStatus.RECOVERED]: "text-status-recovered",
-  [GameStatus.UNKNOWN]: "text-status-unknown"
+  [GameStatus.RELEASED]: "text-[#16a34a]",
+  [GameStatus.IN_DEVELOPMENT]: "text-[#f2b63d]",
+  [GameStatus.ON_HOLD]: "text-[#71717a]",
+  [GameStatus.CANCELED]: "text-[#94353d]",
+  [GameStatus.RELEASED_DEMO]: "text-[#4ade80]",
+  [GameStatus.PROTOTYPE]: "text-[#e4e4e7]",
+  [GameStatus.LOST_MEDIA]: "text-[#fecaca]",
+  [GameStatus.EARLY_ACCESS]: "text-[#449489]",
+  [GameStatus.RECOVERED]: "text-[#457cd6]",
+  [GameStatus.UNKNOWN]: "text-[#18181b]"
 };
 
+// DaisyUI badge sizes - Añadimos height auto y padding para que no se vean comprimidos
 const sizeClasses: Record<Size, string> = {
-  xs: 'text-[10px] px-1.5 py-0.5 rounded',
-  sm: 'text-xs px-2 py-0.5 rounded',
-  md: 'text-sm px-2.5 py-1 rounded-md',
+  xs: 'badge-xs px-2 py-1 h-auto text-[10px]',
+  sm: 'badge-sm px-2.5 py-1.5 h-auto text-xs',
+  md: 'badge-md px-3.5 py-2 h-auto text-sm',
+  lg: 'badge-lg px-4 py-2.5 h-auto text-base',
 };
 
 function toSoftBg(bgClass: string) {
@@ -54,29 +57,30 @@ export default function StatusBadge({
   status,
   className = '',
   variant = 'solid',
-  size = 'sm',
+  size = 'md', // Cambio del default de sm a md
   colorMap,
 }: StatusBadgeProps): JSX.Element {
   const bgMap = { ...defaultBgMap, ...(colorMap || {}) };
-  const bg = bgMap[status] || 'bg-gray-500';
+  const bg = bgMap[status] || 'bg-neutral';
   const text = defaultTextMap[status] || 'text-white';
 
+  // DaisyUI variant mapping
   let variantClasses = '';
   switch (variant) {
     case 'solid':
-      variantClasses = `${bg} text-black`;
+      variantClasses = `${bg} text-base-100 border-transparent shadow-sm`;
       break;
     case 'soft':
-      variantClasses = `${toSoftBg(bg)} ${text} ring-1 ring-white/15`;
+      variantClasses = `badge-soft ${toSoftBg(bg)} ${text} border-transparent`;
       break;
     case 'outline':
-      variantClasses = `bg-transparent ${text} ring-1 ring-current`;
+      variantClasses = `badge-outline ${text} border-current`;
       break;
   }
 
   return (
     <span
-      className={`inline-block font-semibold ${sizeClasses[size]} ${variantClasses} ${className}`}
+      className={`badge ${sizeClasses[size]} ${variantClasses} font-bold uppercase tracking-wider ${className}`}
     >
       {status}
     </span>

@@ -12,15 +12,15 @@ interface ViewModeToggleProps {
 const ViewModeToggle = ({ mode, onChange, className }: ViewModeToggleProps) => {
   return (
     <div
-      className={`inline-flex rounded-lg overflow-hidden border border-surface-600 bg-surface-800 ${className || ''}`}
+      className={`join ${className || ''}`}
       role="group"
       aria-label="Cambiar modo de vista"
     >
       <button
         type="button"
         onClick={() => onChange('grid')}
-        className={`px-2.5 py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal-dark ${
-          mode === 'grid' ? 'bg-accent-teal-dark text-white' : 'text-gray-300 hover:bg-surface-700'
+        className={`btn btn-sm join-item ${
+          mode === 'grid' ? 'btn-active btn-accent' : 'btn-ghost'
         }`}
         aria-pressed={mode === 'grid'}
         aria-label="Ver en cuadrícula"
@@ -33,8 +33,8 @@ const ViewModeToggle = ({ mode, onChange, className }: ViewModeToggleProps) => {
       <button
         type="button"
         onClick={() => onChange('list')}
-        className={`px-2.5 py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal-dark ${
-          mode === 'list' ? 'bg-accent-teal-dark text-white' : 'text-gray-300 hover:bg-surface-700'
+        className={`btn btn-sm join-item ${
+          mode === 'list' ? 'btn-active btn-accent' : 'btn-ghost'
         }`}
         aria-pressed={mode === 'list'}
         aria-label="Ver en lista"

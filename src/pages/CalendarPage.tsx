@@ -64,7 +64,7 @@ const CalendarTooltip = ({ game, position }: { game: Game; position: { top: numb
             <h3 className="font-bold text-white text-lg mb-1 leading-tight">{game.title}</h3>
             <p className="text-sm text-accent-teal mb-2">{game.developers.join(', ')}</p>
             {game.releaseDate && (
-                <p className="text-xs text-surface-400 flex items-center">
+                <p className="text-xs text-base-content/70 flex items-center">
                     <FontAwesomeIcon icon={faCalendarDays} className="w-3 h-3 mr-1" />
                     {new Date(game.releaseDate).toLocaleDateString('es-ES')}
                 </p>
@@ -158,7 +158,7 @@ const CalendarStats = ({ games, viewYear }: { games: Game[], viewYear: number })
             {statItems.map(({ icon, value, label, color, subValue }) => (
                 <div
                     key={label}
-                    className="flex items-center gap-2.5 bg-surface-800/60 border border-surface-700/40 rounded-xl px-4 py-2.5"
+                    className="flex items-center gap-2.5 bg-base-300/60 border border-surface-700 rounded-xl px-4 py-2.5"
                 >
                     <div
                         className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
@@ -169,9 +169,9 @@ const CalendarStats = ({ games, viewYear }: { games: Game[], viewYear: number })
                     <div>
                         <div className="flex items-baseline gap-1.5">
                             <p className="text-white font-black text-lg leading-none">{value}</p>
-                            {subValue && <span className="text-[10px] text-surface-500 font-medium">{subValue}</span>}
+                            {subValue && <span className="text-[10px] text-base-content/70 font-medium">{subValue}</span>}
                         </div>
-                        <p className="text-surface-500 text-[10px] font-medium uppercase tracking-wide">{label}</p>
+                        <p className="text-base-content/70 text-[10px] font-medium uppercase tracking-wide">{label}</p>
                     </div>
                 </div>
             ))}
@@ -251,7 +251,7 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
                             Calendario de
                             <span className="bg-gradient-to-r from-accent-teal to-brand-blue bg-clip-text text-transparent"> Eventos</span>
                         </h1>
-                        <p className="text-surface-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                        <p className="text-base-content/70 text-base md:text-lg max-w-2xl leading-relaxed">
                             Explora las fechas de lanzamiento de los juegos venezolanos, eventos importantes de la industria, y todo el historial que ha acontecido sobre videojuegos en el país.
                         </p>
                     </div>
@@ -265,7 +265,7 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
                             {/* Dropdown Trigger */}
                             <button
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                className="flex items-center justify-between min-w-[210px] bg-surface-800/80 hover:bg-surface-700/90 border border-accent-teal-dark/30 hover:border-accent-teal/50 outline-none rounded-xl px-4 py-2 text-white font-bold transition-all shadow-lg backdrop-blur-md"
+                                className="flex items-center justify-between min-w-[210px] bg-base-300/80 hover:bg-base-300/90 border border-accent-teal-dark/30 hover:border-accent-teal/50 outline-none rounded-xl px-4 py-2 text-white font-bold transition-all shadow-lg backdrop-blur-md"
                             >
                                 <div className="flex items-center gap-2">
                                     <span className="text-lg">{viewYear}</span>
@@ -284,7 +284,7 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
 
                             {/* Dropdown Menu List */}
                             {isDropdownOpen && (
-                                <div className="absolute top-full right-0 mt-2 w-full min-w-[220px] max-h-[350px] overflow-y-auto bg-surface-800/95 backdrop-blur-xl border border-surface-600/50 rounded-xl shadow-[0_10px_40px_-5px_rgba(0,0,0,0.6)] z-50 animate-fade-in-fast scrollbar-thin scrollbar-thumb-surface-600 scrollbar-track-transparent">
+                                <div className="absolute top-full right-0 mt-2 w-full min-w-[220px] max-h-[350px] overflow-y-auto bg-base-300/95 backdrop-blur-xl border border-surface-700 rounded-xl shadow-[0_10px_40px_-5px_rgba(0,0,0,0.6)] z-50 animate-fade-in-fast scrollbar-thin scrollbar-thumb-surface-600 scrollbar-track-transparent">
                                     <div className="p-1.5 flex flex-col gap-1">
                                         {availableYears.map(year => {
                                             const count = yearCountsMap[year] || 0;
@@ -302,7 +302,7 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
                                                     }}
                                                     className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left ${isActive
                                                             ? 'bg-gradient-to-r from-accent-teal-dark/20 to-brand-blue/10 border border-accent-teal-dark/30 text-white'
-                                                            : 'text-surface-300 hover:bg-surface-700/50 hover:text-white border border-transparent'
+                                                            : 'text-base-content/70 hover:bg-base-300/50 hover:text-white border border-transparent'
                                                         }`}
                                                 >
                                                     <span className={`font-semibold ${isActive ? 'text-accent-teal' : ''}`}>
@@ -312,12 +312,12 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
                                                     {count > 0 ? (
                                                         <span className={`text-[11px] font-bold px-2 py-1 rounded-md ${isActive
                                                                 ? 'bg-accent-teal-dark text-white shadow-md'
-                                                                : 'bg-surface-900/80 text-surface-400 border border-surface-700'
+                                                                : 'bg-base-200/80 text-base-content/70 border border-surface-700'
                                                             }`}>
                                                             {count} {count === 1 ? 'juego' : 'juegos'}
                                                         </span>
                                                     ) : (
-                                                        <span className="text-[11px] text-surface-500 font-medium px-2 py-1">
+                                                        <span className="text-[11px] text-base-content/70 font-medium px-2 py-1">
                                                             Sin reg.
                                                         </span>
                                                     )}
@@ -337,7 +337,7 @@ const CalendarPage = ({ games, onNavigateToCatalog, onEventClick }: CalendarPage
             {/* Divider */}
             <div className="h-px bg-gradient-to-r from-accent-teal-dark/20 via-surface-700/30 to-transparent mb-12" />
 
-            <div className="bg-surface-800/30 backdrop-blur-sm border border-surface-700/40 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="bg-base-300/30 backdrop-blur-sm border border-surface-700 rounded-2xl shadow-2xl overflow-hidden">
                 <div className="p-6 sm:p-8">
 
                     <div className="calendar-container">

@@ -70,8 +70,8 @@ interface ChartCardProps {
 }
 
 const ChartCard = ({ title, children }: ChartCardProps) => (
-    <div className="bg-surface-800/30 backdrop-blur-sm border border-surface-700/40 rounded-2xl shadow-xl overflow-hidden h-full flex flex-col">
-        <div className="px-6 py-4 border-b border-surface-700/50 bg-surface-800/50">
+    <div className="bg-base-300/30 backdrop-blur-sm border border-surface-700 rounded-2xl shadow-xl overflow-hidden h-full flex flex-col">
+        <div className="px-6 py-4 border-b border-surface-700 bg-base-300/50">
             <h3 className="text-lg font-bold text-white tracking-wide">{title}</h3>
         </div>
         <div className="p-6 flex-1 flex flex-col items-center justify-center relative min-h-[300px]">
@@ -108,7 +108,7 @@ const ChartsStats = ({ games }: { games: Game[] }) => {
             {statItems.map(({ icon, value, label, color, subValue }, idx) => (
                 <div
                     key={idx}
-                    className="flex items-center gap-3 bg-surface-800/60 border border-surface-700/60 rounded-xl px-5 py-3 transition-transform duration-300 hover:scale-105 hover:bg-surface-700/60 shadow-lg"
+                    className="flex items-center gap-3 bg-base-300/60 border border-surface-700 rounded-xl px-5 py-3 transition-transform duration-300 hover:scale-105 hover:bg-base-300/60 shadow-lg"
                 >
                     <div
                         className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -121,7 +121,7 @@ const ChartsStats = ({ games }: { games: Game[] }) => {
                             <p className="text-white font-black text-xl leading-none">{value.toString().length > 15 ? value.toString().substring(0, 15) + '...' : value}</p>
                             {subValue && <span className="text-[11px] text-accent-teal font-semibold">{subValue}</span>}
                         </div>
-                        <p className="text-surface-400 text-xs font-semibold uppercase tracking-wider mt-1">{label}</p>
+                        <p className="text-base-content/70 text-xs font-semibold uppercase tracking-wider mt-1">{label}</p>
                     </div>
                 </div>
             ))}
@@ -228,11 +228,11 @@ const RealtimeTopVisitsChart = ({ games, onSelectGame }: { games: Game[], onSele
             <div className="w-full h-full min-h-[350px]">
                 <canvas ref={chartRef}></canvas>
             </div>
-            <div className="mt-4 flex items-center justify-center gap-2 text-surface-400 text-sm font-medium">
-                <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-teal opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-teal-dark"></span>
-                </span>
+            <div className="mt-4 flex items-center justify-center gap-2 text-base-content/70 text-sm font-medium">
+                <div class="inline-grid *:[grid-area:1/1]">
+                    <div class="status status-primary animate-ping"></div>
+                    <div class="status status-primary"></div>
+                </div>
                 Esta información está siendo tomada en tiempo real
             </div>
         </ChartCard>
@@ -261,7 +261,7 @@ const ChartsPage = ({ games, onNavigateToCatalog, onGameClick }: ChartsPageProps
         const statusData = countStatuses(games);
 
         const chartColors = ['#457cd6', '#449489', '#f2b63d', '#e34262', '#b4ba47', '#d46e33', '#9c656c', '#4b3b9c', '#6d8c32', '#2f2b5c'];
-        const chartBorders = '#18131e'; // bg-surface-900
+        const chartBorders = '#18131e'; // bg-base-200
 
         const statusColors = {
             [GameStatus.RELEASED]: '#16a34a',
@@ -478,7 +478,7 @@ const ChartsPage = ({ games, onNavigateToCatalog, onGameClick }: ChartsPageProps
                                 Métricas y
                                 <span className="bg-gradient-to-r from-brand-red via-brand-gold to-accent-teal bg-clip-text text-transparent"> Estadísticas</span>
                             </h1>
-                            <p className="text-surface-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                            <p className="text-base-content/70 text-base md:text-lg max-w-2xl leading-relaxed">
                                 Analíticas extraídas directamente del catálogo de juegos. Observa las preferencias en plataformas, motores gráficos y el ritmo de publicación a lo largo de los años.
                             </p>
                         </div>

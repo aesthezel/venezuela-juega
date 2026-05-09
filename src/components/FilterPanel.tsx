@@ -29,37 +29,29 @@ interface FilterPanelProps {
 
 const AccordionItem = ({ title, icon, isOpen, onClick, children, badgeCount }: { title: string; icon: any; isOpen: boolean; onClick: () => void; children: any; badgeCount?: number }) => {
     return (
-        <div className={`border-b border-surface-700/30 last:border-0 pb-2 last:pb-0 transition-all duration-300`}>
-            <button
+        <div className={`collapse collapse-arrow bg-base-200/50 mb-2 border border-base-300 ${isOpen ? 'collapse-open' : 'collapse-close'}`}>
+            <div 
+                className="collapse-title flex items-center gap-3 cursor-pointer min-h-0 py-3"
                 onClick={onClick}
-                className="w-full flex items-center justify-between py-3 group cursor-pointer outline-none"
             >
-                <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-accent-teal-dark text-white shadow-lg shadow-accent-teal-dark/20' : 'bg-white/5 text-surface-400 group-hover:bg-white/10 group-hover:text-surface-200'}`}>
-                        <FontAwesomeIcon icon={icon} className="text-sm" />
-                    </div>
-                    <div className="flex flex-col items-start translate-y-[1px]">
-                        <span className={`text-xs font-black uppercase tracking-[0.15em] transition-colors ${isOpen ? 'text-white' : 'text-surface-400 group-hover:text-surface-200'}`}>
-                            {title}
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${isOpen ? 'bg-accent-teal-dark text-white' : 'bg-base-300 text-base-content/70'}`}>
+                    <FontAwesomeIcon icon={icon} className="text-sm" />
+                </div>
+                <div className="flex flex-col items-start leading-tight">
+                    <span className="text-xs font-bold uppercase tracking-[0.1em]">
+                        {title}
+                    </span>
+                    {badgeCount !== undefined && badgeCount > 0 && !isOpen && (
+                        <span className="text-[10px] text-accent font-bold mt-1">
+                            {badgeCount} {badgeCount === 1 ? 'seleccionado' : 'seleccionados'}
                         </span>
-                        {badgeCount !== undefined && badgeCount > 0 && !isOpen && (
-                            <span className="text-[10px] text-accent-teal font-bold animate-fade-in">
-                                {badgeCount} {badgeCount === 1 ? 'seleccionado' : 'seleccionados'}
-                            </span>
-                        )}
-                    </div>
+                    )}
                 </div>
-                <FontAwesomeIcon
-                    icon={faChevronDown}
-                    className={`text-[10px] text-surface-500 transition-all duration-500 ${isOpen ? 'rotate-180 text-accent-teal-dark' : 'group-hover:text-surface-400'}`}
-                />
-            </button>
+            </div>
 
-            {isOpen && (
-                <div className="pb-4 animate-slide-up origin-top">
-                    {children}
-                </div>
-            )}
+            <div className="collapse-content pb-4">
+                {children}
+            </div>
         </div>
     );
 };
@@ -71,7 +63,7 @@ const FilterList = ({ items, selectedItems, onToggleItem, category, onClear }: {
                 <div className="flex justify-end">
                     <button
                         onClick={() => onClear(category)}
-                        className="text-[10px] font-black text-brand-red/80 hover:text-brand-red uppercase tracking-widest transition-colors flex items-center gap-1.5"
+                        className="text-[10px] font-black text-secondary/80 hover:text-secondary uppercase tracking-widest transition-colors flex items-center gap-1.5"
                     >
                         <FontAwesomeIcon icon={faTrash} className="text-[9px]" />
                         Limpiar
@@ -85,18 +77,17 @@ const FilterList = ({ items, selectedItems, onToggleItem, category, onClear }: {
                         <div
                             key={item}
                             onClick={() => onToggleItem(category, item)}
-                            className={`px-3 py-2.5 rounded-xl cursor-pointer flex items-center justify-between group/item transition-all duration-200 ${isSelected ? 'bg-accent-teal-dark/10 border border-accent-teal-dark/20' : 'hover:bg-white/5 border border-transparent'
-                                }`}
+                            className={`px-3 py-2 rounded-xl cursor-pointer flex items-center justify-between group/item transition-colors ${isSelected ? 'bg-accent/10 border border-accent/20' : 'hover:bg-base-300 border border-transparent'}`}
                         >
-                            <span className={`text-sm tracking-wide transition-colors ${isSelected ? 'text-accent-teal font-bold' : 'text-surface-400 group-hover/item:text-surface-200'}`}>
+                            <span className={`text-sm font-medium transition-colors ${isSelected ? 'text-accent font-bold' : 'text-base-content/70 group-hover/item:text-base-content'}`}>
                                 {item}
                             </span>
-                            <div className={`h-5 w-5 rounded-lg border flex items-center justify-center transition-all duration-300 ${isSelected
-                                ? 'bg-accent-teal-dark border-accent-teal-dark scale-105 shadow-lg shadow-accent-teal-dark/20'
-                                : 'border-surface-700 group-hover/item:border-surface-600'
-                                }`}>
-                                {isSelected && <FontAwesomeIcon icon={faCheck} className="text-[10px] text-white" />}
-                            </div>
+                            <input 
+                                type="checkbox" 
+                                className="checkbox checkbox-accent checkbox-sm"
+                                checked={isSelected}
+                                readOnly
+                            />
                         </div>
                     );
                 })}
@@ -121,22 +112,13 @@ const FilterButtons = ({ items, category, activeItems, onFilterChange, itemColor
                 <button
                     key={item}
                     onClick={() => onFilterChange(category, item)}
-                    className={`group relative px-4 py-2 text-[11px] font-black rounded-xl transition-all duration-300 border uppercase tracking-wider ${isActive
-                        ? 'text-white border-transparent'
-                        : 'bg-white/5 hover:bg-white/10 text-surface-500 hover:text-surface-200 border-white/5'
-                        }`}
+                    className={`btn btn-sm ${isActive ? 'btn-active text-white border-transparent' : 'btn-ghost border border-surface-700'}`}
                     style={isActive && statusColorBase ? {
-                        backgroundColor: `var(--color-${statusColorBase})`,
-                        boxShadow: `0 8px 15px -3px var(--color-${statusColorBase} / 0.3)`
+                        backgroundColor: `var(--color-${statusColorBase})`
                     } : {}}
                 >
-                    {isActive && !statusColorBase && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-accent-teal-dark to-accent-mauve-deep animate-gradient-half"></div>
-                    )}
-                    <span className="relative z-10 flex items-center gap-2">
-                        {isActive && <FontAwesomeIcon icon={faCheck} className="text-[10px]" />}
-                        {item}
-                    </span>
+                    {isActive && <FontAwesomeIcon icon={faCheck} className="opacity-70" />}
+                    {item}
                 </button>
             );
         })}
@@ -184,10 +166,10 @@ const YearRangeInputs = ({ minYear, maxYear, yearRange, onYearRangeChange }: { m
                     onInput={(e) => setMinVal(e.currentTarget.value)}
                     onBlur={commitChanges}
                     onKeyDown={handleKeyDown}
-                    className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3.5 px-3 text-center text-sm font-black focus:ring-2 focus:ring-accent-teal-dark/50 focus:border-accent-teal-dark/50 outline-none transition-all group-hover:border-white/20 backdrop-blur-md"
+                    className="input input-bordered w-full text-center font-bold"
                     placeholder={String(minYear)}
                 />
-                <div className="absolute -top-2 left-3 bg-surface-900 px-2 text-[9px] text-surface-500 font-black uppercase tracking-[0.2em] group-focus-within:text-accent-teal transition-colors">Desde</div>
+                <div className="absolute -top-2 left-3 bg-base-200 px-2 text-[10px] text-base-content/60 font-bold uppercase tracking-wider group-focus-within:text-accent transition-colors">Desde</div>
             </div>
             <div className="relative group">
                 <input
@@ -196,10 +178,10 @@ const YearRangeInputs = ({ minYear, maxYear, yearRange, onYearRangeChange }: { m
                     onInput={(e) => setMaxVal(e.currentTarget.value)}
                     onBlur={commitChanges}
                     onKeyDown={handleKeyDown}
-                    className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3.5 px-3 text-center text-sm font-black focus:ring-2 focus:ring-accent-teal-dark/50 focus:border-accent-teal-dark/50 outline-none transition-all group-hover:border-white/20 backdrop-blur-md"
+                    className="input input-bordered w-full text-center font-bold"
                     placeholder={String(maxYear)}
                 />
-                <div className="absolute -top-2 left-3 bg-surface-900 px-2 text-[9px] text-surface-500 font-black uppercase tracking-[0.2em] group-focus-within:text-accent-teal transition-colors">Hasta</div>
+                <div className="absolute -top-2 left-3 bg-base-200 px-2 text-[10px] text-base-content/60 font-bold uppercase tracking-wider group-focus-within:text-accent transition-colors">Hasta</div>
             </div>
         </div>
     );
@@ -330,16 +312,13 @@ const FilterPanel = ({
                 </AccordionItem>
             </div>
 
-            <div className="pt-6 mt-4 border-t border-surface-700/50">
+            <div className="pt-4 mt-2">
                 <button
                     onClick={handleClearAllClick}
                     disabled={!hasActiveFilters}
-                    className={`w-full group flex items-center justify-center gap-3 py-4 px-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all duration-500 ${hasActiveFilters
-                        ? 'bg-brand-red/10 hover:bg-brand-red text-brand-red hover:text-white border border-brand-red/20 hover:border-brand-red shadow-xl shadow-red-900/10 hover:shadow-brand-red/30'
-                        : 'bg-surface-800/30 text-surface-700 border border-surface-700/20 cursor-not-allowed grayscale'
-                        }`}
+                    className="btn btn-error btn-outline btn-block"
                 >
-                    <FontAwesomeIcon icon={faTrash} className={`transition-transform duration-500 ${hasActiveFilters ? 'group-hover:rotate-12 group-hover:scale-125' : ''}`} />
+                    <FontAwesomeIcon icon={faTrash} />
                     <span>Reiniciar todos los filtros</span>
                 </button>
             </div>

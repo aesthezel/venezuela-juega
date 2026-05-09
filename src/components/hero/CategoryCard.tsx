@@ -112,10 +112,10 @@ const CategoryCard = ({ preset, gameCount, backgroundSrc, overrideImageUrl, onCl
                         className="inline-flex items-center gap-1.5
                                    px-4 py-1.5 rounded-md text-[10px] md:text-xs
                                    font-bold uppercase tracking-wider
-                                   border border-white/30
+                                   border border-surface-700
                                    bg-white/5 backdrop-blur-sm
                                    text-white
-                                   group-hover:bg-white/15 group-hover:border-white/50
+                                   group-hover:bg-white/15 group-hover:border-surface-700
                                    transition-all duration-300"
                     >
                         Explorar

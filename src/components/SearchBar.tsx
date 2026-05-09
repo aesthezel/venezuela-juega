@@ -179,7 +179,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
         const parts = text.split(regex);
         return parts.map((part, index) =>
             regex.test(part) ? (
-                <mark key={index} className="bg-accent-teal text-surface-900 px-1 rounded">
+                <mark key={index} className="bg-accent-teal text-base-200 px-1 rounded">
                     {part}
                 </mark>
             ) : part
@@ -191,7 +191,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
             <div className="relative">
                 <FontAwesomeIcon
                     icon={faSearch}
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm pointer-events-none"
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/70 text-sm pointer-events-none"
                 />
                 <input
                     ref={searchRef}
@@ -202,40 +202,37 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                     onKeyDown={handleKeyDown}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    className="w-full pl-10 pr-10 py-3 bg-surface-700 text-white rounded-lg border border-surface-600 focus:border-accent-teal focus:ring-2 focus:ring-accent-teal focus:ring-opacity-50 transition-all duration-200 placeholder-gray-400"
+                    className="input input-bordered w-full pl-10 pr-10 transition-all duration-200"
                     autoComplete="off"
                 />
                 {localSearchTerm && (
                     <button
                         onClick={(e) => clearSearch(e as any)}
                         type="button"
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors z-30"
+                        className="btn btn-ghost btn-circle btn-sm absolute right-2 top-1/2 transform -translate-y-1/2 z-30"
                         aria-label="Limpiar búsqueda"
                     >
-                        <FontAwesomeIcon icon={faTimes} className="text-sm" />
+                        <FontAwesomeIcon icon={faTimes} />
                     </button>
                 )}
             </div>
 
             {showSuggestions && suggestions.length > 0 && (
-                <div
-                    ref={dropdownRef}
-                    className="absolute top-full left-0 right-0 mt-2 bg-surface-800/95 backdrop-blur-xl border border-surface-600 rounded-xl shadow-2xl z-50 max-h-[350px] md:max-h-[550px] overflow-y-auto scrollbar-thin scrollbar-thumb-surface-600 scrollbar-track-transparent"
+                <ul
+                    ref={dropdownRef as any}
+                    className="menu absolute top-full left-0 right-0 mt-2 bg-base-200/95 backdrop-blur-xl border border-base-300 rounded-xl shadow-2xl z-50 max-h-[350px] md:max-h-[550px] overflow-y-auto flex-nowrap p-2"
                 >
                     {suggestions.map((game, index) => (
-                        <div
-                            key={`${game.id}-${index}`}
-                            onMouseDown={(e) => {
-                                e.preventDefault();
-                                selectSuggestion(game);
-                            }}
-                            className={`px-4 py-4 cursor-pointer transition-all duration-300 border-b border-surface-700/50 last:border-b-0 flex items-center justify-between group ${index === activeSuggestion
-                                ? 'bg-accent-teal-dark/20 border-accent-teal-dark/50'
-                                : 'hover:bg-surface-700/80'
-                                }`}
-                        >
+                        <li key={`${game.id}-${index}`}>
+                            <a
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    selectSuggestion(game);
+                                }}
+                                className={`py-3 flex items-center justify-between gap-4 border-b border-base-300/50 last:border-b-0 rounded-lg group ${index === activeSuggestion ? 'active' : ''}`}
+                            >
                             <div className="flex items-center gap-4 flex-1 min-w-0">
-                                <div className="relative flex-shrink-0 w-24 h-14 overflow-hidden rounded-md border border-surface-600 group-hover:border-accent-teal-dark/50 transition-colors shadow-lg">
+                                <div className="relative flex-shrink-0 w-24 h-14 overflow-hidden rounded-md border border-surface-700 group-hover:border-accent-teal-dark/50 transition-colors shadow-lg">
                                     <CoverImage
                                         src={game.imageCover || game.imageUrl}
                                         alt={game.title}
@@ -247,7 +244,7 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                                     <div className="text-white font-bold truncate text-base mb-0.5 group-hover:text-accent-teal transition-colors">
                                         {highlightMatch(game.title, debouncedLocalTerm)}
                                     </div>
-                                    <div className="text-gray-400 text-xs truncate font-medium opacity-80">
+                                    <div className="text-base-content/70 text-xs truncate font-medium opacity-80">
                                         {renderSuggestionSubtitle ? renderSuggestionSubtitle(game) : game.developers.join(', ')}
                                     </div>
                                 </div>
@@ -258,22 +255,25 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                                     {game.genre.slice(0, 2).map(genre => (
                                         <span
                                             key={genre}
-                                            className="bg-surface-900/80 text-accent-teal/90 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-white/5 whitespace-nowrap"
+                                            className="badge badge-sm badge-outline badge-accent whitespace-nowrap text-[9px] font-bold uppercase tracking-wider"
                                         >
                                             {genre}
                                         </span>
                                     ))}
                                 </div>
                             )}
-                        </div>
+                            </a>
+                        </li>
                     ))}
 
                     {suggestions.length === 10 && (
-                        <div className="px-4 py-3 text-center text-gray-400 text-xs bg-surface-900/50 backdrop-blur-sm border-t border-surface-700/50">
-                            Escribe más caracteres para refinar la búsqueda
-                        </div>
+                        <li className="disabled mt-2">
+                            <span className="text-center text-xs opacity-50 flex justify-center py-2">
+                                Escribe más caracteres para refinar la búsqueda
+                            </span>
+                        </li>
                     )}
-                </div>
+                </ul>
             )}
         </div>
     );

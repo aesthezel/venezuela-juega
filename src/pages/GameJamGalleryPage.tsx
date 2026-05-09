@@ -23,7 +23,7 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
     );
 
     return (
-        <div className="min-h-screen bg-surface-900 text-gray-200">
+        <div className="min-h-screen bg-base-200 text-base-content">
             {/* 1. Encabezado Reutilizado de GameJamPage.tsx */}
             <PromoHeader
                 title="GameJamPlus 10th Edition - 25/26"
@@ -44,25 +44,25 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
                     <aside className="md:col-span-1">
                         <div className="sticky top-20 space-y-6">
 
-                            <section className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-600/50">
+                            <section className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-700">
                                 <div className="flex items-center gap-3 mb-4">
                                     <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent-teal to-accent-indigo">
                                         Resultados del Jam
                                     </h3>
                                 </div>
-                                <div className="p-4 bg-surface-700/50 rounded-lg text-center border border-surface-600">
+                                <div className="p-4 bg-base-300/50 rounded-lg text-center border border-surface-700">
                                     <div className="text-5xl font-bold text-white mb-1 flex items-center justify-center gap-2">
-                                        <FontAwesomeIcon icon={faTrophy} className="text-brand-gold" />
+                                        <FontAwesomeIcon icon={faTrophy} className="text-accent" />
                                         {gameJamPlusGames.length}
                                     </div>
-                                    <div className="text-sm text-gray-300">Juegos Creados</div>
+                                    <div className="text-sm text-base-content/70">Juegos Creados</div>
                                 </div>
-                                <p className="text-gray-300 text-sm mt-4 opacity-90">
+                                <p className="text-base-content/70 text-sm mt-4 opacity-90">
                                     Estos son los proyectos desarrollados durante las 48 horas del evento en la sede de Venezuela.
                                 </p>
                             </section>
 
-                            <section className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-600/50">
+                            <section className="bg-gradient-to-br from-surface-800 to-surface-700 p-6 rounded-xl shadow-xl border border-surface-700">
                                 <div className="flex items-center gap-3 mb-4">
                                     <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent-teal to-accent-indigo">
                                         Únete a la comunidad
@@ -78,7 +78,7 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
                                         <div className="w-8 h-8 bg-accent-indigo rounded flex items-center justify-center text-white text-sm group-hover:bg-accent-indigo transition-colors">💬</div>
                                         <div>
                                             <p className="text-accent-indigo font-medium text-sm">Discord</p>
-                                            <p className="text-gray-400 text-xs">Únete a la conversación</p>
+                                            <p className="text-base-content/70 text-xs">Únete a la conversación</p>
                                         </div>
                                     </a>
                                     <a
@@ -90,7 +90,7 @@ const GameJamPlusGallery = ({ games, onGameClick }: GameJamPlusGalleryProps) => 
                                         <div className="w-8 h-8 bg-gradient-to-br from-accent-mauve-dark to-pink-500 rounded flex items-center justify-center text-white text-sm group-hover:scale-105 transition-transform">📸</div>
                                         <div>
                                             <p className="text-pink-300 font-medium text-sm">Instagram</p>
-                                            <p className="text-gray-400 text-xs">Síguenos para updates</p>
+                                            <p className="text-base-content/70 text-xs">Síguenos para updates</p>
                                         </div>
                                     </a>
                                 </div>
@@ -131,7 +131,7 @@ const GameJamItem = ({ game, onGameClick }: { game: Game; onGameClick: (game: Ga
                 });
                 onGameClick(game);
             }}
-            className="group flex flex-col md:flex-row items-start gap-4 p-4 bg-surface-800/60 border border-surface-700 rounded-xl hover:border-accent-orange transition-all duration-300 cursor-pointer hover:bg-surface-800 shadow-lg"
+            className="group flex flex-col md:flex-row items-start gap-4 p-4 bg-base-300/60 border border-surface-700 rounded-xl hover:border-accent-orange transition-all duration-300 cursor-pointer hover:bg-base-300 shadow-lg"
         >
             {/* Imagen (Miniatura) */}
             <div className="w-full md:w-48 h-32 md:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gradient-to-br from-surface-700 to-surface-900">
@@ -156,12 +156,12 @@ const GameJamItem = ({ game, onGameClick }: { game: Game; onGameClick: (game: Ga
                 )}
 
                 {game.highlightReason && (
-                    <p className="text-sm text-amber-300 italic bg-surface-700/50 p-3 rounded-lg mb-3 border-l-4 border-amber-400">
+                    <p className="text-sm text-amber-300 italic bg-base-300/50 p-3 rounded-lg mb-3 border-l-4 border-amber-400">
                         "{game.highlightReason}"
                     </p>
                 )}
 
-                <p className={`text-sm text-gray-300 mb-4 ${lineCount > 3 ? 'line-clamp-3' : ''}`}>
+                <p className={`text-sm text-base-content/70 mb-4 ${lineCount > 3 ? 'line-clamp-3' : ''}`}>
                     {descriptionText}
                 </p>
 
@@ -182,7 +182,7 @@ const GameJamItem = ({ game, onGameClick }: { game: Game; onGameClick: (game: Ga
                                         url: link.url
                                     });
                                 }}
-                                className="flex items-center gap-1.5 bg-surface-700 hover:bg-accent-teal-dark text-white font-bold py-1 px-3 rounded-lg text-sm transition-colors z-10 relative"
+                                className="flex items-center gap-1.5 bg-base-300 hover:bg-accent-teal-dark text-white font-bold py-1 px-3 rounded-lg text-sm transition-colors z-10 relative"
                                 title={`Ir a ${link.name}`}
                             >
                                 {link.name} <LinkIcon />
@@ -195,4 +195,4 @@ const GameJamItem = ({ game, onGameClick }: { game: Game; onGameClick: (game: Ga
     );
 };
 
-export default GameJamPlusGallery;
+export default GameJamPlusGallery;

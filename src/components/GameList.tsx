@@ -102,9 +102,11 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
 
   if (games.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full bg-surface-800 rounded-lg p-12 text-center">
-        <h2 className="text-2xl font-bold text-white mb-2">No se encontraron juegos</h2>
-        <p className="text-gray-400">Intenta ajustar tus filtros de búsqueda.</p>
+      <div className="card bg-base-200 shadow-sm flex flex-col items-center justify-center h-full p-12 text-center">
+        <div className="card-body items-center text-center">
+            <h2 className="card-title text-2xl font-bold">No se encontraron juegos</h2>
+            <p className="text-base-content/70">Intenta ajustar tus filtros de búsqueda.</p>
+        </div>
       </div>
     );
   }
@@ -132,14 +134,14 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         className={`game-list-row w-full text-left transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer relative ${fireflyCount > 0
-          ? 'bg-surface-800 hover:bg-surface-700 border-l-2 border-l-accent-teal/60'
-          : 'bg-surface-800 hover:bg-surface-700'
+          ? 'bg-base-300 hover:bg-base-300 border-l-2 border-l-accent-teal/60'
+          : 'bg-base-300 hover:bg-base-300'
           }`}
         style={fireflyCount > 0 ? {
           boxShadow: `inset 4px 0 ${Math.min(fireflyCount * 6, 20)}px rgba(34, 211, 238, ${Math.min(fireflyCount * 0.06, 0.15)})`,
         } : undefined}
       >
-        <div className="relative h-16 w-28 flex-shrink-0 overflow-hidden rounded-md bg-surface-900 border border-surface-700/50">
+        <div className="relative h-16 w-28 flex-shrink-0 overflow-hidden rounded-md bg-base-200 border border-surface-700">
           <CoverImage
             src={game.imageUrl}
             alt={game.title}
@@ -182,15 +184,15 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
           <div className="flex items-center gap-2">
             <h3 className="text-base md:text-lg font-semibold text-white truncate">{game.title}</h3>
             {game.isHighlighted && (
-              <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              <span className="badge badge-warning badge-sm badge-outline border-amber-500/30 text-amber-300">
                 Destacado
               </span>
             )}
           </div>
-          <div className="mt-1 text-sm text-gray-300 truncate">
+          <div className="mt-1 text-sm text-base-content/70 truncate">
             {game.genre?.join(' • ') || 'Género no especificado'}
           </div>
-          <div className="mt-0.5 text-xs text-gray-400 truncate">
+          <div className="mt-0.5 text-xs text-base-content/70 truncate">
             {(game.platform?.length ? game.platform : ['Plataforma no especificada']).join(' • ')}
           </div>
         </div>
@@ -209,7 +211,7 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
           <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-md px-2 py-1 shadow-sm" />
           <div
             onClick={isReady ? handleToggleLike : undefined}
-            className={`flex items-center gap-1.5 transition-all duration-300 group/like px-2 py-1 rounded-md hover:bg-white/5 ${hasLiked ? 'text-rose-400' : 'text-surface-500 hover:text-white'
+            className={`btn btn-ghost btn-sm flex items-center gap-1.5 transition-all duration-300 group/like px-2 py-1 rounded-md ${hasLiked ? 'text-rose-400 hover:bg-rose-400/10' : 'text-base-content/70 hover:text-base-content'
               } ${!isReady ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             title={!isReady ? "Iniciando conexión..." : (hasLiked ? "Quitar me gusta" : "Me gusta")}
           >

@@ -29,26 +29,28 @@ const CONTRIBUTORS = [
 ];
 
 const Card = ({ children, className = "" }: { children: preact.ComponentChildren, className?: string }) => (
-    <div className={`bg-surface-800/30 backdrop-blur-sm p-6 rounded-2xl border border-surface-700/40 hover:border-surface-600/60 transition-all duration-300 ${className}`}>
-        {children}
+    <div className={`card bg-base-200 shadow-xl border border-surface-700 ${className}`}>
+        <div className="card-body">
+            {children}
+        </div>
     </div>
 );
 
 const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
     return (
         <PageTransition>
-            <main className="container mx-auto px-4 py-8 text-gray-300">
+            <main className="container mx-auto px-4 py-8 text-base-content/70">
                 <BackButton onClick={onNavigateToCatalog} className="mb-6" />
 
                 {/* Page header */}
                 <header className="mb-10">
                     <div className="flex items-start gap-4 mb-4">
                         <div className="flex-1">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-3">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-base-content leading-tight mb-3">
                                 Sobre
-                                <span className="bg-gradient-to-r from-accent-orange to-amber-300 bg-clip-text text-transparent"> Venezuela Juega</span>
+                                <span className="text-primary"> Venezuela Juega</span>
                             </h1>
-                            <p className="text-surface-400 text-base md:text-lg max-w-2xl leading-relaxed">
+                            <p className="text-base-content/70 text-base md:text-lg max-w-2xl leading-relaxed">
                                 Conoce la iniciativa, los colaboradores y el propósito detrás de la base de datos de videojuegos venezolanos más completa.
                             </p>
                         </div>
@@ -56,13 +58,13 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                 </header>
 
                 {/* Divider */}
-                <div className="h-px bg-gradient-to-r from-accent-orange/20 via-surface-700/30 to-transparent mb-12" />
+                <div className="divider mb-12"></div>
 
                 <div className="space-y-12">
 
                     <section>
                         <div className="flex items-center gap-3 mb-6">
-                            <h2 className="text-2xl md:text-3xl font-black text-white">
+                            <h2 className="text-2xl md:text-3xl font-black text-base-content">
                                 Iniciativa
                             </h2>
                         </div>
@@ -77,11 +79,11 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                     </section>
 
                     {/* Section Divider */}
-                    <div className="h-px bg-surface-800/50 w-full" />
+                    <div className="divider"></div>
 
                     <section>
                         <div className="flex items-center gap-3 mb-6">
-                            <h2 className="text-2xl md:text-3xl font-black text-white">
+                            <h2 className="text-2xl md:text-3xl font-black text-base-content">
                                 Colaboradores
                             </h2>
                         </div>
@@ -94,19 +96,19 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                     </section>
 
                     {/* Section Divider */}
-                    <div className="h-px bg-surface-800/50 w-full" />
+                    <div className="divider"></div>
 
                     <section>
                         <div className="flex items-center gap-3 mb-6">
-                            <h2 className="text-2xl md:text-3xl font-black text-white">
+                            <h2 className="text-2xl md:text-3xl font-black text-base-content">
                                 Patrocinadores
                             </h2>
                         </div>
                         <Card>
-                            <p className="text-sm text-gray-400 mb-4">Gracias a quienes apoyan este proyecto:</p>
+                            <p className="text-sm text-base-content/70 mb-4">Gracias a quienes apoyan este proyecto:</p>
                             <div className="flex flex-wrap gap-4 items-center">
-                                <div className="bg-surface-700/50 border border-surface-600 p-4 rounded-lg text-center min-w-[100px]">
-                                    <span className="text-gray-400 font-mono text-xs">Próximamente</span>
+                                <div className="badge badge-outline badge-lg p-4 h-auto min-w-[100px]">
+                                    <span className="text-base-content/70 font-mono text-xs">Próximamente</span>
                                 </div>
                             </div>
                         </Card>

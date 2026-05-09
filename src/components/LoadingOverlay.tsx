@@ -56,7 +56,7 @@ const LoadingOverlay = ({
     return (
         <div
             ref={overlayRef}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-surface-900 overflow-hidden"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-base-200 overflow-hidden"
             style={{ opacity: 1 }}
         >
             <img

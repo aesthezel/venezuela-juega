@@ -81,7 +81,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
             <header
                 ref={headerRef}
                 className={`fixed top-0 left-0 right-0 z-[60] h-20 w-full will-change-transform transition-[background-color,border-color,padding,backdrop-filter] duration-500 ${isScrolled
-                    ? 'bg-surface-950/80 backdrop-blur-2xl border-b border-white/10 shadow-xl py-0'
+                    ? 'bg-base-100/80 backdrop-blur-2xl border-b border-surface-700 shadow-xl py-0'
                     : 'bg-transparent border-b border-transparent py-2'
                     }`}
             >
@@ -112,18 +112,18 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                             onClick={() => navigateTo(item.path)}
                                             className={`relative flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${active
                                                 ? 'text-white bg-accent-teal-dark/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-accent-teal-dark/40'
-                                                : 'text-surface-300 hover:text-white hover:bg-white/5'
+                                                : 'text-base-content/70 hover:text-white hover:bg-white/5'
                                                 }`}
                                         >
-                                            <FontAwesomeIcon icon={item.icon} className={`text-xs ${active ? 'text-accent-teal' : 'text-surface-500 group-hover/nav:text-surface-300 transition-colors'}`} />
+                                            <FontAwesomeIcon icon={item.icon} className={`text-xs ${active ? 'text-accent-teal' : 'text-base-content/70 group-hover/nav:text-base-content/70 transition-colors'}`} />
                                             <span>{item.label}</span>
                                         </button>
 
                                         {/* Tooltip Bubble for Home page */}
                                         {isGameJamsOnHome && !isScrolled && (
-                                            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-brand-blue text-white text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xl animate-bounce z-50 pointer-events-none">
+                                            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-primary text-white text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xl animate-bounce z-50 pointer-events-none">
                                                 ¡Nuevos juegos!
-                                                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-brand-blue rotate-45" />
+                                                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rotate-45" />
                                             </div>
                                         )}
                                     </div>
@@ -137,7 +137,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                             {/* Mobile Hamburger Trigger */}
                             <button
                                 onClick={() => setIsMenuOpen(true)}
-                                className="md:hidden p-2.5 text-surface-200 hover:text-white transition-all rounded-xl hover:bg-white/5 border border-white/5"
+                                className="md:hidden p-2.5 text-base-content hover:text-white transition-all rounded-xl hover:bg-white/5 border border-surface-700"
                                 aria-label="Abrir menú"
                             >
                                 <FontAwesomeIcon icon={faBars} size="lg" />
@@ -154,22 +154,22 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
             >
                 {/* Backdrop Overlay */}
                 <div
-                    className={`absolute inset-0 bg-surface-950/60 backdrop-blur-sm transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0'
+                    className={`absolute inset-0 bg-base-100/60 backdrop-blur-sm transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0'
                         }`}
                     onClick={() => setIsMenuOpen(false)}
                 />
 
                 {/* Sidebar Panel */}
                 <div
-                    className={`absolute top-0 right-0 h-full w-[280px] sm:w-[320px] bg-surface-900 border-l border-white/10 shadow-2xl transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+                    className={`absolute top-0 right-0 h-full w-[280px] sm:w-[320px] bg-base-200 border-l border-surface-700 shadow-2xl transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
                         }`}
                 >
                     {/* Sidebar Header */}
-                    <div className="p-6 flex items-center justify-between border-b border-white/5">
+                    <div className="p-6 flex items-center justify-between border-b border-surface-700">
                         <img src={LOGO_URL} alt="Logo" className="h-6 w-auto" />
                         <button
                             onClick={() => setIsMenuOpen(false)}
-                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-800 text-surface-300 hover:text-white transition-colors"
+                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-base-300 text-base-content/70 hover:text-white transition-colors"
                         >
                             <FontAwesomeIcon icon={faXmark} />
                         </button>
@@ -185,10 +185,10 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                     onClick={() => navigateTo(item.path)}
                                     className={`flex items-center gap-4 p-4 rounded-2xl transition-all border ${active
                                         ? 'bg-accent-teal-dark/20 border-accent-teal-dark/40 text-white shadow-[0_0_20px_rgba(6,182,212,0.15)]'
-                                        : 'bg-white/5 border-transparent text-surface-300'
+                                        : 'bg-white/5 border-transparent text-base-content/70'
                                         }`}
                                 >
-                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${active ? 'bg-accent-teal-dark text-surface-950' : 'bg-surface-800 text-surface-400'
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${active ? 'bg-accent-teal-dark text-base-100' : 'bg-base-300 text-base-content/70'
                                         }`}>
                                         <FontAwesomeIcon icon={item.icon} />
                                     </div>
@@ -199,8 +199,8 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                     </nav>
 
                     {/* Footer Info */}
-                    <div className="mt-auto p-8 border-t border-white/5 bg-surface-950/30">
-                        <p className="text-[10px] text-surface-500 uppercase font-black tracking-widest text-center">
+                    <div className="mt-auto p-8 border-t border-surface-700 bg-base-100/30">
+                        <p className="text-[10px] text-base-content/70 uppercase font-black tracking-widest text-center">
                             Hecho con ❤️ en Venezuela
                         </p>
                     </div>

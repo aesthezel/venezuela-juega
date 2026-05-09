@@ -1,11 +1,12 @@
 {
   "name": "venezuela-juega",
   "private": true,
-  "version": "0.3.20",
+  "version": "0.4.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/generate-meta.js",
+    "build:css": "npx @tailwindcss/cli -i ./src/styles/global.css -o ./app.css",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -20,8 +21,10 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/preact": "^7.0.0-beta.8",
     "@fullcalendar/react": "^6.1.15",
+    "@tailwindcss/cli": "^4.3.0",
     "bootstrap-icons": "^1.13.1",
     "chart.js": "^4.5.1",
+    "daisyui": "^5.5.19",
     "gsap": "^3.13.0",
     "papaparse": "^5.5.3",
     "preact": "^10.22.1",
@@ -36,7 +39,7 @@
     "@types/papaparse": "^5.3.16",
     "dotenv": "^17.3.1",
     "happy-dom": "^18.0.1",
-    "tailwindcss": "^4.0.0",
+    "tailwindcss": "^4.3.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
     "vitest": "^3.2.4"
