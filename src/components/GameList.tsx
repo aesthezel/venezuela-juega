@@ -150,8 +150,7 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
             trailerInfo.type === 'youtube' ? (
               <iframe
                 src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] pointer-events-none opacity-0 transition-opacity duration-700"
-                style={{ maxWidth: 'none' }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] pointer-events-none opacity-0 transition-opacity duration-700 max-w-none"
                 allow="autoplay; encrypted-media"
                 title={`${game.title} trailer`}
                 onLoad={(e) => {

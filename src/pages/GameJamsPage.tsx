@@ -279,8 +279,7 @@ const GameCard = ({ game, onGameClick, accentColor }: {
                     trailerInfo.type === 'youtube' ? (
                         <iframe
                             src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] pointer-events-none opacity-0 transition-opacity duration-700"
-                            style={{ zIndex: 5, maxWidth: 'none' }}
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] pointer-events-none opacity-0 transition-opacity duration-700 z-5 max-w-none"
                             allow="autoplay; encrypted-media"
                             title={`${game.title} trailer`}
                             onLoad={(e) => {
@@ -297,8 +296,7 @@ const GameCard = ({ game, onGameClick, accentColor }: {
                             muted
                             loop
                             playsInline
-                            className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700"
-                            style={{ zIndex: 5 }}
+                            className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700 z-5"
                             onCanPlay={(e) => {
                                 if (e.target instanceof HTMLVideoElement) {
                                     e.target.classList.remove('opacity-0');
@@ -309,10 +307,10 @@ const GameCard = ({ game, onGameClick, accentColor }: {
                     )
                 )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-surface-800/80 via-transparent to-transparent" style={{ zIndex: 10, pointerEvents: 'none' }} />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-800/80 via-transparent to-transparent z-10 pointer-events-none" />
 
                 {game.isHighlighted && (
-                    <div className="absolute top-2.5 right-2.5 bg-amber-500 px-2.5 py-1 rounded-full flex items-center gap-1 text-xs font-bold text-white shadow-lg" style={{ zIndex: 10 }}>
+                    <div className="absolute top-2.5 right-2.5 bg-amber-500 px-2.5 py-1 rounded-full flex items-center gap-1 text-xs font-bold text-white shadow-lg z-10">
                         <FontAwesomeIcon icon={faTrophy} className="text-[10px]" />
                         Destacado
                     </div>

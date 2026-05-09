@@ -204,3 +204,60 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: color-mix(in srgb, var(--color-surface-400) 60%, transparent);
 }
+
+/* ─── Fade-in with translate (variant) ─── */
+@keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fade-in-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+/* ─── Fade-in fast (tooltip/dropdown) ─── */
+@keyframes fade-in-fast {
+    from { opacity: 0; transform: translateY(10px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-fade-in-fast { animation: fade-in-fast 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+/* ─── Slide-in from right (drawer/mobile panel) ─── */
+@keyframes slide-in-right {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+.animate-slide-in-right { animation: slide-in-right 0.3s ease-out forwards; }
+
+/* ─── Hero entrance ─── */
+@keyframes hero-fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-hero-fade-in {
+    animation: hero-fade-in 1s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* ─── Gradient shift (decorative buttons) ─── */
+@keyframes gradient-half {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+.animate-gradient-half {
+    background-size: 200% 200%;
+    animation: gradient-half 3s ease infinite;
+}
+
+/* ─── Scrollbar Hide Utility ─── */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* ─── Mask Edge Fade ─── */
+.mask-fade-edges {
+    mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
+}

@@ -266,7 +266,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0d0a11_100%)]" />
 
             {/* Hero content */}
-            <div className="relative z-10 w-full flex flex-col items-center px-4 pt-24 pb-8 md:pt-28 md:pb-12 mx-auto max-w-6xl hero-fade-in">
+            <div className="relative z-10 w-full flex flex-col items-center px-4 pt-24 pb-8 md:pt-28 md:pb-12 mx-auto max-w-6xl animate-hero-fade-in">
 
                 {/* Badge */}
                 <div className="mb-3 md:mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-surface-400 backdrop-blur-md md:text-sm shadow-xl">
@@ -496,29 +496,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                 </div>
             </div>
 
-            <style>{`
-                .hero-fade-in {
-                    animation: heroFadeIn 1s ease-out forwards;
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-                @keyframes heroFadeIn {
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-                .snap-x {
-                    scroll-snap-type: x mandatory;
-                }
-                .snap-center {
-                    scroll-snap-align: center;
-                }
-            `}</style>
+
         </div>
     );
 };

@@ -1,0 +1,166 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FullCalendar Theme — Venezuela Juega
+   Overrides for FullCalendar's internal DOM/classes to match the app's
+   dark-surface design system. These cannot be handled via Tailwind utilities.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+    --fc-border-color: #475569;
+    --fc-daygrid-event-dot-width: 8px;
+    --fc-list-event-dot-width: 10px;
+    --fc-event-text-color: #ffffff;
+    --fc-more-link-bg-color: #334155;
+    --fc-more-link-text-color: #cbd5e1;
+    --fc-today-bg-color: rgba(6, 182, 212, 0.1);
+    --fc-page-bg-color: transparent;
+    --fc-neutral-bg-color: transparent;
+    --fc-list-day-text-color: #ffffff;
+    --fc-list-day-side-text-color: #ffffff;
+}
+
+.calendar-container .fc {
+    background: transparent;
+}
+
+.fc .fc-toolbar {
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+.fc .fc-toolbar-title {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.fc .fc-event {
+    border-radius: 6px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #0891b2, #06b6d4) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.2s ease !important;
+    font-weight: 500 !important;
+}
+
+.fc .fc-event:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(6, 182, 212, 0.3) !important;
+    background: linear-gradient(135deg, #0e7490, #0891b2) !important;
+}
+
+.fc .fc-event-title {
+    font-size: 0.875rem;
+    color: #ffffff;
+    padding: 2px 6px;
+}
+
+.fc .fc-more-link {
+    color: #06b6d4;
+    background: rgba(6, 182, 212, 0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.fc .fc-more-link:hover {
+    background: rgba(6, 182, 212, 0.2);
+    transform: translateY(-1px);
+}
+
+.fc .fc-button {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-transform: none;
+}
+
+.fc .fc-daygrid-day-number {
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+.fc .fc-col-header-cell-cushion {
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.fc .fc-button-primary {
+    background: linear-gradient(135deg, #0891b2, #06b6d4) !important;
+    border: none !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.fc .fc-button-primary:hover {
+    background: linear-gradient(135deg, #0e7490, #0891b2) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(6, 182, 212, 0.2) !important;
+}
+
+.fc .fc-button-primary:active {
+    background: linear-gradient(135deg, #155e75, #0e7490) !important;
+    transform: translateY(0) !important;
+}
+
+.fc .fc-button-primary:disabled {
+    background: #475569 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.fc .fc-daygrid-day {
+    transition: background-color 0.2s ease;
+}
+
+.fc .fc-daygrid-day:hover {
+    background-color: rgba(6, 182, 212, 0.05);
+}
+
+.fc .fc-day-today {
+    background-color: rgba(6, 182, 212, 0.08) !important;
+    border: 1px solid rgba(6, 182, 212, 0.2) !important;
+}
+
+.fc .fc-scrollgrid {
+    border: 1px solid #475569;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.fc .fc-col-header-cell {
+    background: rgba(51, 65, 85, 0.8);
+    border-bottom: 2px solid #475569;
+}
+
+.fc .fc-daygrid-day-frame {
+    min-height: 80px;
+}
+
+/* ─── FullCalendar Responsive ─── */
+@media (max-width: 768px) {
+    .fc .fc-toolbar {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+    }
+
+    .fc .fc-button-group {
+        gap: 0.25rem;
+    }
+
+    .fc .fc-button {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8rem;
+    }
+}

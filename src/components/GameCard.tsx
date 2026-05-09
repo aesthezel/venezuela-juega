@@ -151,8 +151,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                         trailerInfo.type === 'youtube' ? (
                             <iframe
                                 src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] pointer-events-none opacity-0 transition-opacity duration-700"
-                                style={{ zIndex: 5, maxWidth: 'none' }}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] pointer-events-none opacity-0 transition-opacity duration-700 z-5 max-w-none"
                                 allow="autoplay; encrypted-media"
                                 title={`${game.title} trailer`}
                                 onLoad={(e) => {
@@ -169,8 +168,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                                 muted
                                 loop
                                 playsInline
-                                className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700"
-                                style={{ zIndex: 5 }}
+                                className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700 z-5"
                                 onCanPlay={(e) => {
                                     if (e.target instanceof HTMLVideoElement) {
                                         e.target.classList.remove('opacity-0');
@@ -180,7 +178,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                             />
                         )
                     )}
-                    <div className="absolute top-2 right-2" style={{ zIndex: 10 }}>
+                    <div className="absolute top-2 right-2 z-10">
                         <StatusBadge status={game.status} size="xs" variant="solid" className="px-2 py-1" />
                     </div>
                 </div>
@@ -196,8 +194,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                         trailerInfo.type === 'youtube' ? (
                             <iframe
                                 src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] pointer-events-none opacity-0 transition-opacity duration-700"
-                                style={{ zIndex: 5, maxWidth: 'none' }}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] pointer-events-none opacity-0 transition-opacity duration-700 z-5 max-w-none"
                                 allow="autoplay; encrypted-media"
                                 title={`${game.title} trailer`}
                                 onLoad={(e) => {
@@ -214,8 +211,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                                 muted
                                 loop
                                 playsInline
-                                className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700"
-                                style={{ zIndex: 5 }}
+                                className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-0 transition-opacity duration-700 z-5"
                                 onCanPlay={(e) => {
                                     if (e.target instanceof HTMLVideoElement) {
                                         e.target.classList.remove('opacity-0');
@@ -225,10 +221,10 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                             />
                         )
                     )}
-                    <div className="absolute top-2 right-2" style={{ zIndex: 10 }}>
+                    <div className="absolute top-2 right-2 z-10">
                         <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-full px-2 py-1" />
                     </div>
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" style={{ zIndex: 10, pointerEvents: 'none' }} />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 z-10 pointer-events-none" />
                 </div>
             )}
 
