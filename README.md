@@ -94,7 +94,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Estadísticas rediseñadas
 - [x] Optimización de renderizado de juegos mediante pre-renderizado estático en build time
 - [x] Design tokens y tailwind mejorados
-- [ ] Agregar DaisyUI y mejorar el Tailwind
+- [x] Agregar DaisyUI y mejorar el Tailwind
+- [x] Mejorar diseño de la página de los juegos por separado
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar

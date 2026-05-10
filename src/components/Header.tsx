@@ -89,7 +89,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                     {/* Logo Section */}
                     <button
                         onClick={() => navigateTo('/')}
-                        className="group flex items-center gap-3 hover:opacity-90 transition-opacity"
+                        className="group flex items-center gap-3 hover:opacity-90 transition-opacity cursor-pointer"
                         aria-label="Ir al inicio"
                     >
                         <img
@@ -110,7 +110,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                     <div key={item.path} className="relative group/nav">
                                         <button
                                             onClick={() => navigateTo(item.path)}
-                                            className={`relative flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${active
+                                            className={`relative flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 cursor-pointer ${active
                                                 ? 'text-white bg-accent-teal-dark/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-accent-teal-dark/40'
                                                 : 'text-base-content/70 hover:text-white hover:bg-white/5'
                                                 }`}
@@ -137,7 +137,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                             {/* Mobile Hamburger Trigger */}
                             <button
                                 onClick={() => setIsMenuOpen(true)}
-                                className="md:hidden p-2.5 text-base-content hover:text-white transition-all rounded-xl hover:bg-white/5 border border-surface-700"
+                                className="md:hidden p-2.5 text-base-content hover:text-white transition-all rounded-xl hover:bg-white/5 border border-surface-700 cursor-pointer"
                                 aria-label="Abrir menú"
                             >
                                 <FontAwesomeIcon icon={faBars} size="lg" />
@@ -166,7 +166,9 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                 >
                     {/* Sidebar Header */}
                     <div className="p-6 flex items-center justify-between border-b border-surface-700">
-                        <img src={LOGO_URL} alt="Logo" className="h-6 w-auto" />
+                        <button onClick={() => navigateTo('/')} className="cursor-pointer hover:opacity-80 transition-opacity">
+                            <img src={LOGO_URL} alt="Logo" className="h-6 w-auto" />
+                        </button>
                         <button
                             onClick={() => setIsMenuOpen(false)}
                             className="w-10 h-10 flex items-center justify-center rounded-xl bg-base-300 text-base-content/70 hover:text-white transition-colors"
@@ -183,7 +185,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                                 <button
                                     key={item.path}
                                     onClick={() => navigateTo(item.path)}
-                                    className={`flex items-center gap-4 p-4 rounded-2xl transition-all border ${active
+                                    className={`flex items-center gap-4 p-4 rounded-2xl transition-all border cursor-pointer ${active
                                         ? 'bg-accent-teal-dark/20 border-accent-teal-dark/40 text-white shadow-[0_0_20px_rgba(6,182,212,0.15)]'
                                         : 'bg-white/5 border-transparent text-base-content/70'
                                         }`}

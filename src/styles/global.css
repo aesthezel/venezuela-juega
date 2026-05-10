@@ -94,6 +94,11 @@
     );
 }
 
+
+button:not(:disabled) {
+    cursor: pointer;
+}
+
 body {
     background-image:
             radial-gradient(at 0% 0%, var(--color-base-200) 0, transparent 50%),

@@ -247,7 +247,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             {/* Background mosaic grid */}
             <div
                 ref={gridRef}
-                className="pointer-events-none absolute w-[120vw] h-[200vh] -left-[10vw] -top-[50vh] -rotate-3 grid select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7 z-0"
+                className="pointer-events-none absolute w-[120vw] h-[200vh] -left-[10vw] -top-[50vh] -rotate-3 grid select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7 z-[-2]"
             >
                 {mosaicGames.map((game) => (
                     <div key={game.id} className="relative h-full w-full overflow-hidden rounded-lg bg-base-200/50 border border-surface-700 shadow-xl">
@@ -261,8 +261,8 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             </div>
 
             {/* Gradient overlays */}
-            <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-surface-950/85 via-surface-950/60 to-surface-950/95" />
-            <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0d0a11_100%)] opacity-90" />
+            <div className="pointer-events-none absolute inset-0 z-[-2] bg-gradient-to-b from-surface-950/85 via-surface-950/60 to-surface-950/95" />
+            <div className="pointer-events-none absolute inset-0 z-[-2] bg-[radial-gradient(circle_at_center,transparent_0%,#0d0a11_100%)] opacity-90" />
 
             {/* Hero content */}
             <div className="relative z-10 w-full flex flex-col items-center px-4 pt-24 pb-8 md:pt-28 md:pb-12 mx-auto max-w-6xl animate-hero-fade-in">

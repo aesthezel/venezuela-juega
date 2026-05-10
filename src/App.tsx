@@ -132,7 +132,7 @@ const App = () => {
     return (
         <SpacetimeDBProvider>
             <FireflyProvider currentPath={currentPath}>
-                <div className="relative min-h-screen font-sans flex flex-col overflow-x-clip">
+                <div className="relative min-h-screen font-sans flex flex-col overflow-x-clip isolate">
                     {/* Deep Layers */}
                     <FireflyOverlay />
                     

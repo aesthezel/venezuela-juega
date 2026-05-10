@@ -123,21 +123,17 @@ const Modal = ({ game, onClose }: ModalProps) => {
     const embedUrl = getYoutubeEmbedUrl(game.trailerUrl);
 
     return (
-        <div
-            className="modal modal-open z-[100] bg-black/70 backdrop-blur-md animate-in fade-in"
-            onClick={onClose}
-        >
-            <div
-                className="modal-box p-0 bg-base-200/60 glass shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)] rounded-3xl w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] flex flex-col overflow-hidden relative animate-slide-up"
-                onClick={e => e.stopPropagation()}
-            >
-                <button
-                    onClick={onClose}
-                    className="btn btn-sm btn-circle btn-ghost absolute top-4 right-4 z-20 bg-base-100/60 text-base-content/70 hover:text-white hover:bg-error/80 backdrop-blur-md border border-surface-700 hover:border-transparent"
-                    title="Cerrar"
-                >
-                    <CloseIcon />
-                </button>
+        <dialog className="modal modal-open z-[100] bg-black/70 backdrop-blur-md animate-in fade-in">
+            <div className="modal-box p-0 bg-base-200 shadow-2xl w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] flex flex-col overflow-hidden relative">
+                <form method="dialog">
+                    <button
+                        onClick={onClose}
+                        className="btn btn-sm btn-circle btn-ghost absolute top-4 right-4 z-20 bg-base-100/60 text-base-content/70 hover:text-white hover:bg-error/80 backdrop-blur-md border border-base-content/10 hover:border-transparent"
+                        title="Cerrar"
+                    >
+                        <CloseIcon />
+                    </button>
+                </form>
 
                 <div className="overflow-y-auto flex-1 w-full relative custom-scrollbar">
 
@@ -147,11 +143,11 @@ const Modal = ({ game, onClose }: ModalProps) => {
                             alt={game.title}
                             className="w-full h-full object-cover opacity-80"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-surface-900 via-surface-900/60 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-base-200 via-base-200/60 to-transparent"></div>
 
                         <button
                             onClick={handleViewFullInfo}
-                            className="absolute bottom-0 right-6 md:right-10 translate-y-1/2 z-20 bg-accent hover:brightness-110 text-base-100 font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-accent/30 hover:-translate-y-[-40%] flex items-center gap-2 cursor-pointer"
+                            className="absolute bottom-0 right-6 md:right-10 translate-y-1/2 z-20 btn btn-primary border-none shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:translate-y-[40%] transition-transform duration-300 flex items-center gap-2"
                         >
                             <span>Ver más sobre el juego</span>
                             <FontAwesomeIcon icon={faArrowRight} />
@@ -162,67 +158,71 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
                         <div className="flex flex-col md:pr-56">
                             <h2 className="text-3xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight leading-tight">{game.title}</h2>
-                            <p className="text-accent-teal font-medium md:text-lg mt-1">{game.developers.join(', ')}</p>
+                            <p className="text-primary font-bold tracking-wide uppercase text-xs mt-2">{game.developers.join(' • ')}</p>
                         </div>
 
-                        <div className="flex items-stretch glass rounded-2xl border border-surface-700 divide-x divide-surface-700 overflow-hidden shadow-2xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200 mt-8">
+                        <div className="join shadow-xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200 mt-6 bg-base-300">
                             <button
                                 onClick={handleToggleLike}
                                 title={hasLiked ? "Quitar me gusta" : "Me gusta"}
-                                className={`flex items-center gap-2.5 px-6 py-3.5 transition-all duration-300 group/like hover:bg-rose-500/5 ${hasLiked ? 'text-rose-400' : 'text-base-content/70 hover:text-white'}`}
+                                className="btn join-item btn-ghost border-none hover:bg-base-200"
                             >
-                                <FontAwesomeIcon icon={hasLiked ? faHeartSolid : faHeartReg} className={`transition-transform duration-300 ${hasLiked ? "scale-110 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]" : "group-hover/like:scale-110"}`} />
-                                <span className="font-black text-sm tracking-tight">{totalHearts}</span>
+                                <FontAwesomeIcon icon={hasLiked ? faHeartSolid : faHeartReg} className={`text-lg transition-transform ${hasLiked ? "text-error scale-110" : ""}`} />
+                                <span className="font-bold">{totalHearts}</span>
                             </button>
 
                             <button
                                 onClick={handleToggleFavorite}
                                 title={isFavorite ? "Quitar de favoritos" : "Añadir de favoritos"}
-                                className={`flex items-center justify-center px-6 py-3.5 transition-all duration-300 group/fav hover:bg-amber-500/5 ${isFavorite ? 'text-amber-400' : 'text-base-content/70 hover:text-white'}`}
+                                className="btn join-item btn-ghost border-none hover:bg-base-200"
                             >
-                                <FontAwesomeIcon icon={isFavorite ? faStarSolid : faStarReg} className={`transition-transform duration-300 ${isFavorite ? "scale-110 drop-shadow-[0_0_8px_rgba(245,158,11,0.4)]" : "group-hover/fav:scale-110"}`} />
+                                <FontAwesomeIcon icon={isFavorite ? faStarSolid : faStarReg} className={`text-lg transition-transform ${isFavorite ? "text-warning scale-110" : ""}`} />
                             </button>
 
-                            <div className="flex items-center gap-2.5 px-6 py-3.5 bg-white/[0.02] text-base-content/70 border-r border-surface-700">
-                                <FontAwesomeIcon icon={faEye} className="text-xs opacity-60" />
-                                <span className="font-black text-sm tracking-widest">{totalVisits}</span>
+                            <div className="btn join-item btn-ghost border-none no-animation pointer-events-none text-base-content/70">
+                                <FontAwesomeIcon icon={faEye} />
+                                <span className="font-bold">{totalVisits}</span>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 mt-4">
 
-                            <div className="lg:col-span-2 flex flex-col gap-8">
+                            <div className="lg:col-span-2 flex flex-col gap-6">
                                 {game.pitch && (
-                                    <div className="bg-base-300/40 p-6 rounded-2xl border border-surface-700" ref={pitchRef}>
-                                        <h3 className="text-sm font-bold text-accent-teal uppercase tracking-wider mb-2">Acerca del juego</h3>
-                                        <p className={`text-base-content/70 text-base md:text-lg leading-relaxed whitespace-pre-wrap transition-all ${!isPitchExpanded && pitchLineCount > 6 ? 'line-clamp-6' : ''}`}>
-                                            {game.pitch}
-                                        </p>
-                                        {pitchLineCount > 6 && (
-                                            <button
-                                                onClick={() => setIsPitchExpanded(!isPitchExpanded)}
-                                                className="text-accent-teal hover:text-accent-teal text-sm font-bold mt-3 transition-colors flex items-center gap-1"
-                                            >
-                                                {isPitchExpanded ? 'Ver menos' : 'Ver más'}
-                                            </button>
-                                        )}
+                                    <div className="card bg-base-300 shadow-sm border border-base-content/5" ref={pitchRef}>
+                                        <div className="card-body p-6">
+                                            <h3 className="card-title text-sm font-bold text-primary uppercase tracking-wider mb-2">Acerca del juego</h3>
+                                            <p className={`text-base-content/80 text-base md:text-lg leading-relaxed whitespace-pre-wrap transition-all ${!isPitchExpanded && pitchLineCount > 6 ? 'line-clamp-6' : ''}`}>
+                                                {game.pitch}
+                                            </p>
+                                            {pitchLineCount > 6 && (
+                                                <button
+                                                    onClick={() => setIsPitchExpanded(!isPitchExpanded)}
+                                                    className="text-primary hover:brightness-125 text-sm font-bold mt-3 transition-colors flex items-center gap-1 self-start"
+                                                >
+                                                    {isPitchExpanded ? 'Ver menos' : 'Ver más'}
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
                                 )}
 
                                 {!embedUrl && game.description && (
-                                    <div className="bg-base-300/20 p-6 rounded-2xl border border-surface-700" ref={descRef}>
-                                        <h3 className="text-sm font-bold text-base-content/70 uppercase tracking-wider mb-3">Descripción General</h3>
-                                        <div className={`text-base-content/70 text-sm md:text-base leading-relaxed whitespace-pre-wrap transition-all ${!isDescExpanded && descLineCount > 6 ? 'line-clamp-6' : ''}`}>
-                                            {game.description}
+                                    <div className="card bg-base-300 shadow-sm border border-base-content/5" ref={descRef}>
+                                        <div className="card-body p-6">
+                                            <h3 className="card-title text-sm font-bold text-base-content/70 uppercase tracking-wider mb-3">Descripción General</h3>
+                                            <div className={`text-base-content/80 text-sm md:text-base leading-relaxed whitespace-pre-wrap transition-all ${!isDescExpanded && descLineCount > 6 ? 'line-clamp-6' : ''}`}>
+                                                {game.description}
+                                            </div>
+                                            {descLineCount > 6 && (
+                                                <button
+                                                    onClick={() => setIsDescExpanded(!isDescExpanded)}
+                                                    className="text-primary hover:brightness-125 text-sm font-bold mt-3 transition-colors flex items-center gap-1 self-start"
+                                                >
+                                                    {isDescExpanded ? 'Ver menos' : 'Ver más'}
+                                                </button>
+                                            )}
                                         </div>
-                                        {descLineCount > 6 && (
-                                            <button
-                                                onClick={() => setIsDescExpanded(!isDescExpanded)}
-                                                className="text-accent-teal hover:text-accent-teal text-sm font-bold mt-3 transition-colors flex items-center gap-1"
-                                            >
-                                                {isDescExpanded ? 'Ver menos' : 'Ver más'}
-                                            </button>
-                                        )}
                                     </div>
                                 )}
 
@@ -231,7 +231,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                         <h3 className="text-lg font-bold text-white flex items-center gap-2">
                                             Trailer
                                         </h3>
-                                        <div className="aspect-video w-full rounded-2xl overflow-hidden border border-surface-700 shadow-xl bg-base-100">
+                                        <div className="aspect-video w-full rounded-box overflow-hidden border border-base-content/10 shadow-xl bg-base-300">
                                             <iframe
                                                 src={embedUrl}
                                                 title={`${game.title} Trailer`}
@@ -254,7 +254,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                                 <button
                                                     key={`${shot}-${idx}`}
                                                     onClick={() => openLightbox(idx)}
-                                                    className="relative group/shot overflow-hidden rounded-xl border border-surface-700 hover:border-accent-teal-dark/50 transition-all duration-300 hover:scale-[1.02]"
+                                                    className="relative group/shot overflow-hidden rounded-box border border-base-content/10 hover:border-primary/50 transition-all duration-300 hover:scale-[1.02]"
                                                 >
                                                     <img
                                                         src={shot}
@@ -262,7 +262,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                                         className="w-full h-24 md:h-32 object-cover cursor-zoom-in group-hover/shot:scale-110 transition-transform duration-700"
                                                         loading="lazy"
                                                     />
-                                                    <div className="absolute inset-0 bg-accent-teal-dark/10 opacity-0 group-hover/shot:opacity-100 transition-opacity" />
+                                                    <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover/shot:opacity-100 transition-opacity" />
                                                 </button>
                                             ))}
                                         </div>
@@ -293,7 +293,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                                     href={link.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center gap-2 bg-base-300 hover:bg-base-300 border border-surface-700 hover:border-accent-teal-dark text-base-content/70 hover:text-white py-2 px-3 rounded-lg text-sm transition-all shadow-sm"
+                                                    className="btn btn-outline btn-sm hover:btn-primary gap-2"
                                                     onClick={() => trackEvent('game_external_click', { game_slug: game.slug, game_title: game.title, link_name: link.name, url: link.url })}
                                                 >
                                                     {link.name} <LinkIcon />
@@ -303,18 +303,20 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                     </div>
                                 )}
 
-                                <div className="bg-base-300/30 p-5 rounded-2xl border border-surface-700">
-                                    <dl className="grid grid-cols-1 gap-y-4">
-                                        <DetailItem label="Estado">{game.status}</DetailItem>
-                                        <DetailItem label="Lanzamiento">{game.releaseDate}</DetailItem>
-                                        <DetailItem label="Géneros">{game.genre.join(', ')}</DetailItem>
-                                        <DetailItem label="Plataformas">{game.platform.join(', ')}</DetailItem>
-                                        <DetailItem label="Motor">{game.engine}</DetailItem>
-                                        <DetailItem label="Idiomas">{game.languages.join(', ')}</DetailItem>
-                                        <DetailItem label="Distribuidores">{game.publishers.length > 0 ? game.publishers.join(', ') : 'N/A'}</DetailItem>
-                                        {game.funding && <DetailItem label="Financiamiento">{game.funding}</DetailItem>}
-                                        {game.lastUpdateDate && <DetailItem label="Última Actualización">{game.lastUpdateDate}</DetailItem>}
-                                    </dl>
+                                <div className="card bg-base-300 shadow-sm border border-base-content/5">
+                                    <div className="card-body p-6">
+                                        <dl className="grid grid-cols-1 gap-y-4">
+                                            <DetailItem label="Estado">{game.status}</DetailItem>
+                                            <DetailItem label="Lanzamiento">{game.releaseDate}</DetailItem>
+                                            <DetailItem label="Géneros">{game.genre.join(', ')}</DetailItem>
+                                            <DetailItem label="Plataformas">{game.platform.join(', ')}</DetailItem>
+                                            <DetailItem label="Motor">{game.engine}</DetailItem>
+                                            <DetailItem label="Idiomas">{game.languages.join(', ')}</DetailItem>
+                                            <DetailItem label="Distribuidores">{game.publishers.length > 0 ? game.publishers.join(', ') : 'N/A'}</DetailItem>
+                                            {game.funding && <DetailItem label="Financiamiento">{game.funding}</DetailItem>}
+                                            {game.lastUpdateDate && <DetailItem label="Última Actualización">{game.lastUpdateDate}</DetailItem>}
+                                        </dl>
+                                    </div>
                                 </div>
 
                             </div>
@@ -323,13 +325,17 @@ const Modal = ({ game, onClose }: ModalProps) => {
                 </div>
             </div>
 
+            <form method="dialog" className="modal-backdrop" onClick={onClose}>
+                <button>close</button>
+            </form>
+
             <ScreenshotLightbox
                 isOpen={isLightboxOpen}
                 onClose={() => setIsLightboxOpen(false)}
                 screenshots={game.screenshots || []}
                 initialIndex={currentShotIndex}
             />
-        </div>
+        </dialog>
     );
 };
 

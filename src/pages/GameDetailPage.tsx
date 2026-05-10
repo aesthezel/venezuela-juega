@@ -9,6 +9,7 @@ import {
     faHeart as faHeartSolid, faStar as faStarSolid, faEye
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-regular-svg-icons';
+import { faSteam, faItchIo, faPlaystation, faXbox, faGooglePlay, faApple, faMeta } from '@fortawesome/free-brands-svg-icons';
 import { BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge, PageTransition, ScreenshotLightbox } from "@/src/components";
 import { useSpacetimeDB } from '@/src/spacetimedb/connection';
 import { useGameStats, useMeasure, useTextLayout } from '@/src/hooks';
@@ -21,16 +22,15 @@ interface DetailSectionProps {
 }
 
 const DetailSection = ({ title, children, icon }: DetailSectionProps) => (
-    <div className="bg-base-200/40 backdrop-blur-xl border border-surface-700 rounded-[2rem] p-8 shadow-2xl hover:border-accent-teal-dark/20 transition-all duration-500 group overflow-hidden relative">
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-accent-teal-dark/5 blur-[80px] pointer-events-none group-hover:bg-accent-teal-dark/10 transition-all duration-700" />
-        <h3 className="text-sm font-black text-white mb-8 flex items-center gap-4 uppercase tracking-[0.2em]">
-            <div className="w-12 h-12 rounded-2xl bg-accent-teal-dark/10 flex items-center justify-center text-accent-teal group-hover:bg-accent-teal-dark group-hover:text-base-100 transition-all duration-500 shadow-inner">
-                {icon && <FontAwesomeIcon icon={icon} className="text-lg" />}
+    <div className="card bg-base-200 shadow-xl border border-base-content/5 overflow-hidden">
+        <div className="card-body">
+            <h3 className="card-title text-sm uppercase tracking-widest text-base-content mb-6 flex items-center gap-3">
+                {icon && <FontAwesomeIcon icon={icon} className="text-primary text-lg" />}
+                {title}
+            </h3>
+            <div className="text-base-content/80">
+                {children}
             </div>
-            {title}
-        </h3>
-        <div className="text-base-content/70">
-            {children}
         </div>
     </div>
 );
@@ -80,6 +80,30 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
     });
 
     const trailerInfo = useMemo(() => game ? getTrailerInfo(game.trailerUrl) : null, [game?.trailerUrl]);
+
+    const primaryStore = useMemo(() => {
+        if (!game?.stores || game.stores.length === 0) return null;
+        const priority = ['steam', 'epic', 'gog', 'playstation', 'xbox', 'nintendo', 'google play', 'app store', 'itch.io', 'itch'];
+        for (const p of priority) {
+            const found = game.stores.find(s => s.name.toLowerCase().includes(p));
+            if (found) return found;
+        }
+        return game.stores[0];
+    }, [game?.stores]);
+
+    const primaryStoreIcon = useMemo(() => {
+        if (!primaryStore) return faShoppingCart;
+        const name = primaryStore.name.toLowerCase();
+        if (name.includes('steam')) return faSteam;
+        if (name.includes('itch')) return faItchIo;
+        if (name.includes('playstation')) return faPlaystation;
+        if (name.includes('xbox') || name.includes('microsoft')) return faXbox;
+        if (name.includes('play store') || name.includes('google')) return faGooglePlay;
+        if (name.includes('app store') || name.includes('apple')) return faApple;
+        if (name.includes('meta')) return faMeta;
+        if (name.includes('nintendo') || name.includes('gog')) return faGamepad;
+        return faShoppingCart;
+    }, [primaryStore]);
 
     // Lightbox state
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -179,99 +203,101 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         <BackButton onClick={handleGoBack} className="mb-10 hover:translate-x-[-4px] transition-transform" />
                     </div>
 
-                    <div className="bg-base-200/60 backdrop-blur-2xl border border-surface-700 rounded-[2.5rem] overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] mb-12 relative group/hero animate-in zoom-in-95 duration-700">
-                        <div className="absolute inset-0 bg-gradient-to-br from-accent-teal-dark/5 to-transparent pointer-events-none" />
-
-                        <div className="flex flex-col lg:flex-row relative z-10">
-                            <div className="lg:w-[60%] relative aspect-video bg-base-100 overflow-hidden group-hover/hero:shadow-[0_0_30px_rgba(6,182,212,0.1)] transition-all duration-700">
-                                {trailerInfo ? (
-                                    trailerInfo.type === 'youtube' ? (
-                                        <iframe
-                                            src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0`}
-                                            className="w-full h-full"
-                                            allow="autoplay; encrypted-media; fullscreen"
-                                            allowFullScreen
-                                            title={`${game.title} trailer`}
-                                        />
-                                    ) : (
-                                        <video
-                                            src={trailerInfo.url}
-                                            controls
-                                            autoPlay
-                                            muted
-                                            playsInline
-                                            className="w-full h-full object-cover"
-                                        />
-                                    )
-                                ) : (
-                                    <CoverImage
-                                        src={game.imageHero || game.imageUrl}
-                                        alt={game.title}
-                                        className="absolute inset-0 w-full h-full object-cover scale-105"
-                                        imgClassName="absolute inset-0 w-full h-full object-cover"
+                    <div className="card lg:card-side bg-base-200 shadow-2xl border border-base-content/5 mb-12 animate-in zoom-in-95 duration-700">
+                        <figure className="lg:w-[60%] relative aspect-video bg-base-300">
+                            {trailerInfo ? (
+                                trailerInfo.type === 'youtube' ? (
+                                    <iframe
+                                        src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0`}
+                                        className="w-full h-full"
+                                        allow="autoplay; encrypted-media; fullscreen"
+                                        allowFullScreen
+                                        title={`${game.title} trailer`}
                                     />
-                                )}
-                                <div className="absolute inset-0 pointer-events-none border-r border-surface-700 hidden lg:block" />
+                                ) : (
+                                    <video
+                                        src={trailerInfo.url}
+                                        controls
+                                        autoPlay
+                                        muted
+                                        playsInline
+                                        className="w-full h-full object-cover"
+                                    />
+                                )
+                            ) : (
+                                <CoverImage
+                                    src={game.imageHero || game.imageUrl}
+                                    alt={game.title}
+                                    className="absolute inset-0 w-full h-full object-cover scale-105"
+                                    imgClassName="absolute inset-0 w-full h-full object-cover"
+                                />
+                            )}
+                        </figure>
+
+                        <div className="card-body lg:w-[40%] p-6 lg:p-10 flex flex-col justify-start">
+                            {/* Title & Developer */}
+                            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500">
+                                <h1 className="card-title text-4xl lg:text-5xl font-black text-white leading-tight mb-2 tracking-tight">
+                                    {game.title}
+                                </h1>
+                                <p className="text-primary font-bold tracking-wide uppercase text-xs">
+                                    {game.developers.join(' • ')}
+                                </p>
                             </div>
 
-                            <div className="lg:w-[40%] p-6 lg:p-10 flex flex-col justify-start relative">
-                                {/* Title & Developer */}
-                                <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500">
-                                    <h1 className="text-4xl lg:text-5xl font-black text-white leading-tight mb-2 tracking-tight drop-shadow-2xl">
-                                        {game.title}
-                                    </h1>
-                                    <p className="text-lg text-accent-teal font-bold tracking-wide uppercase text-[12px]">
-                                        {game.developers.join(' • ')}
-                                    </p>
+                            {primaryStore && (
+                                <div className="mb-8 animate-in fade-in slide-in-from-left-4 duration-700 delay-100">
+                                    <a href={primaryStore.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary shadow-xl shadow-primary/20 text-[11px] font-black uppercase tracking-widest px-8 hover:scale-105 transition-transform flex items-center gap-2 w-fit">
+                                        <FontAwesomeIcon icon={primaryStoreIcon} className="text-lg" />
+                                        Jugar / Obtener en {primaryStore.name}
+                                    </a>
                                 </div>
+                            )}
 
-                                {/* Description with improved contrast */}
-                                <div className="relative group animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-                                    <p
-                                        ref={descRef}
-                                        className={`text-base-content/70 mb-8 leading-relaxed text-base lg:text-lg font-medium opacity-90 ${descLineCount > 10 ? 'line-clamp-[10]' : ''}`}
+                            {/* Description with improved contrast */}
+                            <div className="relative group animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
+                                <p
+                                    ref={descRef}
+                                    className={`text-base-content/80 mb-8 leading-relaxed text-base lg:text-lg font-medium opacity-90 ${descLineCount > 10 ? 'line-clamp-[10]' : ''}`}
+                                >
+                                    {game.description}
+                                </p>
+                            </div>
+
+                            {/* Genres */}
+                            <div className="flex flex-wrap gap-2 mb-8 animate-in fade-in duration-1000 delay-300">
+                                {game.genre.map(g => (
+                                    <div key={g} className="badge badge-outline badge-lg uppercase text-xs tracking-wider font-bold opacity-80 hover:opacity-100 transition-opacity">
+                                        {g}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Status & Actions - The new interaction hub */}
+                            <div className="mt-auto flex flex-col items-center sm:items-start gap-6 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500">
+                                <StatusBadge status={game.status} size="md" variant="soft" className="uppercase tracking-widest text-xs font-bold" />
+
+                                <div className="join shadow-xl self-start bg-base-300">
+                                    <button
+                                        onClick={handleToggleLike}
+                                        title={hasLiked ? "Quitar me gusta" : "Me gusta"}
+                                        className="btn join-item btn-ghost border-none hover:bg-base-200"
                                     >
-                                        {game.description}
-                                    </p>
-                                </div>
+                                        <FontAwesomeIcon icon={hasLiked ? faHeartSolid : faHeartReg} className={`text-lg transition-transform ${hasLiked ? "text-error scale-110" : ""}`} />
+                                        <span className="font-bold">{totalHearts}</span>
+                                    </button>
 
-                                {/* Genres */}
-                                <div className="flex flex-wrap gap-2 mb-8 animate-in fade-in duration-1000 delay-300">
-                                    {game.genre.map(g => (
-                                        <span key={g} className="bg-white/5 border border-surface-700 text-base-content/70 text-[11px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full backdrop-blur-md shadow-sm hover:border-accent-teal-dark/50 hover:bg-accent-teal-dark/5 transition-all">
-                                            {g}
-                                        </span>
-                                    ))}
-                                </div>
+                                    <button
+                                        onClick={handleToggleFavorite}
+                                        title={isFavorite ? "Quitar de favoritos" : "Añadir de favoritos"}
+                                        className="btn join-item btn-ghost border-none hover:bg-base-200"
+                                    >
+                                        <FontAwesomeIcon icon={isFavorite ? faStarSolid : faStarReg} className={`text-lg transition-transform ${isFavorite ? "text-warning scale-110" : ""}`} />
+                                    </button>
 
-                                {/* Status & Actions - The new interaction hub */}
-                                <div className="mt-auto flex flex-col items-center sm:items-start gap-6 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500">
-                                    <StatusBadge status={game.status} size="md" variant="soft" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-teal" />
-
-                                    <div className="flex items-stretch bg-base-100/40 backdrop-blur-xl rounded-[1.25rem] border border-surface-700 divide-x divide-surface-700 overflow-hidden shadow-2xl">
-                                        <button
-                                            onClick={handleToggleLike}
-                                            title={hasLiked ? "Quitar me gusta" : "Me gusta"}
-                                            className={`flex items-center gap-3 px-8 py-4 transition-all duration-300 group/like hover:bg-rose-500/5 ${hasLiked ? 'text-rose-400' : 'text-base-content/70 hover:text-white'
-                                                }`}
-                                        >
-                                            <FontAwesomeIcon icon={hasLiked ? faHeartSolid : faHeartReg} className={`transition-transform duration-300 ${hasLiked ? "scale-125 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]" : "group-hover/like:scale-110"}`} />
-                                            <span className="font-black text-sm tracking-tight">{totalHearts}</span>
-                                        </button>
-
-                                        <button
-                                            onClick={handleToggleFavorite}
-                                            title={isFavorite ? "Quitar de favoritos" : "Añadir de favoritos"}
-                                            className={`flex items-center justify-center px-8 py-4 transition-all duration-300 group/fav hover:bg-amber-500/5 ${isFavorite ? 'text-amber-400' : 'text-base-content/70 hover:text-white'
-                                                }`}
-                                        >
-                                            <FontAwesomeIcon icon={isFavorite ? faStarSolid : faStarReg} className={`transition-transform duration-300 ${isFavorite ? "scale-125 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" : "group-hover/fav:scale-110"}`} />
-                                        </button>
-
-                                        <div className="flex items-center gap-3 px-8 py-4 bg-white/[0.02] text-base-content/70">
-                                            <FontAwesomeIcon icon={faEye} className="text-xs opacity-60" />
-                                            <span className="font-black text-sm tracking-widest">{totalVisits}</span>
-                                        </div>
+                                    <div className="btn join-item btn-ghost border-none no-animation pointer-events-none text-base-content/70">
+                                        <FontAwesomeIcon icon={faEye} />
+                                        <span className="font-bold">{totalVisits}</span>
                                     </div>
                                 </div>
                             </div>
@@ -282,30 +308,30 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                         <div className="animate-in slide-in-from-left-8 duration-700 delay-200">
                             <DetailSection title="Información General" icon={faGamepad}>
-                                <div className="space-y-6">
-                                    <div className="flex items-center justify-between py-2 border-b border-surface-700 hover:bg-white/5 px-2 rounded-lg transition-colors group">
-                                        <span className="text-accent-teal text-xs font-black uppercase tracking-widest">Lanzamiento</span>
-                                        <span className="text-base-content font-bold group-hover:text-accent-teal transition-colors">{game.releaseDate}</span>
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between py-3 border-b border-base-content/10 px-2">
+                                        <span className="text-primary text-xs font-bold uppercase tracking-wider">Lanzamiento</span>
+                                        <span className="text-base-content font-bold">{game.releaseDate}</span>
                                     </div>
                                     {game.lastUpdateDate && (
-                                        <div className="flex items-center justify-between py-2 border-b border-surface-700 hover:bg-white/5 px-2 rounded-lg transition-colors group">
-                                            <span className="text-accent-teal text-xs font-black uppercase tracking-widest">Actualización</span>
-                                            <span className="text-base-content font-bold group-hover:text-accent-teal transition-colors">{game.lastUpdateDate}</span>
+                                        <div className="flex items-center justify-between py-3 border-b border-base-content/10 px-2">
+                                            <span className="text-primary text-xs font-bold uppercase tracking-wider">Actualización</span>
+                                            <span className="text-base-content font-bold">{game.lastUpdateDate}</span>
                                         </div>
                                     )}
-                                    <div className="py-2">
-                                        <span className="text-accent-teal text-xs font-black uppercase tracking-widest block mb-4">Plataformas Disponibles</span>
+                                    <div className="py-3 px-2">
+                                        <span className="text-primary text-xs font-bold uppercase tracking-wider block mb-4">Plataformas Disponibles</span>
                                         <div className="flex flex-wrap gap-2">
                                             {game.platform.map(platform => (
-                                                <span key={platform} className="bg-base-100/60 border border-surface-700 text-base-content/70 px-3 py-1 rounded-xl text-[11px] font-bold uppercase tracking-tight">
+                                                <div key={platform} className="badge badge-neutral font-bold uppercase tracking-tight">
                                                     {platform}
-                                                </span>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-between py-2 border-b border-surface-700 hover:bg-white/5 px-2 rounded-lg transition-colors group">
-                                        <span className="text-accent-teal text-xs font-black uppercase tracking-widest">Distribuidores</span>
-                                        <span className="text-base-content font-bold group-hover:text-accent-teal transition-colors">
+                                    <div className="flex items-center justify-between py-3 border-b border-base-content/10 px-2">
+                                        <span className="text-primary text-xs font-bold uppercase tracking-wider">Distribuidores</span>
+                                        <span className="text-base-content font-bold">
                                             {game.publishers.length > 0 ? game.publishers.join(', ') : 'Desarrollo Independiente'}
                                         </span>
                                     </div>
@@ -327,24 +353,24 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                             )}
 
                             <DetailSection title="Características" icon={faCog}>
-                                <div className="space-y-6">
-                                    <div className="flex items-center justify-between py-2 border-b border-surface-700">
-                                        <span className="text-accent-teal text-xs font-black uppercase tracking-widest">Motor</span>
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between py-3 border-b border-base-content/10 px-2">
+                                        <span className="text-primary text-xs font-bold uppercase tracking-wider">Motor</span>
                                         <span className="text-base-content font-bold">{game.engine}</span>
                                     </div>
-                                    <div className="py-2">
-                                        <span className="text-accent-teal text-xs font-black uppercase tracking-widest block mb-4">Idiomas</span>
+                                    <div className="py-3 px-2">
+                                        <span className="text-primary text-xs font-bold uppercase tracking-wider block mb-4">Idiomas</span>
                                         <div className="flex flex-wrap gap-2">
                                             {game.languages.map(language => (
-                                                <span key={language} className="bg-base-100/60 border border-surface-700 text-base-content px-3 py-1 rounded-lg text-[10px] font-black uppercase">
+                                                <div key={language} className="badge badge-neutral font-bold uppercase tracking-tight">
                                                     {language}
-                                                </span>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>
                                     {game.funding && (
-                                        <div className="flex items-center justify-between py-2 border-b border-surface-700">
-                                            <span className="text-accent-teal text-xs font-black uppercase tracking-widest">Financiamiento</span>
+                                        <div className="flex items-center justify-between py-3 border-b border-base-content/10 px-2">
+                                            <span className="text-primary text-xs font-bold uppercase tracking-wider">Financiamiento</span>
                                             <span className="text-base-content font-bold">{game.funding}</span>
                                         </div>
                                     )}
@@ -372,12 +398,10 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                                                 href={link.url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center gap-3 bg-base-200 border border-surface-700 hover:border-accent-teal-dark/50 hover:bg-accent-teal-dark/10 text-white font-black py-4 px-8 rounded-2xl text-[11px] uppercase tracking-[0.2em] transition-all duration-300 shadow-xl group/link"
+                                                className="btn btn-outline hover:btn-primary text-xs uppercase tracking-wider"
                                             >
                                                 {link.name}
-                                                <div className="group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform">
-                                                    <LinkIcon />
-                                                </div>
+                                                <LinkIcon />
                                             </a>
                                         ))}
                                     </div>
@@ -387,38 +411,35 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                     </div>
 
                     {game.screenshots && game.screenshots.length > 0 && (
-                        <div className="bg-base-200/40 backdrop-blur-xl border border-surface-700 rounded-[2.5rem] p-8 lg:p-12 shadow-2xl mt-12 relative overflow-hidden group/gallery animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
-                            <div className="absolute top-0 right-0 w-80 h-80 bg-accent-teal-dark/5 blur-[120px] pointer-events-none group-hover/gallery:bg-accent-teal-dark/10 transition-all duration-1000" />
+                        <div className="card bg-base-200 shadow-xl border border-base-content/5 mt-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
+                            <div className="card-body p-8 lg:p-12">
+                                <h3 className="card-title text-sm uppercase tracking-widest text-base-content mb-8">
+                                    Galería de Capturas
+                                </h3>
 
-                            <h3 className="text-xs font-black text-white mb-10 uppercase tracking-[0.3em] flex items-center gap-4">
-                                <div className="w-12 h-[1px] bg-accent-teal-dark/50 shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
-                                Galería de Capturas
-                            </h3>
-
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
-                                {game.screenshots.map((shot, idx) => (
-                                    <button
-                                        key={`${shot}-${idx}`}
-                                        type="button"
-                                        onClick={() => openLightbox(idx)}
-                                        className="relative group/shot focus:outline-none overflow-hidden rounded-[2rem] border border-surface-700 shadow-2xl transition-all duration-500 hover:scale-[1.05] hover:border-accent-teal-dark/40 hover:shadow-accent-teal-dark/10"
-                                        aria-label={`Abrir captura ${idx + 1}`}
-                                    >
-                                        <img
-                                            src={shot}
-                                            alt={`Screenshot ${idx + 1}`}
-                                            className="w-full h-48 lg:h-60 object-cover cursor-zoom-in transition-transform duration-1000 group-hover/shot:scale-110"
-                                            loading="lazy"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover/shot:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
-                                            <div className="translate-y-4 group-hover/shot:translate-y-0 transition-transform duration-500">
-                                                <span className="text-[10px] font-black text-white uppercase tracking-[0.2em] bg-accent-teal-dark px-3 py-1.5 rounded-lg shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-                                                    Ampliar Captura
-                                                </span>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+                                    {game.screenshots.map((shot, idx) => (
+                                        <button
+                                            key={`${shot}-${idx}`}
+                                            type="button"
+                                            onClick={() => openLightbox(idx)}
+                                            className="relative group/shot focus:outline-none overflow-hidden rounded-box border border-base-content/10 shadow-lg hover:shadow-xl transition-all"
+                                            aria-label={`Abrir captura ${idx + 1}`}
+                                        >
+                                            <img
+                                                src={shot}
+                                                alt={`Screenshot ${idx + 1}`}
+                                                className="w-full h-48 lg:h-60 object-cover cursor-zoom-in transition-transform group-hover/shot:scale-105"
+                                                loading="lazy"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover/shot:opacity-100 transition-all flex flex-col justify-end p-4">
+                                                <div className="badge badge-primary mx-auto">
+                                                    Ampliar
+                                                </div>
                                             </div>
-                                        </div>
-                                    </button>
-                                ))}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     )}

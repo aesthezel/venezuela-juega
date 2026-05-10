@@ -46,6 +46,78 @@ The content is organized as follows:
 .agents/skills/caveman-compress/SKILL.md
 .agents/skills/caveman-review/SKILL.md
 .agents/skills/caveman/SKILL.md
+.agents/skills/daisyui/actions-button.md
+.agents/skills/daisyui/actions-dropdown.md
+.agents/skills/daisyui/actions-modal.md
+.agents/skills/daisyui/actions-speed-dial.md
+.agents/skills/daisyui/actions-swap.md
+.agents/skills/daisyui/actions-theme-controller.md
+.agents/skills/daisyui/base-style.md
+.agents/skills/daisyui/data-display-accordion.md
+.agents/skills/daisyui/data-display-avatar.md
+.agents/skills/daisyui/data-display-badge.md
+.agents/skills/daisyui/data-display-card.md
+.agents/skills/daisyui/data-display-carousel.md
+.agents/skills/daisyui/data-display-chat.md
+.agents/skills/daisyui/data-display-collapse.md
+.agents/skills/daisyui/data-display-countdown.md
+.agents/skills/daisyui/data-display-diff.md
+.agents/skills/daisyui/data-display-hover-3d-card.md
+.agents/skills/daisyui/data-display-hover-gallery.md
+.agents/skills/daisyui/data-display-kbd.md
+.agents/skills/daisyui/data-display-list.md
+.agents/skills/daisyui/data-display-stat.md
+.agents/skills/daisyui/data-display-status.md
+.agents/skills/daisyui/data-display-table.md
+.agents/skills/daisyui/data-display-text-rotate.md
+.agents/skills/daisyui/data-display-timeline.md
+.agents/skills/daisyui/data-input-calendar.md
+.agents/skills/daisyui/data-input-checkbox.md
+.agents/skills/daisyui/data-input-fieldset.md
+.agents/skills/daisyui/data-input-file.md
+.agents/skills/daisyui/data-input-filter.md
+.agents/skills/daisyui/data-input-label.md
+.agents/skills/daisyui/data-input-radio.md
+.agents/skills/daisyui/data-input-range.md
+.agents/skills/daisyui/data-input-rating.md
+.agents/skills/daisyui/data-input-select.md
+.agents/skills/daisyui/data-input-text.md
+.agents/skills/daisyui/data-input-textarea.md
+.agents/skills/daisyui/data-input-toggle.md
+.agents/skills/daisyui/data-input-validator.md
+.agents/skills/daisyui/feedback-alert.md
+.agents/skills/daisyui/feedback-loading.md
+.agents/skills/daisyui/feedback-progress.md
+.agents/skills/daisyui/feedback-radial.md
+.agents/skills/daisyui/feedback-skeleton.md
+.agents/skills/daisyui/feedback-toast.md
+.agents/skills/daisyui/feedback-tooltip.md
+.agents/skills/daisyui/layout-artboard.md
+.agents/skills/daisyui/layout-divider.md
+.agents/skills/daisyui/layout-drawer.md
+.agents/skills/daisyui/layout-footer.md
+.agents/skills/daisyui/layout-hero.md
+.agents/skills/daisyui/layout-indicator.md
+.agents/skills/daisyui/layout-join.md
+.agents/skills/daisyui/layout-mask.md
+.agents/skills/daisyui/layout-stack.md
+.agents/skills/daisyui/mockup-browser.md
+.agents/skills/daisyui/mockup-code.md
+.agents/skills/daisyui/mockup-phone.md
+.agents/skills/daisyui/mockup-window.md
+.agents/skills/daisyui/navigation-bottom-nav.md
+.agents/skills/daisyui/navigation-breadcrumbs.md
+.agents/skills/daisyui/navigation-dock.md
+.agents/skills/daisyui/navigation-link.md
+.agents/skills/daisyui/navigation-menu.md
+.agents/skills/daisyui/navigation-navbar.md
+.agents/skills/daisyui/navigation-pagination.md
+.agents/skills/daisyui/navigation-steps.md
+.agents/skills/daisyui/navigation-tab.md
+.agents/skills/daisyui/SKILL.md
+.agents/skills/daisyui/theme-generator.md
+.agents/skills/daisyui/themes.md
+.agents/skills/daisyui/utilities-variables.md
 .github/copilot-instructions.md
 .junie/guidelines.md
 AGENTS.md
@@ -351,303 +423,6 @@ https://docs.google.com/spreadsheets/d/1tVBCGdGaTSTTikMKWFVT4Lzmq71TRikWSzIjiIR1
 If you need to change the data source, update this URL in the `App.tsx` file.
 `````
 
-## File: docs/frontend/design-tokens.md
-`````markdown
-# Guía de Design Tokens — Venezuela Juega
-
-> Referencia práctica para mantener y extender el sistema de tokens de diseño del proyecto.
-
-## Arquitectura de Tokens
-
-El sistema usa **3 capas** (Tailwind v4 CSS-first):
-
-```
-@theme { Primitivos }      →  Valores raw de color, tipografía
-:root  { Semánticos }       →  Variables CSS con propósito (glass, layout)
-Componentes (clases TW)     →  bg-surface-900, text-brand-gold, etc.
-```
-
-### Regla de Oro
-
-> **Nunca** sobrescribas nombres de paleta de Tailwind (`slate-*`, `cyan-*`, `blue-*`).  
-> Usa nombres **semánticos propios**: `surface-*`, `brand-*`, `accent-*`.
-
----
-
-## Inventario de Tokens Actuales
-
-### Surface (escala oscura principal)
-
-| Token | Hex | Uso típico |
-|-------|-----|------------|
-| `surface-950` | `#0d0a11` | Fondo más profundo, body |
-| `surface-900` | `#18131e` | Fondos de sección, sidebar |
-| `surface-800` | `#221a2a` | Cards, inputs, contenedores |
-| `surface-700` | `#2c1b2e` | Bordes, divisores |
-| `surface-600` | `#3b2a3d` | Bordes secundarios |
-| `surface-500` | `#5b4a5d` | Texto deshabilitado |
-| `surface-400` | `#9c8a9d` | Texto secundario, iconos |
-| `surface-300` | `#d4cfd6` | Texto body |
-| `surface-200` | `#eae7ec` | Texto principal |
-| `surface-100` | `#fff4e0` | Texto destacado (warm) |
-| `surface-50`  | `#ffffff` | Blanco puro |
-
-### Brand (bandera venezolana)
-
-| Token | Hex | Uso |
-|-------|-----|-----|
-| `brand-gold` | `#f2b63d` | Amarillo principal, highlights |
-| `brand-blue` | `#457cd6` | Azul principal, links |
-| `brand-red` | `#e34262` | Rojo principal, errores |
-| `brand-red-dark` | `#94353d` | Rojo oscuro, estados críticos |
-| `brand-warm-white` | `#fff4e0` | Blanco cálido |
-
-### Accent (paleta suplementaria)
-
-| Token | Hex | Uso |
-|-------|-----|-----|
-| `accent-teal` | `#8fcccb` | Teal claro, highlights interactivos |
-| `accent-teal-dark` | `#449489` | Teal primario, botones CTA |
-| `accent-teal-deep` | `#285763` | Teal oscuro, sombras |
-| `accent-indigo` | `#4b3b9c` | Violeta, scrollbar hover |
-| `accent-indigo-dark` | `#2f2b5c` | Violeta oscuro |
-| `accent-lime` | `#b4ba47` | Lima/verde claro |
-| `accent-lime-dark` | `#6d8c32` | Lima oscuro |
-| `accent-orange` | `#d46e33` | Naranja |
-| `accent-mauve` | `#9c656c` | Mauve/rosado |
-| `accent-mauve-dark` | `#57253b` | Mauve oscuro |
-| `accent-mauve-deep` | `#2c1b2e` | Mauve profundo |
-
-### Status (estados de juegos)
-
-| Token | Hex | Estado |
-|-------|-----|--------|
-| `status-released` | `#16a34a` | Lanzado |
-| `status-in-development` | `#f2b63d` | En desarrollo |
-| `status-on-hold` | `#71717a` | En pausa |
-| `status-canceled` | `#94353d` | Cancelado |
-| `status-demo` | `#4ade80` | Demo lanzado |
-| `status-prototype` | `#e4e4e7` | Prototipo |
-| `status-lost` | `#fecaca` | Media perdida |
-| `status-early` | `#449489` | Acceso anticipado |
-| `status-recovered` | `#457cd6` | Recuperado |
-| `status-unknown` | `#18181b` | Desconocido |
-
-### Store (marcas de tiendas)
-
-| Token | Hex | Tienda |
-|-------|-----|--------|
-| `store-steam` / `store-steam-hover` | `#172337` / `#2a475e` | Steam |
-| `store-itch` / `store-itch-hover` | `#fa5c5c` / `#ff7f7f` | Itch.io |
-| `store-nintendo` / `store-nintendo-hover` | `#e60012` / `#ff334f` | Nintendo |
-| `store-playstation` / `store-playstation-hover` | `#0070d1` / `#0084f7` | PlayStation |
-| `store-xbox` / `store-xbox-hover` | `#107b10` / `#00bfff` | Xbox |
-| `store-google-play` / `store-google-play-hover` | `#00a185` / `#00c9a6` | Play Store |
-| `store-apple` / `store-apple-hover` | `#000000` / `#333333` | App Store |
-| `store-meta` / `store-meta-hover` | `#0078ff` / `#3391ff` | Meta |
-| `store-gog` / `store-gog-hover` | `#c99aff` / `#3391ff` | GOG |
-
----
-
-## Cómo Agregar Nuevos Tokens
-
-### 1. Agregar un color primitivo
-
-En `src/styles/global.css`, dentro del bloque `@theme`:
-
-```css
-@theme {
-  /* ─── Tu nueva categoría ─── */
-  --color-mi-nuevo-token: #hexcolor;
-}
-```
-
-### 2. Usarlo en componentes
-
-```tsx
-// Tailwind lo genera automáticamente como clase
-<div className="bg-mi-nuevo-token text-mi-nuevo-token">
-```
-
-### 3. Si es un token semántico (con propósito)
-
-Agréguelo en `:root` como variable CSS:
-
-```css
-:root {
-  --mi-variable: var(--color-mi-nuevo-token);
-}
-```
-
----
-
-## Convenciones de Nombres
-
-| Prefijo | Cuándo usarlo | Ejemplo |
-|---------|--------------|---------|
-| `surface-` | Escala de grises/oscuros del fondo | `surface-800` |
-| `brand-` | Colores de identidad de marca | `brand-gold` |
-| `accent-` | Colores decorativos/highlight | `accent-teal-dark` |
-| `status-` | Estados de juegos | `status-released` |
-| `store-` | Colores de marca de tiendas | `store-steam` |
-
-### Reglas:
-1. **Usar sufijos descriptivos** en vez de números arbitrarios: `-dark`, `-deep`, `-hover`
-2. **Agrupar en familias**: `accent-teal`, `accent-teal-dark`, `accent-teal-deep`
-3. **No sobrescribir paletas de Tailwind**: nunca `--color-slate-*` ni `--color-cyan-*`
-4. **Token para cada uso**: no reutilizar el mismo hex en múltiples tokens a menos que sea intencional
-
----
-
-## Tokens Semánticos en `:root`
-
-Tokens de mayor nivel para efectos y layout:
-
-```css
-:root {
-  --header-height: 80px;
-  --primary-glow: conic-gradient(...);
-  
-  /* Glass morphism */
-  --glass-bg: rgba(24, 19, 30, 0.4);
-  --glass-border: rgba(255, 244, 224, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --glass-card-bg: rgba(255, 255, 255, 0.03);
-  --glass-card-border: rgba(255, 255, 255, 0.05);
-}
-```
-
----
-
-## Patrones Anti (NO hacer)
-
-| ❌ Incorrecto | ✅ Correcto |
-|---|---|
-| `bg-[#172337]` | `bg-store-steam` |
-| `text-[#f2b63d]` | `text-brand-gold` |
-| `--color-slate-900: #custom` | `--color-surface-900: #custom` |
-| `bg-cyan-500` (overriding cyan) | `bg-accent-teal-dark` |
-| `rgba(6, 182, 212, 0.3)` inline | Crear `--glass-*` token en `:root` |
-
----
-
-## Checklist para Nuevos Componentes
-
-- [ ] ¿Usas solo tokens de `@theme` para colores? (nunca hex raw)
-- [ ] ¿Las sombras con `rgba()` están en `:root` como variables?
-- [ ] ¿Los nombres de clase usan `surface-*`, `brand-*`, `accent-*`?
-- [ ] ¿Los colores de hover/active usan tokens (ej. `hover:bg-store-steam-hover`)?
-- [ ] ¿No se sobrescriben nombres de Tailwind por defecto?
-
----
-
-## Próximos Pasos de Estandarización
-
-### Pendientes de tokenizar:
-
-1. **Sombras con rgba en inline styles**  
-   Componentes como `GameCard.tsx`, `GameDetailPage.tsx`, `Modal.tsx` usan `shadow-[0_0_12px_rgba(...)]`. Crear tokens:
-   ```css
-   @theme {
-     --shadow-glow-teal: 0 0 12px rgba(68, 148, 137, 0.3);
-     --shadow-glow-red: 0 0 8px rgba(244, 63, 94, 0.5);
-   }
-   ```
-
-2. **CalendarPage (FullCalendar overrides)**  
-   ~30 valores `rgba(6, 182, 212, ...)` en un bloque `<style>` inline. Migrar a variables CSS.
-
-3. **GameJamPage `gray-*` references**  
-   ~30 usos de `text-gray-300/400` que podrían estandarizarse a `text-surface-300/400`.
-
-4. **CategoryPresets `accentFrom`/`accentTo`**  
-   Los colores en `categoryPresets.ts` son hex raw dinámicos. Considerar crear un mapping a los tokens CSS.
-
-5. **Colores de gradiente dinámicos**  
-   `GameJamsPage.tsx` genera gradientes con hex dinámico desde datos. No tokenizable directamente, pero documentar como excepción aceptada.
-
----
-
-## Referencia Rápida: Migración de Nombres
-
-| Antes (hijacked) | Después (token propio) |
-|---|---|
-| `slate-950` | `surface-950` |
-| `slate-900` → `900` | `surface-900` → `900` |
-| `cyan-400` | `accent-teal` |
-| `cyan-500` | `accent-teal-dark` |
-| `yellow-300/400/500` | `brand-gold` |
-| `blue-400/500/600` | `brand-blue` |
-| `red-400/500` | `brand-red` |
-| `red-600` | `brand-red-dark` |
-| `indigo-400/500` | `accent-indigo` |
-| `emerald-300/400` | `accent-lime` |
-| `orange-300/400/500` | `accent-orange` |
-| `purple-300/400` | `accent-mauve` |
-`````
-
-## File: src/App.tsx
-`````typescript
-import { useState, useMemo } from 'preact/hooks';
-import { Router, route } from 'preact-router';
-import { Game, ViewMode } from "@/src/types";
-import { useGamesData, useMetadata } from '@/src/hooks';
-import { FireflyProvider } from '@/src/hooks/FireflyContext';
-import { generateSlug, ensureUniqueSlug } from '@/src/utils';
-import { Header, Modal, LoadingSpinner, Footer, ScrollToTop, FireflyOverlay } from '@/src/components';
-import {
-    ChartsPage,
-    AddGamePage,
-    AboutPage,
-    CalendarPage,
-    GameDetailPage,
-    CatalogPage,
-    GameJamGalleryPage,
-    GameJamsPage,
-    NotFoundPage,
-    Redirect
-} from '@/src/pages';
-⋮----
-import { SpacetimeDBProvider } from '@/src/spacetimedb/SpacetimeDBProvider';
-⋮----
-const handleFilterChange = (category: string, value: string) =>
-⋮----
-const handleRouteChange = (e: any) =>
-⋮----
-const handleOpenModal = (game: Game)
-const handleCloseModal = ()
-const navigateToCatalog = ()
-`````
-
-## File: src/components/BackButton.tsx
-`````typescript
-import { ComponentChildren, VNode } from 'preact';
-import { JSX } from 'preact/jsx-runtime';
-import { ArrowLeftIcon } from '@/src/components/icons';
-⋮----
-type Size = 'sm' | 'md' | 'lg';
-⋮----
-interface BackButtonProps extends Omit<JSX.HTMLAttributes<HTMLButtonElement>, 'class' | 'className'> {
-  onClick: () => void;
-  children?: ComponentChildren;
-  className?: string;
-  icon?: VNode;
-  size?: Size;
-}
-⋮----
-const BackButton = (
-`````
-
-## File: src/components/GameCounter.tsx
-`````typescript
-interface GameCounterProps {
-    filteredCount: number;
-    totalCount: number;
-}
-⋮----
-const GameCounter = (
-`````
-
 ## File: src/components/icons/ArrowLeftIcon.tsx
 `````typescript
 const ArrowLeftIcon = () => (
@@ -759,24 +534,6 @@ import { GameCard, Header, Footer, SearchBar } from '@/src/components';
 import { ArrowLeftIcon, CloseIcon } from '@/src/components/icons';
 `````
 
-## File: src/components/ViewModeToggle.tsx
-`````typescript
-import { h } from 'preact';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGrip, faList } from '@fortawesome/free-solid-svg-icons';
-import { ViewMode } from '@/src/types';
-⋮----
-interface ViewModeToggleProps {
-  mode: ViewMode;
-  onChange: (mode: ViewMode) => void;
-  className?: string;
-}
-⋮----
-const ViewModeToggle = (
-⋮----
-onClick=
-`````
-
 ## File: src/hooks/README.md
 `````markdown
 # Directorio de hooks
@@ -801,18 +558,6 @@ import { useDebounce } from '../hooks';
 import { useState, useEffect } from 'preact/hooks';
 ⋮----
 export const useDebounce = <T>(value: T, delay: number): T =>
-`````
-
-## File: src/index.tsx
-`````typescript
-import { render } from 'preact';
-import App from './App';
-⋮----
-// Normalize trailing slash (avoid blank page when route doesn't match '/path/' vs '/path')
-⋮----
-const normalized = pathname.replace(/\/+$/, ''); // remove trailing slashes
-⋮----
-// No-op: normalization is best-effort
 `````
 
 ## File: src/pages/README.md
@@ -1630,6 +1375,3753 @@ Example — destructive op:
 ## Boundaries
 
 Code/commits/PRs: write normal. "stop caveman" or "normal mode": revert. Level persist until changed or session end.
+`````
+
+## File: .agents/skills/daisyui/actions-button.md
+`````markdown
+# DaisyUI Actions: Buttons
+
+Comprehensive guide for `btn` classes in daisyUI 5.
+
+## Basic Patterns
+Buttons come in various colors and styles. Always prefer semantic modifiers.
+
+```html
+<!-- Colors -->
+<button class="btn btn-primary">Primary</button>
+<button class="btn btn-secondary">Secondary</button>
+<button class="btn btn-accent">Accent</button>
+<button class="btn btn-info">Info</button>
+<button class="btn btn-success">Success</button>
+<button class="btn btn-warning">Warning</button>
+<button class="btn btn-error">Error</button>
+
+<!-- Styles -->
+<button class="btn btn-soft">Soft (Light background)</button>
+<button class="btn btn-outline">Outline</button>
+<button class="btn btn-ghost">Ghost (No background)</button>
+<button class="btn btn-dash">Dashed Border</button>
+<button class="btn btn-link">Link Style</button>
+```
+
+## Pattern: Sizing & Shapes
+Use size modifiers for consistent scaling across devices.
+
+```html
+<!-- Sizes -->
+<button class="btn btn-xs">Extra Small</button>
+<button class="btn btn-sm">Small</button>
+<button class="btn btn-md">Medium (Default)</button>
+<button class="btn btn-lg">Large</button>
+<button class="btn btn-xl">Extra Large</button>
+
+<!-- Shapes -->
+<button class="btn btn-square">
+  <svg>...</svg>
+</button>
+<button class="btn btn-circle">
+  <svg>...</svg>
+</button>
+<button class="btn btn-wide">Wide Button</button>
+<button class="btn btn-block">Full Width</button>
+```
+
+## Good vs. Bad Buttons
+```html
+<!-- Good: Semantic and accessible -->
+<button class="btn btn-primary btn-sm" aria-label="Submit Form">
+  Submit
+</button>
+
+<!-- Bad: Over-relying on Tailwind utilities -->
+<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
+  Manual Button (Harder to theme)
+</button>
+```
+
+## Quick Reference: State Classes
+- `btn-disabled` / `disabled`: Applies grayed out style and removes pointer events.
+- `btn-active`: Forces active/pressed state visual.
+- `loading`: (Handled via feedback-loading.md) Can be added to buttons.
+`````
+
+## File: .agents/skills/daisyui/actions-dropdown.md
+`````markdown
+# Actions: Dropdown
+
+DaisyUI dropdowns use HTML `<details>` or custom `.dropdown` classes to display a list of actions or links.
+
+## Hover & Click Triggers
+
+### Good Example: Standard Click Dropdown
+```html
+<div class="dropdown">
+  <div tabindex="0" role="button" class="btn m-1">Click Me</div>
+  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+    <li><a>Item 1</a></li>
+    <li><a>Item 2</a></li>
+  </ul>
+</div>
+```
+*Note: `z-[1]` or `z-1` in Tailwind 4 is needed so the dropdown floats above content.*
+
+### Good Example: Hover Dropdown
+```html
+<div class="dropdown dropdown-hover">
+  <div tabindex="0" role="button" class="btn m-1">Hover Me</div>
+  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+    <li><a>Item 1</a></li>
+  </ul>
+</div>
+```
+
+## Positioning
+
+Use directional modifier classes to change where the menu appears.
+
+### Good Example: Dropdown Directions
+```html
+<!-- Top -->
+<div class="dropdown dropdown-top">...</div>
+<!-- Left -->
+<div class="dropdown dropdown-left">...</div>
+<!-- Right -->
+<div class="dropdown dropdown-right">...</div>
+<!-- End (RTL Support) -->
+<div class="dropdown dropdown-end">...</div>
+```
+
+### Bad Example: Custom Positioning
+```html
+<!-- Bad: Using arbitrary margins instead of built-in directional classes -->
+<div class="dropdown">
+  <div class="btn">Click</div>
+  <ul class="dropdown-content mt-[-200px]">...</ul>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/actions-modal.md
+`````markdown
+# Actions: Modal
+
+DaisyUI 5 recommends using the native HTML `<dialog>` element for modals to ensure accessibility, focus trapping, and native backdrop support.
+
+## Standard Modal
+
+### Good Example: Native Dialog Modal
+```html
+<!-- Trigger -->
+<button class="btn" onclick="my_modal_1.showModal()">Open Modal</button>
+
+<!-- Modal Content -->
+<dialog id="my_modal_1" class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Hello!</h3>
+    <p class="py-4">Press ESC key or click the button below to close</p>
+    <div class="modal-action">
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+```
+
+## Click Outside to Close
+
+### Good Example: Backdrop Close
+```html
+<dialog id="my_modal_2" class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Close via backdrop</h3>
+  </div>
+  <!-- Clicking this form area closes the dialog -->
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+```
+
+### Bad Example: Checkbox Hack (Outdated)
+```html
+<!-- Bad: While DaisyUI supports this, the <dialog> approach is more accessible and semantic. -->
+<input type="checkbox" id="my-modal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box">...</div>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/actions-speed-dial.md
+`````markdown
+# DaisyUI Actions: Speed Dial
+
+A fixed-position floating action button that reveals secondary actions when clicked or hovered.
+
+## Basic Usage
+Speed Dial uses the `dropdown` class combined with `fixed` and `btn-circle` for a classic floating action button feel.
+
+```html
+<div class="dropdown dropdown-top dropdown-end fixed right-6 bottom-6">
+  <div tabindex="0" role="button" class="btn btn-primary btn-circle btn-lg shadow-xl">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>
+  </div>
+  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-2xl mb-4">
+    <li><a><svg>...</svg> New Document</a></li>
+    <li><a><svg>...</svg> Upload Photo</a></li>
+    <li><a><svg>...</svg> Share Link</a></li>
+  </ul>
+</div>
+```
+
+## Good vs. Bad Speed Dial
+```html
+<!-- Good: Semantic and properly positioned -->
+<div class="dropdown dropdown-top fixed bottom-8 right-8">
+  <button class="btn btn-accent btn-circle shadow-lg" aria-label="Quick Actions">
+    +
+  </button>
+  <ul class="dropdown-content menu p-2 shadow bg-base-100 rounded-box mb-2">
+    <li><a>Action 1</a></li>
+  </ul>
+</div>
+
+<!-- Bad: Manual absolute positioning and z-index hacks -->
+<div class="absolute bottom-0 right-0 z-50 p-4">
+  <button class="rounded-full h-12 w-12 bg-blue-500">
+    +
+  </button>
+</div>
+```
+
+## Variants
+- `dropdown-top`: Opens upwards (common for FABs).
+- `dropdown-left` / `dropdown-right`: Horizontal speed dials.
+- `btn-circle`: Essential for the rounded floating action button look.
+`````
+
+## File: .agents/skills/daisyui/actions-swap.md
+`````markdown
+# Actions: Swap
+
+The `swap` class allows toggling between two different elements (usually icons, text, or SVGs) using a hidden checkbox or dynamically via a class toggle.
+
+## Checkbox Trigger
+
+### Good Example: Icon Swap (Active/Inactive)
+```html
+<label class="swap swap-rotate">
+  <!-- This hidden checkbox controls the state -->
+  <input type="checkbox" />
+
+  <!-- Sun icon (shown when unchecked) -->
+  <svg class="swap-off h-10 w-10 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <!-- SVG Path -->
+  </svg>
+
+  <!-- Moon icon (shown when checked) -->
+  <svg class="swap-on h-10 w-10 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <!-- SVG Path -->
+  </svg>
+</label>
+```
+
+## Animation Variants
+
+Use modifier classes to change the transition effect.
+
+- `swap-rotate`: Rotates the elements during the swap.
+- `swap-flip`: Flips the elements 3D style.
+
+### Good Example: Flip Animation with Text
+```html
+<label class="swap swap-flip text-9xl">
+  <input type="checkbox" />
+  <div class="swap-on">😈</div>
+  <div class="swap-off">😇</div>
+</label>
+```
+
+### Bad Example: Manual State Management for Pure UI Swaps
+```html
+<!-- Bad: Using JS for a purely visual toggle when CSS can handle it via the 'swap' class -->
+<div onclick="toggleIcon()">
+  <span id="icon-a">A</span>
+  <span id="icon-b" class="hidden">B</span>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/actions-theme-controller.md
+`````markdown
+# DaisyUI Actions: Theme Controller
+
+A toggle, radio, or checkbox component that automatically switches themes for the entire document or a specific container.
+
+## Basic Usage
+The `theme-controller` class is used on an input element. It listens for changes and applies the theme specified in the `value` attribute.
+
+```html
+<!-- Toggle style -->
+<input type="checkbox" value="synthwave" class="toggle theme-controller" />
+
+<!-- Swap style (using icons) -->
+<label class="swap swap-rotate">
+  <input type="checkbox" class="theme-controller" value="light" />
+  <!-- sun icon -->
+  <svg class="swap-on ...">...</svg>
+  <!-- moon icon -->
+  <svg class="swap-off ...">...</svg>
+</label>
+```
+
+## Pattern: Radio Theme Selection
+Use radios with `theme-controller` to provide multiple theme choices.
+
+```html
+<div class="form-control">
+  <label class="label cursor-pointer gap-4">
+    <span class="label-text">Default</span>
+    <input type="radio" name="theme-buttons" class="radio theme-controller" value="default"/>
+  </label>
+</div>
+<div class="form-control">
+  <label class="label cursor-pointer gap-4">
+    <span class="label-text">Retro</span>
+    <input type="radio" name="theme-buttons" class="radio theme-controller" value="retro"/>
+  </label>
+</div>
+<div class="form-control">
+  <label class="label cursor-pointer gap-4">
+    <span class="label-text">Cyberpunk</span>
+    <input type="radio" name="theme-buttons" class="radio theme-controller" value="cyberpunk"/>
+  </label>
+</div>
+```
+
+## Good vs. Bad Theme Switching
+```html
+<!-- Good: Declarative theme control -->
+<input type="checkbox" value="dark" class="checkbox theme-controller" />
+
+<!-- Bad: Manual JS theme toggling with classList manipulation -->
+<button onclick="document.documentElement.setAttribute('data-theme', 'dark')">
+  Dark Mode (Requires extra JS boilerplate)
+</button>
+```
+`````
+
+## File: .agents/skills/daisyui/base-style.md
+`````markdown
+# Base Style
+
+DaisyUI 5 relies on Tailwind CSS 4 and OKLCH color spaces. Base styles are automatically applied to standard HTML elements when using the plugin, but can be customized heavily using CSS variables.
+
+## Semantic Colors and OKLCH
+
+Colors in DaisyUI 5 are defined using OKLCH to ensure perceptual uniformity.
+
+### Good Example: Overriding Colors in CSS
+```css
+/* Customizing base colors in Tailwind 4 / DaisyUI 5 */
+@theme {
+  --color-primary: oklch(0.65 0.25 250);
+  --color-secondary: oklch(0.7 0.15 300);
+  --color-base-100: oklch(0.98 0.01 200);
+  --color-base-content: oklch(0.2 0.05 200);
+}
+```
+
+### Good Example: Using Semantic Variables in Utility Classes
+```html
+<!-- Use semantic names directly, mapping to standard Tailwind 4 colors -->
+<div class="bg-base-100 text-base-content">
+  <h1 class="text-primary">Welcome</h1>
+  <p class="text-secondary">This text uses the secondary color.</p>
+</div>
+```
+
+### Bad Example: Hardcoding Hex Codes
+```html
+<!-- Bad: Breaks theme support and OKLCH perceptual lightness -->
+<div class="bg-[#ffffff] text-[#333333]">
+  <h1 class="text-[#3b82f6]">Welcome</h1>
+</div>
+```
+
+## Key Variables
+- `base-100`: Main background color.
+- `base-200`, `base-300`: Slightly darker variants for cards or panels.
+- `base-content`: Text color for `base-*` backgrounds.
+- `primary`, `secondary`, `accent`, `neutral`: Brand colors.
+- `info`, `success`, `warning`, `error`: State colors.
+`````
+
+## File: .agents/skills/daisyui/data-display-accordion.md
+`````markdown
+# Data Display: Accordion
+
+DaisyUI uses the `.collapse` class with radio inputs to create a mutually exclusive accordion.
+
+## Mutually Exclusive Accordion (Single Open)
+
+### Good Example: Radio Input Accordion
+```html
+<div class="join join-vertical w-full">
+  <div class="collapse collapse-arrow join-item border-base-300 border">
+    <input type="radio" name="my-accordion-4" checked="checked" /> 
+    <div class="collapse-title text-xl font-medium">Click to open this one and close others</div>
+    <div class="collapse-content"> 
+      <p>Content for the first section.</p>
+    </div>
+  </div>
+  <div class="collapse collapse-arrow join-item border-base-300 border">
+    <input type="radio" name="my-accordion-4" /> 
+    <div class="collapse-title text-xl font-medium">Click to open this one and close others</div>
+    <div class="collapse-content"> 
+      <p>Content for the second section.</p>
+    </div>
+  </div>
+</div>
+```
+*Note: Using `name="my-accordion-4"` on all radio inputs groups them, ensuring only one can be checked at a time.*
+
+## Multiple Open Accordion (Independent)
+
+If you want multiple sections to be open simultaneously, use `type="checkbox"` or the HTML `<details>` element instead of radio buttons. See the `collapse` component for more details.
+
+### Bad Example: Missing Name Attribute
+```html
+<!-- Bad: Missing 'name' attribute means they act as independent checkboxes, breaking the accordion behavior. -->
+<div class="collapse">
+  <input type="radio" />
+  ...
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-avatar.md
+`````markdown
+# DaisyUI Data Display: Avatar
+
+A versatile component for displaying user profile pictures, initials, or status indicators.
+
+## Basic Usage
+The `avatar` class wraps an image or text element.
+
+```html
+<div class="avatar">
+  <div class="w-24 rounded">
+    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Avatar" />
+  </div>
+</div>
+
+<!-- With placeholder (initials) -->
+<div class="avatar placeholder">
+  <div class="bg-neutral text-neutral-content w-12 rounded-full">
+    <span>JS</span>
+  </div>
+</div>
+```
+
+## Pattern: Sizes & Shapes
+Avatars can be shaped using standard Tailwind border-radius classes inside the `avatar` wrapper.
+
+```html
+<!-- Rounded-full (Circle) -->
+<div class="avatar">
+  <div class="w-16 rounded-full">
+    <img src="..." />
+  </div>
+</div>
+
+<!-- Mask Squircle -->
+<div class="avatar">
+  <div class="mask mask-squircle w-20">
+    <img src="..." />
+  </div>
+</div>
+```
+
+## Good vs. Bad Avatar
+```html
+<!-- Good: Semantic avatar container with proper sizing -->
+<div class="avatar">
+  <div class="w-12 h-12 rounded-full">
+    <img src="user.jpg" alt="User profile" />
+  </div>
+</div>
+
+<!-- Bad: Manual image styling without container -->
+<img src="user.jpg" class="rounded-full w-12 h-12 object-cover border-2 border-white" />
+```
+
+## Quick Reference
+- `avatar-online`: Adds a green status indicator.
+- `avatar-offline`: Adds a gray status indicator.
+- `avatar-group`: Wrapper for multiple overlapping avatars.
+`````
+
+## File: .agents/skills/daisyui/data-display-badge.md
+`````markdown
+# Data Display: Badge
+
+Badges are used to highlight an item's status for quick recognition.
+
+## Colors and Variants
+
+DaisyUI provides semantic colors and stylistic variants for badges.
+
+### Good Example: Color Badges
+```html
+<div class="badge">neutral</div>
+<div class="badge badge-primary">primary</div>
+<div class="badge badge-secondary">secondary</div>
+<div class="badge badge-accent">accent</div>
+```
+
+### Good Example: Variant Badges
+```html
+<div class="badge badge-outline">Outline</div>
+<div class="badge badge-ghost">Ghost</div>
+<div class="badge badge-soft">Soft</div> <!-- New in DaisyUI 5 -->
+```
+
+## Sizes
+
+### Good Example: Sizing Badges
+```html
+<div class="badge badge-lg">Large</div>
+<div class="badge badge-md">Medium</div>
+<div class="badge badge-sm">Small</div>
+<div class="badge badge-xs">Extra Small</div>
+```
+
+## Common Use Case: Badges in Buttons
+
+### Good Example: Badge in a Button
+```html
+<button class="btn">
+  Inbox
+  <div class="badge badge-secondary">+99</div>
+</button>
+```
+
+### Bad Example: Arbitrary Styling
+```html
+<!-- Bad: Ignoring built-in badge sizes and variants -->
+<div class="badge bg-red-500 border-2 border-dashed text-[10px] p-4">Custom</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-card.md
+`````markdown
+# Data Display: Card
+
+Cards provide a flexible and extensible content container with multiple variants and options.
+
+## Anatomy of a Card
+
+A card typically contains a figure (image) and a body, which further contains the title, content, and actions.
+
+### Good Example: Standard Card
+```html
+<div class="card bg-base-100 w-96 shadow-sm">
+  <figure>
+    <img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp" alt="Shoes" />
+  </figure>
+  <div class="card-body">
+    <h2 class="card-title">Shoes!</h2>
+    <p>If a dog chews shoes whose shoes does he choose?</p>
+    <div class="card-actions justify-end">
+      <button class="btn btn-primary">Buy Now</button>
+    </div>
+  </div>
+</div>
+```
+
+## Variants
+
+### Good Example: Bordered Card
+```html
+<!-- Add border and remove shadow for a flatter look -->
+<div class="card bg-base-100 w-96 border-base-300 border">
+  <div class="card-body">...</div>
+</div>
+```
+
+### Good Example: Image Full (Background Image)
+```html
+<!-- The image becomes a darkened background behind the text -->
+<div class="card image-full bg-base-100 w-96 shadow-sm">
+  <figure><img src="..." alt="Shoes" /></figure>
+  <div class="card-body">...</div>
+</div>
+```
+
+### Bad Example: Unstructured Content
+```html
+<!-- Bad: Missing card-body, text will touch the edges -->
+<div class="card bg-base-100 w-96 shadow-sm">
+  <h2>Shoes!</h2>
+  <button class="btn">Buy</button>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-carousel.md
+`````markdown
+# Data Display: Carousel
+
+Carousels display multiple items in a scrollable horizontal area. They utilize native CSS scroll snapping.
+
+## Basic Carousel
+
+### Good Example: Standard Scroll Carousel
+```html
+<div class="carousel rounded-box">
+  <div class="carousel-item">
+    <img src="https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.webp" alt="Burger" />
+  </div> 
+  <div class="carousel-item">
+    <img src="https://img.daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.webp" alt="Burger" />
+  </div>
+</div>
+```
+
+## Carousels with Navigation
+
+### Good Example: Button Navigation
+```html
+<div class="carousel w-full">
+  <div id="item1" class="carousel-item w-full">
+    <img src="..." class="w-full" />
+  </div> 
+  <div id="item2" class="carousel-item w-full">
+    <img src="..." class="w-full" />
+  </div>
+</div> 
+<div class="flex w-full justify-center gap-2 py-2">
+  <a href="#item1" class="btn btn-xs">1</a> 
+  <a href="#item2" class="btn btn-xs">2</a>
+</div>
+```
+
+### Good Example: Full-width Items with Prev/Next Buttons
+```html
+<div class="carousel w-full">
+  <div id="slide1" class="carousel-item relative w-full">
+    <img src="..." class="w-full" />
+    <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+      <a href="#slide4" class="btn btn-circle">❮</a> 
+      <a href="#slide2" class="btn btn-circle">❯</a>
+    </div>
+  </div>
+</div>
+```
+
+### Bad Example: JS Over-engineering
+```html
+<!-- Bad: Bringing in heavy JS libraries for basic sliders when CSS scroll snap (DaisyUI's approach) works natively and performantly. -->
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-chat.md
+`````markdown
+# Data Display: Chat
+
+Chat components style messaging interfaces with avatars, timestamps, and styled bubbles.
+
+## Chat Directions
+
+Use `chat-start` (left) or `chat-end` (right) to determine the alignment of the message.
+
+### Good Example: Chat Start & End
+```html
+<div class="chat chat-start">
+  <div class="chat-bubble">It's over Anakin, I have the high ground.</div>
+</div>
+<div class="chat chat-end">
+  <div class="chat-bubble">You underestimate my power!</div>
+</div>
+```
+
+## Advanced Anatomy
+
+A complete chat bubble includes headers, footers, and avatars.
+
+### Good Example: Complete Chat Bubble
+```html
+<div class="chat chat-start">
+  <div class="chat-image avatar">
+    <div class="w-10 rounded-full">
+      <img alt="Tailwind CSS chat bubble component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+    </div>
+  </div>
+  <div class="chat-header">
+    Obi-Wan Kenobi
+    <time class="text-xs opacity-50">12:45</time>
+  </div>
+  <div class="chat-bubble chat-bubble-primary">You were the Chosen One!</div>
+  <div class="chat-footer opacity-50">Delivered</div>
+</div>
+```
+
+### Colors
+
+Apply color variants directly to the `chat-bubble`.
+
+### Good Example: Bubble Colors
+```html
+<div class="chat chat-start">
+  <div class="chat-bubble chat-bubble-info">Calm down.</div>
+</div>
+<div class="chat chat-end">
+  <div class="chat-bubble chat-bubble-error">I HATE YOU!</div>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-collapse.md
+`````markdown
+# Data Display: Collapse
+
+The collapse component hides or shows content based on focus or a checkbox state.
+
+## Native `<details>` Element
+
+This is the most semantic and accessible way to create a collapsible element.
+
+### Good Example: Semantic Details/Summary
+```html
+<details class="collapse collapse-arrow bg-base-200">
+  <summary class="collapse-title text-xl font-medium">Click to open/close</summary>
+  <div class="collapse-content">
+    <p>Content goes here.</p>
+  </div>
+</details>
+```
+
+## Checkbox or Focus Triggers
+
+If you need specific styling or behavior that `<details>` cannot provide, use hidden inputs.
+
+### Good Example: Checkbox Trigger
+```html
+<div class="collapse collapse-plus bg-base-200">
+  <input type="checkbox" /> 
+  <div class="collapse-title text-xl font-medium">Click me to show/hide content</div>
+  <div class="collapse-content"> 
+    <p>hello</p>
+  </div>
+</div>
+```
+
+### Good Example: Focus Trigger (Closes when clicking away)
+```html
+<div tabindex="0" class="collapse collapse-arrow border-base-300 bg-base-100 border">
+  <div class="collapse-title text-xl font-medium">Focus me to see content</div>
+  <div class="collapse-content"> 
+    <p>tabindex="0" attribute is necessary to make the div focusable</p>
+  </div>
+</div>
+```
+
+### Bad Example: Invalid Structure
+```html
+<!-- Bad: Missing collapse-title and collapse-content wrappers -->
+<details class="collapse">
+  <h1>Click me</h1>
+  <p>Content</p>
+</details>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-countdown.md
+`````markdown
+# Data Display: Countdown
+
+The countdown component utilizes CSS variables to display numbers. This allows updating the value via JavaScript by changing a single CSS variable rather than manipulating the DOM text directly.
+
+## Usage
+
+Set the `--value` CSS variable using inline styles. The variable accepts an integer between 0 and 99.
+
+### Good Example: Standard Countdown
+```html
+<span class="countdown">
+  <span style="--value:59;"></span>
+</span>
+```
+
+### Good Example: Clock Format
+```html
+<span class="countdown font-mono text-2xl">
+  <span style="--value:10;"></span>h
+  <span style="--value:24;"></span>m
+  <span style="--value:59;"></span>s
+</span>
+```
+
+### Good Example: Updating via JavaScript
+```javascript
+// Good: Update the style property to change the number
+const timer = document.getElementById('seconds');
+let time = 60;
+setInterval(() => {
+  time--;
+  timer.style.setProperty('--value', time);
+}, 1000);
+```
+
+### Bad Example: Direct DOM Manipulation
+```html
+<!-- Bad: Modifying the innerText instead of using the CSS variable breaks the component's formatting logic -->
+<span class="countdown">
+  <span id="counter">59</span> 
+</span>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-diff.md
+`````markdown
+# DaisyUI Data Display: Diff
+
+A component to compare two images or elements side-by-side with a draggable slider.
+
+## Basic Usage
+The `diff` class contains two items and a handle is automatically generated.
+
+```html
+<div class="diff aspect-16/9">
+  <div class="diff-item-1">
+    <img alt="daisyui" src="https://img.daisyui.com/images/stock/photo-1560717789-0ac7c58ac90a.webp" />
+  </div>
+  <div class="diff-item-2">
+    <img alt="daisyui" src="https://img.daisyui.com/images/stock/photo-1560717789-0ac7c58ac90a-blur.webp" />
+  </div>
+  <div class="diff-resizer"></div>
+</div>
+```
+
+## Pattern: Content Comparison
+You can compare text or any HTML content, not just images.
+
+```html
+<div class="diff aspect-16/9">
+  <div class="diff-item-1">
+    <div class="bg-primary text-primary-content grid place-content-center text-9xl font-black">
+      BEFORE
+    </div>
+  </div>
+  <div class="diff-item-2">
+    <div class="bg-base-200 grid place-content-center text-9xl font-black">
+      AFTER
+    </div>
+  </div>
+  <div class="diff-resizer"></div>
+</div>
+```
+
+## Good vs. Bad Diff
+```html
+<!-- Good: Using the built-in diff component -->
+<div class="diff h-64">...</div>
+
+<!-- Bad: Manual implementation with range inputs and absolute positioning -->
+<div class="relative overflow-hidden">
+  <div class="absolute inset-0">...</div>
+  <input type="range" class="absolute w-full ..." />
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-hover-3d-card.md
+`````markdown
+# DaisyUI Data Display: Hover 3D Card
+
+A visually striking card component that tilts in 3D space based on mouse position.
+
+## Basic Usage
+The `hover-3d` class requires 8 empty `div` elements inside to handle the hover detection zones.
+
+```html
+<div class="hover-3d h-64 w-96">
+  <!-- 8 divs for hover detection -->
+  <div></div><div></div><div></div><div></div>
+  <div></div><div></div><div></div><div></div>
+  
+  <div class="hover-3d-card bg-primary text-primary-content grid place-content-center rounded-xl shadow-2xl">
+    <div class="text-3xl font-bold">Tilt Me</div>
+  </div>
+</div>
+```
+
+## Patterns
+Use `bg-base-100` and `shadow-xl` for a more subtle, professional card look.
+
+```html
+<div class="hover-3d h-72 w-60">
+  <div></div><div></div><div></div><div></div>
+  <div></div><div></div><div></div><div></div>
+  <div class="hover-3d-card bg-base-100 p-6 rounded-box shadow-xl border border-base-300">
+    <h3 class="text-lg font-bold">Interactive Card</h3>
+    <p class="text-sm opacity-70">Move your mouse over this card to see the 3D effect.</p>
+  </div>
+</div>
+```
+
+## Good vs. Bad Hover 3D
+```html
+<!-- Good: Pure CSS 3D effect using DaisyUI classes -->
+<div class="hover-3d">...</div>
+
+<!-- Bad: Heavy JavaScript libraries (like Tilt.js) for simple UI effects -->
+<div data-tilt class="manual-tilt-card">...</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-hover-gallery.md
+`````markdown
+# DaisyUI Data Display: Hover Gallery
+
+An interactive image gallery where images expand or reveal details on hover.
+
+## Basic Usage
+Use `hover-gallery` to create a grid of items that respond to mouse interaction.
+
+```html
+<div class="hover-gallery flex flex-wrap gap-4">
+  <div class="hover-gallery-item">
+    <img src="..." alt="Gallery Image" />
+    <div class="hover-gallery-content">
+      <h2 class="text-xl">Title</h2>
+    </div>
+  </div>
+</div>
+```
+
+## Patterns: Grid Layout
+Hover galleries work best with auto-filling grids or flexbox.
+
+```html
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 hover-gallery">
+  <div class="hover-gallery-item aspect-square overflow-hidden rounded-box">
+    <img src="image1.jpg" class="object-cover" />
+    <div class="bg-black/50 text-white p-4">Caption 1</div>
+  </div>
+  <div class="hover-gallery-item aspect-square overflow-hidden rounded-box">
+    <img src="image2.jpg" class="object-cover" />
+    <div class="bg-black/50 text-white p-4">Caption 2</div>
+  </div>
+</div>
+```
+
+## Good vs. Bad Gallery
+```html
+<!-- Good: Pure CSS hover effects with DaisyUI -->
+<div class="hover-gallery-item">...</div>
+
+<!-- Bad: Complex JS event listeners for simple overlay toggles -->
+<div onmouseenter="showOverlay(this)" onmouseleave="hideOverlay(this)">...</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-kbd.md
+`````markdown
+# Data Display: KBD
+
+The KBD component is used to format keyboard shortcuts or key combinations.
+
+## Basic Usage
+
+### Good Example: Individual Keys
+```html
+<kbd class="kbd">A</kbd>
+<kbd class="kbd">Ctrl</kbd>
+<kbd class="kbd">⌘</kbd>
+```
+
+## Sizes
+
+### Good Example: Responsive Key Sizes
+```html
+<kbd class="kbd kbd-lg">Shift</kbd>
+<kbd class="kbd kbd-md">Shift</kbd>
+<kbd class="kbd kbd-sm">Shift</kbd>
+<kbd class="kbd kbd-xs">Shift</kbd>
+```
+
+## Key Combinations
+
+Group keys together with a plus sign or spacing to show shortcuts.
+
+### Good Example: Shortcut Display
+```html
+<p>
+  Press
+  <kbd class="kbd kbd-sm">⌘</kbd>
+  +
+  <kbd class="kbd kbd-sm">C</kbd>
+  to copy.
+</p>
+```
+
+### Bad Example: Complex Structures inside KBD
+```html
+<!-- Bad: KBD is an inline text element, do not put block elements inside it -->
+<kbd class="kbd">
+  <div>Enter</div>
+</kbd>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-list.md
+`````markdown
+# DaisyUI Data Display: List
+
+A semantic list component for displaying rows of data, often used for settings, menus, or contact lists.
+
+## Basic Usage
+The `list` class is used on the container, and `list-row` on each item.
+
+```html
+<ul class="list bg-base-100 rounded-box shadow">
+  <li class="list-row">
+    <div>
+      <div class="font-bold">John Doe</div>
+      <div class="text-xs opacity-50">Admin</div>
+    </div>
+    <button class="btn btn-ghost btn-xs">Edit</button>
+  </li>
+  <li class="list-row">
+    <div>
+      <div class="font-bold">Jane Smith</div>
+      <div class="text-xs opacity-50">User</div>
+    </div>
+    <button class="btn btn-ghost btn-xs">Edit</button>
+  </li>
+</ul>
+```
+
+## Pattern: List with Avatars
+Combine with `avatar` for professional contact lists.
+
+```html
+<div class="list bg-base-100 border border-base-300 rounded-box">
+  <div class="list-row items-center p-4">
+    <div class="avatar">
+      <div class="w-10 rounded-full"><img src="..." /></div>
+    </div>
+    <div class="flex-1">
+      <div class="font-bold">Project Alpha</div>
+      <div class="text-sm">Ongoing development</div>
+    </div>
+    <span class="badge badge-success">Active</span>
+  </div>
+</div>
+```
+
+## Good vs. Bad Lists
+```html
+<!-- Good: Semantic list rows with flexbox alignment -->
+<li class="list-row p-4 hover:bg-base-200 transition-colors">...</li>
+
+<!-- Bad: Manual list styling with border-t hacks -->
+<li class="p-4 border-t border-gray-200 last:border-b">...</li>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-stat.md
+`````markdown
+# Data Display: Stat
+
+The stat component groups labels, values, and descriptive text together, often used for dashboards to display Key Performance Indicators (KPIs).
+
+## Anatomy of a Stat
+
+Wrap multiple stats in a `stats` container. Each individual item is a `stat`.
+
+### Good Example: Basic Stats Group
+```html
+<div class="stats shadow-sm">
+  <div class="stat">
+    <div class="stat-title">Total Page Views</div>
+    <div class="stat-value">89,400</div>
+    <div class="stat-desc">21% more than last month</div>
+  </div>
+</div>
+```
+
+## Adding Figures and Actions
+
+You can include icons (figures) and action buttons within a stat block.
+
+### Good Example: Complex Stat Block
+```html
+<div class="stats shadow-sm">
+  <div class="stat">
+    <div class="stat-figure text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-8 w-8 stroke-current">
+        <!-- SVG Path -->
+      </svg>
+    </div>
+    <div class="stat-title">Total Likes</div>
+    <div class="stat-value text-primary">25.6K</div>
+    <div class="stat-desc">21% more than last month</div>
+  </div>
+</div>
+```
+
+## Layouts
+
+Use Tailwind 4 layout utilities to change the orientation.
+
+### Good Example: Vertical Stats
+```html
+<!-- Use flex-col or stats-vertical for stacking -->
+<div class="stats stats-vertical shadow-sm">
+  <div class="stat">...</div>
+  <div class="stat">...</div>
+</div>
+```
+
+### Bad Example: Missing Hierarchy
+```html
+<!-- Bad: Missing semantic child classes breaks the layout -->
+<div class="stat">
+  <span>Total Views</span>
+  <h1>89,400</h1>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-status.md
+`````markdown
+# DaisyUI Data Display: Status
+
+A compact component used to show status indicators (online, busy, etc.) on avatars or standalone elements.
+
+## Basic Usage
+The `status` class provides a small circle indicator.
+
+```html
+<div class="status"></div>
+<div class="status status-success"></div>
+<div class="status status-error"></div>
+<div class="status status-warning"></div>
+<div class="status status-info"></div>
+```
+
+## Pattern: Status on Avatars
+Place the `status` inside an `avatar` container for automatic positioning.
+
+```html
+<div class="avatar">
+  <div class="w-16 rounded-full">
+    <img src="..." />
+  </div>
+  <div class="status status-success status-bottom status-right border-2 border-base-100"></div>
+</div>
+```
+
+## Good vs. Bad Status
+```html
+<!-- Good: Semantic status indicator -->
+<span class="status status-success"></span>
+
+<!-- Bad: Manual circle styling -->
+<span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span>
+```
+
+## Quick Reference
+- `status-success`, `status-error`, `status-warning`, `status-info`: Colors.
+- `status-top`, `status-bottom`, `status-left`, `status-right`: Positioning relative to parent.
+`````
+
+## File: .agents/skills/daisyui/data-display-table.md
+`````markdown
+# Data Display: Table
+
+The table component styles HTML tables, adding padding, borders, and hover effects. Ensure the table is wrapped in an `overflow-x-auto` container for responsive scrolling.
+
+## Basic Table
+
+### Good Example: Standard Table
+```html
+<div class="overflow-x-auto">
+  <table class="table">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Job</th>
+        <th>Favorite Color</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- row 1 -->
+      <tr>
+        <th>1</th>
+        <td>Cy Ganderton</td>
+        <td>Quality Control Specialist</td>
+        <td>Blue</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+## Table Variants
+
+### Good Example: Zebra and Hover Effects
+```html
+<!-- table-zebra adds striped rows, table-hover adds a hover effect to rows -->
+<table class="table table-zebra table-hover">
+  ...
+</table>
+```
+
+## Pinning Rows and Columns
+
+DaisyUI provides sticky utilities for complex tables.
+
+### Good Example: Pinned Header and First Column
+```html
+<table class="table table-pin-rows table-pin-cols">
+  <thead>
+    <tr>
+      <!-- This column stays pinned on horizontal scroll -->
+      <th>ID</th> 
+      <th>Name</th>
+      <th>Job</th>
+    </tr>
+  </thead>
+  <tbody>...</tbody>
+</table>
+```
+
+### Bad Example: Missing Responsive Wrapper
+```html
+<!-- Bad: Missing div.overflow-x-auto causes the table to overflow the screen on mobile devices -->
+<table class="table">...</table>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-text-rotate.md
+`````markdown
+# DaisyUI Data Display: Text Rotate
+
+An animation component that rotates text elements, useful for headlines with dynamic content.
+
+## Basic Usage
+The `text-rotate` class contains multiple spans that rotate in sequence.
+
+```html
+<h1 class="text-4xl font-bold">
+  Build 
+  <span class="text-rotate text-primary">
+    <span>faster</span>
+    <span>better</span>
+    <span>stronger</span>
+  </span>
+  websites.
+</h1>
+```
+
+## Patterns: Colors and Timing
+You can style individual rotated items.
+
+```html
+<div class="text-lg">
+  Status: 
+  <span class="text-rotate font-mono">
+    <span class="text-success">Online</span>
+    <span class="text-warning">Connecting</span>
+    <span class="text-error">Offline</span>
+  </span>
+</div>
+```
+
+## Good vs. Bad Text Rotate
+```html
+<!-- Good: Using the built-in text-rotate component -->
+<span class="text-rotate">...</span>
+
+<!-- Bad: Complex JavaScript intervals or heavy Framer Motion animations for simple text flips -->
+<div id="rotating-text">...</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-display-timeline.md
+`````markdown
+# Data Display: Timeline
+
+The timeline component displays a list of events in chronological order. It can be oriented horizontally or vertically.
+
+## Horizontal Timeline
+
+### Good Example: Horizontal Steps
+```html
+<ul class="timeline">
+  <li>
+    <div class="timeline-start">1984</div>
+    <div class="timeline-middle">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="timeline-end timeline-box">First Macintosh computer</div>
+    <hr/>
+  </li>
+  <li>
+    <hr/>
+    <div class="timeline-start">1998</div>
+    <div class="timeline-middle">...</div>
+    <div class="timeline-end timeline-box">iMac</div>
+  </li>
+</ul>
+```
+
+## Vertical Timeline
+
+Add the `timeline-vertical` class to stack items.
+
+### Good Example: Vertical Events
+```html
+<ul class="timeline timeline-vertical">
+  <li>
+    <div class="timeline-start">Step 1</div>
+    <div class="timeline-middle">...</div>
+    <hr/>
+  </li>
+  <li>
+    <hr/>
+    <div class="timeline-start">Step 2</div>
+    <div class="timeline-middle">...</div>
+  </li>
+</ul>
+```
+
+### Bad Example: Inconsistent Alignment
+```html
+<!-- Bad: Mixing timeline-start and timeline-end on the same side without clear hierarchy -->
+<li>
+  <div class="timeline-start">Date</div>
+  <div class="timeline-start">Description</div>
+</li>
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-calendar.md
+`````markdown
+# DaisyUI Data Input: Calendar
+
+A semantic calendar component for date selection and display. Often uses the `cally` class for enhanced functionality.
+
+## Basic Usage
+The `calendar` class creates a standard date grid.
+
+```html
+<div class="calendar bg-base-100 p-4 rounded-box shadow">
+  <!-- Calendar header/grid provided by daisyUI styles -->
+  <div class="calendar-month">October 2024</div>
+  <div class="calendar-grid">...</div>
+</div>
+```
+
+## Pattern: Date Range Picker
+Use with multiple calendars or specialized `cally` wrappers.
+
+```html
+<div class="flex gap-4">
+  <div class="calendar calendar-sm">...</div>
+  <div class="calendar calendar-sm border-l pl-4">...</div>
+</div>
+```
+
+## Good vs. Bad Calendar
+```html
+<!-- Good: DaisyUI calendar component for consistent theming -->
+<div class="calendar">...</div>
+
+<!-- Bad: Over-relying on browser default <input type="date"> which is hard to style -->
+<input type="date" class="input input-bordered" />
+```
+
+## Quick Reference
+- `calendar-sm`, `calendar-lg`: Sizing.
+- `calendar-today`: Highlights current date.
+- `calendar-selected`: Highlights active selection.
+`````
+
+## File: .agents/skills/daisyui/data-input-checkbox.md
+`````markdown
+# Data Input: Checkbox
+
+Checkboxes allow users to select one or more options from a set.
+
+## Basic Usage
+
+### Good Example: Standard Checkbox
+```html
+<div class="form-control">
+  <label class="label cursor-pointer">
+    <span class="label-text">Remember me</span> 
+    <input type="checkbox" checked="checked" class="checkbox" />
+  </label>
+</div>
+```
+
+## Colors and Sizes
+
+### Good Example: Color Variants
+```html
+<input type="checkbox" class="checkbox checkbox-primary" />
+<input type="checkbox" class="checkbox checkbox-secondary" />
+<input type="checkbox" class="checkbox checkbox-success" />
+```
+
+### Good Example: Size Variants
+```html
+<input type="checkbox" class="checkbox checkbox-lg" />
+<input type="checkbox" class="checkbox checkbox-md" />
+<input type="checkbox" class="checkbox checkbox-sm" />
+<input type="checkbox" class="checkbox checkbox-xs" />
+```
+
+## Intermediate State
+
+Intermediate states must be set via JavaScript as there is no HTML attribute for it.
+
+### Good Example: JS Indeterminate
+```javascript
+document.getElementById('my-checkbox').indeterminate = true;
+```
+
+### Bad Example: Bare Input
+```html
+<!-- Bad: Missing 'checkbox' class results in unstyled native browser checkbox -->
+<input type="checkbox" />
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-fieldset.md
+`````markdown
+# DaisyUI Data Input: Fieldset
+
+A semantic container for grouping related form inputs with legends and labels.
+
+## Basic Usage
+Use `fieldset`, `fieldset-legend`, and `fieldset-label` for accessible forms.
+
+```html
+<fieldset class="fieldset bg-base-200 p-4 rounded-box">
+  <legend class="fieldset-legend">User Information</legend>
+  
+  <label class="fieldset-label">Name</label>
+  <input type="text" class="input input-bordered" placeholder="Full Name" />
+  
+  <label class="fieldset-label">Email</label>
+  <input type="email" class="input input-bordered" placeholder="email@example.com" />
+</fieldset>
+```
+
+## Pattern: Radio Groups
+Fieldsets are ideal for radio button groups.
+
+```html
+<fieldset class="fieldset">
+  <legend class="fieldset-legend text-primary">Notification Settings</legend>
+  <label class="label cursor-pointer">
+    <span class="label-text">Email</span>
+    <input type="radio" name="notify" class="radio" checked />
+  </label>
+  <label class="label cursor-pointer">
+    <span class="label-text">Push</span>
+    <input type="radio" name="notify" class="radio" />
+  </label>
+</fieldset>
+```
+
+## Good vs. Bad Fieldset
+```html
+<!-- Good: Accessible fieldset with semantic legend -->
+<fieldset class="fieldset">
+  <legend class="fieldset-legend">Title</legend>
+  ...
+</fieldset>
+
+<!-- Bad: Using a div with font-bold to simulate a legend -->
+<div class="p-4 border">
+  <div class="font-bold">Title</div>
+  ...
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-file.md
+`````markdown
+# Data Input: File
+
+The file input component provides a styled interface for selecting files from the local device.
+
+## Basic Usage
+
+### Good Example: Bordered File Input
+```html
+<label class="form-control w-full max-w-xs">
+  <div class="label">
+    <span class="label-text">Pick a file</span>
+  </div>
+  <input type="file" class="file-input file-input-bordered w-full max-w-xs" />
+</label>
+```
+
+## Variants
+
+### Good Example: Ghost and Color Variants
+```html
+<input type="file" class="file-input file-input-ghost w-full max-w-xs" />
+<input type="file" class="file-input file-input-primary w-full max-w-xs" />
+```
+
+## Sizes
+
+### Good Example: Sizing File Inputs
+```html
+<input type="file" class="file-input file-input-lg" />
+<input type="file" class="file-input file-input-sm" />
+```
+
+### Bad Example: Overflowing Container
+```html
+<!-- Bad: File inputs often have wide default widths; always wrap or use 'w-full' -->
+<input type="file" class="file-input" />
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-filter.md
+`````markdown
+# DaisyUI Data Input: Filter
+
+A toggleable filter component often used for search tags, categories, or filtering lists.
+
+## Basic Usage
+The `filter` class acts as a toggle button for filtering data.
+
+```html
+<div class="join">
+  <input class="join-item btn filter" type="radio" name="options" aria-label="All" checked />
+  <input class="join-item btn filter" type="radio" name="options" aria-label="Active" />
+  <input class="join-item btn filter" type="radio" name="options" aria-label="Completed" />
+</div>
+```
+
+## Pattern: Checkbox Filters
+Use `filter` with checkboxes for multi-select filtering.
+
+```html
+<div class="flex flex-wrap gap-2">
+  <input type="checkbox" aria-label="React" class="filter btn btn-sm" />
+  <input type="checkbox" aria-label="Vue" class="filter btn btn-sm" />
+  <input type="checkbox" aria-label="Svelte" class="filter btn btn-sm" />
+</div>
+```
+
+## Good vs. Bad Filter
+```html
+<!-- Good: Using native inputs with filter classes for accessibility -->
+<input type="radio" class="filter btn" aria-label="Selection" />
+
+<!-- Bad: Manual button styling with complex active-state logic in JS -->
+<button onclick="toggleFilter(this)" class="btn bg-gray-200">
+  Filter
+</button>
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-label.md
+`````markdown
+# DaisyUI Data Input: Label
+
+A semantic label component for form inputs, providing consistent spacing and typography.
+
+## Basic Usage
+The `label` class wraps label text or spans.
+
+```html
+<div class="form-control">
+  <label class="label">
+    <span class="label-text text-base-content">Username</span>
+  </label>
+  <input type="text" class="input input-bordered" />
+</div>
+```
+
+## Pattern: Top/Bottom Labels
+Use multiple spans within a `label` to create descriptive helpers.
+
+```html
+<div class="form-control">
+  <label class="label">
+    <span class="label-text">Email</span>
+    <span class="label-text-alt text-error">Required</span>
+  </label>
+  <input type="email" class="input input-bordered" />
+  <label class="label">
+    <span class="label-text-alt">We'll never share your email.</span>
+  </label>
+</div>
+```
+
+## Good vs. Bad Label
+```html
+<!-- Good: Semantic label with text-alt for auxiliary information -->
+<label class="label">
+  <span class="label-text">Password</span>
+</label>
+
+<!-- Bad: Using a p tag with mb-2 for labeling -->
+<p class="mb-2 font-semibold">Password</p>
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-radio.md
+`````markdown
+# Data Input: Radio
+
+Radio buttons allow users to select exactly one option from a predefined set of mutually exclusive options.
+
+## Basic Usage
+
+Ensure all radio buttons in a group share the same `name` attribute.
+
+### Good Example: Styled Radio Group
+```html
+<div class="form-control">
+  <label class="label cursor-pointer">
+    <span class="label-text">Option 1</span> 
+    <input type="radio" name="radio-10" class="radio checked:bg-red-500" checked="checked" />
+  </label>
+</div>
+<div class="form-control">
+  <label class="label cursor-pointer">
+    <span class="label-text">Option 2</span> 
+    <input type="radio" name="radio-10" class="radio checked:bg-blue-500" />
+  </label>
+</div>
+```
+
+## Colors and Sizes
+
+### Good Example: Color Variants
+```html
+<input type="radio" name="radio-1" class="radio radio-primary" />
+<input type="radio" name="radio-1" class="radio radio-secondary" />
+```
+
+### Good Example: Size Variants
+```html
+<input type="radio" name="radio-2" class="radio radio-lg" />
+<input type="radio" name="radio-2" class="radio radio-xs" />
+```
+
+### Bad Example: Missing Name Attribute
+```html
+<!-- Bad: Without a name, these are not linked and behave like independent checkboxes -->
+<input type="radio" class="radio" />
+<input type="radio" class="radio" />
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-range.md
+`````markdown
+# Data Input: Range
+
+The range component is a slider input for selecting a numeric value within a specified range.
+
+## Basic Usage
+
+### Good Example: Standard Range Slider
+```html
+<input type="range" min="0" max="100" value="40" class="range" />
+```
+
+## Colors and Sizes
+
+### Good Example: Color Variants
+```html
+<input type="range" min="0" max="100" value="25" class="range range-primary" />
+<input type="range" min="0" max="100" value="50" class="range range-secondary" />
+<input type="range" min="0" max="100" value="75" class="range range-accent" />
+```
+
+### Good Example: Size Variants
+```html
+<input type="range" min="0" max="100" value="40" class="range range-lg" />
+<input type="range" min="0" max="100" value="40" class="range range-xs" />
+```
+
+## Range with Steps (Ticks)
+
+### Good Example: Stepped Range
+```html
+<input type="range" min="0" max="100" value="25" class="range" step="25" />
+<div class="flex w-full justify-between px-2 text-xs">
+  <span>|</span>
+  <span>|</span>
+  <span>|</span>
+  <span>|</span>
+  <span>|</span>
+</div>
+```
+
+### Bad Example: Vertical Range without Modifiers
+```html
+<!-- Bad: Range is horizontal by default. Native vertical ranges require platform-specific CSS. -->
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-rating.md
+`````markdown
+# Data Input: Rating
+
+The rating component uses a set of radio inputs to create a star, heart, or emoji-based rating system.
+
+## Basic Usage
+
+### Good Example: Star Rating
+```html
+<div class="rating">
+  <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" />
+  <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" checked="checked" />
+  <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" />
+  <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" />
+  <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" />
+</div>
+```
+
+## Half Stars
+
+Use the `mask-half-1` and `mask-half-2` classes on two separate inputs to create a single star that can be half-filled.
+
+### Good Example: Half-Star Rating
+```html
+<div class="rating rating-half">
+  <input type="radio" name="rating-10" class="rating-hidden" />
+  <input type="radio" name="rating-10" class="mask mask-star-2 mask-half-1 bg-green-500" />
+  <input type="radio" name="rating-10" class="mask mask-star-2 mask-half-2 bg-green-500" />
+  <!-- repeat ... -->
+</div>
+```
+
+## Sizes
+
+### Good Example: Rating Sizes
+```html
+<div class="rating rating-lg">...</div>
+<div class="rating rating-sm">...</div>
+```
+
+### Bad Example: Using Buttons
+```html
+<!-- Bad: Ratings should be radio inputs for form compatibility and accessibility. -->
+<div class="rating">
+  <button class="mask mask-star">1</button>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-select.md
+`````markdown
+# Data Input: Select
+
+The select component provides a styled dropdown menu for selecting an option from a list.
+
+## Basic Usage
+
+### Good Example: Bordered Select
+```html
+<select class="select select-bordered w-full max-w-xs">
+  <option disabled selected>Who shot first?</option>
+  <option>Han Solo</option>
+  <option>Greedo</option>
+</select>
+```
+
+## Colors and Variants
+
+### Good Example: Ghost and Color Variants
+```html
+<select class="select select-ghost w-full max-w-xs">...</select>
+<select class="select select-primary w-full max-w-xs">...</select>
+```
+
+## Sizes
+
+### Good Example: Sizing Selects
+```html
+<select class="select select-lg">...</select>
+<select class="select select-xs">...</select>
+```
+
+## Use Case: Select with Form Control
+
+### Good Example: Select with Label
+```html
+<label class="form-control w-full max-w-xs">
+  <div class="label">
+    <span class="label-text">Pick the best sci-fi movie</span>
+  </div>
+  <select class="select select-bordered">
+    <option>Star Wars</option>
+    <option>Star Trek</option>
+  </select>
+</label>
+```
+
+### Bad Example: Bare Select
+```html
+<!-- Bad: Unstyled select looks inconsistent with the rest of the UI -->
+<select>
+  <option>Option 1</option>
+</select>
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-text.md
+`````markdown
+# Data Input: Text
+
+The text input component styles standard single-line text inputs.
+
+## Basic Usage
+
+### Good Example: Bordered Input
+```html
+<input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+```
+
+## Variants
+
+### Good Example: Ghost and Color Variants
+```html
+<input type="text" placeholder="Ghost" class="input input-ghost w-full max-w-xs" />
+<input type="text" placeholder="Primary" class="input input-primary w-full max-w-xs" />
+```
+
+## Sizes
+
+### Good Example: Input Sizes
+```html
+<input type="text" class="input input-lg" />
+<input type="text" class="input input-md" />
+<input type="text" class="input input-sm" />
+<input type="text" class="input input-xs" />
+```
+
+## Form Control Integration
+
+### Good Example: Input with Labels and Helper Text
+```html
+<label class="form-control w-full max-w-xs">
+  <div class="label">
+    <span class="label-text">What is your name?</span>
+    <span class="label-text-alt">Top Right</span>
+  </div>
+  <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+  <div class="label">
+    <span class="label-text-alt">Bottom Left</span>
+  </div>
+</label>
+```
+
+### Bad Example: Input without width class
+```html
+<!-- Bad: Inputs have small default widths; use 'w-full' for responsive layouts -->
+<input class="input input-bordered" />
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-textarea.md
+`````markdown
+# Data Input: Textarea
+
+The textarea component styles multi-line text inputs.
+
+## Basic Usage
+
+### Good Example: Bordered Textarea
+```html
+<textarea class="textarea textarea-bordered" placeholder="Bio"></textarea>
+```
+
+## Colors and Variants
+
+### Good Example: Ghost and Color Variants
+```html
+<textarea class="textarea textarea-ghost" placeholder="Bio"></textarea>
+<textarea class="textarea textarea-primary" placeholder="Bio"></textarea>
+```
+
+## Sizes
+
+### Good Example: Textarea Sizes
+```html
+<textarea class="textarea textarea-lg"></textarea>
+<textarea class="textarea textarea-xs"></textarea>
+```
+
+## Form Control Integration
+
+### Good Example: Textarea with Label
+```html
+<label class="form-control">
+  <div class="label">
+    <span class="label-text">Your bio</span>
+  </div>
+  <textarea class="textarea textarea-bordered h-24" placeholder="Bio"></textarea>
+</label>
+```
+
+### Bad Example: Missing Height
+```html
+<!-- Bad: Textareas often need a specific height (h-24, etc.) to look balanced in a form -->
+<textarea class="textarea textarea-bordered"></textarea>
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-toggle.md
+`````markdown
+# Data Input: Toggle
+
+The toggle component is a styled checkbox that acts as a binary switch.
+
+## Basic Usage
+
+### Good Example: Standard Toggle
+```html
+<input type="checkbox" class="toggle" checked="checked" />
+```
+
+## Colors and Sizes
+
+### Good Example: Color Variants
+```html
+<input type="checkbox" class="toggle toggle-primary" />
+<input type="checkbox" class="toggle toggle-secondary" />
+<input type="checkbox" class="toggle toggle-success" />
+```
+
+### Good Example: Size Variants
+```html
+<input type="checkbox" class="toggle toggle-lg" />
+<input type="checkbox" class="toggle toggle-md" />
+<input type="checkbox" class="toggle toggle-sm" />
+<input type="checkbox" class="toggle toggle-xs" />
+```
+
+## Integration with Labels
+
+### Good Example: Toggle with Label
+```html
+<div class="form-control w-52">
+  <label class="label cursor-pointer">
+    <span class="label-text">Remember me</span> 
+    <input type="checkbox" class="toggle" checked="checked" />
+  </label>
+</div>
+```
+
+### Bad Example: Manual Switch Styling
+```html
+<!-- Bad: Creating custom switch logic when DaisyUI 'toggle' class handles it natively and accessibly -->
+<div class="bg-gray-200 rounded-full w-10 h-6">
+  <div class="bg-white rounded-full w-4 h-4 translate-x-1"></div>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/data-input-validator.md
+`````markdown
+# DaisyUI Data Input: Validator
+
+A component for real-time form validation feedback using CSS-only patterns or minimal JS.
+
+## Basic Usage
+The `validator` class is applied to input wrappers to show error states.
+
+```html
+<div class="form-control">
+  <input type="email" placeholder="email@example.com" class="input validator" required />
+  <div class="validator-hint">Please enter a valid email address</div>
+</div>
+```
+
+## Pattern: Successful Validation
+DaisyUI can show success states automatically when criteria are met.
+
+```html
+<div class="form-control">
+  <input type="password" 
+         pattern=".{8,}" 
+         placeholder="Min 8 chars" 
+         class="input validator" 
+         required />
+  <div class="validator-hint">Password must be at least 8 characters</div>
+</div>
+```
+
+## Good vs. Bad Validator
+```html
+<!-- Good: Native HTML5 validation integrated with DaisyUI -->
+<input type="text" class="validator" required />
+
+<!-- Bad: Manual error state toggling via complex JS logic -->
+<input id="my-input" class="input border-red-500" />
+<p id="error-msg" class="hidden text-red-500">Error</p>
+```
+
+## Quick Reference
+- `validator-hint`: The message shown when validation fails.
+- `validator-success`: (Internal) Applied when input is valid.
+- `validator-error`: (Internal) Applied when input is invalid.
+`````
+
+## File: .agents/skills/daisyui/feedback-alert.md
+`````markdown
+# Feedback: Alert
+
+Alerts inform users about important events or changes in state. They use semantic colors to convey meaning.
+
+## Basic Usage
+
+### Good Example: Informational Alert
+```html
+<div role="alert" class="alert shadow-sm">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info h-6 w-6 shrink-0">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+  </svg>
+  <span>New software update available.</span>
+</div>
+```
+
+## Semantic Variants
+
+### Good Example: Success, Warning, and Error
+```html
+<div role="alert" class="alert alert-success">
+  <span>Your purchase has been confirmed!</span>
+</div>
+
+<div role="alert" class="alert alert-warning">
+  <span>Warning: Invalid email address!</span>
+</div>
+
+<div role="alert" class="alert alert-error">
+  <span>Error! Task failed successfully.</span>
+</div>
+```
+
+## Alerts with Actions
+
+### Good Example: Alert with Buttons
+```html
+<div role="alert" class="alert">
+  <svg ...></svg>
+  <div>
+    <h3 class="font-bold">New message!</h3>
+    <div class="text-xs">You have 1 unread message</div>
+  </div>
+  <button class="btn btn-sm">See</button>
+</div>
+```
+
+### Bad Example: Missing Role Attribute
+```html
+<!-- Bad: Missing role="alert" reduces accessibility for screen readers -->
+<div class="alert alert-info">...</div>
+```
+`````
+
+## File: .agents/skills/daisyui/feedback-loading.md
+`````markdown
+# Feedback: Loading
+
+The loading component provides various animated indicators for indeterminate wait states.
+
+## Types of Spinners
+
+### Good Example: Different Loading Animations
+```html
+<span class="loading loading-spinner loading-lg"></span>
+<span class="loading loading-dots loading-lg"></span>
+<span class="loading loading-ring loading-lg"></span>
+<span class="loading loading-ball loading-lg"></span>
+<span class="loading loading-bars loading-lg"></span>
+<span class="loading loading-infinity loading-lg"></span>
+```
+
+## Colors
+
+### Good Example: Semantic Loading Colors
+```html
+<span class="loading loading-spinner text-primary"></span>
+<span class="loading loading-spinner text-secondary"></span>
+<span class="loading loading-spinner text-success"></span>
+```
+
+## Integration with Buttons
+
+### Good Example: Button with Loading State
+```html
+<button class="btn">
+  <span class="loading loading-spinner"></span>
+  loading
+</button>
+```
+
+### Bad Example: Manual SVG Animations
+```html
+<!-- Bad: Over-complicating UI with custom keyframe animations when 'loading' classes provide optimized defaults -->
+<svg class="animate-spin ...">...</svg>
+```
+`````
+
+## File: .agents/skills/daisyui/feedback-progress.md
+`````markdown
+# Feedback: Progress
+
+The progress component is used for displaying both determinate and indeterminate progress states.
+
+## Determinate Progress
+
+Set the `value` and `max` attributes to show a specific progress level.
+
+### Good Example: 40% Progress
+```html
+<progress class="progress progress-primary w-56" value="40" max="100"></progress>
+```
+
+## Indeterminate Progress
+
+Omit the `value` attribute to create a looping animation for unknown wait times.
+
+### Good Example: Indeterminate Progress
+```html
+<progress class="progress w-56"></progress>
+```
+
+## Colors
+
+### Good Example: Semantic Colors
+```html
+<progress class="progress progress-success w-56" value="100" max="100"></progress>
+<progress class="progress progress-warning w-56" value="70" max="100"></progress>
+<progress class="progress progress-error w-56" value="10" max="100"></progress>
+```
+
+### Bad Example: Using Divs with Widths
+```html
+<!-- Bad: Using a div with a fixed width for progress is less accessible than the semantic <progress> element -->
+<div class="h-2 w-full bg-gray-200">
+  <div class="h-2 bg-blue-500 w-[40%]"></div>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/feedback-radial.md
+`````markdown
+# Feedback: Radial Progress
+
+Radial progress displays a circular progress indicator using CSS variables.
+
+## Usage
+
+Set the `--value` and `--size` CSS variables. The component uses a `radial-progress` class.
+
+### Good Example: 70% Circular Progress
+```html
+<div class="radial-progress" style="--value:70;" role="progressbar">70%</div>
+```
+
+## Customization
+
+### Good Example: Colors, Size, and Thickness
+```html
+<div class="radial-progress text-primary" style="--value:70; --size:12rem; --thickness: 2rem;" role="progressbar">
+  70%
+</div>
+```
+
+## Integration with Backgrounds
+
+### Good Example: Adding Background and Borders
+```html
+<div class="radial-progress bg-primary text-primary-content border-primary border-4" style="--value:70;" role="progressbar">
+  70%
+</div>
+```
+
+### Bad Example: Missing Role Attribute
+```html
+<!-- Bad: Missing role="progressbar" makes it difficult for assistive technologies to interpret the component -->
+<div class="radial-progress" style="--value:70;">70%</div>
+```
+`````
+
+## File: .agents/skills/daisyui/feedback-skeleton.md
+`````markdown
+# Feedback: Skeleton
+
+Skeleton loaders act as placeholders while content is being fetched, preventing layout shifts.
+
+## Basic Usage
+
+### Good Example: Square and Circle Placeholders
+```html
+<div class="skeleton h-32 w-32"></div>
+<div class="skeleton h-10 w-10 shrink-0 rounded-full"></div>
+```
+
+## Complex Layouts
+
+Combine multiple skeleton elements to mimic the layout of the final content.
+
+### Good Example: Skeleton for a Card/Post
+```html
+<div class="flex w-52 flex-col gap-4">
+  <div class="skeleton h-32 w-full"></div>
+  <div class="skeleton h-4 w-28"></div>
+  <div class="skeleton h-4 w-full"></div>
+  <div class="skeleton h-4 w-full"></div>
+</div>
+```
+
+## Integration with Actual Content
+
+Use conditional rendering in your framework (React/Vue/etc.) to swap skeletons for real components.
+
+### Good Example: Logic Pseudo-code
+```html
+{isLoading ? <div class="skeleton ..."></div> : <Card ... />}
+```
+
+### Bad Example: Static Heights
+```html
+<!-- Bad: If the skeleton doesn't match the final content's height, you'll still get a layout shift -->
+<div class="skeleton h-10 w-full"></div> <!-- Content is actually 200px tall -->
+```
+`````
+
+## File: .agents/skills/daisyui/feedback-toast.md
+`````markdown
+# Feedback: Toast
+
+Toasts are used to display floating notifications, typically in one of the corners of the viewport.
+
+## Positioning
+
+The `toast` container can be positioned using Tailwind 4 utility classes (e.g., `toast-start`, `toast-end`, `toast-top`, `toast-bottom`).
+
+### Good Example: Bottom-End Toast
+```html
+<div class="toast toast-end toast-bottom">
+  <div class="alert alert-info">
+    <span>New message arrived.</span>
+  </div>
+  <div class="alert alert-success">
+    <span>Message sent successfully.</span>
+  </div>
+</div>
+```
+
+## Alignment Variants
+
+### Good Example: Top-Center Toast
+```html
+<div class="toast toast-top toast-center">
+  <div class="alert alert-info">
+    <span>New notification</span>
+  </div>
+</div>
+```
+
+## Responsive Positioning
+
+### Good Example: Changing Position on Mobile
+```html
+<!-- Bottom on mobile, Top-End on larger screens -->
+<div class="toast toast-bottom sm:toast-top sm:toast-end">
+  <div class="alert">...</div>
+</div>
+```
+
+### Bad Example: Multiple Toast Containers
+```html
+<!-- Bad: Multiple 'toast' divs can overlap. Use a single container for multiple alerts if they share the same position. -->
+<div class="toast">...</div>
+<div class="toast">...</div>
+```
+`````
+
+## File: .agents/skills/daisyui/feedback-tooltip.md
+`````markdown
+# Feedback: Tooltip
+
+Tooltips provide small contextual information when a user hovers over or focuses on an element.
+
+## Basic Usage
+
+Wrap the target element in a `tooltip` container and set the `data-tip` attribute.
+
+### Good Example: Standard Tooltip
+```html
+<div class="tooltip" data-tip="hello">
+  <button class="btn">Hover me</button>
+</div>
+```
+
+## Positioning
+
+### Good Example: Tooltip Directions
+```html
+<div class="tooltip tooltip-top" data-tip="Top">...</div>
+<div class="tooltip tooltip-bottom" data-tip="Bottom">...</div>
+<div class="tooltip tooltip-left" data-tip="Left">...</div>
+<div class="tooltip tooltip-right" data-tip="Right">...</div>
+```
+
+## Colors
+
+### Good Example: Semantic Tooltip Colors
+```html
+<div class="tooltip tooltip-primary" data-tip="Primary color">...</div>
+<div class="tooltip tooltip-error" data-tip="Error state">...</div>
+```
+
+## Forced Visibility
+
+### Good Example: Persistent Tooltip (Always Open)
+```html
+<div class="tooltip tooltip-open" data-tip="I am always here">...</div>
+```
+
+### Bad Example: Complex HTML inside Tooltip
+```html
+<!-- Bad: The tooltip content is defined in the data-tip attribute, which only supports plain text. Use a dropdown for complex HTML. -->
+<div class="tooltip" data-tip="<b>Bold</b>">...</div>
+```
+`````
+
+## File: .agents/skills/daisyui/layout-artboard.md
+`````markdown
+# Layout: Artboard
+
+The artboard component provides fixed-size containers that mimic mobile screen resolutions, useful for prototyping mobile apps.
+
+## Basic Usage
+
+### Good Example: iPhone-sized Artboard
+```html
+<!-- Phone 1 (320×568) -->
+<div class="artboard phone-1 bg-base-200">
+  <div class="p-4">Mobile View Content</div>
+</div>
+```
+
+## Artboard Sizes
+
+- `phone-1`: 320×568
+- `phone-2`: 375×667
+- `phone-3`: 414×736
+- `phone-4`: 375×812
+- `phone-5`: 414×896
+- `phone-6`: 320×1024
+
+## Orientation
+
+Use `artboard-horizontal` to switch to landscape mode.
+
+### Good Example: Horizontal Artboard
+```html
+<div class="artboard artboard-horizontal phone-1 bg-base-200">
+  Landscape Content
+</div>
+```
+
+### Bad Example: Using Artboard for Production Layouts
+```html
+<!-- Bad: Artboards are intended for prototyping and demos, not for actual responsive production website containers. Use standard Tailwind 'container' or 'max-w-*' classes instead. -->
+```
+`````
+
+## File: .agents/skills/daisyui/layout-divider.md
+`````markdown
+# Layout: Divider
+
+Dividers create visual separation between elements and can optionally include text or icons.
+
+## Basic Usage
+
+### Good Example: Horizontal Divider
+```html
+<div class="flex flex-col w-full">
+  <div class="grid h-20 card bg-base-300 rounded-box place-items-center">content</div>
+  <div class="divider">OR</div>
+  <div class="grid h-20 card bg-base-300 rounded-box place-items-center">content</div>
+</div>
+```
+
+## Vertical Divider
+
+Add the `divider-horizontal` class. Note that the parent container must be `flex-row`.
+
+### Good Example: Side-by-side Separation
+```html
+<div class="flex w-full">
+  <div class="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">content</div>
+  <div class="divider divider-horizontal">OR</div>
+  <div class="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">content</div>
+</div>
+```
+
+## Colors
+
+### Good Example: Semantic Divider Colors
+```html
+<div class="divider divider-primary">Primary</div>
+<div class="divider divider-secondary">Secondary</div>
+<div class="divider divider-accent">Accent</div>
+```
+
+### Bad Example: Absolute Positioning for Dividers
+```html
+<!-- Bad: Trying to manually position a divider line with absolute positioning and borders is brittle compared to the 'divider' utility -->
+```
+`````
+
+## File: .agents/skills/daisyui/layout-drawer.md
+`````markdown
+# Layout: Drawer
+
+The drawer component creates a side-menu overlay, common in mobile apps and dashboards.
+
+## Basic Usage
+
+The drawer consists of a toggle (hidden checkbox), the page content, and the side-menu content.
+
+### Good Example: Standard Drawer
+```html
+<div class="drawer">
+  <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content">
+    <!-- Page content here -->
+    <label for="my-drawer" class="btn btn-primary drawer-button">Open drawer</label>
+  </div> 
+  <div class="drawer-side">
+    <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+    <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+      <!-- Sidebar content here -->
+      <li><a>Sidebar Item 1</a></li>
+      <li><a>Sidebar Item 2</a></li>
+    </ul>
+  </div>
+</div>
+```
+
+## Always Open on Large Screens
+
+Use the `lg:drawer-open` modifier to keep the sidebar visible on desktops.
+
+### Good Example: Responsive Sidebar
+```html
+<div class="drawer lg:drawer-open">
+  ...
+</div>
+```
+
+## Drawer End (Right Side)
+
+Use the `drawer-end` modifier to move the sidebar to the right.
+
+### Good Example: Right Sidebar
+```html
+<div class="drawer drawer-end">
+  ...
+</div>
+```
+
+### Bad Example: Missing Overlay
+```html
+<!-- Bad: Without the drawer-overlay label, the user cannot click outside the sidebar to close it -->
+<div class="drawer-side">
+  <ul class="menu ...">...</ul>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/layout-footer.md
+`````markdown
+# Layout: Footer
+
+The footer component styles page footers with multiple columns of links and branding.
+
+## Basic Usage
+
+### Good Example: Multi-column Footer
+```html
+<footer class="footer p-10 bg-neutral text-neutral-content">
+  <nav>
+    <h6 class="footer-title">Services</h6> 
+    <a class="link link-hover">Branding</a>
+    <a class="link link-hover">Design</a>
+  </nav> 
+  <nav>
+    <h6 class="footer-title">Company</h6> 
+    <a class="link link-hover">About us</a>
+    <a class="link link-hover">Contact</a>
+  </nav> 
+  <nav>
+    <h6 class="footer-title">Legal</h6> 
+    <a class="link link-hover">Terms of use</a>
+    <a class="link link-hover">Privacy policy</a>
+  </nav>
+</footer>
+```
+
+## Centered Footer
+
+### Good Example: Simple Footer with Icons
+```html
+<footer class="footer footer-center p-10 bg-base-200 text-base-content rounded">
+  <nav class="grid grid-flow-col gap-4">
+    <a class="link link-hover">About us</a>
+    <a class="link link-hover">Contact</a>
+  </nav> 
+  <nav>
+    <div class="grid grid-flow-col gap-4">
+      <a><svg ...></svg></a>
+      <a><svg ...></svg></a>
+    </div>
+  </nav> 
+  <aside>
+    <p>Copyright © 2024 - All right reserved</p>
+  </aside>
+</footer>
+```
+
+### Bad Example: Complex Layout inside Footer
+```html
+<!-- Bad: Avoid putting large forms or complex interactive components directly inside the footer; keep it focused on navigation and meta information. -->
+```
+`````
+
+## File: .agents/skills/daisyui/layout-hero.md
+`````markdown
+# Layout: Hero
+
+The hero component is a large, attention-grabbing section typically found at the top of a page.
+
+## Centered Hero
+
+### Good Example: Text and Button Hero
+```html
+<div class="hero min-h-screen bg-base-200">
+  <div class="hero-content text-center">
+    <div class="max-w-md">
+      <h1 class="text-5xl font-bold">Hello there</h1>
+      <p class="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi.</p>
+      <button class="btn btn-primary">Get Started</button>
+    </div>
+  </div>
+</div>
+```
+
+## Hero with Side Image
+
+### Good Example: Image and Content
+```html
+<div class="hero min-h-screen bg-base-200">
+  <div class="hero-content flex-col lg:flex-row">
+    <img src="..." class="max-w-sm rounded-lg shadow-2xl" />
+    <div>
+      <h1 class="text-5xl font-bold">Box Office News!</h1>
+      <p class="py-6">Check out the latest movies.</p>
+      <button class="btn btn-primary">Get Started</button>
+    </div>
+  </div>
+</div>
+```
+
+## Hero with Background Image
+
+### Good Example: Overlay Hero
+```html
+<div class="hero min-h-screen" style="background-image: url(...);">
+  <div class="hero-overlay bg-opacity-60"></div>
+  <div class="hero-content text-center text-neutral-content">
+    <div class="max-w-md">
+      <h1 class="mb-5 text-5xl font-bold">Hello there</h1>
+      <button class="btn btn-primary">Get Started</button>
+    </div>
+  </div>
+</div>
+```
+
+### Bad Example: Missing Max-Width
+```html
+<!-- Bad: Without max-w-md or similar, text lines can become too long and difficult to read in a hero section -->
+<div class="hero-content">
+  <p>Very long text that spans the whole screen width...</p>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/layout-indicator.md
+`````markdown
+# Layout: Indicator
+
+Indicators are used to place an element (like a badge or status dot) on the corner of another element.
+
+## Basic Usage
+
+The `indicator` class is placed on the parent, and `indicator-item` is placed on the element that floats.
+
+### Good Example: Badge on an Avatar
+```html
+<div class="avatar indicator">
+  <span class="indicator-item badge badge-secondary">new</span> 
+  <div class="h-20 w-20 rounded-lg">
+    <img src="..." />
+  </div>
+</div>
+```
+
+## Positioning
+
+Use alignment utilities to move the indicator to different corners.
+
+### Good Example: Placement Variants
+```html
+<!-- Top End (Default) -->
+<div class="indicator">
+  <span class="indicator-item badge">1</span>
+  <div class="grid w-32 h-32 bg-base-300 place-items-center">content</div>
+</div>
+
+<!-- Bottom Start -->
+<div class="indicator">
+  <span class="indicator-item indicator-bottom indicator-start badge">1</span>
+  <div class="grid w-32 h-32 bg-base-300 place-items-center">content</div>
+</div>
+```
+
+## Center and Middle
+
+### Good Example: Centered Indicator
+```html
+<div class="indicator">
+  <span class="indicator-item indicator-center indicator-middle badge">Center</span>
+  <div class="grid w-32 h-32 bg-base-300 place-items-center">content</div>
+</div>
+```
+
+### Bad Example: Missing Indicator Parent
+```html
+<!-- Bad: Without the 'indicator' parent, 'indicator-item' will not be positioned correctly relative to the content -->
+<div class="badge indicator-item">1</div>
+<div>content</div>
+```
+`````
+
+## File: .agents/skills/daisyui/layout-join.md
+`````markdown
+# Layout: Join
+
+The `join` component groups multiple items (buttons, inputs, etc.) together into a single cohesive unit with shared borders and radii.
+
+## Basic Usage
+
+### Good Example: Grouping Buttons and Inputs
+```html
+<div class="join">
+  <input class="input input-bordered join-item" placeholder="Search..."/>
+  <select class="select select-bordered join-item">
+    <option disabled selected>Category</option>
+    <option>Sci-fi</option>
+    <option>Drama</option>
+  </select>
+  <button class="btn join-item">Search</button>
+</div>
+```
+
+## Vertical Join
+
+Add the `join-vertical` class to stack items.
+
+### Good Example: Vertical Button Group
+```html
+<div class="join join-vertical">
+  <button class="btn join-item">Top</button>
+  <button class="btn join-item">Middle</button>
+  <button class="btn join-item">Bottom</button>
+</div>
+```
+
+## Responsive Join
+
+### Good Example: Vertical on Mobile, Horizontal on Desktop
+```html
+<div class="join join-vertical lg:join-horizontal">
+  <button class="btn join-item">Item 1</button>
+  <button class="btn join-item">Item 2</button>
+</div>
+```
+
+### Bad Example: Missing Join-Item Class
+```html
+<!-- Bad: Items without 'join-item' will not have their border-radii adjusted, leading to broken visual continuity -->
+<div class="join">
+  <button class="btn">1</button>
+  <button class="btn">2</button>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/layout-mask.md
+`````markdown
+# Layout: Mask
+
+The mask component allows you to clip images or elements into specific shapes like circles, hearts, or squircles.
+
+## Basic Usage
+
+Apply the `mask` class along with a specific shape modifier.
+
+### Good Example: Common Mask Shapes
+```html
+<!-- Squircle (Smoothed corner square) -->
+<img class="mask mask-squircle" src="..." />
+
+<!-- Heart -->
+<img class="mask mask-heart" src="..." />
+
+<!-- Hexagon -->
+<img class="mask mask-hexagon" src="..." />
+
+<!-- Decagon -->
+<img class="mask mask-decagon" src="..." />
+```
+
+## Mask with Half Shapes
+
+### Good Example: Half-Star (Used in Ratings)
+```html
+<div class="mask mask-star-2 mask-half-1 bg-orange-400 w-10 h-10"></div>
+<div class="mask mask-star-2 mask-half-2 bg-orange-400 w-10 h-10"></div>
+```
+
+## Custom Masks
+
+You can use the `mask` class with standard Tailwind 4 object-fit utilities.
+
+### Good Example: Centered Masked Image
+```html
+<img class="mask mask-circle object-cover w-32 h-32" src="..." />
+```
+
+### Bad Example: Low Resolution Images
+```html
+<!-- Bad: Small images masked into large shapes will appear pixelated. Ensure the source image resolution is sufficient for the mask size. -->
+```
+`````
+
+## File: .agents/skills/daisyui/layout-stack.md
+`````markdown
+# Layout: Stack
+
+The stack component visually layers multiple elements on top of each other, creating a sense of depth or grouping (like a stack of cards or photos).
+
+## Basic Usage
+
+### Good Example: Stack of Cards
+```html
+<div class="stack">
+  <div class="card bg-primary text-primary-content shadow-md">
+    <div class="card-body">Top card</div>
+  </div>
+  <div class="card bg-secondary text-secondary-content shadow-sm">
+    <div class="card-body">Middle card</div>
+  </div>
+  <div class="card bg-accent text-accent-content shadow-xs">
+    <div class="card-body">Bottom card</div>
+  </div>
+</div>
+```
+
+## Stacking Images
+
+### Good Example: Image Gallery Stack
+```html
+<div class="stack">
+  <img src="..." class="rounded-box" />
+  <img src="..." class="rounded-box" />
+  <img src="..." class="rounded-box" />
+</div>
+```
+
+## Interaction Patterns
+
+Stacks are often used with hover effects to "expand" the stack via custom CSS or simple JS toggles.
+
+### Bad Example: Too many items
+```html
+<!-- Bad: Stacking more than 3-4 items usually results in a messy appearance as the underlying items become too crowded -->
+<div class="stack">
+  <!-- 10 items ... -->
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/mockup-browser.md
+`````markdown
+# Mockup: Browser
+
+The browser mockup component displays content inside a simulated web browser window.
+
+## Basic Usage
+
+### Good Example: Browser with URL Bar
+```html
+<div class="mockup-browser bg-base-300 border">
+  <div class="mockup-browser-toolbar">
+    <div class="input">https://daisyui.com</div>
+  </div>
+  <div class="flex justify-center bg-base-200 px-4 py-16">Hello!</div>
+</div>
+```
+
+## Variants
+
+### Good Example: Different Background Colors
+```html
+<div class="mockup-browser bg-primary text-primary-content border">
+  <div class="mockup-browser-toolbar">
+    <div class="input">https://daisyui.com</div>
+  </div>
+  <div class="flex justify-center bg-base-100 p-4">...</div>
+</div>
+```
+
+### Bad Example: Excessive Content Height
+```html
+<!-- Bad: Mockups are best for demos; if the content is extremely long, it breaks the "window" illusion. Use a fixed height with overflow-y-auto for long content. -->
+<div class="mockup-browser">
+  <div class="h-96 overflow-y-auto">...</div>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/mockup-code.md
+`````markdown
+# Mockup: Code
+
+The code mockup component displays code snippets inside a simulated terminal window.
+
+## Basic Usage
+
+Use `data-prefix` on the `<code>` tag to show terminal prompts.
+
+### Good Example: Simple Terminal Command
+```html
+<div class="mockup-code">
+  <pre data-prefix="$"><code>npm i daisyui</code></pre>
+  <pre data-prefix=">" class="text-warning"><code>installing...</code></pre> 
+  <pre data-prefix=">" class="text-success"><code>Done!</code></pre>
+</div>
+```
+
+## Line Highlights and Colors
+
+### Good Example: Multi-line Code with Highlights
+```html
+<div class="mockup-code">
+  <pre data-prefix="1"><code>const x = 10;</code></pre>
+  <pre data-prefix="2" class="bg-warning text-warning-content"><code>console.log(x);</code></pre>
+  <pre data-prefix="3"><code>// Output: 10</code></pre>
+</div>
+```
+
+## Multi-line Wraps
+
+Use `overflow-x-auto` if your code lines are long.
+
+### Bad Example: Hardcoded Prefixes
+```html
+<!-- Bad: Do not put '$' directly in the code text; use the 'data-prefix' attribute for proper alignment and styling -->
+<div class="mockup-code">
+  <pre><code>$ npm install</code></pre>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/mockup-phone.md
+`````markdown
+# Mockup: Phone
+
+The phone mockup component displays content inside a simulated mobile device frame.
+
+## Basic Usage
+
+### Good Example: iPhone Mockup
+```html
+<div class="mockup-phone">
+  <div class="camera"></div> 
+  <div class="display">
+    <div class="artboard phone-1 bg-base-200">
+      <div class="flex h-full items-center justify-center">Hello World</div>
+    </div>
+  </div>
+</div>
+```
+
+## Colored Borders
+
+### Good Example: Primary Colored Phone
+```html
+<div class="mockup-phone border-primary">
+  <div class="camera"></div>
+  <div class="display">...</div>
+</div>
+```
+
+### Bad Example: Invalid Hierarchy
+```html
+<!-- Bad: Missing 'camera' or 'display' divs will break the CSS grid layout of the phone frame -->
+<div class="mockup-phone">
+  <div class="artboard">...</div>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/mockup-window.md
+`````markdown
+# Mockup: Window
+
+The window mockup component displays content inside a simulated operating system window (macOS style).
+
+## Basic Usage
+
+### Good Example: Standard Window
+```html
+<div class="mockup-window bg-base-300 border">
+  <div class="flex justify-center bg-base-200 px-4 py-16 text-xl">
+    Hello!
+  </div>
+</div>
+```
+
+## Background Variants
+
+### Good Example: Color and Contrast
+```html
+<div class="mockup-window bg-neutral text-neutral-content border">
+  <div class="p-10">Window Content</div>
+</div>
+```
+
+### Bad Example: Missing Border
+```html
+<!-- Bad: Without a border or a high-contrast background, the window mockup can blend into the page and lose its "window" effect -->
+<div class="mockup-window bg-base-100">...</div>
+```
+`````
+
+## File: .agents/skills/daisyui/navigation-bottom-nav.md
+`````markdown
+# Navigation: Bottom Nav
+
+Bottom navigation is a mobile-first navigation pattern that stays fixed at the bottom of the screen.
+
+## Basic Usage
+
+### Good Example: Standard Bottom Nav
+```html
+<div class="btm-nav">
+  <button>
+    <svg ...></svg>
+    <span class="btm-nav-label">Home</span>
+  </button>
+  <button class="active">
+    <svg ...></svg>
+    <span class="btm-nav-label">Warnings</span>
+  </button>
+  <button>
+    <svg ...></svg>
+    <span class="btm-nav-label">Stat</span>
+  </button>
+</div>
+```
+
+## Colors
+
+Apply color classes directly to the buttons to indicate state.
+
+### Good Example: Colored Active States
+```html
+<div class="btm-nav">
+  <button class="text-primary active">...</button>
+  <button class="text-secondary">...</button>
+  <button class="text-accent">...</button>
+</div>
+```
+
+## Sizes
+
+### Good Example: Responsive Bottom Nav
+```html
+<div class="btm-nav btm-nav-xs sm:btm-nav-md md:btm-nav-lg">
+  ...
+</div>
+```
+
+### Bad Example: Missing Active Class
+```html
+<!-- Bad: If no button has the 'active' class, the user won't know which section they are currently in -->
+<div class="btm-nav">
+  <button>No Active State</button>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/navigation-breadcrumbs.md
+`````markdown
+# Navigation: Breadcrumbs
+
+Breadcrumbs help users understand their current location within a site's hierarchy.
+
+## Basic Usage
+
+Breadcrumbs use a standard `<ul>` inside a `<nav>` or `<div>` with the `breadcrumbs` class.
+
+### Good Example: List-based Breadcrumbs
+```html
+<div class="breadcrumbs text-sm">
+  <ul>
+    <li><a>Home</a></li>
+    <li><a>Documents</a></li>
+    <li>Add Document</li>
+  </ul>
+</div>
+```
+
+## With Icons
+
+### Good Example: Breadcrumbs with SVGs
+```html
+<div class="breadcrumbs text-sm">
+  <ul>
+    <li>
+      <a>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="mr-2 h-4 w-4 stroke-current">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+        </svg>
+        Home
+      </a>
+    </li> 
+    <li>
+      <a>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="mr-2 h-4 w-4 stroke-current">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+        </svg>
+        Documents
+      </a>
+    </li>
+  </ul>
+</div>
+```
+
+### Bad Example: Using Divs instead of Lis
+```html
+<!-- Bad: DaisyUI breadcrumbs rely on <ul> and <li> structure for proper styling and separators -->
+<div class="breadcrumbs">
+  <a>Home</a> / <a>Settings</a>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/navigation-dock.md
+`````markdown
+# DaisyUI Navigation: Dock
+
+A bottom navigation component (formerly `btm-nav`) optimized for mobile web and desktop applications.
+
+## Basic Usage
+The `dock` class creates a fixed bottom bar.
+
+```html
+<div class="dock">
+  <button>
+    <svg>...</svg>
+    <span class="dock-label">Home</span>
+  </button>
+  <button class="dock-active">
+    <svg>...</svg>
+    <span class="dock-label">Search</span>
+  </button>
+  <button>
+    <svg>...</svg>
+    <span class="dock-label">Profile</span>
+  </button>
+</div>
+```
+
+## Pattern: Responsive Dock
+Hide labels on small screens or change dock position.
+
+```html
+<div class="dock dock-sm md:dock-md lg:dock-lg">
+  <button class="text-primary">
+    <svg>...</svg>
+  </button>
+  <button>
+    <svg>...</svg>
+  </button>
+</div>
+```
+
+## Good vs. Bad Dock
+```html
+<!-- Good: Semantic dock with proper button interaction -->
+<nav class="dock">
+  <a href="/">...</a>
+</nav>
+
+<!-- Bad: Manual absolute positioning and flex-grow hacks -->
+<div class="fixed bottom-0 w-full flex justify-around bg-white">...</div>
+```
+
+## Quick Reference
+- `dock-active`: Highlights the current item.
+- `dock-xs` to `dock-lg`: Sizing.
+- `dock-label`: Optional text label below icons.
+`````
+
+## File: .agents/skills/daisyui/navigation-link.md
+`````markdown
+# Navigation: Link
+
+The link component styles anchor tags with subtle hover effects and semantic colors.
+
+## Basic Usage
+
+### Good Example: Standard Link
+```html
+<a class="link">I am a simple link</a>
+```
+
+## Colors and Hover
+
+Use `link-hover` if you want the underline to only appear on hover.
+
+### Good Example: Link Variants
+```html
+<a class="link link-primary">Primary color</a>
+<a class="link link-secondary">Secondary color</a>
+<a class="link link-hover">Underline only on hover</a>
+<a class="link link-neutral">Neutral color</a>
+```
+
+## Interaction Patterns
+
+### Good Example: Hover-Primary
+```html
+<!-- Text starts neutral and becomes primary on hover -->
+<a class="link hover:link-primary">Hover me to see primary color</a>
+```
+
+### Bad Example: Over-styling Links
+```html
+<!-- Bad: Using button classes for text-only inline links is confusing for UX -->
+<p>Click <a class="btn btn-link">this button</a> to continue.</p>
+```
+`````
+
+## File: .agents/skills/daisyui/navigation-menu.md
+`````markdown
+# Navigation: Menu
+
+The menu component is a list of links, often used for sidebars or dropdowns. It can be vertical or horizontal.
+
+## Vertical Menu
+
+### Good Example: Basic Sidebar Menu
+```html
+<ul class="menu bg-base-200 rounded-box w-56">
+  <li><a>Item 1</a></li>
+  <li>
+    <a>Parent</a>
+    <ul>
+      <li><a>Submenu 1</a></li>
+      <li><a>Submenu 2</a></li>
+    </ul>
+  </li>
+  <li><a>Item 3</a></li>
+</ul>
+```
+
+## Horizontal Menu
+
+### Good Example: Navbar Menu
+```html
+<ul class="menu menu-horizontal bg-base-200 rounded-box">
+  <li><a>Item 1</a></li>
+  <li><a>Item 2</a></li>
+  <li><a>Item 3</a></li>
+</ul>
+```
+
+## Active and Focus States
+
+### Good Example: Highlighted Item
+```html
+<li><a class="active">Current Page</a></li>
+<li><a class="focus">Focused Item</a></li>
+```
+
+## With Icons
+
+### Good Example: Menu with Icons
+```html
+<ul class="menu bg-base-200 rounded-box w-56">
+  <li>
+    <a>
+      <svg ...></svg>
+      Dashboard
+    </a>
+  </li>
+</ul>
+```
+
+### Bad Example: Unordered Structure
+```html
+<!-- Bad: DaisyUI menu expects a strict <ul> -> <li> -> <a> structure -->
+<div class="menu">
+  <a>Item 1</a>
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/navigation-navbar.md
+`````markdown
+# Navigation: Navbar
+
+The navbar is a high-level container for branding, navigation links, and actions at the top of a page.
+
+## Anatomy of a Navbar
+
+A standard navbar is divided into `navbar-start`, `navbar-center`, and `navbar-end`.
+
+### Good Example: Standard Layout
+```html
+<div class="navbar bg-base-100 shadow-sm">
+  <div class="navbar-start">
+    <a class="btn btn-ghost text-xl">daisyUI</a>
+  </div>
+  <div class="navbar-center hidden lg:flex">
+    <ul class="menu menu-horizontal px-1">
+      <li><a>Item 1</a></li>
+      <li><a>Item 2</a></li>
+    </ul>
+  </div>
+  <div class="navbar-end">
+    <a class="btn">Button</a>
+  </div>
+</div>
+```
+
+## Responsive Navbar
+
+Use a dropdown in `navbar-start` for mobile menus.
+
+### Good Example: Mobile Dropdown
+```html
+<div class="navbar-start">
+  <div class="dropdown">
+    <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+      <svg ...></svg>
+    </div>
+    <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+      <li><a>Item 1</a></li>
+    </ul>
+  </div>
+  <a class="btn btn-ghost text-xl">daisyUI</a>
+</div>
+```
+
+### Bad Example: Center-heavy Layout on Mobile
+```html
+<!-- Bad: Centered navigation usually overflows on mobile; always wrap in hidden lg:flex -->
+<div class="navbar-center flex">...</div>
+```
+`````
+
+## File: .agents/skills/daisyui/navigation-pagination.md
+`````markdown
+# Navigation: Pagination
+
+Pagination allows users to navigate through multi-page content using a group of buttons.
+
+## Basic Usage
+
+Wrap buttons in a `join` container to group them together.
+
+### Good Example: Simple Pagination
+```html
+<div class="join">
+  <button class="join-item btn">1</button>
+  <button class="join-item btn btn-active">2</button>
+  <button class="join-item btn">3</button>
+  <button class="join-item btn">4</button>
+</div>
+```
+
+## Sizes
+
+### Good Example: Different Sizes
+```html
+<div class="join">
+  <button class="join-item btn btn-xs">1</button>
+  <button class="join-item btn btn-xs">2</button>
+</div>
+```
+
+## Navigation with Arrows
+
+### Good Example: Prev/Next Buttons
+```html
+<div class="join">
+  <button class="join-item btn">«</button>
+  <button class="join-item btn">Page 22</button>
+  <button class="join-item btn">»</button>
+</div>
+```
+
+### Bad Example: Ungrouped Buttons
+```html
+<!-- Bad: Without the 'join' container, buttons will have standard margins and separated borders -->
+<button class="btn">1</button>
+<button class="btn">2</button>
+```
+`````
+
+## File: .agents/skills/daisyui/navigation-steps.md
+`````markdown
+# Navigation: Steps
+
+Steps are used to visualize a multi-step process or progress through a wizard.
+
+## Basic Usage
+
+Steps use a `<ul>` with the `steps` class and `<li>` with the `step` class.
+
+### Good Example: Progress Tracker
+```html
+<ul class="steps">
+  <li class="step step-primary">Register</li>
+  <li class="step step-primary">Choose plan</li>
+  <li class="step">Purchase</li>
+  <li class="step">Receive Product</li>
+</ul>
+```
+
+## Vertical Steps
+
+Add the `steps-vertical` class to stack steps.
+
+### Good Example: Vertical Wizard
+```html
+<ul class="steps steps-vertical">
+  <li class="step step-primary">Step 1</li>
+  <li class="step step-primary">Step 2</li>
+  <li class="step">Step 3</li>
+</ul>
+```
+
+## Colored Steps
+
+### Good Example: Status-based Colors
+```html
+<ul class="steps">
+  <li class="step step-info">Fly</li>
+  <li class="step step-success">Land</li>
+  <li class="step step-error">Crash</li>
+</ul>
+```
+
+### Bad Example: Too many steps
+```html
+<!-- Bad: More than 5 steps horizontally often overflows on mobile. Use 'steps-vertical' for small screens. -->
+<ul class="steps">...</ul>
+```
+`````
+
+## File: .agents/skills/daisyui/navigation-tab.md
+`````markdown
+# Navigation: Tab
+
+Tabs allow users to switch between different views or content sections.
+
+## Basic Usage
+
+Tabs use a container with the `tabs` class. For modern DaisyUI 5 projects, using the radio button approach is recommended for state management without JS.
+
+### Good Example: Tabbed Interface with Radio Buttons
+```html
+<div role="tablist" class="tabs tabs-bordered">
+  <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Tab 1" />
+  <div role="tabpanel" class="tab-content p-10">Tab content 1</div>
+
+  <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Tab 2" checked="checked" />
+  <div role="tabpanel" class="tab-content p-10">Tab content 2</div>
+
+  <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Tab 3" />
+  <div role="tabpanel" class="tab-content p-10">Tab content 3</div>
+</div>
+```
+
+## Variants
+
+### Good Example: Lifted and Boxed Tabs
+```html
+<div role="tablist" class="tabs tabs-lifted">...</div>
+<div role="tablist" class="tabs tabs-boxed">...</div>
+```
+
+## Sizes
+
+### Good Example: Sizing Tabs
+```html
+<div role="tablist" class="tabs tabs-lg">...</div>
+<div role="tablist" class="tabs tabs-xs">...</div>
+```
+
+### Bad Example: Manual Active Class Toggling
+```html
+<!-- Bad: Toggling 'tab-active' with JS is less efficient than using the radio input pattern (DaisyUI 5 standard) -->
+<a class="tab tab-active">Tab 1</a>
+```
+`````
+
+## File: .agents/skills/daisyui/SKILL.md
+`````markdown
+---
+name: daisyui
+description: Expert guidance for building accessible, themeable UI components using daisyUI 5 and Tailwind CSS 4. Use this skill whenever the user wants to build web interfaces, dashboards, or components with Tailwind CSS.
+---
+
+# daisyui
+
+Expert guidance for using daisyUI 5 with Tailwind CSS 4 to build modern, accessible, and themeable web interfaces.
+
+## Core Concepts & Configuration
+
+Fundamental setup and customization for daisyUI projects.
+
+See [themes.md](./themes.md) for:
+- Official theme list and activation
+- Customizing themes with `@theme` blocks
+- Light/Dark mode implementation
+
+See [base-style.md](./base-style.md) for:
+- Default CSS variables
+- Color semantic mapping
+- Global component styling
+
+See [utilities-variables.md](./utilities-variables.md) for:
+- Layout utilities (Flex/Grid integration)
+- Variable overrides
+- Performance optimization
+
+See [theme-generator.md](./theme-generator.md) for:
+- Tailwind CSS 4 `@theme` block generation
+- OKLCH color customizing
+- Variable-based theme overrides
+
+## Actions
+
+Interactive elements for user engagement.
+
+- [actions-button.md](./actions-button.md): Primary, soft, outline, and ghost variants
+- [actions-dropdown.md](./actions-dropdown.md): Menu placement, hover, and click triggers
+- [actions-modal.md](./actions-modal.md): Dialog element integration and accessibility
+- [actions-speed-dial.md](./actions-speed-dial.md): Floating action buttons with revealed sub-menu
+- [actions-swap.md](./actions-swap.md): Animated state toggles (icons/text)
+- [actions-theme-controller.md](./actions-theme-controller.md): Declarative theme switching toggles and radios
+
+## Data Display
+
+Displaying information in structured formats.
+
+- [data-display-accordion.md](./data-display-accordion.md): Collapsible content sections
+- [data-display-avatar.md](./data-display-avatar.md): User profiles and status indicators
+- [data-display-badge.md](./data-display-badge.md): Small status indicators and counts
+- [data-display-card.md](./data-display-card.md): Versatile content containers
+- [data-display-carousel.md](./data-display-carousel.md): Image and content sliders
+- [data-display-chat.md](./data-display-chat.md): Messaging interface bubbles
+- [data-display-collapse.md](./data-display-collapse.md): Simple toggleable visibility
+- [data-display-countdown.md](./data-display-countdown.md): Time-based counters
+- [data-display-diff.md](./data-display-diff.md): Side-by-side element comparison
+- [data-display-hover-3d-card.md](./data-display-hover-3d-card.md): Interactive 3D tilt effects
+- [data-display-hover-gallery.md](./data-display-hover-gallery.md): Expanding grid image galleries
+- [data-display-kbd.md](./data-display-kbd.md): Keyboard shortcut keys
+- [data-display-list.md](./data-display-list.md): Semantic rows for settings and contacts
+- [data-display-stat.md](./data-display-stat.md): Numerical data and KPI displays
+- [data-display-status.md](./data-display-status.md): Standalone and avatar-bound status dots
+- [data-display-table.md](./data-display-table.md): Tabular data formatting
+- [data-display-text-rotate.md](./data-display-text-rotate.md): Animated sequential text headlines
+- [data-display-timeline.md](./data-display-timeline.md): Chronological event lists
+
+## Data Input
+
+Collecting user information through forms.
+
+- [data-input-calendar.md](./data-input-calendar.md): Date grid selection and display
+- [data-input-checkbox.md](./data-input-checkbox.md): Multi-select options
+- [data-input-fieldset.md](./data-input-fieldset.md): Grouped input containers with legends
+- [data-input-file.md](./data-input-file.md): Styled file upload inputs
+- [data-input-filter.md](./data-input-filter.md): Toggleable chips for search categories
+- [data-input-label.md](./data-input-label.md): Semantic spacing for form labels
+- [data-input-radio.md](./data-input-radio.md): Single-select options
+- [data-input-range.md](./data-input-range.md): Slider inputs for numeric values
+- [data-input-rating.md](./data-input-rating.md): Star and emoji rating systems
+- [data-input-select.md](./data-input-select.md): Dropdown selection menus
+- [data-input-text.md](./data-input-text.md): Standard text and email inputs
+- [data-input-textarea.md](./data-input-textarea.md): Multi-line text input
+- [data-input-toggle.md](./data-input-toggle.md): Binary switch inputs
+- [data-input-validator.md](./data-input-validator.md): Real-time feedback for input criteria
+
+## Feedback
+
+Providing status and progress updates to users.
+
+- [feedback-alert.md](./feedback-alert.md): Critical status messages
+- [feedback-loading.md](./feedback-loading.md): Spinners and indeterminate states
+- [feedback-progress.md](./feedback-progress.md): Determinant progress bars
+- [feedback-radial.md](./feedback-radial.md): Circular progress indicators
+- [feedback-skeleton.md](./feedback-skeleton.md): Content loading placeholders
+- [feedback-toast.md](./feedback-toast.md): Floating notification messages
+- [feedback-tooltip.md](./feedback-tooltip.md): Hover-based context info
+
+## Navigation
+
+Guiding users through the application.
+
+- [navigation-breadcrumbs.md](./navigation-breadcrumbs.md): Path-based navigation
+- [navigation-bottom-nav.md](./navigation-bottom-nav.md): Legacy sticky bottom navigation
+- [navigation-dock.md](./navigation-dock.md): Modern sticky bottom navigation (replaces btm-nav)
+- [navigation-link.md](./navigation-link.md): Styled anchor elements
+- [navigation-menu.md](./navigation-menu.md): List-based navigation menus
+- [navigation-navbar.md](./navigation-navbar.md): Main application headers
+- [navigation-pagination.md](./navigation-pagination.md): Multi-page navigation controls
+- [navigation-steps.md](./navigation-steps.md): Multi-step process indicators
+- [navigation-tab.md](./navigation-tab.md): Content switching interfaces
+
+## Layout
+
+Structural components for page organization.
+
+- [layout-artboard.md](./layout-artboard.md): Fixed-size mobile screens
+- [layout-divider.md](./layout-divider.md): Vertical or horizontal separators
+- [layout-drawer.md](./layout-drawer.md): Sidebar navigation overlays
+- [layout-footer.md](./layout-footer.md): Multi-column page footers
+- [layout-hero.md](./layout-hero.md): Large attention-grabbing headers
+- [layout-indicator.md](./layout-indicator.md): Floating element badges
+- [layout-join.md](./layout-join.md): Grouping adjacent components
+- [layout-mask.md](./layout-mask.md): Image shaping and cropping
+- [layout-stack.md](./layout-stack.md): Layered component groupings
+
+## Mockup
+
+Presenting content inside simulated UI wrappers.
+
+- [mockup-browser.md](./mockup-browser.md): Simulated browser window
+- [mockup-code.md](./mockup-code.md): Styled terminal/editor block
+- [mockup-phone.md](./mockup-phone.md): Simulated mobile device
+- [mockup-window.md](./mockup-window.md): Simulated OS window
+`````
+
+## File: .agents/skills/daisyui/theme-generator.md
+`````markdown
+# DaisyUI 5 Theme Generator
+
+Guide for generating and customizing themes in DaisyUI 5 using Tailwind CSS 4 `@theme` blocks.
+
+## Basic Usage
+In DaisyUI 5, themes are defined using standard CSS variables within a Tailwind `@theme` block.
+
+```css
+@theme {
+  --color-primary: oklch(0.65 0.25 250);
+  --color-secondary: oklch(0.7 0.15 300);
+  --radius-box: 1rem;
+  --radius-btn: 0.5rem;
+}
+```
+
+## Pattern: Multiple Themes
+You can define multiple themes by nesting variables under data attributes.
+
+```css
+[data-theme="my-custom-theme"] {
+  --color-primary: oklch(0.6 0.2 20);
+  --color-base-100: oklch(0.95 0.02 20);
+  --color-base-content: oklch(0.2 0.05 20);
+}
+
+[data-theme="dark-pro"] {
+  --color-primary: oklch(0.5 0.15 200);
+  --color-base-100: oklch(0.2 0.01 200);
+  --color-base-content: oklch(0.9 0.01 200);
+}
+```
+
+## Good vs. Bad Theme Config
+```css
+/* Good: Using OKLCH for consistent perceptual lightness across themes */
+--color-primary: oklch(0.65 0.25 250);
+
+/* Bad: Using Hex codes which don't support modern color features natively */
+--color-primary: #3b82f6;
+```
+
+## Key Variable Prefix
+DaisyUI 5 looks for specifically named variables to apply its component styles:
+- `--color-primary`, `--color-secondary`, etc.
+- `--color-base-100`, `--color-base-200`, etc.
+- `--radius-btn`, `--radius-box`.
+- `--padding-card`.
+`````
+
+## File: .agents/skills/daisyui/themes.md
+`````markdown
+# DaisyUI Themes
+
+Expert guidance for implementing and customizing themes in daisyUI 5.
+
+## Official Themes
+daisyUI includes 32+ built-in themes. Activate them by adding `data-theme` to your `<html>` tag.
+
+| Theme Group | Names |
+|-------------|-------|
+| Clean | `light`, `dark`, `cupcake`, `bumblebee`, `winter`, `nord` |
+| Vibrant | `emerald`, `corporate`, `synthwave`, `cyberpunk`, `aqua` |
+| Aesthetic | `retro`, `valentine`, `halloween`, `garden`, `forest`, `lofi`, `pastel`, `fantasy` |
+| Pro | `luxury`, `dracula`, `business`, `night`, `coffee`, `dim`, `sunset` |
+
+## Theme Activation
+```html
+<!-- Single theme -->
+<html data-theme="cupcake">
+
+<!-- Dark mode toggle support -->
+<html data-theme="light">
+<!-- Switch to -->
+<html data-theme="dark">
+```
+
+## Pattern: Customizing with Tailwind 4
+In Tailwind 4, you customize daisyUI themes directly in your CSS using the `@theme` block.
+
+```css
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  /* Customize an existing theme */
+  --color-primary: oklch(0.7 0.2 150);
+  --color-primary-content: oklch(0.98 0.01 150);
+  
+  /* Create a custom theme object */
+  --daisyui-theme-mytheme: {
+    "primary": "#570df8",
+    "primary-content": "#ffffff",
+    "secondary": "#f000b8",
+    "accent": "#37cdbe",
+    "neutral": "#3d4451",
+    "base-100": "#ffffff",
+  }
+}
+```
+
+## Good vs. Bad Theming
+```html
+<!-- Good: Using semantic colors -->
+<div class="bg-primary text-primary-content p-4">
+  Always readable in any theme.
+</div>
+
+<!-- Bad: Hardcoding hex values -->
+<div class="bg-[#570df8] text-white p-4">
+  Will look broken when switching to a light/custom theme.
+</div>
+```
+`````
+
+## File: .agents/skills/daisyui/utilities-variables.md
+`````markdown
+# Utilities & Variables
+
+DaisyUI 5 and Tailwind CSS 4 integrate deeply, allowing you to use CSS variables to override specific component behaviors without writing complex selectors.
+
+## Layout Utilities
+
+Use standard Tailwind layout utilities alongside DaisyUI components.
+
+### Good Example: Mixing Tailwind Layout with DaisyUI
+```html
+<div class="flex flex-col gap-4 p-6 sm:grid sm:grid-cols-2">
+  <div class="card bg-base-100 shadow-sm">...</div>
+  <div class="card bg-base-100 shadow-sm">...</div>
+</div>
+```
+
+## Variable Overrides
+
+DaisyUI 5 allows overriding specific component variables within a local scope or in the `@theme` block.
+
+### Good Example: Local Variable Override
+```html
+<!-- Overriding the border radius locally using arbitrary property syntax in Tailwind 4 -->
+<button class="btn btn-primary [--rounded-btn:0.5rem]">
+  Slightly Rounded Button
+</button>
+```
+
+### Good Example: Global Theme Overrides
+```css
+@theme {
+  /* Tailwind 4 @theme syntax for global DaisyUI variables */
+  --rounded-box: 1rem; /* Border radius for cards and modals */
+  --rounded-btn: 0.5rem; /* Border radius for buttons */
+  --animation-btn: 0.25s; /* Click animation duration */
+}
+```
+
+### Bad Example: Important Flags and Custom CSS
+```css
+/* Bad: Bypassing the built-in variable system */
+.btn {
+  border-radius: 0px !important;
+}
+```
 `````
 
 ## File: .github/copilot-instructions.md
@@ -2648,6 +6140,241 @@ Feedback visual. SVG animados ligeros. `LoadingOverlay` bloquea interacción en 
 - **Tooltips**: Descripción en botones tiendas solo icono (móvil).
 `````
 
+## File: docs/frontend/design-tokens.md
+`````markdown
+# Guía de Design Tokens — Venezuela Juega
+
+> Referencia práctica para mantener y extender el sistema de tokens de diseño del proyecto.
+
+## Arquitectura de Tokens
+
+El sistema usa **3 capas** (Tailwind v4 CSS-first):
+
+```
+@theme { Primitivos }      →  Valores raw de color, tipografía
+:root  { Semánticos }       →  Variables CSS con propósito (glass, layout)
+Componentes (clases TW)     →  bg-surface-900, text-brand-gold, etc.
+```
+
+### Regla de Oro
+
+> **Nunca** sobrescribas nombres de paleta de Tailwind (`slate-*`, `cyan-*`, `blue-*`).  
+> Usa nombres **semánticos propios**: `surface-*`, `brand-*`, `accent-*`.
+
+---
+
+## Inventario de Tokens Actuales
+
+### Surface (escala oscura principal)
+
+| Token | Hex | Uso típico |
+|-------|-----|------------|
+| `surface-950` | `#0d0a11` | Fondo más profundo, body |
+| `surface-900` | `#18131e` | Fondos de sección, sidebar |
+| `surface-800` | `#221a2a` | Cards, inputs, contenedores |
+| `surface-700` | `#2c1b2e` | Bordes, divisores |
+| `surface-600` | `#3b2a3d` | Bordes secundarios |
+| `surface-500` | `#5b4a5d` | Texto deshabilitado |
+| `surface-400` | `#9c8a9d` | Texto secundario, iconos |
+| `surface-300` | `#d4cfd6` | Texto body |
+| `surface-200` | `#eae7ec` | Texto principal |
+| `surface-100` | `#fff4e0` | Texto destacado (warm) |
+| `surface-50`  | `#ffffff` | Blanco puro |
+
+### Brand (bandera venezolana)
+
+| Token | Hex | Uso |
+|-------|-----|-----|
+| `brand-gold` | `#f2b63d` | Amarillo principal, highlights |
+| `brand-blue` | `#457cd6` | Azul principal, links |
+| `brand-red` | `#e34262` | Rojo principal, errores |
+| `brand-red-dark` | `#94353d` | Rojo oscuro, estados críticos |
+| `brand-warm-white` | `#fff4e0` | Blanco cálido |
+
+### Accent (paleta suplementaria)
+
+| Token | Hex | Uso |
+|-------|-----|-----|
+| `accent-teal` | `#8fcccb` | Teal claro, highlights interactivos |
+| `accent-teal-dark` | `#449489` | Teal primario, botones CTA |
+| `accent-teal-deep` | `#285763` | Teal oscuro, sombras |
+| `accent-indigo` | `#4b3b9c` | Violeta, scrollbar hover |
+| `accent-indigo-dark` | `#2f2b5c` | Violeta oscuro |
+| `accent-lime` | `#b4ba47` | Lima/verde claro |
+| `accent-lime-dark` | `#6d8c32` | Lima oscuro |
+| `accent-orange` | `#d46e33` | Naranja |
+| `accent-mauve` | `#9c656c` | Mauve/rosado |
+| `accent-mauve-dark` | `#57253b` | Mauve oscuro |
+| `accent-mauve-deep` | `#2c1b2e` | Mauve profundo |
+
+### Status (estados de juegos)
+
+| Token | Hex | Estado |
+|-------|-----|--------|
+| `status-released` | `#16a34a` | Lanzado |
+| `status-in-development` | `#f2b63d` | En desarrollo |
+| `status-on-hold` | `#71717a` | En pausa |
+| `status-canceled` | `#94353d` | Cancelado |
+| `status-demo` | `#4ade80` | Demo lanzado |
+| `status-prototype` | `#e4e4e7` | Prototipo |
+| `status-lost` | `#fecaca` | Media perdida |
+| `status-early` | `#449489` | Acceso anticipado |
+| `status-recovered` | `#457cd6` | Recuperado |
+| `status-unknown` | `#18181b` | Desconocido |
+
+### Store (marcas de tiendas)
+
+| Token | Hex | Tienda |
+|-------|-----|--------|
+| `store-steam` / `store-steam-hover` | `#172337` / `#2a475e` | Steam |
+| `store-itch` / `store-itch-hover` | `#fa5c5c` / `#ff7f7f` | Itch.io |
+| `store-nintendo` / `store-nintendo-hover` | `#e60012` / `#ff334f` | Nintendo |
+| `store-playstation` / `store-playstation-hover` | `#0070d1` / `#0084f7` | PlayStation |
+| `store-xbox` / `store-xbox-hover` | `#107b10` / `#00bfff` | Xbox |
+| `store-google-play` / `store-google-play-hover` | `#00a185` / `#00c9a6` | Play Store |
+| `store-apple` / `store-apple-hover` | `#000000` / `#333333` | App Store |
+| `store-meta` / `store-meta-hover` | `#0078ff` / `#3391ff` | Meta |
+| `store-gog` / `store-gog-hover` | `#c99aff` / `#3391ff` | GOG |
+
+---
+
+## Cómo Agregar Nuevos Tokens
+
+### 1. Agregar un color primitivo
+
+En `src/styles/global.css`, dentro del bloque `@theme`:
+
+```css
+@theme {
+  /* ─── Tu nueva categoría ─── */
+  --color-mi-nuevo-token: #hexcolor;
+}
+```
+
+### 2. Usarlo en componentes
+
+```tsx
+// Tailwind lo genera automáticamente como clase
+<div className="bg-mi-nuevo-token text-mi-nuevo-token">
+```
+
+### 3. Si es un token semántico (con propósito)
+
+Agréguelo en `:root` como variable CSS:
+
+```css
+:root {
+  --mi-variable: var(--color-mi-nuevo-token);
+}
+```
+
+---
+
+## Convenciones de Nombres
+
+| Prefijo | Cuándo usarlo | Ejemplo |
+|---------|--------------|---------|
+| `surface-` | Escala de grises/oscuros del fondo | `surface-800` |
+| `brand-` | Colores de identidad de marca | `brand-gold` |
+| `accent-` | Colores decorativos/highlight | `accent-teal-dark` |
+| `status-` | Estados de juegos | `status-released` |
+| `store-` | Colores de marca de tiendas | `store-steam` |
+
+### Reglas:
+1. **Usar sufijos descriptivos** en vez de números arbitrarios: `-dark`, `-deep`, `-hover`
+2. **Agrupar en familias**: `accent-teal`, `accent-teal-dark`, `accent-teal-deep`
+3. **No sobrescribir paletas de Tailwind**: nunca `--color-slate-*` ni `--color-cyan-*`
+4. **Token para cada uso**: no reutilizar el mismo hex en múltiples tokens a menos que sea intencional
+
+---
+
+## Tokens Semánticos en `:root`
+
+Tokens de mayor nivel para efectos y layout:
+
+```css
+:root {
+  --header-height: 80px;
+  --primary-glow: conic-gradient(...);
+  
+  /* Glass morphism */
+  --glass-bg: rgba(24, 19, 30, 0.4);
+  --glass-border: rgba(255, 244, 224, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-card-bg: rgba(255, 255, 255, 0.03);
+  --glass-card-border: rgba(255, 255, 255, 0.05);
+}
+```
+
+---
+
+## Patrones Anti (NO hacer)
+
+| ❌ Incorrecto | ✅ Correcto |
+|---|---|
+| `bg-[#172337]` | `bg-store-steam` |
+| `text-[#f2b63d]` | `text-brand-gold` |
+| `--color-slate-900: #custom` | `--color-surface-900: #custom` |
+| `bg-cyan-500` (overriding cyan) | `bg-accent-teal-dark` |
+| `rgba(6, 182, 212, 0.3)` inline | Crear `--glass-*` token en `:root` |
+
+---
+
+## Checklist para Nuevos Componentes
+
+- [ ] ¿Usas solo tokens de `@theme` para colores? (nunca hex raw)
+- [ ] ¿Las sombras con `rgba()` están en `:root` como variables?
+- [ ] ¿Los nombres de clase usan `surface-*`, `brand-*`, `accent-*`?
+- [ ] ¿Los colores de hover/active usan tokens (ej. `hover:bg-store-steam-hover`)?
+- [ ] ¿No se sobrescriben nombres de Tailwind por defecto?
+
+---
+
+## Próximos Pasos de Estandarización
+
+### Pendientes de tokenizar:
+
+1. **Sombras con rgba en inline styles**  
+   Componentes como `GameCard.tsx`, `GameDetailPage.tsx`, `Modal.tsx` usan `shadow-[0_0_12px_rgba(...)]`. Crear tokens:
+   ```css
+   @theme {
+     --shadow-glow-teal: 0 0 12px rgba(68, 148, 137, 0.3);
+     --shadow-glow-red: 0 0 8px rgba(244, 63, 94, 0.5);
+   }
+   ```
+
+2. **CalendarPage (FullCalendar overrides)**  
+   ~30 valores `rgba(6, 182, 212, ...)` en un bloque `<style>` inline. Migrar a variables CSS.
+
+3. **GameJamPage `gray-*` references**  
+   ~30 usos de `text-gray-300/400` que podrían estandarizarse a `text-surface-300/400`.
+
+4. **CategoryPresets `accentFrom`/`accentTo`**  
+   Los colores en `categoryPresets.ts` son hex raw dinámicos. Considerar crear un mapping a los tokens CSS.
+
+5. **Colores de gradiente dinámicos**  
+   `GameJamsPage.tsx` genera gradientes con hex dinámico desde datos. No tokenizable directamente, pero documentar como excepción aceptada.
+
+---
+
+## Referencia Rápida: Migración de Nombres
+
+| Antes (hijacked) | Después (token propio) |
+|---|---|
+| `slate-950` | `surface-950` |
+| `slate-900` → `900` | `surface-900` → `900` |
+| `cyan-400` | `accent-teal` |
+| `cyan-500` | `accent-teal-dark` |
+| `yellow-300/400/500` | `brand-gold` |
+| `blue-400/500/600` | `brand-blue` |
+| `red-400/500` | `brand-red` |
+| `red-600` | `brand-red-dark` |
+| `indigo-400/500` | `accent-indigo` |
+| `emerald-300/400` | `accent-lime` |
+| `orange-300/400/500` | `accent-orange` |
+| `purple-300/400` | `accent-mauve` |
+`````
+
 ## File: docs/frontend/features.md
 `````markdown
 # Características y Funcionalidades
@@ -3233,157 +6960,6 @@ src/
 ```
 `````
 
-## File: docs/frontend/theme-system.md
-`````markdown
-# Sistema de Temas (Light/Dark Mode)
-
-Este documento describe la arquitectura y el funcionamiento del sistema de temas de **Venezuela Juega**, el cual permite alternar entre un modo oscuro (predeterminado) y un modo claro con una transición visual suave.
-
-## Arquitectura del Sistema
-
-El sistema se basa en tres pilares fundamentales:
-1. **Estado Global**: Administrado por `ThemeContext`.
-2. **Inversión de Tokens**: Re-mapeado automático de colores de Tailwind v4 mediante variables CSS.
-3. **Persistencia y Rendimiento**: Prevención de destellos (FOUC) mediante detección temprana.
-
----
-
-## 1. ThemeContext
-
-Ubicación: `src/hooks/ThemeContext.tsx`
-
-Es el responsable de orquestar el cambio de estado y aplicar las persistencias necesarias.
-
-### Funcionamiento
-- **Estado Inicial**: Determina el tema basándose en `localStorage` (llave `vj-theme`). Si no existe, el valor predeterminado es `dark`.
-- **Efecto de Aplicación**: Al cambiar el estado, actualiza la clase del elemento `<html>` (`.light` o `.dark`) y el atributo `data-theme`.
-- **Transición**: Integra el **View Transitions API** para realizar un efecto de "revelación de logo" (logo reveal) al cambiar de tema.
-- **Efecto de Logo**: El nuevo tema se revela a través del logo de la aplicación, el cual escala desde el centro de la pantalla.
-- **Fases de Animación**: El logo aparece rápidamente (10% de la duración), se mantiene visible un momento para reforzar la identidad de marca, y finalmente se expande masivamente para revelar el contenido completo.
-
-```typescript
-const toggleTheme = () => {
-    const switchTheme = () => {
-        setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
-    };
-
-    if (!document.startViewTransition) {
-        switchTheme();
-    } else {
-        document.startViewTransition(switchTheme);
-    }
-};
-```
-
----
-
-## 2. Estrategia de Inversión de Tokens (CSS)
-
-Ubicación: `src/styles/global.css`
-
-En lugar de añadir clases `dark:` de forma manual en cientos de componentes, el sistema utiliza una técnica de **inversión de tokens** a nivel de motor de estilos.
-
-### Tailwind v4 Configuration
-Para habilitar el modo oscuro basado en clases (requerido por Tailwind v4), se utiliza la directiva:
-```css
-@custom-variant dark (&:where(.dark, .dark *));
-```
-
-### Inversión de Escala
-Definimos los colores base de la aplicación (Escala Surface) en el bloque `@theme`. Cuando la clase `.light` está activa, re-definimos esas mismas variables en el `@layer theme`:
-
-- **Oscuro (Default)**: `surface-950` es negro profundo (#0d0a11).
-- **Claro (.light)**: `surface-950` se convierte en un gris muy claro (#f5f3f7).
-
-Este enfoque garantiza que cualquier componente que use tokens como `bg-surface-950` o `text-surface-200` se adapte **automáticamente** sin cambios en el código del componente.
-
-### Secciones Scoped (`hero-always-dark`)
-Para mantener la estética cinematográfica de la sección Hero (mosaico de juegos), se utiliza la clase `.hero-always-dark`. Esta clase restaura los tokens oscuros dentro de ese contenedor, incluso si el sitio está en modo claro.
-
----
-
-## 3. Prevención de Destellos (FOUC)
-
-Para evitar el "flash" de luz blanca al cargar la app en modo oscuro (o viceversa), se implementó un script de bloqueo en el `<head>` de `index.html`.
-
-```html
-<script>
-    (function() {
-        try {
-            var t = localStorage.getItem('vj-theme');
-            if (t === 'light' || t === 'dark') {
-                document.documentElement.className = t;
-            }
-        } catch(e) {}
-    })();
-</script>
-```
-
-Este script se ejecuta antes de que el navegador renderice el cuerpo de la página, asegurando que el tema correcto esté aplicado desde el primer frame.
-
----
-
-## 4. Efectos Visuales y Glassmorphism
-
-El sistema adapta dinámicamente:
-- **Scrollbars**: Cambian de color y opacidad según el tema.
-- **Glass Panel**: La utilidad `.glass-panel` ajusta su desenfoque y opacidad de fondo (`white/75` en claro vs `surface-950/70` en oscuro). Los valores de glass están tokenizados en `:root` como `--glass-*`.
-- **Logos**: Se aplica un filtro `invert` condicional mediante CSS para asegurar la visibilidad del logo blanco sobre fondos claros.
-
----
-
-## 5. Mejores Prácticas para Desarrolladores
-
-Para mantener la compatibilidad con el sistema de temas:
-1. **Usa Tokens Surface**: Prefiere `bg-surface-900` sobre colores hexadecimales fijos. Ver [design-tokens.md](./design-tokens.md) para el inventario completo.
-2. **Evita Hardcoding**: Si necesitas un color específico para un tema, usa las variantes de Tailwind: `bg-white dark:bg-surface-950`.
-3. **Semántica**: Los tokens están invertidos. Recuerda que `surface-50` es el texto más oscuro en el tema claro.
-4. **No sobrescribas Tailwind**: Nunca uses `--color-slate-*` o `--color-cyan-*` en `@theme`. Usa los nombres propios (`surface-*`, `accent-*`, `brand-*`).
-`````
-
-## File: src/components/AlphaFilter.tsx
-`````typescript
-import { h } from 'preact';
-⋮----
-interface AlphaFilterProps {
-  activeAlpha: string | null;
-  onAlphaChange: (value: string | null) => void;
-  className?: string;
-}
-⋮----
-const AlphaFilter = (
-`````
-
-## File: src/components/ContributorCard.tsx
-`````typescript
-import { h, ComponentChildren } from 'preact';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
-⋮----
-export interface ContributorSocial {
-    icon: any;
-    url: string;
-}
-⋮----
-export interface Contributor {
-    name: string;
-    role: string;
-    description: string;
-    socials: ContributorSocial[];
-}
-⋮----
-const Card = ({ children, className = "" }: { children: ComponentChildren, className?: string }) => (
-    <div className={`bg-surface-800/30 backdrop-blur-sm p-6 rounded-2xl border border-surface-700/40 hover:border-surface-600/60 transition-all duration-300 ${className}`}>
-        {children}
-    </div>
-);
-⋮----
-interface ContributorCardProps {
-    person: Contributor;
-}
-`````
-
 ## File: src/components/CoverImage.tsx
 `````typescript
 import { JSX } from 'preact/jsx-runtime';
@@ -3399,24 +6975,6 @@ interface CoverImageProps {
 const handleError = () =>
 ⋮----
 // Placeholder con degradado + emoji
-`````
-
-## File: src/components/hero/CategoryCard.tsx
-`````typescript
-import { h } from 'preact';
-import type { CategoryPreset } from './categoryPresets';
-⋮----
-const hexToRgb = (hex: string): string =>
-⋮----
-export interface CategoryCardProps {
-    preset: CategoryPreset;
-    gameCount: number;
-    backgroundSrc?: string;
-
-    overrideImageUrl?: string;
-    onClick: () => void;
-    index: number;
-}
 `````
 
 ## File: src/components/hero/categoryPresets.ts
@@ -3459,54 +7017,6 @@ export interface ProgressDotsProps {
 }
 `````
 
-## File: src/components/hero/TabButton.tsx
-`````typescript
-import { h } from 'preact';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
-⋮----
-export interface TabButtonProps {
-    icon: IconDefinition;
-    label: string;
-    isActive: boolean;
-    onClick: () => void;
-}
-⋮----
-const TabButton = ({ icon, label, isActive, onClick }: TabButtonProps) => (
-    <button
-        onClick={onClick}
-        className={`
-            flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5
-            rounded-xl text-[11px] md:text-xs font-bold uppercase tracking-[0.12em]
-            transition-all duration-300 cursor-pointer border
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50
-            ${isActive
-                ? 'bg-white/[0.1] border-white/[0.15] text-white shadow-lg'
-                : 'bg-transparent border-transparent text-surface-500 hover:text-surface-300 hover:bg-white/[0.04]'
-            }
-        `}
-    >
-        <FontAwesomeIcon icon={icon} className={`text-xs ${isActive ? 'text-brand-gold' : ''}`} />
-        <span className="hidden sm:inline">{label}</span>
-    </button>
-);
-`````
-
-## File: src/components/Highlights.tsx
-`````typescript
-import { useState, useEffect, useCallback, useMemo } from 'preact/hooks';
-import { Game } from '@/src/types';
-import { HighlightCard } from '@/src/components';
-import { IndicatorLeftIcon, IndicatorRightIcon } from '@/src/components/icons';
-⋮----
-interface HighlightsProps {
-    games: Game[];
-    onGameClick: (game: Game) => void;
-}
-⋮----
-const goToPrevious = () =>
-`````
-
 ## File: src/components/icons/ExternalLinkIcon.tsx
 `````typescript
 import { h } from 'preact';
@@ -3524,31 +7034,6 @@ const ExternalLinkIcon = (
 
 `````
 
-## File: src/components/LoadingOverlay.tsx
-`````typescript
-import { h } from 'preact';
-import { useEffect, useRef, useState } from 'preact/hooks';
-import { gsap } from 'gsap';
-⋮----
-interface LoadingOverlayProps {
-    isLoading: boolean;
-    logoSrc?: string;
-    onAnimationComplete?: () => void;
-}
-`````
-
-## File: src/components/LoadingSpinner.tsx
-`````typescript
-import {FunctionComponent, h} from 'preact';
-import {useRef} from "preact/hooks";
-⋮----
-interface LoadingSpinnerProps {
-    logoSrc?: string;
-}
-⋮----
-const LoadingSpinner: FunctionComponent<LoadingSpinnerProps> = (
-`````
-
 ## File: src/components/PageTransition.tsx
 `````typescript
 import { useLayoutEffect, useRef } from 'preact/hooks';
@@ -3563,53 +7048,6 @@ interface PageTransitionProps {
 const PageTransition = (
 ⋮----
 // Ensure initial state to avoid flash of content
-`````
-
-## File: src/components/PromoHeader.tsx
-`````typescript
-import { h } from 'preact';
-import { ComponentChildren } from 'preact';
-⋮----
-interface PromoHeaderProps {
-    title: string;
-    subtitle: string;
-    subtitleMobile?: string;
-    logoSrc?: string;
-    gradientClass?: string;
-    children: ComponentChildren;
-}
-⋮----
-const PromoHeader = ({
-                           title,
-                           subtitle,
-                           subtitleMobile,
-                           children,
-                           logoSrc,
-                           gradientClass
-}: PromoHeaderProps) =>
-`````
-
-## File: src/components/ScreenshotLightbox.tsx
-`````typescript
-import { useEffect, useState } from 'preact/hooks';
-import { createPortal } from 'preact/compat';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-⋮----
-interface ScreenshotLightboxProps {
-    isOpen: boolean;
-    onClose: () => void;
-    screenshots: string[];
-    initialIndex?: number;
-}
-⋮----
-const showPrev = () =>
-⋮----
-const showNext = () =>
-⋮----
-const onKey = (e: KeyboardEvent) =>
-⋮----
-onClick=
 `````
 
 ## File: src/hooks/FireflyContext.tsx
@@ -3668,6 +7106,18 @@ export function useTextLayout(
   containerWidth: number,
   options: TextLayoutOptions = {}
 )
+`````
+
+## File: src/index.tsx
+`````typescript
+import { render } from 'preact';
+import App from './App';
+⋮----
+// Normalize trailing slash (avoid blank page when route doesn't match '/path/' vs '/path')
+⋮----
+const normalized = pathname.replace(/\/+$/, ''); // remove trailing slashes
+⋮----
+// No-op: normalization is best-effort
 `````
 
 ## File: src/pages/Redirect.tsx
@@ -3951,28 +7401,208 @@ Si tienes dudas sobre cómo implementar algo o encuentras un error, puedes abrir
 ¡Gracias por sumarte a la comunidad de desarrolladores de Venezuela!
 `````
 
-## File: src/components/hero/CompactStat.tsx
+## File: docs/frontend/theme-system.md
+`````markdown
+# Sistema de Temas (Light/Dark Mode)
+
+Este documento describe la arquitectura y el funcionamiento del sistema de temas de **Venezuela Juega**, el cual permite alternar entre un modo oscuro (predeterminado) y un modo claro con una transición visual suave.
+
+## Arquitectura del Sistema
+
+El sistema se basa en tres pilares fundamentales:
+1. **Estado Global**: Administrado por `ThemeContext`.
+2. **Inversión de Tokens**: Re-mapeado automático de colores de Tailwind v4 mediante variables CSS.
+3. **Persistencia y Rendimiento**: Prevención de destellos (FOUC) mediante detección temprana.
+
+---
+
+## 1. ThemeContext
+
+Ubicación: `src/hooks/ThemeContext.tsx`
+
+Es el responsable de orquestar el cambio de estado y aplicar las persistencias necesarias.
+
+### Funcionamiento
+- **Estado Inicial**: Determina el tema basándose en `localStorage` (llave `vj-theme`). Si no existe, el valor predeterminado es `dark`.
+- **Efecto de Aplicación**: Al cambiar el estado, actualiza la clase del elemento `<html>` (`.light` o `.dark`) y el atributo `data-theme`.
+- **Transición**: Integra el **View Transitions API** para realizar un efecto de "revelación de logo" (logo reveal) al cambiar de tema.
+- **Efecto de Logo**: El nuevo tema se revela a través del logo de la aplicación, el cual escala desde el centro de la pantalla.
+- **Fases de Animación**: El logo aparece rápidamente (10% de la duración), se mantiene visible un momento para reforzar la identidad de marca, y finalmente se expande masivamente para revelar el contenido completo.
+
+```typescript
+const toggleTheme = () => {
+    const switchTheme = () => {
+        setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+    };
+
+    if (!document.startViewTransition) {
+        switchTheme();
+    } else {
+        document.startViewTransition(switchTheme);
+    }
+};
+```
+
+---
+
+## 2. Estrategia de Inversión de Tokens (CSS)
+
+Ubicación: `src/styles/global.css`
+
+En lugar de añadir clases `dark:` de forma manual en cientos de componentes, el sistema utiliza una técnica de **inversión de tokens** a nivel de motor de estilos.
+
+### Tailwind v4 Configuration
+Para habilitar el modo oscuro basado en clases (requerido por Tailwind v4), se utiliza la directiva:
+```css
+@custom-variant dark (&:where(.dark, .dark *));
+```
+
+### Inversión de Escala
+Definimos los colores base de la aplicación (Escala Surface) en el bloque `@theme`. Cuando la clase `.light` está activa, re-definimos esas mismas variables en el `@layer theme`:
+
+- **Oscuro (Default)**: `surface-950` es negro profundo (#0d0a11).
+- **Claro (.light)**: `surface-950` se convierte en un gris muy claro (#f5f3f7).
+
+Este enfoque garantiza que cualquier componente que use tokens como `bg-surface-950` o `text-surface-200` se adapte **automáticamente** sin cambios en el código del componente.
+
+### Secciones Scoped (`hero-always-dark`)
+Para mantener la estética cinematográfica de la sección Hero (mosaico de juegos), se utiliza la clase `.hero-always-dark`. Esta clase restaura los tokens oscuros dentro de ese contenedor, incluso si el sitio está en modo claro.
+
+---
+
+## 3. Prevención de Destellos (FOUC)
+
+Para evitar el "flash" de luz blanca al cargar la app en modo oscuro (o viceversa), se implementó un script de bloqueo en el `<head>` de `index.html`.
+
+```html
+<script>
+    (function() {
+        try {
+            var t = localStorage.getItem('vj-theme');
+            if (t === 'light' || t === 'dark') {
+                document.documentElement.className = t;
+            }
+        } catch(e) {}
+    })();
+</script>
+```
+
+Este script se ejecuta antes de que el navegador renderice el cuerpo de la página, asegurando que el tema correcto esté aplicado desde el primer frame.
+
+---
+
+## 4. Efectos Visuales y Glassmorphism
+
+El sistema adapta dinámicamente:
+- **Scrollbars**: Cambian de color y opacidad según el tema.
+- **Glass Panel**: La utilidad `.glass-panel` ajusta su desenfoque y opacidad de fondo (`white/75` en claro vs `surface-950/70` en oscuro). Los valores de glass están tokenizados en `:root` como `--glass-*`.
+- **Logos**: Se aplica un filtro `invert` condicional mediante CSS para asegurar la visibilidad del logo blanco sobre fondos claros.
+
+---
+
+## 5. Mejores Prácticas para Desarrolladores
+
+Para mantener la compatibilidad con el sistema de temas:
+1. **Usa Tokens Surface**: Prefiere `bg-surface-900` sobre colores hexadecimales fijos. Ver [design-tokens.md](./design-tokens.md) para el inventario completo.
+2. **Evita Hardcoding**: Si necesitas un color específico para un tema, usa las variantes de Tailwind: `bg-white dark:bg-surface-950`.
+3. **Semántica**: Los tokens están invertidos. Recuerda que `surface-50` es el texto más oscuro en el tema claro.
+4. **No sobrescribas Tailwind**: Nunca uses `--color-slate-*` o `--color-cyan-*` en `@theme`. Usa los nombres propios (`surface-*`, `accent-*`, `brand-*`).
+`````
+
+## File: src/components/BackButton.tsx
+`````typescript
+import { ComponentChildren, VNode } from 'preact';
+import { JSX } from 'preact/jsx-runtime';
+import { ArrowLeftIcon } from '@/src/components/icons';
+⋮----
+type Size = 'sm' | 'md' | 'lg';
+⋮----
+interface BackButtonProps extends Omit<JSX.HTMLAttributes<HTMLButtonElement>, 'class' | 'className' | 'size' | 'icon'> {
+  onClick: () => void;
+  children?: ComponentChildren;
+  className?: string;
+  icon?: VNode;
+  size?: Size;
+}
+⋮----
+md: '',      // default DaisyUI size
+⋮----
+const BackButton = (
+`````
+
+## File: src/components/GameCounter.tsx
+`````typescript
+interface GameCounterProps {
+    filteredCount: number;
+    totalCount: number;
+}
+⋮----
+const GameCounter = (
+`````
+
+## File: src/components/PromoHeader.tsx
+`````typescript
+import { h } from 'preact';
+import { ComponentChildren } from 'preact';
+⋮----
+interface PromoHeaderProps {
+    title: string;
+    subtitle: string;
+    subtitleMobile?: string;
+    logoSrc?: string;
+    gradientClass?: string;
+    children: ComponentChildren;
+}
+⋮----
+const PromoHeader = ({
+                           title,
+                           subtitle,
+                           subtitleMobile,
+                           children,
+                           logoSrc,
+                           gradientClass
+}: PromoHeaderProps) =>
+`````
+
+## File: src/components/ScreenshotLightbox.tsx
+`````typescript
+import { useEffect, useState } from 'preact/hooks';
+import { createPortal } from 'preact/compat';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+⋮----
+interface ScreenshotLightboxProps {
+    isOpen: boolean;
+    onClose: () => void;
+    screenshots: string[];
+    initialIndex?: number;
+}
+⋮----
+const showPrev = () =>
+⋮----
+const showNext = () =>
+⋮----
+const onKey = (e: KeyboardEvent) =>
+⋮----
+onClick=
+`````
+
+## File: src/components/ViewModeToggle.tsx
 `````typescript
 import { h } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faGrip, faList } from '@fortawesome/free-solid-svg-icons';
+import { ViewMode } from '@/src/types';
 ⋮----
-export interface CompactStatProps {
-    value: string | number;
-    label: string;
-    icon: IconDefinition;
-    accentColor: string;
+interface ViewModeToggleProps {
+  mode: ViewMode;
+  onChange: (mode: ViewMode) => void;
+  className?: string;
 }
 ⋮----
-const CompactStat = ({ value, label, icon, accentColor }: CompactStatProps) => (
-    <div className="flex flex-col items-center px-4 py-3 md:px-8 md:py-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md flex-1 min-w-[90px] md:min-w-[150px] shadow-lg transition-all duration-300 hover:scale-105 hover:bg-white/[0.08] hover:border-white/[0.15] group">
-        <span className="text-2xl md:text-4xl font-extrabold text-white mb-1 drop-shadow-lg">{value}</span>
-        <span className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold tracking-widest uppercase text-surface-400 md:text-sm text-center leading-tight">
-            <FontAwesomeIcon icon={icon} className="transition-colors duration-300" style={{ color: accentColor }} />
-            {label}
-        </span>
-    </div>
-);
+const ViewModeToggle = (
+⋮----
+onClick=
 `````
 
 ## File: src/hooks/useMeasure.ts
@@ -3980,100 +7610,6 @@ const CompactStat = ({ value, label, icon, accentColor }: CompactStatProps) => (
 import { useState, useLayoutEffect, useCallback, useRef } from 'preact/hooks';
 ⋮----
 export function useMeasure<T extends HTMLElement>()
-`````
-
-## File: src/pages/AddGamePage.tsx
-`````typescript
-import { useState } from 'preact/hooks';
-import { ComponentChildren, ComponentProps } from 'preact';
-import { JSX } from 'preact/jsx-runtime';
-import { Game, GameStatus } from "@/src/types";
-import CloseIcon from '../components/icons/CloseIcon.tsx';
-import { AddGamePageProps } from "@/src/types";
-import { PageTransition } from '@/src/components';
-⋮----
-interface FormCardProps {
-    title: string;
-    children: ComponentChildren;
-}
-⋮----
-const FormCard = ({ title, children }: FormCardProps) => (
-    <div className="bg-surface-800 p-6 rounded-lg shadow-lg">
-        <h3 className="text-xl font-bold text-accent-teal mb-4 border-l-4 border-accent-teal pl-3">{title}</h3>
-        <div className="space-y-4">{children}</div>
-    </div>
-);
-⋮----
-type FormInputProps = { label: string } & ComponentProps<'input'>;
-⋮----
-const FormInput = ({ label, ...props }: FormInputProps) => (
-    <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
-        <input
-            {...props}
-            className="w-full bg-surface-700 border-2 border-surface-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-accent-teal-dark focus:outline-none transition-colors duration-300"
-        />
-    </div>
-);
-⋮----
-type FormTextareaProps = { label: string } & ComponentProps<'textarea'>;
-⋮----
-const FormTextarea = ({ label, ...props }: FormTextareaProps) => (
-    <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
-        <textarea
-            {...props}
-            className="w-full bg-surface-700 border-2 border-surface-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-accent-teal-dark focus:outline-none transition-colors duration-300"
-        ></textarea>
-    </div>
-);
-⋮----
-type FormSelectProps = { label: string } & ComponentProps<'select'>;
-⋮----
-const FormSelect = ({ label, children, ...props }: FormSelectProps) => (
-    <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
-        <select
-            {...props}
-            className="w-full bg-surface-700 border-2 border-surface-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-accent-teal-dark focus:outline-none transition-colors duration-300"
-        >
-            {children}
-        </select>
-    </div>
-);
-⋮----
-const handleChange = (e: JSX.TargetedEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-⋮----
-const handleArrayChange = (e: JSX.TargetedEvent<HTMLInputElement>) =>
-⋮----
-const handleAddLink = () =>
-⋮----
-const handleRemoveLink = (index: number) =>
-⋮----
-const handleAddStore = () =>
-⋮----
-const handleRemoveStore = (index: number) =>
-⋮----
-const handleSubmit = (e: JSX.TargetedEvent<HTMLFormElement>) =>
-`````
-
-## File: src/pages/NotFoundPage.tsx
-`````typescript
-import { useEffect, useState, useMemo } from 'preact/hooks';
-import { RoutableProps, route } from 'preact-router';
-import { PageTransition, BackButton, GameCard } from '@/src/components';
-import { Game } from '@/src/types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCompass, faDice, faGhost, faHouse } from '@fortawesome/free-solid-svg-icons';
-⋮----
-interface NotFoundPageProps extends RoutableProps {
-    games?: Game[];
-    onGameClick?: (game: Game) => void;
-}
-⋮----
-const pickRandomGame = () =>
-⋮----
-const handleNavigateHome = () =>
 `````
 
 ## File: src/spacetimedb/connection.ts
@@ -4207,66 +7743,161 @@ export type TrailerInfo = { type: 'youtube'; id: string } | { type: 'video'; url
 export const getTrailerInfo = (url?: string): TrailerInfo =>
 `````
 
-## File: src/components/Firefly.tsx
+## File: src/App.tsx
 `````typescript
-import { useLayoutEffect, useRef } from 'preact/hooks';
-import gsap from 'gsap';
+import { useState, useMemo } from 'preact/hooks';
+import { Router, route } from 'preact-router';
+import { Game, ViewMode } from "@/src/types";
+import { useGamesData, useMetadata } from '@/src/hooks';
+import { FireflyProvider } from '@/src/hooks/FireflyContext';
+import { generateSlug, ensureUniqueSlug } from '@/src/utils';
+import { Header, Modal, LoadingSpinner, Footer, ScrollToTop, FireflyOverlay } from '@/src/components';
+import {
+    ChartsPage,
+    AddGamePage,
+    AboutPage,
+    CalendarPage,
+    GameDetailPage,
+    CatalogPage,
+    GameJamGalleryPage,
+    GameJamsPage,
+    NotFoundPage,
+    Redirect
+} from '@/src/pages';
 ⋮----
-interface FireflyProps {
-  x: number;
-  y: number;
-  id: string;
-}
+import { SpacetimeDBProvider } from '@/src/spacetimedb/SpacetimeDBProvider';
 ⋮----
-const Firefly = (
+const handleFilterChange = (category: string, value: string) =>
+⋮----
+const handleRouteChange = (e: any) =>
+⋮----
+const handleOpenModal = (game: Game)
+const handleCloseModal = ()
+const navigateToCatalog = ()
 `````
 
-## File: src/components/StatusBadge.tsx
+## File: src/components/AlphaFilter.tsx
 `````typescript
-import { GameStatus } from '@/src/types';
-import { JSX } from 'preact/jsx-runtime';
+import { h } from 'preact';
 ⋮----
-type Variant = 'solid' | 'soft' | 'outline';
-type Size = 'xs' | 'sm' | 'md';
-⋮----
-export interface StatusBadgeProps {
-  status: GameStatus;
+interface AlphaFilterProps {
+  activeAlpha: string | null;
+  onAlphaChange: (value: string | null) => void;
   className?: string;
-  variant?: Variant;
-  size?: Size;
-  colorMap?: Partial<Record<GameStatus, string>>;
 }
 ⋮----
-function toSoftBg(bgClass: string)
-⋮----
-export default function StatusBadge({
-  status,
-  className = '',
-  variant = 'solid',
-  size = 'sm',
-  colorMap,
-}: StatusBadgeProps): JSX.Element
+const AlphaFilter = (
 `````
 
-## File: src/components/UserProfile.tsx
+## File: src/components/ContributorCard.tsx
 `````typescript
-import { useState, useEffect, useMemo } from 'preact/hooks';
-import { route } from 'preact-router';
-import { useSpacetimeDB } from '@/src/spacetimedb/connection';
-import { useGamesData } from '@/src/hooks/useGamesData';
+import { h, ComponentChildren } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faStar, faHistory, faClose, faExchangeAlt, faMagic, faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
 ⋮----
-const updateProfile = () =>
+export interface ContributorSocial {
+    icon: any;
+    url: string;
+}
 ⋮----
-const updateActivity = () =>
+export interface Contributor {
+    name: string;
+    role: string;
+    description: string;
+    socials: ContributorSocial[];
+}
+`````
+
+## File: src/components/hero/CategoryCard.tsx
+`````typescript
+import { h } from 'preact';
+import type { CategoryPreset } from './categoryPresets';
 ⋮----
-const handleToggleHistory = () =>
+const hexToRgb = (hex: string): string =>
 ⋮----
-<button onClick=
+export interface CategoryCardProps {
+    preset: CategoryPreset;
+    gameCount: number;
+    backgroundSrc?: string;
+
+    overrideImageUrl?: string;
+    onClick: () => void;
+    index: number;
+}
+`````
+
+## File: src/components/hero/TabButton.tsx
+`````typescript
+import { h } from 'preact';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 ⋮----
-setShowHistory(false);
-route(`/game/$
+export interface TabButtonProps {
+    icon: IconDefinition;
+    label: string;
+    isActive: boolean;
+    onClick: () => void;
+}
+⋮----
+const TabButton = ({ icon, label, isActive, onClick }: TabButtonProps) => (
+    <button
+        onClick={onClick}
+        className={`
+            flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5
+            rounded-xl text-[11px] md:text-xs font-bold uppercase tracking-[0.12em]
+            transition-all duration-300 cursor-pointer border
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50
+            ${isActive
+                ? 'bg-white/[0.1] border-white/[0.15] text-white shadow-lg'
+                : 'bg-transparent border-transparent text-base-content/70 hover:text-base-content/70 hover:bg-white/[0.04]'
+            }
+        `}
+    >
+        <FontAwesomeIcon icon={icon} className={`text-xs ${isActive ? 'text-accent' : ''}`} />
+        <span className="hidden sm:inline">{label}</span>
+    </button>
+);
+`````
+
+## File: src/components/Highlights.tsx
+`````typescript
+import { useState, useEffect, useCallback, useMemo } from 'preact/hooks';
+import { Game } from '@/src/types';
+import { HighlightCard } from '@/src/components';
+import { IndicatorLeftIcon, IndicatorRightIcon } from '@/src/components/icons';
+⋮----
+interface HighlightsProps {
+    games: Game[];
+    onGameClick: (game: Game) => void;
+}
+⋮----
+const goToPrevious = () =>
+`````
+
+## File: src/components/LoadingOverlay.tsx
+`````typescript
+import { h } from 'preact';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { gsap } from 'gsap';
+⋮----
+interface LoadingOverlayProps {
+    isLoading: boolean;
+    logoSrc?: string;
+    onAnimationComplete?: () => void;
+}
+`````
+
+## File: src/components/LoadingSpinner.tsx
+`````typescript
+import {FunctionComponent, h} from 'preact';
+import {useRef} from "preact/hooks";
+⋮----
+interface LoadingSpinnerProps {
+    logoSrc?: string;
+}
+⋮----
+const LoadingSpinner: FunctionComponent<LoadingSpinnerProps> = (
 `````
 
 ## File: src/hooks/index.ts
@@ -4293,6 +7924,89 @@ import { useSpacetimeDB } from '@/src/spacetimedb/connection';
 import { generateSlug } from '@/src/utils/gameUtils';
 ⋮----
 export const useGameStats = (gameSlugRaw: string) =>
+`````
+
+## File: src/pages/AddGamePage.tsx
+`````typescript
+import { useState } from 'preact/hooks';
+import { ComponentChildren, ComponentProps } from 'preact';
+import { JSX } from 'preact/jsx-runtime';
+import { Game, GameStatus } from "@/src/types";
+import CloseIcon from '../components/icons/CloseIcon.tsx';
+import { AddGamePageProps } from "@/src/types";
+import { PageTransition } from '@/src/components';
+⋮----
+interface FormCardProps {
+    title: string;
+    children: ComponentChildren;
+}
+⋮----
+const FormCard = ({ title, children }: FormCardProps) => (
+    <div className="card bg-base-200 shadow-xl border border-surface-700 mb-8">
+        <div className="card-body">
+            <h3 className="card-title text-primary border-l-4 border-primary pl-3 mb-2">{title}</h3>
+            <div className="space-y-4">{children}</div>
+        </div>
+    </div>
+);
+⋮----
+type FormInputProps = { label: string } & ComponentProps<'input'>;
+⋮----
+const FormInput = ({ label, ...props }: FormInputProps) => (
+    <label className="form-control w-full">
+        <div className="label">
+            <span className="label-text font-medium">{label}</span>
+        </div>
+        <input
+            {...props}
+            className="input input-bordered w-full focus:input-primary transition-colors duration-300"
+        />
+    </label>
+);
+⋮----
+type FormTextareaProps = { label: string } & ComponentProps<'textarea'>;
+⋮----
+const FormTextarea = ({ label, ...props }: FormTextareaProps) => (
+    <label className="form-control w-full">
+        <div className="label">
+            <span className="label-text font-medium">{label}</span>
+        </div>
+        <textarea
+            {...props}
+            className="textarea textarea-bordered w-full focus:textarea-primary transition-colors duration-300 min-h-[100px]"
+        ></textarea>
+    </label>
+);
+⋮----
+type FormSelectProps = { label: string } & ComponentProps<'select'>;
+⋮----
+const FormSelect = ({ label, children, ...props }: FormSelectProps) => (
+    <label className="form-control w-full">
+        <div className="label">
+            <span className="label-text font-medium">{label}</span>
+        </div>
+        <select
+            {...props}
+            className="select select-bordered w-full focus:select-primary transition-colors duration-300"
+        >
+            {children}
+        </select>
+    </label>
+);
+⋮----
+const handleChange = (e: JSX.TargetedEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+⋮----
+const handleArrayChange = (e: JSX.TargetedEvent<HTMLInputElement>) =>
+⋮----
+const handleAddLink = () =>
+⋮----
+const handleRemoveLink = (index: number) =>
+⋮----
+const handleAddStore = () =>
+⋮----
+const handleRemoveStore = (index: number) =>
+⋮----
+const handleSubmit = (e: JSX.TargetedEvent<HTMLFormElement>) =>
 `````
 
 ## File: src/spacetimedb/config.ts
@@ -4327,96 +8041,75 @@ const getP = (r: any, c: string, s: string) =>
 export const useSpacetimeDB = ()
 `````
 
+## File: src/components/Firefly.tsx
+`````typescript
+import { useLayoutEffect, useRef } from 'preact/hooks';
+import gsap from 'gsap';
+⋮----
+interface FireflyProps {
+  x: number;
+  y: number;
+  id: string;
+}
+⋮----
+const Firefly = (
+`````
+
 ## File: src/components/FireflyOverlay.tsx
 `````typescript
 import { useFireflyOverlay } from '../hooks/FireflyContext';
 import Firefly from './Firefly';
 `````
 
-## File: src/components/GameJamPlusSection.tsx
-`````typescript
-import { h } from 'preact';
-import { useMemo, useState } from 'preact/hooks';
-import { Game, GameOrigin } from '@/src/types';
-import { route } from 'preact-router';
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
-⋮----
-interface GameJamPlusSectionProps {
-    games: Game[];
-    onGameClick: (game: Game) => void;
-}
-⋮----
-const shuffleArray = (array: Game[]) =>
-⋮----
-onClick=
-`````
-
-## File: src/components/HighlightCard.tsx
-`````typescript
-import { useMemo } from 'preact/hooks';
-import { Game } from '@/src/types';
-import { StatusBadge } from "@/src/components/index.ts";
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
-⋮----
-interface HighlightCardProps {
-    game: Game;
-    onClick: (game: Game) => void;
-    fullWidth?: boolean;
-}
-`````
-
-## File: src/components/SearchBar.tsx
-`````typescript
-import { useState, useEffect, useRef, useMemo, useCallback } from 'preact/hooks';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { route } from 'preact-router';
-import { Game } from '@/src/types';
-import { useDebounce } from '@/src/hooks';
-import { CoverImage } from "@/src/components/index.ts";
-⋮----
-interface SearchBarProps {
-    searchTerm: string;
-    onSearchChange: (term: string) => void;
-    games: Game[];
-    onSelectGame?: (game: Game) => void;
-    renderSuggestionSubtitle?: (game: Game) => any;
-}
-⋮----
-const handleClickOutside = (event: MouseEvent) =>
-⋮----
-onClick=
-⋮----
-e.preventDefault();
-selectSuggestion(game);
-`````
-
-## File: src/components/StoreButton.tsx
+## File: src/components/hero/CompactStat.tsx
 `````typescript
 import { h } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faSteam,
-    faItchIo,
-    faPlaystation,
-    faXbox,
-    faGooglePlay,
-    faApple,
-    faMeta,
-} from '@fortawesome/free-brands-svg-icons';
-import { faGamepad, faGlobe } from '@fortawesome/free-solid-svg-icons';
-import { LinkIcon } from './icons';
-import { trackExternalStore } from '@/src/utils/analytics';
+import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 ⋮----
-interface StoreButtonProps {
-    store: { name: string; url: string };
-    gameSlug?: string;
-    gameTitle?: string;
+export interface CompactStatProps {
+    value: string | number;
+    label: string;
+    icon: IconDefinition;
+    accentColor: string;
 }
 ⋮----
-const StoreButton = (
+const CompactStat = ({ value, label, icon, accentColor }: CompactStatProps) => (
+    <div className="flex flex-col items-center px-4 py-3 md:px-8 md:py-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md flex-1 min-w-[90px] md:min-w-[150px] shadow-lg transition-all duration-300 hover:scale-105 hover:bg-white/[0.08] hover:border-white/[0.15] group">
+        <span className="text-2xl md:text-4xl font-extrabold text-white mb-1 drop-shadow-lg">{value}</span>
+        <span className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold tracking-widest uppercase text-base-content/70 md:text-sm text-center leading-tight">
+            <FontAwesomeIcon icon={icon} className="transition-colors duration-300" style={{ color: accentColor }} />
+            {label}
+        </span>
+    </div>
+);
+`````
+
+## File: src/components/StatusBadge.tsx
+`````typescript
+import { GameStatus } from '@/src/types';
+import { JSX } from 'preact/jsx-runtime';
+⋮----
+type Variant = 'solid' | 'soft' | 'outline';
+type Size = 'xs' | 'sm' | 'md' | 'lg';
+⋮----
+export interface StatusBadgeProps {
+  status: GameStatus;
+  className?: string;
+  variant?: Variant;
+  size?: Size;
+  colorMap?: Partial<Record<GameStatus, string>>;
+}
+⋮----
+function toSoftBg(bgClass: string)
+⋮----
+export default function StatusBadge({
+  status,
+  className = '',
+  variant = 'solid',
+  size = 'md',
+  colorMap,
+}: StatusBadgeProps): JSX.Element
 `````
 
 ## File: src/hooks/useGamesData.ts
@@ -4454,45 +8147,28 @@ export const useGamesData = () =>
 const parseScreenshots = (value?: string): string[] =>
 `````
 
-## File: src/pages/GameJamGalleryPage.tsx
-`````typescript
-import { h } from 'preact';
-import { useMemo, useState } from 'preact/hooks';
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
-import { Game } from '@/src/types';
-import { GameOrigin } from '@/src/types/enums';
-import { RoutableProps, route } from 'preact-router';
-import {LinkIcon, CoverImage, BackButton, PromoHeader} from '@/src/components';
-import { trackEvent } from '@/src/utils/analytics';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrophy } from '@fortawesome/free-solid-svg-icons';
-⋮----
-interface GameJamPlusGalleryProps extends RoutableProps {
-    games: Game[];
-    onGameClick: (game: Game) => void;
-}
-⋮----
-onClick=
-⋮----
-trackEvent('game_jam_click', {
-                    game_slug: game.slug,
-                    game_title: game.title
-                });
-onGameClick(game);
-⋮----
-e.stopPropagation();
-trackEvent('game_external_click', {
-                                        game_slug: game.slug,
-                                        game_title: game.title,
-                                        link_name: link.name,
-                                        url: link.url
-                                    });
-`````
-
 ## File: src/pages/index.ts
 `````typescript
 
+`````
+
+## File: src/pages/NotFoundPage.tsx
+`````typescript
+import { useEffect, useState, useMemo } from 'preact/hooks';
+import { RoutableProps, route } from 'preact-router';
+import { PageTransition, BackButton, GameCard } from '@/src/components';
+import { Game } from '@/src/types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCompass, faDice, faGhost, faHouse } from '@fortawesome/free-solid-svg-icons';
+⋮----
+interface NotFoundPageProps extends RoutableProps {
+    games?: Game[];
+    onGameClick?: (game: Game) => void;
+}
+⋮----
+const pickRandomGame = () =>
+⋮----
+const handleNavigateHome = () =>
 `````
 
 ## File: src/types/interfaces/Game.ts
@@ -4654,18 +8330,6 @@ export interface CatalogPageProps {
 }
 `````
 
-## File: src/components/Footer.tsx
-`````typescript
-import { useRef, useEffect } from 'preact/hooks';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faTwitter, faYoutube, faInstagram, faTiktok } from '@fortawesome/free-brands-svg-icons';
-import { gsap } from 'gsap';
-⋮----
-const Footer = () =>
-⋮----
-const handleScroll = () =>
-`````
-
 ## File: src/components/GameGrid.tsx
 `````typescript
 import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
@@ -4685,37 +8349,180 @@ const MasonryItem = (
 onClick=
 `````
 
-## File: src/components/GameList.tsx
+## File: src/components/GameJamPlusSection.tsx
 `````typescript
-import { useState, useEffect, useRef, useCallback, useMemo } from 'preact/hooks';
-import { Game } from '@/src/types';
-import { useGameStats } from '@/src/hooks';
-import { useFireflyPresence } from '@/src/hooks/FireflyContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
-import { faHeart as faHeartReg } from '@fortawesome/free-regular-svg-icons';
-import { CoverImage, StatusBadge } from '@/src/components';
-import { trackGameCardClick } from '@/src/utils/analytics';
-import { getTrailerInfo } from '@/src/utils';
-import { gsap } from 'gsap';
+import { h } from 'preact';
+import { useMemo, useState } from 'preact/hooks';
+import { Game, GameOrigin } from '@/src/types';
+import { route } from 'preact-router';
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
 ⋮----
-interface GameListProps {
-  games: Game[];
-  onGameClick: (game: Game) => void;
+interface GameJamPlusSectionProps {
+    games: Game[];
+    onGameClick: (game: Game) => void;
 }
 ⋮----
-const GameList = (
+const shuffleArray = (array: Game[]) =>
 ⋮----
-const GameRowItem = (
+onClick=
+`````
+
+## File: src/components/HighlightCard.tsx
+`````typescript
+import { useMemo } from 'preact/hooks';
+import { Game } from '@/src/types';
+import { StatusBadge } from "@/src/components/index.ts";
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
 ⋮----
-const handleMouseEnter = ()
-const handleMouseLeave = ()
+interface HighlightCardProps {
+    game: Game;
+    onClick: (game: Game) => void;
+    fullWidth?: boolean;
+}
+`````
+
+## File: src/components/SearchBar.tsx
+`````typescript
+import { useState, useEffect, useRef, useMemo, useCallback } from 'preact/hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { route } from 'preact-router';
+import { Game } from '@/src/types';
+import { useDebounce } from '@/src/hooks';
+import { CoverImage } from "@/src/components/index.ts";
 ⋮----
-const handleToggleLike = (e: MouseEvent) =>
+interface SearchBarProps {
+    searchTerm: string;
+    onSearchChange: (term: string) => void;
+    games: Game[];
+    onSelectGame?: (game: Game) => void;
+    renderSuggestionSubtitle?: (game: Game) => any;
+}
+⋮----
+const handleClickOutside = (event: MouseEvent) =>
 ⋮----
 onClick=
 ⋮----
-src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
+e.preventDefault();
+selectSuggestion(game);
+`````
+
+## File: src/components/StoreButton.tsx
+`````typescript
+import { h } from 'preact';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faSteam,
+    faItchIo,
+    faPlaystation,
+    faXbox,
+    faGooglePlay,
+    faApple,
+    faMeta,
+} from '@fortawesome/free-brands-svg-icons';
+import { faGamepad, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { LinkIcon } from './icons';
+import { trackExternalStore } from '@/src/utils/analytics';
+⋮----
+interface StoreButtonProps {
+    store: { name: string; url: string };
+    gameSlug?: string;
+    gameTitle?: string;
+}
+⋮----
+const StoreButton = (
+`````
+
+## File: src/components/UserProfile.tsx
+`````typescript
+import { useState, useEffect, useMemo } from 'preact/hooks';
+import { route } from 'preact-router';
+import { useSpacetimeDB } from '@/src/spacetimedb/connection';
+import { useGamesData } from '@/src/hooks/useGamesData';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faStar, faHistory, faClose, faExchangeAlt, faMagic, faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
+⋮----
+const updateProfile = () =>
+⋮----
+const updateActivity = () =>
+⋮----
+const handleToggleHistory = () =>
+⋮----
+<button onClick=
+⋮----
+setShowHistory(false);
+route(`/game/$
+`````
+
+## File: src/pages/GameJamGalleryPage.tsx
+`````typescript
+import { h } from 'preact';
+import { useMemo, useState } from 'preact/hooks';
+import { useMeasure } from '@/src/hooks/useMeasure';
+import { useTextLayout } from '@/src/hooks/useTextLayout';
+import { Game } from '@/src/types';
+import { GameOrigin } from '@/src/types/enums';
+import { RoutableProps, route } from 'preact-router';
+import {LinkIcon, CoverImage, BackButton, PromoHeader} from '@/src/components';
+import { trackEvent } from '@/src/utils/analytics';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrophy } from '@fortawesome/free-solid-svg-icons';
+⋮----
+interface GameJamPlusGalleryProps extends RoutableProps {
+    games: Game[];
+    onGameClick: (game: Game) => void;
+}
+⋮----
+onClick=
+⋮----
+trackEvent('game_jam_click', {
+                    game_slug: game.slug,
+                    game_title: game.title
+                });
+onGameClick(game);
+⋮----
+e.stopPropagation();
+trackEvent('game_external_click', {
+                                        game_slug: game.slug,
+                                        game_title: game.title,
+                                        link_name: link.name,
+                                        url: link.url
+                                    });
+`````
+
+## File: src/components/Footer.tsx
+`````typescript
+import { useRef, useEffect } from 'preact/hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faTwitter, faYoutube, faInstagram, faTiktok } from '@fortawesome/free-brands-svg-icons';
+import { gsap } from 'gsap';
+⋮----
+const Footer = () =>
+⋮----
+const handleScroll = () =>
+`````
+
+## File: src/components/ScrollToTop.tsx
+`````typescript
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { gsap } from 'gsap';
+⋮----
+const handleScroll = () =>
+⋮----
+const scrollToTop = () =>
+`````
+
+## File: src/pages/AboutPage.tsx
+`````typescript
+import { h } from 'preact';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faInstagram, faLinkedin, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { BackButton, ContributorCard, PageTransition } from "@/src/components";
+import { AboutPageProps } from "@/src/types";
 `````
 
 ## File: src/components/FilterPanel.tsx
@@ -4751,8 +8558,6 @@ interface FilterPanelProps {
 ⋮----
 onClick=
 ⋮----
-const YearRangeInputs = (
-⋮----
 const commitChanges = () =>
 ⋮----
 const handleKeyDown = (e: KeyboardEvent) =>
@@ -4760,31 +8565,37 @@ const handleKeyDown = (e: KeyboardEvent) =>
 const handleClearAllClick = (e: MouseEvent) =>
 `````
 
-## File: src/components/ScrollToTop.tsx
+## File: src/components/GameList.tsx
 `````typescript
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'preact/hooks';
+import { Game } from '@/src/types';
+import { useGameStats } from '@/src/hooks';
+import { useFireflyPresence } from '@/src/hooks/FireflyContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartReg } from '@fortawesome/free-regular-svg-icons';
+import { CoverImage, StatusBadge } from '@/src/components';
+import { trackGameCardClick } from '@/src/utils/analytics';
+import { getTrailerInfo } from '@/src/utils';
 import { gsap } from 'gsap';
 ⋮----
-const handleScroll = () =>
+interface GameListProps {
+  games: Game[];
+  onGameClick: (game: Game) => void;
+}
 ⋮----
-const scrollToTop = () =>
-`````
-
-## File: src/pages/AboutPage.tsx
-`````typescript
-import { h } from 'preact';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faInstagram, faLinkedin, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { BackButton, ContributorCard, PageTransition } from "@/src/components";
-import { AboutPageProps } from "@/src/types";
+const GameList = (
 ⋮----
-const Card = ({ children, className = "" }: { children: preact.ComponentChildren, className?: string }) => (
-    <div className={`bg-surface-800/30 backdrop-blur-sm p-6 rounded-2xl border border-surface-700/40 hover:border-surface-600/60 transition-all duration-300 ${className}`}>
-        {children}
-    </div>
-);
+const GameRowItem = (
+⋮----
+const handleMouseEnter = ()
+const handleMouseLeave = ()
+⋮----
+const handleToggleLike = (e: MouseEvent) =>
+⋮----
+onClick=
+⋮----
+src={`https://www.youtube.com/embed/${trailerInfo.id}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0&loop=1&playlist=${trailerInfo.id}&rel=0`}
 `````
 
 ## File: src/pages/ChartsPage.tsx
@@ -4816,8 +8627,8 @@ interface ChartCardProps {
 }
 ⋮----
 const ChartCard = ({ title, children }: ChartCardProps) => (
-    <div className="bg-surface-800/30 backdrop-blur-sm border border-surface-700/40 rounded-2xl shadow-xl overflow-hidden h-full flex flex-col">
-        <div className="px-6 py-4 border-b border-surface-700/50 bg-surface-800/50">
+    <div className="bg-base-300/30 backdrop-blur-sm border border-surface-700 rounded-2xl shadow-xl overflow-hidden h-full flex flex-col">
+        <div className="px-6 py-4 border-b border-surface-700 bg-base-300/50">
             <h3 className="text-lg font-bold text-white tracking-wide">{title}</h3>
         </div>
         <div className="p-6 flex-1 flex flex-col items-center justify-center relative min-h-[300px]">
@@ -4827,6 +8638,11 @@ const ChartCard = ({ title, children }: ChartCardProps) => (
 );
 ⋮----
 const RealtimeTopVisitsChart = (
+`````
+
+## File: src/components/index.ts
+`````typescript
+
 `````
 
 ## File: src/components/Modal.tsx
@@ -4859,8 +8675,8 @@ interface DetailItemProps {
 ⋮----
 const DetailItem = ({ label, children }: DetailItemProps) => (
     <div className="flex flex-col">
-        <dt className="text-xs font-bold text-surface-400 uppercase tracking-wider">{label}</dt>
-        <dd className="mt-1 text-sm font-medium text-surface-200">{children}</dd>
+        <dt className="text-xs font-bold text-base-content/70 uppercase tracking-wider">{label}</dt>
+        <dd className="mt-1 text-sm font-medium text-base-content">{children}</dd>
     </div>
 );
 ⋮----
@@ -4947,11 +8763,6 @@ const handleToggleLike = (e: MouseEvent) =>
 {/* Firefly presence indicator */}
 `````
 
-## File: src/components/index.ts
-`````typescript
-
-`````
-
 ## File: src/pages/CalendarPage.tsx
 `````typescript
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
@@ -4984,6 +8795,8 @@ const handleClickOutside = (event: MouseEvent) =>
 setViewYear(year);
 setIsDropdownOpen(false);
 if (calendarRef.current)
+⋮----
+eventMouseEnter=
 `````
 
 ## File: src/pages/GameDetailPage.tsx
@@ -5011,15 +8824,15 @@ interface DetailSectionProps {
 }
 ⋮----
 const DetailSection = ({ title, children, icon }: DetailSectionProps) => (
-    <div className="bg-surface-900/40 backdrop-blur-xl border border-white/5 rounded-[2rem] p-8 shadow-2xl hover:border-accent-teal-dark/20 transition-all duration-500 group overflow-hidden relative">
+    <div className="bg-base-200/40 backdrop-blur-xl border border-surface-700 rounded-[2rem] p-8 shadow-2xl hover:border-accent-teal-dark/20 transition-all duration-500 group overflow-hidden relative">
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-accent-teal-dark/5 blur-[80px] pointer-events-none group-hover:bg-accent-teal-dark/10 transition-all duration-700" />
         <h3 className="text-sm font-black text-white mb-8 flex items-center gap-4 uppercase tracking-[0.2em]">
-            <div className="w-12 h-12 rounded-2xl bg-accent-teal-dark/10 flex items-center justify-center text-accent-teal group-hover:bg-accent-teal-dark group-hover:text-surface-950 transition-all duration-500 shadow-inner">
+            <div className="w-12 h-12 rounded-2xl bg-accent-teal-dark/10 flex items-center justify-center text-accent-teal group-hover:bg-accent-teal-dark group-hover:text-base-100 transition-all duration-500 shadow-inner">
                 {icon && <FontAwesomeIcon icon={icon} className="text-lg" />}
             </div>
             {title}
         </h3>
-        <div className="text-surface-300">
+        <div className="text-base-content/70">
             {children}
         </div>
     </div>
@@ -5064,12 +8877,6 @@ import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import type { CategoryPreset } from '@/src/components/hero';
 ⋮----
 const normalizeFirstChar = (title: string) =>
-⋮----
-onClick=
-⋮----
-{/*<GameJamPlusSection games={games} onGameClick={onGameClick}/>*/}
-⋮----
-<button onClick=
 `````
 
 ## File: src/pages/GameJamsPage.tsx

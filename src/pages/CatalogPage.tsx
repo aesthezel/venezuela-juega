@@ -41,7 +41,6 @@ const CatalogPage = ({
 
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
     const [alpha, setAlpha] = useState<string | null>(null);
-    const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
     const activeFilterCount = useMemo(() => {
         let count = 0;
@@ -109,15 +108,6 @@ const CatalogPage = ({
         if (typeof window !== 'undefined') localStorage.setItem('catalog:viewMode', viewMode);
     }, [viewMode]);
 
-    useEffect(() => {
-        if (isMobileFilterOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => { document.body.style.overflow = ''; };
-    }, [isMobileFilterOpen]);
-
     const alphaFilteredGames = useMemo(() => {
         if (!alpha) return filteredGames;
         const normalizeFirstChar = (title: string) => {
@@ -142,41 +132,34 @@ const CatalogPage = ({
                 <main id="catalog-content" className="container mx-auto px-4 py-8 relative z-10">
 
                 <div className="sticky top-0 z-30 bg-base-100/40 backdrop-blur-xl py-4 -mx-4 px-4 border-b border-surface-700 mb-8 shadow-2xl transition-all duration-300">
-                    <div className="container mx-auto flex flex-col gap-4">
-                        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-
-                            <div className="w-full md:flex-1 relative group">
+                    <div className="container mx-auto">
+                        <div className="flex gap-2 md:gap-4 items-center justify-between">
+                            <div className="flex-1 relative group">
                                 <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-teal-dark to-accent-mauve-deep rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
                                 <div className="relative">
                                     <SearchBar searchTerm={searchTerm} onSearchChange={onSearchChange} games={games} />
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3 flex-shrink-0 w-full md:w-auto justify-between md:justify-end">
+                            <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
                                 <button
-                                    onClick={() => setIsMobileFilterOpen(true)}
-                                    className="lg:hidden btn btn-outline btn-neutral relative"
+                                    onClick={() => (document.getElementById('mobile_filter_modal') as HTMLDialogElement)?.showModal()}
+                                    className="lg:hidden btn btn-square btn-outline btn-neutral relative"
+                                    title="Filtros"
                                 >
                                     <FontAwesomeIcon icon={faFilter} />
-                                    <span>Filtros</span>
                                     {activeFilterCount > 0 && (
-                                        <span className="badge badge-primary badge-sm absolute -top-2 -right-2 animate-pulse">
+                                        <span className="badge badge-primary badge-xs absolute -top-1 -right-1 animate-pulse border-none w-4 h-4 p-0">
                                             {activeFilterCount}
                                         </span>
                                     )}
                                 </button>
 
-                                <div className="flex items-center gap-3">
-                                    <div className="hidden md:block">
-                                        <GameCounter filteredCount={alpha ? alphaFilteredGames.length : filteredGames.length} totalCount={games.length} />
-                                    </div>
-                                    <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+                                <div className="hidden md:block">
+                                    <GameCounter filteredCount={alpha ? alphaFilteredGames.length : filteredGames.length} totalCount={games.length} />
                                 </div>
+                                <ViewModeToggle mode={viewMode} onChange={setViewMode} />
                             </div>
-                        </div>
-
-                        <div className="w-full overflow-x-auto pb-1 scrollbar-hide">
-                            <AlphaFilter activeAlpha={alpha} onAlphaChange={setAlpha} className="md:justify-center" />
                         </div>
                     </div>
                 </div>
@@ -204,52 +187,55 @@ const CatalogPage = ({
                                 maxYear={maxYear}
                                 yearRange={yearRange}
                                 onYearRangeChange={onYearRangeChange}
+                                alpha={alpha}
+                                onAlphaChange={setAlpha}
                             />
                         </div>
                     </aside>
 
-                    {isMobileFilterOpen && (
-                        <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
-                            <div
-                                className="absolute inset-0 bg-base-300/80 backdrop-blur-sm transition-opacity animate-fade-in"
-                                onClick={() => setIsMobileFilterOpen(false)}
-                            />
-                            <div className="relative w-[85%] max-w-sm h-full bg-base-100 border-l border-surface-700 shadow-2xl transform transition-transform duration-300 overflow-y-auto animate-slide-in-right">
-                                <div className="p-6 flex flex-col min-h-full">
-                                    <div className="flex items-center justify-between mb-6 sticky top-0 bg-base-100 z-10 pb-4 border-b border-surface-700">
-                                        <h2 className="text-xl font-bold text-base-content flex items-center gap-2">
-                                            <FontAwesomeIcon icon={faFilter} className="text-primary" />
-                                            Filtros
-                                        </h2>
-                                        <button onClick={() => setIsMobileFilterOpen(false)} className="btn btn-circle btn-ghost btn-sm">
-                                            <FontAwesomeIcon icon={faTimes} size="lg" />
-                                        </button>
-                                    </div>
-                                    <div className="flex-1">
-                                        <FilterPanel
-                                            genres={allGenres}
-                                            platforms={allPlatforms}
-                                            stores={allStores}
-                                            activeFilters={activeFilters}
-                                            onFilterChange={onFilterChange}
-                                            onClearCategory={onClearCategory}
-                                            onClearAll={onClearAllFilters}
-                                            clearAllEnabled={hasActiveFilters}
-                                            minYear={minYear}
-                                            maxYear={maxYear}
-                                            yearRange={yearRange}
-                                            onYearRangeChange={onYearRangeChange}
-                                        />
-                                    </div>
-                                    <div className="mt-8 pt-4 border-t border-surface-700 sticky bottom-0 bg-base-100 pb-4">
-                                        <button onClick={() => setIsMobileFilterOpen(false)} className="btn btn-primary w-full shadow-lg shadow-primary/50">
-                                            Ver {alphaFilteredGames.length} juegos
-                                        </button>
-                                    </div>
-                                </div>
+                    <dialog id="mobile_filter_modal" className="modal modal-bottom lg:hidden">
+                        <div className="modal-box p-0 max-h-[85vh] flex flex-col bg-base-100 border border-surface-700 rounded-t-3xl shadow-2xl">
+                            <div className="p-6 pb-4 flex items-center justify-between border-b border-surface-700 bg-base-100 sticky top-0 z-10">
+                                <h2 className="text-xl font-bold text-base-content flex items-center gap-2">
+                                    <FontAwesomeIcon icon={faFilter} className="text-primary" />
+                                    Filtros
+                                </h2>
+                                <form method="dialog">
+                                    <button className="btn btn-circle btn-ghost btn-sm">
+                                        <FontAwesomeIcon icon={faTimes} size="lg" />
+                                    </button>
+                                </form>
+                            </div>
+                            <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
+                                <FilterPanel
+                                    genres={allGenres}
+                                    platforms={allPlatforms}
+                                    stores={allStores}
+                                    activeFilters={activeFilters}
+                                    onFilterChange={onFilterChange}
+                                    onClearCategory={onClearCategory}
+                                    onClearAll={onClearAllFilters}
+                                    clearAllEnabled={hasActiveFilters}
+                                    minYear={minYear}
+                                    maxYear={maxYear}
+                                    yearRange={yearRange}
+                                    onYearRangeChange={onYearRangeChange}
+                                    alpha={alpha}
+                                    onAlphaChange={setAlpha}
+                                />
+                            </div>
+                            <div className="p-6 pt-4 border-t border-surface-700 bg-base-100 sticky bottom-0">
+                                <form method="dialog">
+                                    <button className="btn btn-primary w-full shadow-lg shadow-primary/50">
+                                        Ver {alphaFilteredGames.length} juegos
+                                    </button>
+                                </form>
                             </div>
                         </div>
-                    )}
+                        <form method="dialog" className="modal-backdrop backdrop-blur-sm bg-base-300/80">
+                            <button>close</button>
+                        </form>
+                    </dialog>
 
                     <section className="lg:col-span-9 min-h-[50vh]">
                         <div className="lg:hidden mb-6 flex justify-between items-center text-sm bg-base-200/50 p-3 rounded-lg border border-surface-700">

@@ -8,9 +8,11 @@ import {
     faFilter,
     faTags,
     faDesktop,
-    faStore
+    faStore,
+    faFont
 } from '@fortawesome/free-solid-svg-icons';
 import { GameStatus } from "@/src/types";
+import AlphaFilter from './AlphaFilter';
 
 interface FilterPanelProps {
     genres: string[];
@@ -25,6 +27,8 @@ interface FilterPanelProps {
     maxYear: number;
     yearRange: { min: number; max: number } | null;
     onYearRangeChange: (range: { min: number; max: number }) => void;
+    alpha: string | null;
+    onAlphaChange: (value: string | null) => void;
 }
 
 const AccordionItem = ({ title, icon, isOpen, onClick, children, badgeCount }: { title: string; icon: any; isOpen: boolean; onClick: () => void; children: any; badgeCount?: number }) => {
@@ -199,12 +203,14 @@ const FilterPanel = ({
     minYear,
     maxYear,
     yearRange,
-    onYearRangeChange
+    onYearRangeChange,
+    alpha,
+    onAlphaChange
 }: FilterPanelProps) => {
 
     const [openSection, setOpenSection] = useState<string | null>('status');
     const hasActiveCategories = Object.values(activeFilters || {}).some(filters => filters && filters.length > 0);
-    const hasActiveFilters = hasActiveCategories || clearAllEnabled || (yearRange && (yearRange.min !== minYear || yearRange.max !== maxYear));
+    const hasActiveFilters = hasActiveCategories || clearAllEnabled || (yearRange && (yearRange.min !== minYear || yearRange.max !== maxYear)) || alpha !== null;
 
     const toggleSection = (sectionId: string) => {
         setOpenSection(openSection === sectionId ? null : sectionId);
@@ -246,6 +252,16 @@ const FilterPanel = ({
                         onFilterChange={onFilterChange}
                         itemColorMap={statusColorMap}
                     />
+                </AccordionItem>
+
+                <AccordionItem
+                    title="Inicial del título"
+                    icon={faFont}
+                    isOpen={openSection === 'alpha'}
+                    onClick={() => toggleSection('alpha')}
+                    badgeCount={alpha ? 1 : 0}
+                >
+                    <AlphaFilter activeAlpha={alpha} onAlphaChange={onAlphaChange} className="md:justify-center" />
                 </AccordionItem>
 
                 <AccordionItem
