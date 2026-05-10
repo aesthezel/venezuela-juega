@@ -144,22 +144,20 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
 
         const ctx = gsap.context(() => {
             gsap.fromTo(el,
-                { opacity: 0, scale: 1.1 },
-                { opacity: 0.6, scale: 1, duration: 1.5, ease: 'power2.out' },
+                { opacity: 0, scale: 1.2 },
+                { opacity: 1, scale: 1, duration: 1.5, ease: 'power2.out' },
             );
             ScrollTrigger.create({
                 trigger: container,
                 start: 'top top',
                 end: 'bottom top',
                 scrub: true,
-                animation: gsap.to(el, { y: 150, ease: 'none' }),
+                animation: gsap.to(el, { y: 150, ease: 'none', force3D: true }),
             });
         }, container);
 
         return () => ctx.revert();
     }, []);
-
-
 
     // ── Auto-rotate tabs ───────────────────────────────────────────────────
     useEffect(() => {
@@ -238,7 +236,6 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
         }, 100);
     }, [onCategorySelect]);
 
-    // ── Render ─────────────────────────────────────────────────────────────
     return (
         <div
             ref={containerRef}
@@ -248,6 +245,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             <div
                 ref={gridRef}
                 className="pointer-events-none absolute w-[120vw] h-[200vh] -left-[10vw] -top-[50vh] -rotate-3 grid select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7 z-[-2]"
+                style={{ willChange: 'transform' }}
             >
                 {mosaicGames.map((game) => (
                     <div key={game.id} className="relative h-full w-full overflow-hidden rounded-lg bg-base-200/50 border border-surface-700 shadow-xl">

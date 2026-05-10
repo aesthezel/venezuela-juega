@@ -81,7 +81,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
             <header
                 ref={headerRef}
                 className={`fixed top-0 left-0 right-0 z-[60] h-20 w-full will-change-transform transition-[background-color,border-color,padding,backdrop-filter] duration-500 ${isScrolled
-                    ? 'bg-base-100/80 backdrop-blur-2xl border-b border-surface-700 shadow-xl py-0'
+                    ? 'bg-base-100/80 backdrop-blur-lg border-b border-surface-700 shadow-xl py-0'
                     : 'bg-transparent border-b border-transparent py-2'
                     }`}
             >
