@@ -14,7 +14,6 @@ const NotFoundPage = ({ games = [], onGameClick }: NotFoundPageProps) => {
     const [randomGame, setRandomGame] = useState<Game | null>(null);
 
     const pickRandomGame = () => {
-        CC
         if (games.length > 0) {
             const randomIndex = Math.floor(Math.random() * games.length);
             setRandomGame(games[randomIndex]);

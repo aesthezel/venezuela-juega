@@ -138,7 +138,7 @@ const App = () => {
                     
                     {/* Main Content Layers */}
                     <div className="relative flex flex-col min-h-screen">
-                        <Header currentPath={currentPath} />
+                        <Header currentPath={currentPath} games={games} jamGames={jamGames} />
                         <div className="flex-grow app-content pb-24">
                             <Router onChange={handleRouteChange}>
                                 <CatalogPage path="/" {...catalogPageProps} />

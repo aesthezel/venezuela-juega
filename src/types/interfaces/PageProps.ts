@@ -1,9 +1,6 @@
 import { Game } from './Game';
 
-export interface CatalogPageProps {
-    /** The path for routing purposes */
-    path?: string;
-}
+
 
 export interface CalendarPageProps {
     /** The path for routing purposes */

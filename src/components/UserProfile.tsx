@@ -1,13 +1,17 @@
 import { useState, useEffect, useMemo } from 'preact/hooks';
 import { route } from 'preact-router';
 import { useSpacetimeDB } from '@/src/spacetimedb/connection';
-import { useGamesData } from '@/src/hooks/useGamesData';
+import { Game } from '@/src/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faStar, faHistory, faClose, faExchangeAlt, faMagic, faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faStar, faHistory, faClose, faExchangeAlt, faMagic, faMagicWandSparkles, faGamepad } from '@fortawesome/free-solid-svg-icons';
 
-const UserProfile = () => {
+interface UserProfileProps {
+    games?: Game[];
+    jamGames?: Game[];
+}
+
+const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
     const { connection, identity, isConnected } = useSpacetimeDB();
-    const { games, jamGames } = useGamesData();
     const [profile, setProfile] = useState<{ xp: bigint, level: number } | null>(null);
     const [showHistory, setShowHistory] = useState(false);
     const [favorites, setFavorites] = useState<any[]>([]);

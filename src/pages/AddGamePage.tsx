@@ -5,6 +5,7 @@ import { Game, GameStatus } from "@/src/types";
 import CloseIcon from '../components/icons/CloseIcon.tsx';
 import { AddGamePageProps } from "@/src/types";
 import { PageTransition } from '@/src/components';
+import { generateSlug } from '@/src/utils';
 
 const initialGameState: Omit<Game, 'id'> = {
     title: '',
@@ -92,6 +93,7 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
     const [linkUrl, setLinkUrl] = useState('');
     const [storeName, setStoreName] = useState('');
     const [storeUrl, setStoreUrl] = useState('');
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
     const handleChange = (e: JSX.TargetedEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.currentTarget;
@@ -133,12 +135,52 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
             console.warn('Por favor, completa los campos obligatorios: Título, Descripción e URL de la Imagen.');
             return;
         }
-        onAddNewGame(game);
+
+        // Generate a slug for the game
+        const slug = generateSlug(game.title);
+        const gameWithSlug = { ...game, slug, id: Date.now() };
+
+        // Save to localStorage as MVP persistence
+        try {
+            const stored = localStorage.getItem('vj_pending_games');
+            const pendingGames: Game[] = stored ? JSON.parse(stored) : [];
+            pendingGames.push(gameWithSlug as Game);
+            localStorage.setItem('vj_pending_games', JSON.stringify(pendingGames));
+
+            // Call the parent handler (currently no-op but ready for future backend)
+            onAddNewGame(game);
+
+            // Show success feedback and reset form
+            setSubmitStatus('success');
+            setGame(initialGameState);
+            setLinkName('');
+            setLinkUrl('');
+            setStoreName('');
+            setStoreUrl('');
+
+            // Auto-hide the success message after 5 seconds
+            setTimeout(() => setSubmitStatus('idle'), 5000);
+        } catch (err) {
+            console.error('Error guardando juego:', err);
+            setSubmitStatus('error');
+            setTimeout(() => setSubmitStatus('idle'), 5000);
+        }
     };
 
     return (
         <PageTransition>
             <main className="container mx-auto px-4 py-8">
+            {/* Status Toast */}
+            {submitStatus === 'success' && (
+                <div className="alert alert-success shadow-lg mb-6 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <span>🎉 ¡Juego guardado exitosamente! Tu envío está pendiente de revisión.</span>
+                </div>
+            )}
+            {submitStatus === 'error' && (
+                <div className="alert alert-error shadow-lg mb-6 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <span>❌ Error al guardar el juego. Inténtalo de nuevo.</span>
+                </div>
+            )}
             <h2 className="text-3xl font-bold mb-6 text-base-content">Añadir Nuevo Juego</h2>
             <form onSubmit={handleSubmit} className="space-y-8">
                 <FormCard title="Información Básica">

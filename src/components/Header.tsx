@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad } from '@fortawesome/free-solid-svg-icons';
+import { Game } from '@/src/types';
 import { route } from 'preact-router';
 import { trackNav } from '@/src/utils/analytics';
 import { gsap } from 'gsap';
@@ -11,11 +12,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface HeaderProps {
     currentPath?: string;
+    games?: Game[];
+    jamGames?: Game[];
 }
 
 const LOGO_URL = "https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png";
 
-const Header = ({ currentPath = '/' }: HeaderProps) => {
+const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) => {
     const isVisibleRef = useRef(true);
     const headerRef = useRef<HTMLElement | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -132,7 +135,7 @@ const Header = ({ currentPath = '/' }: HeaderProps) => {
                         </nav>
 
                         <div className="flex items-center gap-3">
-                            <UserProfile />
+                            <UserProfile games={games} jamGames={jamGames} />
 
                             {/* Mobile Hamburger Trigger */}
                             <button

@@ -1,43 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://venezuelajuega.com/venezuela-juega/</loc>
+        <loc>https://venezuelajuega.com/</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
+        <lastmod>2026-05-17</lastmod>
     </url>
     <url>
-        <loc>https://venezuelajuega.com/venezuela-juega/about</loc>
+        <loc>https://venezuelajuega.com/about</loc>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
+        <lastmod>2026-05-17</lastmod>
     </url>
     <url>
-        <loc>https://venezuelajuega.com/venezuela-juega/calendar</loc>
+        <loc>https://venezuelajuega.com/calendar</loc>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
+        <lastmod>2026-05-17</lastmod>
     </url>
     <url>
-        <loc>https://venezuelajuega.com/venezuela-juega/charts</loc>
+        <loc>https://venezuelajuega.com/charts</loc>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
+        <lastmod>2026-05-17</lastmod>
     </url>
     <url>
-        <loc>https://venezuelajuega.com/venezuela-juega/add-game</loc>
+        <loc>https://venezuelajuega.com/add-game</loc>
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>
+        <lastmod>2026-05-17</lastmod>
     </url>
     <url>
-        <loc>https://venezuelajuega.com/venezuela-juega/game-jams</loc>
+        <loc>https://venezuelajuega.com/game-jams</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
+        <lastmod>2026-05-17</lastmod>
     </url>
     <url>
-        <loc>https://venezuelajuega.com/venezuela-juega/gamejam-gallery</loc>
+        <loc>https://venezuelajuega.com/gamejam-gallery</loc>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
+        <lastmod>2026-05-17</lastmod>
     </url>
     <url>
-        <loc>https://venezuelajuega.com/venezuela-juega/credits</loc>
+        <loc>https://venezuelajuega.com/credits</loc>
         <changefreq>monthly</changefreq>
         <priority>0.4</priority>
+        <lastmod>2026-05-17</lastmod>
     </url>
 </urlset>
