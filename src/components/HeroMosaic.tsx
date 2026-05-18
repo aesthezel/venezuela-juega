@@ -77,7 +77,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
         const historyYears = new Date().getFullYear() - minYear;
 
         return [
-            { id: 'total', value: games.length + jamGames.length, label: 'Juegos lanzados', icon: faDatabase, color: '#10b981' },
+            { id: 'total', value: games.length + jamGames.length, label: 'Juegos registrados', icon: faDatabase, color: '#10b981' },
             { id: 'games', value: games.length, label: 'Publicados en tiendas', icon: faGamepad, color: '#457cd6' },
             { id: 'jams', value: jamGames.length, label: 'Creados en Jams', icon: faTrophy, color: '#e34262' },
             { id: 'devs', value: uniqueDevs.size, label: 'Estudios y desarrolladores', icon: faUsers, color: '#f2b63d' },

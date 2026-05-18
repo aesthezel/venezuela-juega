@@ -13,7 +13,7 @@ import { faSteam, faItchIo, faPlaystation, faXbox, faGooglePlay, faApple, faMeta
 import { BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge, PageTransition, ScreenshotLightbox } from "@/src/components";
 import { useSpacetimeDB } from '@/src/spacetimedb/connection';
 import { useGameStats, useMeasure, useTextLayout } from '@/src/hooks';
-import { updateMetadata, getTrailerInfo } from "@/src/utils";
+import { getTrailerInfo } from "@/src/utils";
 
 interface DetailSectionProps {
     title: string;
@@ -114,30 +114,6 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
             const normalizedSlug = decodeURIComponent(gameSlug).trim().toLowerCase();
             const foundGame = games.find(g => g.slug.toLowerCase() === normalizedSlug);
             setGame(foundGame || null);
-
-            // Solución de runtime render - Placebo visual - No es solución final
-            if (foundGame) {
-                document.title = `${foundGame.title} — Venezuela Juega`;
-
-                const pageUrl = window.location.href;
-                updateMetadata('link[rel="canonical"]', 'href', pageUrl);
-                updateMetadata('meta[property="og:url"]', 'content', pageUrl);
-
-                updateMetadata('meta[property="og:title"]', 'content', foundGame.title);
-                updateMetadata('meta[name="twitter:title"]', 'content', foundGame.title);
-
-                const description = foundGame.description.substring(0, 155).trim() + '...';
-                updateMetadata('meta[name="description"]', 'content', description);
-                updateMetadata('meta[property="og:description"]', 'content', description);
-                updateMetadata('meta[name="twitter:description"]', 'content', description);
-
-                const imageUrl = foundGame.imageCover || foundGame.imageHero || foundGame.imageUrl;
-                updateMetadata('meta[property="og:image"]', 'content', imageUrl);
-                updateMetadata('meta[name="twitter:image"]', 'content', imageUrl);
-
-                updateMetadata('meta[name="twitter:card"]', 'content', 'summary_large_image');
-            }
-
         } else {
             setGame(null);
         }
