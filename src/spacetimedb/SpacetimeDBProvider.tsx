@@ -1,8 +1,15 @@
 import { createContext } from 'preact';
-import { useContext, useEffect, useState, useMemo, useCallback, useRef } from 'preact/hooks';
+import { ComponentChildren } from 'preact';
+import { useContext, useEffect, useState, useMemo, useCallback } from 'preact/hooks';
 import { DbConnection } from './module_bindings';
 import { SPACETIMEDB_URI, MODULE_NAME, AUTH_TOKEN_KEY } from './config';
-import { generateSlug } from '@/src/utils/gameUtils';
+import { generateSlug } from '@/utils/gameUtils';
+
+/** Minimal interface for SpacetimeDB identity objects returned by the SDK. */
+interface SdbIdentity {
+    toHexString(): string;
+    data?: Uint8Array;
+}
 
 export interface GameStats { gameSlug: string; totalHearts: number; totalVisits: number; }
 export interface MyActivity { gameSlug: string; hasLiked: boolean; isFavorite: boolean; visitCount: number; lastVisitAt?: number; }
@@ -22,23 +29,30 @@ const SpacetimeDBContext = createContext<SpacetimeDBContextType>({
 
 let connInst: DbConnection | null = null;
 
-const getHex = (id: any): string | null => {
+const getHex = (id: unknown): string | null => {
     if (!id) return null;
     if (typeof id === 'string') return id;
-    if (typeof id.toHexString === 'function') return id.toHexString();
-    if (id.data && id.data instanceof Uint8Array) return Array.from(id.data).map((b: any) => b.toString(16).padStart(2, '0')).join('');
-    if (id instanceof Uint8Array) return Array.from(id).map((b: any) => b.toString(16).padStart(2, '0')).join('');
+    const asIdentity = id as SdbIdentity;
+    if (typeof asIdentity.toHexString === 'function') return asIdentity.toHexString();
+    if (asIdentity.data instanceof Uint8Array) return Array.from(asIdentity.data).map((b: number) => b.toString(16).padStart(2, '0')).join('');
+    if (id instanceof Uint8Array) return Array.from(id).map((b: number) => b.toString(16).padStart(2, '0')).join('');
     return null;
 };
 
-const getP = (r: any, c: string, s: string) => {
+/** Access a row property by camelCase or snake_case key — needed for SDK version compatibility. */
+const getP = (r: Record<string, unknown>, c: string, s: string): unknown => {
     if (!r) return undefined;
     if (typeof r[c] !== 'undefined') return r[c];
     if (typeof r[s] !== 'undefined') return r[s];
     return undefined;
 };
 
-export const SpacetimeDBProvider = ({ children }: { children: any }) => {
+/** Typed accessors built on top of getP. */
+const getString = (r: Record<string, unknown>, c: string, s: string): string => String(getP(r, c, s) ?? '');
+const getNum    = (r: Record<string, unknown>, c: string, s: string): number => Number(getP(r, c, s) ?? 0);
+const getBool   = (r: Record<string, unknown>, c: string, s: string): boolean => !!getP(r, c, s);
+
+export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren }) => {
     const [identity, setIdentity] = useState<string | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const [gameStatsMap, setGameStatsMap] = useState<Record<string, GameStats>>({});
@@ -51,15 +65,16 @@ export const SpacetimeDBProvider = ({ children }: { children: any }) => {
 
         const na: Record<string, MyActivity> = {};
         for (const r of c.db.my_activity.iter()) {
-            if (getHex(getP(r, 'playerId', 'player_id')) === mid) {
-                const s = generateSlug(getP(r, 'gameSlug', 'game_slug') || '');
+            const row = r as Record<string, unknown>;
+            if (getHex(getP(row, 'playerId', 'player_id')) === mid) {
+                const s = generateSlug(getString(row, 'gameSlug', 'game_slug'));
                 if (s) {
                     na[s] = {
                         gameSlug: s,
-                        hasLiked: !!getP(r, 'hasLiked', 'has_liked'),
-                        isFavorite: !!getP(r, 'isFavorite', 'is_favorite'),
-                        visitCount: Number(getP(r, 'visitCount', 'visit_count') ?? 0),
-                        lastVisitAt: Number(getP(r, 'lastVisitAt', 'last_visit_at') ?? 0)
+                        hasLiked:   getBool(row, 'hasLiked',    'has_liked'),
+                        isFavorite: getBool(row, 'isFavorite',  'is_favorite'),
+                        visitCount: getNum(row,  'visitCount',  'visit_count'),
+                        lastVisitAt: getNum(row, 'lastVisitAt', 'last_visit_at')
                     };
                 }
             }
@@ -71,12 +86,13 @@ export const SpacetimeDBProvider = ({ children }: { children: any }) => {
         if (!c) return;
         const ns: Record<string, GameStats> = {};
         for (const r of c.db.game_stats.iter()) {
-            const s = generateSlug(getP(r, 'gameSlug', 'game_slug') || '');
+            const row = r as Record<string, unknown>;
+            const s = generateSlug(getString(row, 'gameSlug', 'game_slug'));
             if (s) {
                 ns[s] = {
                     gameSlug: s,
-                    totalHearts: Number(getP(r, 'totalHearts', 'total_hearts') ?? 0),
-                    totalVisits: Number(getP(r, 'totalVisits', 'total_visits') ?? 0)
+                    totalHearts: getNum(row, 'totalHearts', 'total_hearts'),
+                    totalVisits: getNum(row, 'totalVisits', 'total_visits')
                 };
             }
         }
@@ -106,7 +122,7 @@ export const SpacetimeDBProvider = ({ children }: { children: any }) => {
         if (connInst) return;
         connInst = DbConnection.builder().withUri(SPACETIMEDB_URI).withDatabaseName(MODULE_NAME)
             .withToken(localStorage.getItem(AUTH_TOKEN_KEY) || undefined)
-            .onConnect((c: any, id: any, t: any) => {
+            .onConnect((c: DbConnection, id: SdbIdentity, t: string) => {
                 setIdentity(id.toHexString()); setIsConnected(true);
                 localStorage.setItem(AUTH_TOKEN_KEY, t); setup(c);
             }).build();

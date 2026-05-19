@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo } from 'preact/hooks';
-import { Game } from '@/src/types';
-import { useMeasure, useTextLayout, useGameStats } from '@/src/hooks';
-import { useFireflyPresence } from '@/src/hooks/FireflyContext';
+import { Game } from '@/types';
+import { useMeasure, useTextLayout, useGameStats } from '@/hooks';
+import { useFireflyPresence } from '@/hooks/FireflyContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faWindows,
@@ -19,8 +19,8 @@ import {
     faHeart as faHeartSolid
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg } from '@fortawesome/free-regular-svg-icons';
-import { CoverImage, StatusBadge } from '@/src/components';
-import { getTrailerInfo } from '@/src/utils';
+import { CoverImage, StatusBadge } from '@/components';
+import { getTrailerInfo } from '@/utils';
 
 interface GameCardProps {
     game: Game;

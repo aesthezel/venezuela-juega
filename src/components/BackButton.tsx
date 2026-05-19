@@ -1,6 +1,6 @@
 import { ComponentChildren, VNode } from 'preact';
 import { JSX } from 'preact/jsx-runtime';
-import { ArrowLeftIcon } from '@/src/components/icons';
+import { ArrowLeftIcon } from '@/components/icons';
 
 // TODO: move to global types
 type Size = 'sm' | 'md' | 'lg';

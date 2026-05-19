@@ -1,5 +1,5 @@
 import { useReducer, useMemo } from 'preact/hooks';
-import { Game, ViewMode } from '@/src/types';
+import { Game, ViewMode } from '@/types';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 

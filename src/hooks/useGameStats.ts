@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'preact/hooks';
-import { useSpacetimeDB } from '@/src/spacetimedb/connection';
-import { generateSlug } from '@/src/utils/gameUtils';
+import { useSpacetimeDB } from '@/spacetimedb/connection';
+import { generateSlug } from '@/utils/gameUtils';
 
 /**
  * useGameStats - Custom hook to manage real-time game statistics (likes, visits)

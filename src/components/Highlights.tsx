@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'preact/hooks';
-import { Game } from '@/src/types';
-import { HighlightCard } from '@/src/components';
-import { IndicatorLeftIcon, IndicatorRightIcon } from '@/src/components/icons';
+import { Game } from '@/types';
+import { HighlightCard } from '@/components';
+import { IndicatorLeftIcon, IndicatorRightIcon } from '@/components/icons';
 
 interface HighlightsProps {
     games: Game[];

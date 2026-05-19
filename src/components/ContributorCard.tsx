@@ -1,7 +1,7 @@
 import { h, ComponentChildren } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
+import { useMeasure } from '@/hooks/useMeasure';
+import { useTextLayout } from '@/hooks/useTextLayout';
 
 export interface ContributorSocial {
     icon: any;

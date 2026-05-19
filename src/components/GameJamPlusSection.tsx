@@ -1,9 +1,9 @@
 import { h } from 'preact';
 import { useMemo, useState } from 'preact/hooks';
-import { Game, GameOrigin } from '@/src/types';
+import { Game, GameOrigin } from '@/types';
 import { route } from 'preact-router';
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
+import { useMeasure } from '@/hooks/useMeasure';
+import { useTextLayout } from '@/hooks/useTextLayout';
 
 interface GameJamPlusSectionProps {
     games: Game[];

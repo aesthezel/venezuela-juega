@@ -18,7 +18,7 @@
     "jsxImportSource": "preact",
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*"
       ]
     },
     "allowImportingTsExtensions": true,

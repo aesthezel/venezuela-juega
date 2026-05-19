@@ -1,26 +1,26 @@
 import { useState, useMemo } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
 import { Router, route } from 'preact-router';
-import { Game } from "@/src/types";
-import { useGamesData, useMetadata, useCatalogFilters } from '@/src/hooks';
-import { FireflyProvider } from '@/src/hooks/FireflyContext';
-import { Header, Modal, LoadingSpinner, Footer, ScrollToTop, FireflyOverlay } from '@/src/components';
+import { Game } from "@/types";
+import { useGamesData, useMetadata, useCatalogFilters } from '@/hooks';
+import { FireflyProvider } from '@/hooks/FireflyContext';
+import { Header, Modal, LoadingSpinner, Footer, ScrollToTop, FireflyOverlay } from '@/components';
 import {
     CatalogPage,
     GameDetailPage,
     NotFoundPage,
     Redirect
-} from '@/src/pages';
+} from '@/pages';
 
 // Heavy pages — loaded only when their route is visited
-const ChartsPage = lazy(() => import('@/src/pages/ChartsPage'));
-const CalendarPage = lazy(() => import('@/src/pages/CalendarPage'));
-const GameJamsPage = lazy(() => import('@/src/pages/GameJamsPage'));
-const GameJamGalleryPage = lazy(() => import('@/src/pages/GameJamGalleryPage'));
-const AddGamePage = lazy(() => import('@/src/pages/AddGamePage'));
-const AboutPage = lazy(() => import('@/src/pages/AboutPage'));
+const ChartsPage = lazy(() => import('@/pages/ChartsPage'));
+const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
+const GameJamsPage = lazy(() => import('@/pages/GameJamsPage'));
+const GameJamGalleryPage = lazy(() => import('@/pages/GameJamGalleryPage'));
+const AddGamePage = lazy(() => import('@/pages/AddGamePage'));
+const AboutPage = lazy(() => import('@/pages/AboutPage'));
 
-import { SpacetimeDBProvider } from '@/src/spacetimedb/SpacetimeDBProvider';
+import { SpacetimeDBProvider } from '@/spacetimedb/SpacetimeDBProvider';
 
 const App = () => {
     const { games, loading, error, jamGames, jamSettings } = useGamesData();

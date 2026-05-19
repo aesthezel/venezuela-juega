@@ -1,11 +1,11 @@
 import { h } from 'preact';
 import { useMemo, useState, useEffect } from 'preact/hooks';
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
-import { Game } from '@/src/types';
+import { useMeasure } from '@/hooks/useMeasure';
+import { useTextLayout } from '@/hooks/useTextLayout';
+import { Game } from '@/types';
 import { RoutableProps, route } from 'preact-router';
-import { SearchBar, AlphaFilter, CoverImage, BackButton, PageTransition } from '@/src/components';
-import { getTrailerInfo } from '@/src/utils';
+import { SearchBar, AlphaFilter, CoverImage, BackButton, PageTransition } from '@/components';
+import { getTrailerInfo } from '@/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTrophy, faMapMarkerAlt, faCalendarAlt, faUsers,

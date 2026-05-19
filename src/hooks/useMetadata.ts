@@ -1,7 +1,7 @@
 import { useEffect } from 'preact/hooks';
-import { Game } from '@/src/types';
-import { updateMetadata } from '@/src/utils';
-import { trackPageView, trackGameView, trackEvent } from '@/src/utils/analytics';
+import { Game } from '@/types';
+import { updateMetadata } from '@/utils';
+import { trackPageView, trackGameView, trackEvent } from '@/utils/analytics';
 
 // TODO: move to a separate config file
 const pageMetadata = {

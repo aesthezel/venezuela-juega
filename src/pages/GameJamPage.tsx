@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { FunctionalComponent } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
-import { ExternalLinkIcon } from '@/src/components/icons';
+import { ExternalLinkIcon } from '@/components/icons';
 
 interface Talk {
     title: string;

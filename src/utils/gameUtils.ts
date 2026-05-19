@@ -1,4 +1,4 @@
-import { GameStatus, GameOrigin } from '@/src/types';
+import { GameStatus, GameOrigin } from '@/types';
 
 export const mapStatus = (statusStr: string | undefined): GameStatus => {
     const statusMap: { [key: string]: GameStatus } = {

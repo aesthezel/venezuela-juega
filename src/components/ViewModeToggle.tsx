@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGrip, faList } from '@fortawesome/free-solid-svg-icons';
-import { ViewMode } from '@/src/types';
+import { ViewMode } from '@/types';
 
 interface ViewModeToggleProps {
   mode: ViewMode;

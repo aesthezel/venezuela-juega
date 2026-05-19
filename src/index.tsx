@@ -1,4 +1,4 @@
-import '@/src/styles';
+import '@/styles';
 import { render } from 'preact';
 import App from './App';
 

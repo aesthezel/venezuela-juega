@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { Game } from "@/src/types";
-import { BackButton, CoverImage, PageTransition } from "@/src/components";
-import { CalendarPageProps } from "@/src/types";
+import { Game } from "@/types";
+import { BackButton, CoverImage, PageTransition } from "@/components";
+import { CalendarPageProps } from "@/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faGamepad,
@@ -20,7 +20,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
-import '@/src/styles/fullcalendar-theme.css';
+import '@/styles/fullcalendar-theme.css';
 
 const parseDate = (dateString: string): string | null => {
     if (!dateString || isNaN(new Date(dateString).getTime())) {

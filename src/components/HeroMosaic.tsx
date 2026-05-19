@@ -1,8 +1,8 @@
 import { h } from 'preact';
 import { useMemo, useEffect, useRef, useState, useCallback } from 'preact/hooks';
 import { route } from 'preact-router';
-import { Game } from '@/src/types';
-import { CoverImage } from '@/src/components';
+import { Game } from '@/types';
+import { CoverImage } from '@/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faGamepad, faUsers, faArrowDown,

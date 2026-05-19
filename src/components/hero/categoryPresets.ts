@@ -2,7 +2,7 @@ import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import {
     faDesktop, faMobileAlt, faTv, faRocket, faPuzzlePiece, faStar,
 } from '@fortawesome/free-solid-svg-icons';
-import { Game, GameStatus, GameOrigin } from '@/src/types';
+import { Game, GameStatus, GameOrigin } from '@/types';
 
 /** Which data pool a category filters against */
 export type CategoryDataSource = 'games' | 'jams' | 'all';

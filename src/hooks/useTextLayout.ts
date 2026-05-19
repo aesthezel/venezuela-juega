@@ -31,7 +31,7 @@ export function useTextLayout(
   // 1. Prepare the text (one-time work when text/font changes)
   const prepared = useMemo(() => {
     if (!text) return null;
-    return prepare(text, font, { whiteSpace, wordBreak });
+    return prepare(text, font, { whiteSpace, wordBreak } as Parameters<typeof prepare>[2]);
   }, [text, font, whiteSpace, wordBreak]);
 
   // 2. Perform layout (cheap arithmetic when width/lineHeight changes)

@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'preact/hooks';
-import { Game } from '@/src/types';
-import { useGameStats } from '@/src/hooks';
-import { useFireflyPresence } from '@/src/hooks/FireflyContext';
+import { Game } from '@/types';
+import { useGameStats } from '@/hooks';
+import { useFireflyPresence } from '@/hooks/FireflyContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg } from '@fortawesome/free-regular-svg-icons';
-import { CoverImage, StatusBadge } from '@/src/components';
-import { trackGameCardClick } from '@/src/utils/analytics';
-import { getTrailerInfo } from '@/src/utils';
+import { CoverImage, StatusBadge } from '@/components';
+import { trackGameCardClick } from '@/utils/analytics';
+import { getTrailerInfo } from '@/utils';
 import { gsap } from 'gsap';
 
 interface GameListProps {

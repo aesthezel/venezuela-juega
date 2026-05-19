@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
-import { Game } from '@/src/types';
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
-import { CloseIcon, LinkIcon } from '@/src/components/icons';
+import { Game } from '@/types';
+import { useMeasure } from '@/hooks/useMeasure';
+import { useTextLayout } from '@/hooks/useTextLayout';
+import { CloseIcon, LinkIcon } from '@/components/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faHeart as faHeartSolid, faStar as faStarSolid, faEye } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-regular-svg-icons';
 import StoreButton from './StoreButton';
 import ScreenshotLightbox from './ScreenshotLightbox';
-import { trackEvent } from '@/src/utils/analytics';
-import { useGameStats } from '@/src/hooks/useGameStats';
-import { useSpacetimeDB } from '@/src/spacetimedb/connection';
+import { trackEvent } from '@/utils/analytics';
+import { useGameStats } from '@/hooks/useGameStats';
+import { useSpacetimeDB } from '@/spacetimedb/connection';
 
 interface ModalProps {
     game: Game;

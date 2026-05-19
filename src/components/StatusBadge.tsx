@@ -1,4 +1,4 @@
-import { GameStatus } from '@/src/types';
+import { GameStatus } from '@/types';
 import { JSX } from 'preact/jsx-runtime';
 
 type Variant = 'solid' | 'soft' | 'outline';

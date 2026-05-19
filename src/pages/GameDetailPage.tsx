@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
-import { Game, GameDetailPageProps } from "@/src/types";
+import { Game, GameDetailPageProps } from "@/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faArrowLeft, faGamepad, faGlobe, faCog, faTimes,
@@ -10,10 +10,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-regular-svg-icons';
 import { faSteam, faItchIo, faPlaystation, faXbox, faGooglePlay, faApple, faMeta } from '@fortawesome/free-brands-svg-icons';
-import { BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge, PageTransition, ScreenshotLightbox } from "@/src/components";
-import { useSpacetimeDB } from '@/src/spacetimedb/connection';
-import { useGameStats, useMeasure, useTextLayout } from '@/src/hooks';
-import { getTrailerInfo } from "@/src/utils";
+import { BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge, PageTransition, ScreenshotLightbox } from "@/components";
+import { useSpacetimeDB } from '@/spacetimedb/connection';
+import { useGameStats, useMeasure, useTextLayout } from '@/hooks';
+import { getTrailerInfo } from "@/utils";
 
 interface DetailSectionProps {
     title: string;

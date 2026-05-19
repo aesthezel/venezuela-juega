@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'preact/hooks';
 import { route } from 'preact-router';
-import { useSpacetimeDB } from '@/src/spacetimedb/connection';
-import { Game } from '@/src/types';
+import { useSpacetimeDB } from '@/spacetimedb/connection';
+import { Game } from '@/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faStar, faHistory, faClose, faExchangeAlt, faMagic, faMagicWandSparkles, faGamepad } from '@fortawesome/free-solid-svg-icons';
 

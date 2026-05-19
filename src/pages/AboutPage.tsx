@@ -1,8 +1,8 @@
 import { h } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faInstagram, faLinkedin, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { BackButton, ContributorCard, PageTransition } from "@/src/components";
-import { AboutPageProps } from "@/src/types";
+import { BackButton, ContributorCard, PageTransition } from "@/components";
+import { AboutPageProps } from "@/types";
 
 // Definimos los datos fuera para mantener el componente limpio
 const CONTRIBUTORS = [

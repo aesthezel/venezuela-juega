@@ -1,8 +1,8 @@
 import { useMemo } from 'preact/hooks';
-import { Game } from '@/src/types';
-import { StatusBadge } from "@/src/components/index.ts";
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
+import { Game } from '@/types';
+import { StatusBadge } from "@/components/index.ts";
+import { useMeasure } from '@/hooks/useMeasure';
+import { useTextLayout } from '@/hooks/useTextLayout';
 
 interface HighlightCardProps {
     game: Game;

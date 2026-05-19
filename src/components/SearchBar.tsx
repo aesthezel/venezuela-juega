@@ -2,9 +2,9 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'preact/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { route } from 'preact-router';
-import { Game } from '@/src/types';
-import { useDebounce } from '@/src/hooks';
-import { CoverImage } from "@/src/components/index.ts";
+import { Game } from '@/types';
+import { useDebounce } from '@/hooks';
+import { CoverImage } from "@/components/index.ts";
 
 interface SearchBarProps {
     searchTerm: string;

@@ -1,11 +1,11 @@
 import { useState } from 'preact/hooks';
 import { ComponentChildren, ComponentProps } from 'preact';
 import { JSX } from 'preact/jsx-runtime';
-import { Game, GameStatus } from "@/src/types";
+import { Game, GameStatus } from "@/types";
 import CloseIcon from '../components/icons/CloseIcon.tsx';
-import { AddGamePageProps } from "@/src/types";
-import { PageTransition } from '@/src/components';
-import { generateSlug } from '@/src/utils';
+import { AddGamePageProps } from "@/types";
+import { PageTransition } from '@/components';
+import { generateSlug } from '@/utils';
 
 const initialGameState: Omit<Game, 'id'> = {
     title: '',

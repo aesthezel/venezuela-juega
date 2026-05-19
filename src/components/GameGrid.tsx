@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { Game } from '@/src/types';
-import { GameCard } from '@/src/components';
+import { useMeasure } from '@/hooks/useMeasure';
+import { Game } from '@/types';
+import { GameCard } from '@/components';
 import { gsap } from 'gsap';
-import { trackGameCardClick } from '@/src/utils/analytics';
+import { trackGameCardClick } from '@/utils/analytics';
 
 interface GameGridProps {
     games: Game[];

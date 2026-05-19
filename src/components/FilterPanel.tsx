@@ -11,7 +11,7 @@ import {
     faStore,
     faFont
 } from '@fortawesome/free-solid-svg-icons';
-import { GameStatus } from "@/src/types";
+import { GameStatus } from "@/types";
 import AlphaFilter from './AlphaFilter';
 
 interface FilterPanelProps {

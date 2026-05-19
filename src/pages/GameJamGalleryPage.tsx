@@ -1,12 +1,12 @@
 import { h } from 'preact';
 import { useMemo, useState } from 'preact/hooks';
-import { useMeasure } from '@/src/hooks/useMeasure';
-import { useTextLayout } from '@/src/hooks/useTextLayout';
-import { Game } from '@/src/types';
-import { GameOrigin } from '@/src/types/enums';
+import { useMeasure } from '@/hooks/useMeasure';
+import { useTextLayout } from '@/hooks/useTextLayout';
+import { Game } from '@/types';
+import { GameOrigin } from '@/types/enums';
 import { RoutableProps, route } from 'preact-router';
-import {LinkIcon, CoverImage, BackButton, PromoHeader} from '@/src/components';
-import { trackEvent } from '@/src/utils/analytics';
+import {LinkIcon, CoverImage, BackButton, PromoHeader} from '@/components';
+import { trackEvent } from '@/utils/analytics';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 

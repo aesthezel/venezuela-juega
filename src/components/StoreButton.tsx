@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { faGamepad, faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { LinkIcon } from './icons';
-import { trackExternalStore } from '@/src/utils/analytics';
+import { trackExternalStore } from '@/utils/analytics';
 
 interface StoreButtonProps {
     store: { name: string; url: string };

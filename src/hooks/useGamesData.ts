@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
 import Papa from 'papaparse';
-import { Game } from '@/src/types';
+import { Game } from '@/types';
 import { 
     generateSlug, 
     ensureUniqueSlug, 
@@ -8,7 +8,7 @@ import {
     mapStatus, 
     mapOrigin,
     ensureHttps
-} from '@/src/utils';
+} from '@/utils';
 
 export interface JamGame extends Game {
     Jam_Org_UID?: string;
@@ -241,14 +241,8 @@ export const useGamesData = () => {
         const JAM_GAMES_URL = `https://docs.google.com/spreadsheets/d/${JAM_SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${JAM_GAMES_SHEET}`;
         const JAM_SETTINGS_URL = `https://docs.google.com/spreadsheets/d/${JAM_SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${JAM_SETTINGS_SHEET}`;
 
-        const JAM_GAME_HEADERS = [
-            'Título del videojuego', 'Plataforma(s)', 'Género(s)', 'Desarrollador(es)', 'Distribuidor',
-            'Jam_Org_UID', 'Jam_Edition', 'Fecha de lanzamiento', 'Última actualización', 'Estado actual',
-            'Tiendas', 'Enlace(s)', 'Presskit', 'Pitch', 'Financiamiento', 'Motor',
-            'Origen inicial', 'Idioma(s) disponible(s)', 'Destacado', 'Descripción del Destacado',
-            'steam_appid', 'google_appid', 'Enlace directo', 'Steam', 'GOG', 'Itch', 'Nintendo Shop',
-            'PlayStation Store', 'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'Tienda externa',
-            'Hero', 'Portada', 'Mini Image', 'Trailer', 'Screenshots', 'Descripción', 'UID'
+        const JAM_REQUIRED_COLUMNS = [
+            'Título del videojuego', 'Estado actual', 'Plataforma(s)',
         ];
 
         const JAM_CACHE_KEY = `vj_jam_${JAM_SPREADSHEET_ID}`;
@@ -264,24 +258,62 @@ export const useGamesData = () => {
                 new Promise<JamGame[]>((resolve) => {
                     Papa.parse(JAM_GAMES_URL, {
                         download: true,
+                        // header: false — Google Sheets may emit metadata rows before the
+                        // real column-header row, so we locate it by content and build a
+                        // dynamic name→index map (resilient to column reordering too).
                         header: false,
                         skipEmptyLines: true,
                         complete: (results) => {
                             const data = results.data as string[][];
-                            const headerIndex = data.findIndex(row => row[0] === 'Título del videojuego' && row[5] === 'Jam_Org_UID');
-                            if (headerIndex === -1) { resolve([]); return; }
 
-                            const gameRows = data.slice(headerIndex + 1);
+                            // Find the actual header row by looking for the title column
+                            const headerIndex = data.findIndex(row =>
+                                row.includes('Título del videojuego') && row.includes('Jam_Org_UID')
+                            );
+                            if (headerIndex === -1) {
+                                console.warn('[useGamesData/jams] No se encontró la fila de encabezado jam.');
+                                resolve([]);
+                                return;
+                            }
+
+                            // Build a name→index map from the found header row.
+                            // Google Sheets gviz API sometimes returns empty strings
+                            // for certain header cells — fill them in by position
+                            // relative to the known 'Jam_Org_UID' anchor.
+                            const headerRow = [...data[headerIndex]];
+                            const uidIdx = headerRow.indexOf('Jam_Org_UID');
+                            if (uidIdx !== -1) {
+                                const positionalFallbacks: Record<number, string> = {
+                                    [uidIdx + 1]: 'Jam_Edition',
+                                    [uidIdx + 2]: 'Fecha de lanzamiento',
+                                    [uidIdx + 3]: 'Última actualización',
+                                };
+                                for (const [idx, name] of Object.entries(positionalFallbacks)) {
+                                    const i = Number(idx);
+                                    if (i < headerRow.length && !headerRow[i]) {
+                                        headerRow[i] = name;
+                                    }
+                                }
+                            }
+
+                            const colIndex: Record<string, number> = {};
+                            headerRow.forEach((name, i) => { if (name) colIndex[name] = i; });
+
+                            // Validate required columns
+                            const missingCols = JAM_REQUIRED_COLUMNS.filter(col => !(col in colIndex));
+                            if (missingCols.length > 0) {
+                                console.warn(`[useGamesData/jams] Columnas requeridas faltantes: ${missingCols.join(', ')}`);
+                            }
+
+                            const col = (name: string, row: string[]): string =>
+                                colIndex[name] !== undefined ? (row[colIndex[name]] ?? '') : '';
+
                             const existingSlugs = new Set<string>();
+                            const gameRows = data.slice(headerIndex + 1);
 
-                            const parsedJamGames = gameRows.map((row: string[], index): JamGame | null => {
-                                const rowObject = JAM_GAME_HEADERS.reduce((obj, header, i) => {
-                                    if (header && i < row.length) obj[header] = row[i];
-                                    return obj;
-                                }, {} as { [key: string]: string });
-
-                                const title = rowObject['Título del videojuego'];
-                                if (!title || !title.trim()) return null;
+                            const parsedJamGames = gameRows.map((row, index): JamGame | null => {
+                                const title = col('Título del videojuego', row);
+                                if (!title.trim()) return null;
 
                                 const baseSlug = generateSlug(title);
                                 const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
@@ -290,31 +322,33 @@ export const useGamesData = () => {
                                     id: index + 1,
                                     slug: uniqueSlug,
                                     title,
-                                    platform: parseStringToArray(rowObject['Plataforma(s)']),
-                                    genre: parseStringToArray(rowObject['Género(s)']),
-                                    developers: parseStringToArray(rowObject['Desarrollador(es)']),
-                                    publishers: parseStringToArray(rowObject['Distribuidor']),
-                                    releaseDate: rowObject['Fecha de lanzamiento'] || 'No especificada',
-                                    lastUpdateDate: rowObject['Última actualización'] || undefined,
-                                    status: mapStatus(rowObject['Estado actual']),
-                                    stores: storeColumns.map(name => ({ name, url: rowObject[name]?.trim() })).filter(s => s.url),
+                                    platform: parseStringToArray(col('Plataforma(s)', row)),
+                                    genre: parseStringToArray(col('Género(s)', row)),
+                                    developers: parseStringToArray(col('Desarrollador(es)', row)),
+                                    publishers: parseStringToArray(col('Distribuidor', row)),
+                                    releaseDate: col('Fecha de lanzamiento', row) || 'No especificada',
+                                    lastUpdateDate: col('Última actualización', row) || undefined,
+                                    status: mapStatus(col('Estado actual', row)),
+                                    stores: storeColumns
+                                        .map(name => ({ name, url: col(name, row).trim() }))
+                                        .filter(s => s.url),
                                     links: [],
-                                    pressKitUrl: rowObject['Presskit'] || undefined,
-                                    pitch: rowObject['Pitch'] || '',
-                                    funding: rowObject['Financiamiento'] || undefined,
-                                    engine: rowObject['Motor'] || 'No especificado',
-                                    languages: parseStringToArray(rowObject['Idioma(s) disponible(s)']),
-                                    imageUrl: ensureHttps(rowObject['Mini Image']) || '',
-                                    imageCover: ensureHttps(rowObject['Portada']) || '',
-                                    imageHero: ensureHttps(rowObject['Hero']) || '',
-                                    trailerUrl: ensureHttps(rowObject['Trailer']?.trim()) || undefined,
-                                    description: rowObject['Descripción'] || '',
-                                    isHighlighted: rowObject['Destacado']?.toUpperCase() === 'TRUE',
-                                    highlightReason: rowObject['Descripción del Destacado'] || '',
-                                    screenshots: parseScreenshots(rowObject['Screenshots']).map(s => ensureHttps(s) || ''),
-                                    origin: mapOrigin(rowObject['Origen inicial']),
-                                    Jam_Org_UID: rowObject['Jam_Org_UID']?.trim() || undefined,
-                                    Jam_Edition: rowObject['Jam_Edition']?.trim() || undefined,
+                                    pressKitUrl: col('Presskit', row) || undefined,
+                                    pitch: col('Pitch', row) || '',
+                                    funding: col('Financiamiento', row) || undefined,
+                                    engine: col('Motor', row) || 'No especificado',
+                                    languages: parseStringToArray(col('Idioma(s) disponible(s)', row)),
+                                    imageUrl: ensureHttps(col('Mini Image', row)) || '',
+                                    imageCover: ensureHttps(col('Portada', row)) || '',
+                                    imageHero: ensureHttps(col('Hero', row)) || '',
+                                    trailerUrl: ensureHttps(col('Trailer', row).trim()) || undefined,
+                                    description: col('Descripción', row) || '',
+                                    isHighlighted: col('Destacado', row).toUpperCase() === 'TRUE',
+                                    highlightReason: col('Descripción del Destacado', row) || '',
+                                    screenshots: parseScreenshots(col('Screenshots', row)).map(s => ensureHttps(s) || ''),
+                                    origin: mapOrigin(col('Origen inicial', row)),
+                                    Jam_Org_UID: col('Jam_Org_UID', row).trim() || undefined,
+                                    Jam_Edition: col('Jam_Edition', row).trim() || undefined,
                                 };
                             }).filter((game): game is JamGame => game !== null);
                             resolve(parsedJamGames);

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
-import { Game, GameStatus, GameOrigin } from "@/src/types";
-import { BackButton, PageTransition } from "@/src/components";
-import { ChartsPageProps } from "@/src/types";
+import { Game, GameStatus, GameOrigin } from "@/types";
+import { BackButton, PageTransition } from "@/components";
+import { ChartsPageProps } from "@/types";
 import { Chart, registerables } from 'chart.js/auto';
-import { useSpacetimeDB } from '@/src/spacetimedb/connection';
+import { useSpacetimeDB } from '@/spacetimedb/connection';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faGamepad,

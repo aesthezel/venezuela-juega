@@ -12,12 +12,12 @@ import {
     GameJamPlusSection,
     HeroMosaic,
     PageTransition
-} from '@/src/components';
-import { ViewMode, GameOrigin } from '@/src/types';
-import { CatalogPageProps } from "@/src/types";
+} from '@/components';
+import { ViewMode, GameOrigin } from '@/types';
+import { CatalogPageProps } from "@/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
-import type { CategoryPreset } from '@/src/components/hero';
+import type { CategoryPreset } from '@/components/hero';
 
 const CatalogPage = ({
     games,

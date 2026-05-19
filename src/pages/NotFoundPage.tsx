@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'preact/hooks';
 import { RoutableProps, route } from 'preact-router';
-import { PageTransition, BackButton, GameCard } from '@/src/components';
-import { Game } from '@/src/types';
+import { PageTransition, BackButton, GameCard } from '@/components';
+import { Game } from '@/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCompass, faDice, faGhost, faHouse } from '@fortawesome/free-solid-svg-icons';
 

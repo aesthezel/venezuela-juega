@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad } from '@fortawesome/free-solid-svg-icons';
-import { Game } from '@/src/types';
+import { Game } from '@/types';
 import { route } from 'preact-router';
-import { trackNav } from '@/src/utils/analytics';
+import { trackNav } from '@/utils/analytics';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import UserProfile from './UserProfile';
