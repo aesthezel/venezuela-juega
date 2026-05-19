@@ -37,6 +37,7 @@ const CatalogPage = ({
     yearRange,
     onYearRangeChange,
     jamGames,
+    isLoading
 }: CatalogPageProps) => {
 
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -126,7 +127,11 @@ const CatalogPage = ({
 
     return (
         <div className="w-full min-h-screen">
-            <HeroMosaic games={games} jamGames={jamGames} onGameClick={onGameClick} onCategorySelect={handleCategorySelect} />
+            {isLoading ? (
+                <div className="w-full h-[60vh] md:h-[70vh] skeleton rounded-none mb-8 opacity-70"></div>
+            ) : (
+                <HeroMosaic games={games} jamGames={jamGames} onGameClick={onGameClick} onCategorySelect={handleCategorySelect} />
+            )}
 
             <PageTransition>
                 <main id="catalog-content" className="container mx-auto px-4 py-8 relative z-10">
@@ -165,7 +170,15 @@ const CatalogPage = ({
                     </div>
 
                     <div className="mb-12 space-y-12">
-                        <Highlights games={games} onGameClick={onGameClick} />
+                        {isLoading ? (
+                            <div className="flex gap-4 overflow-hidden py-4">
+                                {[1, 2, 3, 4].map(i => (
+                                    <div key={i} className="skeleton h-[350px] w-80 shrink-0 opacity-50"></div>
+                                ))}
+                            </div>
+                        ) : (
+                            <Highlights games={games} onGameClick={onGameClick} />
+                        )}
                         {/*<GameJamPlusSection games={games} onGameClick={onGameClick}/>*/}
                     </div>
 
@@ -174,22 +187,39 @@ const CatalogPage = ({
                         <aside className="hidden lg:block lg:col-span-3">
                             <div className="card bg-base-200/50 shadow-xl border border-surface-700 p-6 sticky top-52 transition-all z-10 will-change-transform">
 
-                                <FilterPanel
-                                    genres={allGenres}
-                                    platforms={allPlatforms}
-                                    stores={allStores}
-                                    activeFilters={activeFilters}
-                                    onFilterChange={onFilterChange}
-                                    onClearCategory={onClearCategory}
-                                    onClearAll={onClearAllFilters}
-                                    clearAllEnabled={hasActiveFilters}
-                                    minYear={minYear}
-                                    maxYear={maxYear}
-                                    yearRange={yearRange}
-                                    onYearRangeChange={onYearRangeChange}
-                                    alpha={alpha}
-                                    onAlphaChange={setAlpha}
-                                />
+                                {isLoading ? (
+                                    <div className="space-y-6">
+                                        <div className="skeleton h-8 w-1/2 opacity-70"></div>
+                                        <div className="space-y-3">
+                                            <div className="skeleton h-4 w-full opacity-50"></div>
+                                            <div className="skeleton h-4 w-5/6 opacity-50"></div>
+                                            <div className="skeleton h-4 w-4/6 opacity-50"></div>
+                                        </div>
+                                        <div className="space-y-3">
+                                            <div className="skeleton h-4 w-full opacity-50"></div>
+                                            <div className="skeleton h-4 w-3/4 opacity-50"></div>
+                                        </div>
+                                        <div className="skeleton h-10 w-full mt-6 opacity-70"></div>
+                                        <div className="skeleton h-10 w-full opacity-70"></div>
+                                    </div>
+                                ) : (
+                                    <FilterPanel
+                                        genres={allGenres}
+                                        platforms={allPlatforms}
+                                        stores={allStores}
+                                        activeFilters={activeFilters}
+                                        onFilterChange={onFilterChange}
+                                        onClearCategory={onClearCategory}
+                                        onClearAll={onClearAllFilters}
+                                        clearAllEnabled={hasActiveFilters}
+                                        minYear={minYear}
+                                        maxYear={maxYear}
+                                        yearRange={yearRange}
+                                        onYearRangeChange={onYearRangeChange}
+                                        alpha={alpha}
+                                        onAlphaChange={setAlpha}
+                                    />
+                                )}
                             </div>
                         </aside>
 
@@ -238,19 +268,35 @@ const CatalogPage = ({
                         </dialog>
 
                         <section className="lg:col-span-9 min-h-[50vh]">
-                            <div className="lg:hidden mb-6 flex justify-between items-center text-sm bg-base-200/50 p-3 rounded-lg border border-surface-700">
-                                <span className="text-base-content/70 font-medium">{alphaFilteredGames.length} juegos encontrados</span>
-                                {activeFilterCount > 0 && (
-                                    <span className="badge badge-primary font-bold">
-                                        {activeFilterCount} filtros activos
-                                    </span>
-                                )}
-                            </div>
-
-                            {viewMode === 'grid' ? (
-                                <GameGrid games={alphaFilteredGames} onGameClick={onGameClick} />
+                            {isLoading ? (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                                    {[1, 2, 3, 4, 5, 6].map(i => (
+                                        <div key={i} className="flex flex-col gap-4 mb-4">
+                                            <div className="skeleton h-48 w-full opacity-70"></div>
+                                            <div className="skeleton h-6 w-3/4 opacity-50"></div>
+                                            <div className="skeleton h-4 w-1/2 opacity-50"></div>
+                                            <div className="skeleton h-4 w-full opacity-50"></div>
+                                            <div className="skeleton h-4 w-5/6 opacity-50"></div>
+                                        </div>
+                                    ))}
+                                </div>
                             ) : (
-                                <GameList games={alphaFilteredGames} onGameClick={onGameClick} />
+                                <>
+                                    <div className="lg:hidden mb-6 flex justify-between items-center text-sm bg-base-200/50 p-3 rounded-lg border border-surface-700">
+                                        <span className="text-base-content/70 font-medium">{alphaFilteredGames.length} juegos encontrados</span>
+                                        {activeFilterCount > 0 && (
+                                            <span className="badge badge-primary font-bold">
+                                                {activeFilterCount} filtros activos
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {viewMode === 'grid' ? (
+                                        <GameGrid games={alphaFilteredGames} onGameClick={onGameClick} />
+                                    ) : (
+                                        <GameList games={alphaFilteredGames} onGameClick={onGameClick} />
+                                    )}
+                                </>
                             )}
                         </section>
                     </div>

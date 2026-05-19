@@ -6,9 +6,11 @@ interface CoverImageProps {
   alt: string;
   className?: string; // Class for the non-image placeholder or container if needed
   imgClassName?: string; // Class for the image element itself
+  width?: string | number;
+  height?: string | number;
 }
 
-const CoverImage = ({ src, alt, className = '', imgClassName = '' }: CoverImageProps): JSX.Element => {
+const CoverImage = ({ src, alt, className = '', imgClassName = '', width, height }: CoverImageProps): JSX.Element => {
   const [hasError, setHasError] = useState(false);
 
   const handleError = () => {
@@ -23,6 +25,8 @@ const CoverImage = ({ src, alt, className = '', imgClassName = '' }: CoverImageP
         className={imgClassName || className}
         loading="lazy"
         onError={handleError}
+        width={width}
+        height={height}
       />
     );
   }

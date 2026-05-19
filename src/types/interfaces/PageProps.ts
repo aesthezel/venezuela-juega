@@ -68,4 +68,5 @@ export interface CatalogPageProps {
     maxYear: number;
     yearRange: { min: number; max: number } | null;
     onYearRangeChange: (range: { min: number; max: number }) => void;
+    isLoading?: boolean;
 }

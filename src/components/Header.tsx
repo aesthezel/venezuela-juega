@@ -31,34 +31,43 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
     };
 
     useEffect(() => {
-        let lastScrollY = window.scrollY;
         const el = headerRef.current;
         if (!el) return;
 
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-            const direction = currentScrollY > lastScrollY ? 1 : -1; // 1: down, -1: up
+            
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const direction = currentScrollY > lastScrollY ? 1 : -1;
 
-            setIsScrolled(currentScrollY > 20);
+                    setIsScrolled(currentScrollY > 20);
 
-            if (currentScrollY <= 50) {
-                if (!isVisibleRef.current) {
-                    gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
-                    isVisibleRef.current = true;
-                }
-            } else if (direction === 1 && currentScrollY > 200) {
-                if (isVisibleRef.current) {
-                    gsap.to(el, { y: -100, opacity: 0, duration: 0.3, ease: 'power2.in', overwrite: true });
-                    isVisibleRef.current = false;
-                }
-            } else if (direction === -1) {
-                if (!isVisibleRef.current) {
-                    gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
-                    isVisibleRef.current = true;
-                }
+                    if (currentScrollY <= 50) {
+                        if (!isVisibleRef.current) {
+                            gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
+                            isVisibleRef.current = true;
+                        }
+                    } else if (direction === 1 && currentScrollY > 200) {
+                        if (isVisibleRef.current) {
+                            gsap.to(el, { y: -100, opacity: 0, duration: 0.3, ease: 'power2.in', overwrite: true });
+                            isVisibleRef.current = false;
+                        }
+                    } else if (direction === -1) {
+                        if (!isVisibleRef.current) {
+                            gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
+                            isVisibleRef.current = true;
+                        }
+                    }
+
+                    lastScrollY = currentScrollY;
+                    ticking = false;
+                });
+                ticking = true;
             }
-
-            lastScrollY = currentScrollY;
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });

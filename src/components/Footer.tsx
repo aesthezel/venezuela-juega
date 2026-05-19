@@ -16,42 +16,42 @@ const Footer = () => {
         gsap.set(el, { yPercent: 100, opacity: 0 });
 
         let lastScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+        let ticking = false;
 
         const handleScroll = () => {
             const y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const isAtBottom = y + window.innerHeight >= document.documentElement.scrollHeight - 80;
 
-            // Check if we are at the bottom of the page (with a small 80px threshold)
-            const isAtBottom = y + window.innerHeight >= document.documentElement.scrollHeight - 80;
+                    const path = window.location.pathname;
+                    const hasHero = path === '/' || path === '/game' || path === '/games';
+                    const isAtTop = hasHero && y < window.innerHeight * 0.5;
 
-            // Check if we are on a page that contains the fullscreen Hero
-            const path = window.location.pathname;
-            const hasHero = path === '/' || path === '/game' || path === '/games';
-            // Only hide the footer near the top if we actually have a Hero to protect
-            const isAtTop = hasHero && y < window.innerHeight * 0.5;
+                    let direction = 0;
+                    if (y > lastScrollY + 5) {
+                        direction = 1; // Down
+                    } else if (y < lastScrollY - 5) {
+                        direction = -1; // Up
+                    }
 
-            // Determine scroll direction
-            let direction = 0;
-            if (y > lastScrollY + 5) {
-                direction = 1; // Down
-            } else if (y < lastScrollY - 5) {
-                direction = -1; // Up
-            }
+                    if (isAtTop) {
+                        gsap.to(el, { yPercent: 100, opacity: 0, duration: 0.35, pointerEvents: 'none', ease: 'power2.out', overwrite: 'auto' });
+                    } else if (direction !== 0 || isAtBottom) {
+                        if (direction === 1 && !isAtBottom) {
+                            gsap.to(el, { yPercent: 100, opacity: 0, duration: 0.35, pointerEvents: 'none', ease: 'power2.out', overwrite: 'auto' });
+                        } else if (direction === -1 || isAtBottom) {
+                            gsap.to(el, { yPercent: 0, opacity: 1, duration: 0.35, pointerEvents: 'auto', ease: 'power2.out', overwrite: 'auto' });
+                        }
+                    }
 
-            if (isAtTop) {
-                // Siempre ocultar cuando estamos al principio de la página (Hero view)
-                gsap.to(el, { yPercent: 100, opacity: 0, duration: 0.35, pointerEvents: 'none', ease: 'power2.out', overwrite: 'auto' });
-            } else if (direction !== 0 || isAtBottom) {
-                if (direction === 1 && !isAtBottom) {
-                    // Scrolling down → hide footer below viewport
-                    gsap.to(el, { yPercent: 100, opacity: 0, duration: 0.35, pointerEvents: 'none', ease: 'power2.out', overwrite: 'auto' });
-                } else if (direction === -1 || isAtBottom) {
-                    // Scrolling up or at bottom → reveal footer
-                    gsap.to(el, { yPercent: 0, opacity: 1, duration: 0.35, pointerEvents: 'auto', ease: 'power2.out', overwrite: 'auto' });
-                }
-            }
-
-            if (Math.abs(y - lastScrollY) > 5) {
-                lastScrollY = y <= 0 ? 0 : y;
+                    if (Math.abs(y - lastScrollY) > 5) {
+                        lastScrollY = y <= 0 ? 0 : y;
+                    }
+                    ticking = false;
+                });
+                ticking = true;
             }
         };
 

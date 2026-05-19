@@ -13,7 +13,7 @@ import {
     faCodeBranch
 } from '@fortawesome/free-solid-svg-icons';
 
-Chart.register(...registerables);
+// Chart.register is moved to useEffect inside the component
 
 const countItems = (data: Game[], key: 'platform' | 'genre' | 'engine' | 'origin') => {
     const counts = new Map<string, number>();
@@ -248,6 +248,9 @@ const ChartsPage = ({ games, onNavigateToCatalog, onGameClick }: ChartsPageProps
     const originChartRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
+        // Defer Chart.js registration to avoid heavy global init
+        Chart.register(...registerables);
+        
         const chartInstances: any[] = [];
 
         Chart.defaults.color = '#9c8a9d';

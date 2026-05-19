@@ -133,7 +133,9 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             const src = g.imageCover || g.imageUrl;
             return src && src.length > 5;
         });
-        return [...withImages].sort(() => 0.5 - Math.random()).slice(0, 28);
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+        const count = isMobile ? 12 : 28;
+        return [...withImages].sort(() => 0.5 - Math.random()).slice(0, count);
     }, [games]);
 
     // ── GSAP background animation ──────────────────────────────────────────
@@ -253,6 +255,8 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                             src={game.imageCover || game.imageUrl}
                             alt=""
                             className="h-full w-full object-cover opacity-35 grayscale transition-all duration-700"
+                            width={300}
+                            height={400}
                         />
                     </div>
                 ))}

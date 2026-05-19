@@ -77,9 +77,10 @@ const App = () => {
         maxYear,
         yearRange: filterState.yearRange,
         onYearRangeChange: handleYearRangeChange,
+        isLoading: loading,
     };
 
-    if (loading) return <LoadingSpinner />;
+    if (loading && !['/', '/game', '/games'].includes(currentPath)) return <LoadingSpinner />;
     if (error) return <div className="text-center text-secondary text-2xl p-10">{error}</div>;
 
     return (
