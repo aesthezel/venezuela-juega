@@ -22,7 +22,7 @@ const REPLACEMENTS = [
   ['slate-300', 'surface-300'],
   ['slate-200', 'surface-200'],
   ['slate-100', 'surface-100'],
-  ['slate-50',  'surface-50'],
+  ['slate-50', 'surface-50'],
 
   // Cyan → Accent Teal
   ['cyan-950', 'accent-teal-deep'],

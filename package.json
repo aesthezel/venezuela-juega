@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/generate-meta.js",
-    "build:css": "npx @tailwindcss/cli -i ./src/styles/global.css -o ./app.css",
     "preview": "vite preview"
   },
   "dependencies": {
