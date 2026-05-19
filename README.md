@@ -20,7 +20,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - **GSAP** 3.13.0
 
 ### Librerías anexadas estáticas
-- **Tailwind CSS** 4.0.0
+- **Tailwind CSS** 4.3.0
+- **DaisyUI** 5.5.19
 - **Chart.js** 4.5.1
 - **Bootstrap Icons** 1.13.1
 - **FullCalendar** 6.1.15
@@ -96,6 +97,10 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Design tokens y tailwind mejorados
 - [x] Agregar DaisyUI y mejorar el Tailwind
 - [x] Mejorar diseño de la página de los juegos por separado
+- [x] Implementación de Skeletons (DaisyUI) para mejorar la experiencia de carga percibida
+- [x] Consolidación de diseño Glassmorphism e interfaz móvil (filtros y menú) optimizada
+- [x] Refactorización arquitectónica usando alias de ruta (`@/`) centralizados
+- [x] Optimización de rendimiento general (GSAP ScrollTrigger, mitigación de Layout Shift y diferimiento de cargas pesadas)
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar
