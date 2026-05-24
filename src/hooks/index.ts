@@ -5,4 +5,6 @@ export * from './useFireflies';
 export * from './FireflyContext';
 export * from './useGameStats';
 export * from './useMeasure';
-export * from './useTextLayout';export * from './useCatalogFilters';
+export * from './useTextLayout';
+export * from './useCatalogFilters';
+export * from './AuthContext';
