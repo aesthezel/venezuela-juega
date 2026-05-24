@@ -23,6 +23,7 @@
     "@tailwindcss/cli": "^4.3.0",
     "chart.js": "^4.5.1",
     "daisyui": "^5.5.19",
+    "firebase": "^12.13.0",
     "gsap": "^3.13.0",
     "papaparse": "^5.5.3",
     "preact": "^10.22.1",
