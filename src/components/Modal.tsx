@@ -128,7 +128,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                 <form method="dialog">
                     <button
                         onClick={onClose}
-                        className="btn btn-sm btn-circle btn-ghost absolute top-4 right-4 z-20 bg-base-100/60 text-base-content/70 hover:text-white hover:bg-error/80 backdrop-blur-md border border-base-content/10 hover:border-transparent"
+                        className="btn btn-circle btn-ghost absolute top-3 right-3 md:top-4 md:right-4 z-20 h-10 w-10 min-h-0 bg-base-100/60 text-base-content/70 hover:text-white hover:bg-error/80 backdrop-blur-md border border-base-content/10 hover:border-transparent flex items-center justify-center"
                         title="Cerrar"
                     >
                         <CloseIcon />
@@ -147,21 +147,21 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
                         <button
                             onClick={handleViewFullInfo}
-                            className="absolute bottom-0 right-6 md:right-10 translate-y-1/2 z-20 btn btn-primary border-none shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:translate-y-[40%] transition-transform duration-300 flex items-center gap-2"
+                            className="hidden md:flex absolute bottom-0 right-10 translate-y-1/2 z-20 btn btn-primary border-none shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:translate-y-[40%] transition-transform duration-300 items-center gap-2"
                         >
                             <span>Ver más sobre el juego</span>
                             <FontAwesomeIcon icon={faArrowRight} />
                         </button>
                     </div>
 
-                    <div className="px-6 md:px-10 pb-10 -mt-28 md:-mt-32 relative z-10 w-full flex flex-col gap-8">
+                    <div className="px-6 md:px-10 pb-10 -mt-16 md:-mt-32 relative z-10 w-full flex flex-col gap-6 md:gap-8">
 
                         <div className="flex flex-col md:pr-56">
                             <h2 className="text-3xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight leading-tight">{game.title}</h2>
                             <p className="text-primary font-bold tracking-wide uppercase text-xs mt-2">{game.developers.join(' • ')}</p>
                         </div>
 
-                        <div className="join shadow-xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200 mt-6 bg-base-300">
+                        <div className="join shadow-xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200 mt-2 md:mt-6 bg-base-300">
                             <button
                                 onClick={handleToggleLike}
                                 title={hasLiked ? "Quitar me gusta" : "Me gusta"}
@@ -185,12 +185,23 @@ const Modal = ({ game, onClose }: ModalProps) => {
                             </div>
                         </div>
 
+                        {/* Botón "Ver más" exclusivo para móviles */}
+                        <div className="md:hidden w-full mt-2">
+                            <button
+                                onClick={handleViewFullInfo}
+                                className="w-full btn btn-primary border-none shadow-lg shadow-primary/25 flex items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold active:scale-[0.98] transition-all"
+                            >
+                                <span>Ver más sobre el juego</span>
+                                <FontAwesomeIcon icon={faArrowRight} />
+                            </button>
+                        </div>
+
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 mt-4">
 
                             <div className="lg:col-span-2 flex flex-col gap-6">
                                 {game.pitch && (
                                     <div className="card bg-base-300 shadow-sm border border-base-content/5" ref={pitchRef}>
-                                        <div className="card-body p-6">
+                                        <div className="card-body p-5 md:p-6">
                                             <h3 className="card-title text-sm font-bold text-primary uppercase tracking-wider mb-2">Acerca del juego</h3>
                                             <p className={`text-base-content/80 text-base md:text-lg leading-relaxed whitespace-pre-wrap transition-all ${!isPitchExpanded && pitchLineCount > 6 ? 'line-clamp-6' : ''}`}>
                                                 {game.pitch}
@@ -209,7 +220,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
                                 {!embedUrl && game.description && (
                                     <div className="card bg-base-300 shadow-sm border border-base-content/5" ref={descRef}>
-                                        <div className="card-body p-6">
+                                        <div className="card-body p-5 md:p-6">
                                             <h3 className="card-title text-sm font-bold text-base-content/70 uppercase tracking-wider mb-3">Descripción General</h3>
                                             <div className={`text-base-content/80 text-sm md:text-base leading-relaxed whitespace-pre-wrap transition-all ${!isDescExpanded && descLineCount > 6 ? 'line-clamp-6' : ''}`}>
                                                 {game.description}
@@ -304,8 +315,8 @@ const Modal = ({ game, onClose }: ModalProps) => {
                                 )}
 
                                 <div className="card bg-base-300 shadow-sm border border-base-content/5">
-                                    <div className="card-body p-6">
-                                        <dl className="grid grid-cols-1 gap-y-4">
+                                    <div className="card-body p-5 md:p-6">
+                                        <dl className="grid grid-cols-2 lg:grid-cols-1 gap-x-4 gap-y-4">
                                             <DetailItem label="Estado">{game.status}</DetailItem>
                                             <DetailItem label="Lanzamiento">{game.releaseDate}</DetailItem>
                                             <DetailItem label="Géneros">{game.genre.join(', ')}</DetailItem>
