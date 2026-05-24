@@ -14,4 +14,9 @@ export default __t.row({
   id: __t.identity().primaryKey(),
   xp: __t.u64(),
   level: __t.u32(),
+  authenticated: __t.bool(),
+  provider: __t.string(),
+  displayName: __t.string().name("display_name"),
+  email: __t.string(),
+  lastLoginAt: __t.u64().name("last_login_at"),
 });

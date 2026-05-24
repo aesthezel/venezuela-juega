@@ -19,16 +19,6 @@ export const Firefly = __t.object("Firefly", {
 });
 export type Firefly = __Infer<typeof Firefly>;
 
-export const GameActivity = __t.object("GameActivity", {
-  playerId: __t.identity(),
-  gameSlug: __t.string(),
-  lastVisitAt: __t.u64(),
-  isFavorite: __t.bool(),
-  hasLiked: __t.bool(),
-  visitCount: __t.u32(),
-});
-export type GameActivity = __Infer<typeof GameActivity>;
-
 export const GameStats = __t.object("GameStats", {
   gameSlug: __t.string(),
   totalHearts: __t.u64(),
@@ -36,20 +26,26 @@ export const GameStats = __t.object("GameStats", {
 });
 export type GameStats = __Infer<typeof GameStats>;
 
-export const GameVisit = __t.object("GameVisit", {
+export const MyActivity = __t.object("MyActivity", {
+  id: __t.u64(),
   playerId: __t.identity(),
   gameSlug: __t.string(),
-  visitedAt: __t.u64(),
+  lastVisitAt: __t.u64(),
+  isFavorite: __t.bool(),
+  hasLiked: __t.bool(),
+  visitCount: __t.u32(),
 });
-export type GameVisit = __Infer<typeof GameVisit>;
-
-export const MyActivity = __t.object("MyActivity", {});
 export type MyActivity = __Infer<typeof MyActivity>;
 
 export const Profile = __t.object("Profile", {
   id: __t.identity(),
   xp: __t.u64(),
   level: __t.u32(),
+  authenticated: __t.bool(),
+  provider: __t.string(),
+  displayName: __t.string(),
+  email: __t.string(),
+  lastLoginAt: __t.u64(),
 });
 export type Profile = __Infer<typeof Profile>;
 
