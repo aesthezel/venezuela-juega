@@ -2,5 +2,7 @@ packages:
   - '.'
 
 allowBuilds:
+  '@firebase/util': false
   '@parcel/watcher': false
   esbuild: false
+  protobufjs: false

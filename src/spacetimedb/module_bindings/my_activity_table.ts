@@ -11,6 +11,7 @@ import {
 } from "spacetimedb";
 
 export default __t.row({
+  id: __t.u64().primaryKey(),
   playerId: __t.identity().name("player_id"),
   gameSlug: __t.string().name("game_slug"),
   lastVisitAt: __t.u64().name("last_visit_at"),

@@ -40,7 +40,7 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
         };
 
         const updateActivity = () => {
-            const myFavorites = Array.from(connection.db.my_activity.iter())
+            const myFavorites = Array.from(connection.db.myActivity.iter())
                 .filter(row => row.isFavorite === true);
             setFavorites(myFavorites);
         };
@@ -50,15 +50,15 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
 
         connection.db.profile.onInsert(updateProfile);
         connection.db.profile.onUpdate(updateProfile);
-        connection.db.my_activity.onInsert(updateActivity);
-        connection.db.my_activity.onUpdate(updateActivity);
+        connection.db.myActivity.onInsert(updateActivity);
+        connection.db.myActivity.onUpdate(updateActivity);
 
         return () => {
             if (connection) {
                 connection.db.profile.removeOnInsert(updateProfile);
                 connection.db.profile.removeOnUpdate(updateProfile);
-                connection.db.my_activity.removeOnInsert(updateActivity);
-                connection.db.my_activity.removeOnUpdate(updateActivity);
+                connection.db.myActivity.removeOnInsert(updateActivity);
+                connection.db.myActivity.removeOnUpdate(updateActivity);
             }
         };
     }, [isConnected, identity, connection]);

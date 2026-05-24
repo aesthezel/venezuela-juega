@@ -4,6 +4,7 @@ import { Router, route } from 'preact-router';
 import { Game } from "@/types";
 import { useGamesData, useMetadata, useCatalogFilters } from '@/hooks';
 import { FireflyProvider } from '@/hooks/FireflyContext';
+import { AuthProvider } from '@/hooks/AuthContext';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop, FireflyOverlay } from '@/components';
 import {
     CatalogPage,
@@ -19,6 +20,7 @@ const GameJamsPage = lazy(() => import('@/pages/GameJamsPage'));
 const GameJamGalleryPage = lazy(() => import('@/pages/GameJamGalleryPage'));
 const AddGamePage = lazy(() => import('@/pages/AddGamePage'));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
+const LoginPage = lazy(() => import('@/pages/LoginPage'));
 
 import { SpacetimeDBProvider } from '@/spacetimedb/SpacetimeDBProvider';
 
@@ -84,6 +86,7 @@ const App = () => {
     if (error) return <div className="text-center text-secondary text-2xl p-10">{error}</div>;
 
     return (
+        <AuthProvider>
         <SpacetimeDBProvider>
             <FireflyProvider currentPath={currentPath}>
                 <div className="relative min-h-screen font-sans flex flex-col overflow-x-clip isolate">
@@ -111,6 +114,7 @@ const App = () => {
                                     <AddGamePage path="/add-game/" onAddNewGame={() => { }} onNavigateToCatalog={navigateToCatalog} />
                                     <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />
                                     <AboutPage path="/credits" onNavigateToCatalog={navigateToCatalog} />
+                                    <LoginPage path="/login" />
                                     <NotFoundPage default games={games} onGameClick={handleOpenModal} />
                                 </Router>
                             </Suspense>
@@ -128,6 +132,7 @@ const App = () => {
                 </div>
             </FireflyProvider>
         </SpacetimeDBProvider>
+        </AuthProvider>
     );
 };
 
