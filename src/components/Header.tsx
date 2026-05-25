@@ -7,6 +7,7 @@ import { trackNav } from '@/utils/analytics';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import UserProfile from './UserProfile';
+import AuthButton from './AuthButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -144,6 +145,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                         </nav>
 
                         <div className="flex items-center gap-3">
+                            <AuthButton />
                             <UserProfile games={games} jamGames={jamGames} />
 
                             {/* Mobile Hamburger Trigger */}
@@ -211,6 +213,11 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                             );
                         })}
                     </nav>
+
+                    {/* Auth (login/logout) */}
+                    <div className="px-4 pb-2">
+                        <AuthButton variant="mobile" onAction={() => setIsMenuOpen(false)} />
+                    </div>
 
                     {/* Footer Info */}
                     <div className="mt-auto p-8 border-t border-surface-700 bg-base-100/30">
