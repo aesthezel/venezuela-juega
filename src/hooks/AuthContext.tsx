@@ -1,59 +1,36 @@
-import { createContext } from 'preact';
-import { ComponentChildren } from 'preact';
-import { useContext, useEffect, useState, useCallback } from 'preact/hooks';
-import {
-    type User,
-    signInWithPopup,
-    signOut,
-    onIdTokenChanged,
-} from 'firebase/auth';
-import { auth, googleProvider, githubProvider } from '@/firebase/config';
+import { useAuth as useOidcAuth } from 'react-oidc-context';
+import type { User } from 'oidc-client-ts';
 
-interface AuthContextValue {
-    /** Firebase user, or null when signed out (anonymous browsing). */
+/**
+ * Thin adapter over react-oidc-context (SpacetimeAuth OIDC) exposing the shape
+ * the rest of the app already consumes. The AuthProvider itself comes from
+ * react-oidc-context and is mounted in App.tsx with oidcConfig.
+ */
+export interface AppAuth {
+    /** OIDC user when authenticated, else null (anonymous browsing). */
     user: User | null;
-    /** Current Firebase ID token (JWT) passed to SpacetimeDB, or null. */
+    /** SpacetimeAuth ID token (JWT) passed to SpacetimeDB, or null. */
     idToken: string | null;
-    /** True until Firebase resolves the initial auth state. */
+    /** Stable per-user id (JWT sub) — used to key the SpacetimeDB connection. */
+    sub: string | null;
+    /** True until the OIDC state resolves / during a redirect round-trip. */
     loading: boolean;
-    signInGoogle: () => Promise<void>;
-    signInGithub: () => Promise<void>;
+    /** Redirect to the SpacetimeAuth hosted login page. */
+    login: () => Promise<void>;
+    /** Clear the local session (reverts to anonymous). */
     logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextValue>({
-    user: null,
-    idToken: null,
-    loading: true,
-    signInGoogle: async () => {},
-    signInGithub: async () => {},
-    logout: async () => {},
-});
-
-export const AuthProvider = ({ children }: { children: ComponentChildren }) => {
-    const [user, setUser] = useState<User | null>(null);
-    const [idToken, setIdToken] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        // Fires on login, logout, and ~1h token refresh.
-        const unsub = onIdTokenChanged(auth, async (u) => {
-            setUser(u);
-            setIdToken(u ? await u.getIdToken() : null);
-            setLoading(false);
-        });
-        return unsub;
-    }, []);
-
-    const signInGoogle = useCallback(async () => { await signInWithPopup(auth, googleProvider); }, []);
-    const signInGithub = useCallback(async () => { await signInWithPopup(auth, githubProvider); }, []);
-    const logout = useCallback(async () => { await signOut(auth); }, []);
-
-    return (
-        <AuthContext.Provider value={{ user, idToken, loading, signInGoogle, signInGithub, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+export const useAuth = (): AppAuth => {
+    const auth = useOidcAuth();
+    const user = auth.isAuthenticated && auth.user ? auth.user : null;
+    return {
+        user,
+        idToken: user?.id_token ?? null,
+        sub: (user?.profile?.sub as string | undefined) ?? null,
+        loading: auth.isLoading,
+        login: () => auth.signinRedirect(),
+        // Local sign-out (no federated round-trip); SpacetimeDB reconnects anonymously.
+        logout: () => auth.removeUser(),
+    };
 };
-
-export const useAuth = () => useContext(AuthContext);

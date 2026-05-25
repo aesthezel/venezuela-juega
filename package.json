@@ -23,11 +23,12 @@
     "@tailwindcss/cli": "^4.3.0",
     "chart.js": "^4.5.1",
     "daisyui": "^5.5.19",
-    "firebase": "^12.13.0",
     "gsap": "^3.13.0",
+    "oidc-client-ts": "^3.5.0",
     "papaparse": "^5.5.3",
     "preact": "^10.22.1",
     "preact-router": "^4.1.2",
+    "react-oidc-context": "^3.3.1",
     "spacetimedb": "^2.1.0"
   },
   "devDependencies": {
