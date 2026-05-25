@@ -30,7 +30,9 @@ export const useAuth = (): AppAuth => {
         sub: (user?.profile?.sub as string | undefined) ?? null,
         loading: auth.isLoading,
         login: () => auth.signinRedirect(),
-        // Local sign-out (no federated round-trip); SpacetimeDB reconnects anonymously.
-        logout: () => auth.removeUser(),
+        // Federated sign-out: ends the SpacetimeAuth session (redirect to its
+        // end_session_endpoint, then back to post_logout_redirect_uri). Re-login
+        // with the same provider/account restores the same identity + data.
+        logout: () => auth.signoutRedirect(),
     };
 };
