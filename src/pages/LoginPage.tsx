@@ -8,25 +8,23 @@ import { PageTransition } from '@/components';
 import { useAuth } from '@/hooks/AuthContext';
 
 const LoginPage = (_: RoutableProps) => {
-    const { user, loading, signInGoogle, signInGithub } = useAuth();
-    const [busy, setBusy] = useState<'google' | 'github' | null>(null);
+    const { user, loading, login } = useAuth();
+    const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Redirect home once authenticated. `replace` so Back doesn't return to /login.
+    // Already authenticated → home. `replace` so Back doesn't return to /login.
     useEffect(() => {
         if (!loading && user) route('/', true);
     }, [user, loading]);
 
-    const handleSignIn = async (provider: 'google' | 'github', fn: () => Promise<void>) => {
+    const handleLogin = async () => {
         setError(null);
-        setBusy(provider);
+        setBusy(true);
         try {
-            await fn();
-            // onIdTokenChanged → user set → effect routes home.
+            await login(); // redirects to SpacetimeAuth hosted page
         } catch (e) {
-            const msg = e instanceof Error ? e.message : 'No se pudo iniciar sesión.';
-            setError(msg);
-            setBusy(null);
+            setError(e instanceof Error ? e.message : 'No se pudo iniciar sesión.');
+            setBusy(false);
         }
     };
 
@@ -53,30 +51,24 @@ const LoginPage = (_: RoutableProps) => {
                             </div>
                         )}
 
-                        <div className="flex flex-col gap-3 relative">
-                            <button
-                                type="button"
-                                onClick={() => handleSignIn('google', signInGoogle)}
-                                disabled={busy !== null}
-                                className="btn btn-block bg-base-100 hover:bg-base-300 border border-surface-700 text-base-content font-bold gap-3 rounded-2xl h-12 disabled:opacity-60"
-                            >
-                                <FontAwesomeIcon icon={busy === 'google' ? faSpinner : faGoogle} className={busy === 'google' ? 'animate-spin' : 'text-[#ea4335]'} />
-                                Continuar con Google
-                            </button>
+                        <button
+                            type="button"
+                            onClick={handleLogin}
+                            disabled={busy}
+                            className="btn btn-block bg-accent hover:bg-accent/90 text-accent-content font-bold gap-3 rounded-2xl h-12 disabled:opacity-60 relative"
+                        >
+                            <FontAwesomeIcon icon={busy ? faSpinner : faRightToBracket} className={busy ? 'animate-spin' : ''} />
+                            {busy ? 'Redirigiendo…' : 'Continuar'}
+                        </button>
 
-                            <button
-                                type="button"
-                                onClick={() => handleSignIn('github', signInGithub)}
-                                disabled={busy !== null}
-                                className="btn btn-block bg-base-100 hover:bg-base-300 border border-surface-700 text-base-content font-bold gap-3 rounded-2xl h-12 disabled:opacity-60"
-                            >
-                                <FontAwesomeIcon icon={busy === 'github' ? faSpinner : faGithub} className={busy === 'github' ? 'animate-spin' : ''} />
-                                Continuar con GitHub
-                            </button>
+                        <div className="flex items-center justify-center gap-3 mt-6 text-base-content/40">
+                            <FontAwesomeIcon icon={faGoogle} />
+                            <FontAwesomeIcon icon={faGithub} />
+                            <span className="text-[11px] uppercase tracking-widest font-bold">correo · magic link</span>
                         </div>
 
                         <p className="text-[11px] text-base-content/40 text-center mt-8 leading-relaxed">
-                            Al continuar aceptas que tu actividad quede asociada a tu cuenta.
+                            Elegirás el método (Google, GitHub, correo…) en la página segura de SpacetimeAuth.
                         </p>
                     </div>
                 </div>
