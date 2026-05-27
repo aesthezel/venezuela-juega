@@ -54,6 +54,12 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - **Contadores en tiempo real**: Contadores que se actualizan en tiempo real
 - **Luciernagas**: Sistema de luciernagas que se actualizan en tiempo real con la posición de los usuarios en el sitio web
 
+### 4. Perfiles de Desarrolladores y Estudios
+- **Páginas de Perfil Dedicadas**: Portafolios centralizados para desarrolladores y estudios que agrupan sus videojuegos.
+- **Relaciones de Co-Desarrollo**: Asociación y vinculación dinámica de estudios que colaboraron en el mismo juego.
+- **Estadísticas de Estudio**: Agregación automática de plataformas, motores, géneros utilizados y fechas clave de lanzamientos.
+- **URLs Amigables**: Generación y enrutamiento dinámico mediante slugs normalizados en minúsculas.
+
 ## 📋 TO-DO
 - [x] Scraping de CSV de la lista de videojuegos
 - [x] Parseo de datos de la lista de videojuegos
@@ -101,6 +107,8 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Consolidación de diseño Glassmorphism e interfaz móvil (filtros y menú) optimizada
 - [x] Refactorización arquitectónica usando alias de ruta (`@/`) centralizados
 - [x] Optimización de rendimiento general (GSAP ScrollTrigger, mitigación de Layout Shift y diferimiento de cargas pesadas)
+- [x] Páginas de perfil de Desarrolladores/Estudios con portafolios de juegos y co-desarrollo vinculados
+- [x] Rediseño de fondos decorativos del sitio web con grilla técnica estética de DaisyUI
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar

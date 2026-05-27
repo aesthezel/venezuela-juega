@@ -70,3 +70,16 @@ export interface CatalogPageProps {
     onYearRangeChange: (range: { min: number; max: number }) => void;
     isLoading?: boolean;
 }
+
+export interface DeveloperPageProps {
+    /** The path for routing purposes */
+    path?: string;
+    /** The slug of the developer to display */
+    devSlug?: string;
+    /** List of all main catalog games */
+    games: Game[];
+    /** List of all Game Jam games */
+    jamGames: Game[];
+    /** Function to handle clicking on a game */
+    onGameClick: (game: Game) => void;
+}

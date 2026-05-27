@@ -13,7 +13,7 @@ import { faSteam, faItchIo, faPlaystation, faXbox, faGooglePlay, faApple, faMeta
 import { BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge, PageTransition, ScreenshotLightbox } from "@/components";
 import { useSpacetimeDB } from '@/spacetimedb/connection';
 import { useGameStats, useMeasure, useTextLayout } from '@/hooks';
-import { getTrailerInfo } from "@/utils";
+import { getTrailerInfo, generateSlug } from "@/utils";
 
 interface DetailSectionProps {
     title: string;
@@ -171,9 +171,6 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
         <>
             <PageTransition>
                 <main className="container mx-auto px-4 py-8 relative z-10">
-                    {/* Global Decorative Blur Backgrounds */}
-                    <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-accent-teal-dark/5 blur-[120px] rounded-full -z-10 animate-pulse pointer-events-none" />
-                    <div className="fixed bottom-0 right-1/4 w-[400px] h-[400px] bg-primary/5 blur-[120px] rounded-full -z-10 animate-pulse pointer-events-none" />
 
                     <div className="animate-in fade-in slide-in-from-left-4 duration-500">
                         <BackButton onClick={handleGoBack} className="mb-10 hover:translate-x-[-4px] transition-transform" />
@@ -217,7 +214,17 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                                     {game.title}
                                 </h1>
                                 <p className="text-primary font-bold tracking-wide uppercase text-xs">
-                                    {game.developers.join(' • ')}
+                                    {game.developers.map((dev, i) => (
+                                        <span key={dev}>
+                                            <a
+                                                href={`/developer/${generateSlug(dev)}`}
+                                                className="hover:underline hover:text-white transition-colors"
+                                            >
+                                                {dev}
+                                            </a>
+                                            {i < game.developers.length - 1 && ' • '}
+                                        </span>
+                                    ))}
                                 </p>
                             </div>
 

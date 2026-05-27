@@ -4,5 +4,5 @@
  * This type is used for navigation and routing purposes, ensuring type safety
  * when referencing different sections of the application.
  */
-export type Page = 'catalog' | 'charts' | 'add-game' | 'about' | 'calendar';
+export type Page = 'catalog' | 'charts' | 'add-game' | 'about' | 'calendar' | 'developers';
 export type ViewMode = 'grid' | 'list';

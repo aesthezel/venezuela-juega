@@ -19,6 +19,7 @@ const GameJamsPage = lazy(() => import('@/pages/GameJamsPage'));
 const GameJamGalleryPage = lazy(() => import('@/pages/GameJamGalleryPage'));
 const AddGamePage = lazy(() => import('@/pages/AddGamePage'));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
+const DeveloperPage = lazy(() => import('@/pages/DeveloperPage'));
 
 import { SpacetimeDBProvider } from '@/spacetimedb/SpacetimeDBProvider';
 
@@ -107,6 +108,7 @@ const App = () => {
                                     <ChartsPage path="/charts" games={allGames} onNavigateToCatalog={navigateToCatalog} onGameClick={handleOpenModal} />
                                     <GameDetailPage path="/game/:gameSlug" games={allGames} />
                                     <GameDetailPage path="/games/:gameSlug" games={allGames} />
+                                    <DeveloperPage path="/developer/:devSlug" games={games} jamGames={jamGames} onGameClick={handleOpenModal} />
                                     <AddGamePage path="/add-game" onAddNewGame={() => { }} onNavigateToCatalog={navigateToCatalog} />
                                     <AddGamePage path="/add-game/" onAddNewGame={() => { }} onNavigateToCatalog={navigateToCatalog} />
                                     <AboutPage path="/about" onNavigateToCatalog={navigateToCatalog} />

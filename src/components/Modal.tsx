@@ -11,6 +11,7 @@ import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-re
 import StoreButton from './StoreButton';
 import ScreenshotLightbox from './ScreenshotLightbox';
 import { trackEvent } from '@/utils/analytics';
+import { generateSlug } from '@/utils';
 import { useGameStats } from '@/hooks/useGameStats';
 import { useSpacetimeDB } from '@/spacetimedb/connection';
 
@@ -158,7 +159,20 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
                         <div className="flex flex-col md:pr-56">
                             <h2 className="text-3xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight leading-tight">{game.title}</h2>
-                            <p className="text-primary font-bold tracking-wide uppercase text-xs mt-2">{game.developers.join(' • ')}</p>
+                            <p className="text-primary font-bold tracking-wide uppercase text-xs mt-2">
+                                {game.developers.map((dev, i) => (
+                                    <span key={dev}>
+                                        <a
+                                            href={`/developer/${generateSlug(dev)}`}
+                                            onClick={(e) => { e.preventDefault(); onClose(); route(`/developer/${generateSlug(dev)}`); }}
+                                            className="hover:underline hover:text-white transition-colors cursor-pointer"
+                                        >
+                                            {dev}
+                                        </a>
+                                        {i < game.developers.length - 1 && ' • '}
+                                    </span>
+                                ))}
+                            </p>
                         </div>
 
                         <div className="join shadow-xl self-start animate-in fade-in slide-in-from-left-4 duration-500 delay-200 mt-2 md:mt-6 bg-base-300">

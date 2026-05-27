@@ -33,7 +33,7 @@ const NotFoundPage = ({ games = [], onGameClick }: NotFoundPageProps) => {
             <div className="hero min-h-[70vh] relative overflow-hidden">
                 {/* Decorative background elements */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-teal-dark/5 blur-[120px] rounded-full pointer-events-none -z-10" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-accent-mauve-dark/5 blur-[100px] rounded-full pointer-events-none -z-10 animate-pulse" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-accent-mauve-dark/5 blur-[100px] rounded-full pointer-events-none -z-10" />
 
                 <div className="hero-content text-center flex-col w-full max-w-2xl gap-8">
                     {/* Error Message Section */}
