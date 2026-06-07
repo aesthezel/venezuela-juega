@@ -7,6 +7,17 @@ import { AboutPageProps } from "@/types";
 // Definimos los datos fuera para mantener el componente limpio
 const CONTRIBUTORS = [
     {
+        name: "Raúl Díaz",
+        role: "Desarrollador web y base de datos",
+        description: "Enriquecedor de la base de datos, creación de nuevos módulos y sistemas relacionados con la plataforma.",
+        avatarUrl: "https://venezuela-juega.s3.us-east-005.dream.io/collaborators/raul-diaz.jpg",
+        socials: [
+            { icon: faGithub, url: "https://github.com/Raukdv" },
+            { icon: faLinkedin, url: "https://linkedin.com/in/raul-e-diaz-valladares-devback" },
+            { icon: faInstagram, url: "https://www.instagram.com/rauksan" }
+        ]
+    },
+    {
         name: "César Márquez",
         role: "Contribuidor y diseñador",
         description: "Colaborador de la iniciativa, encargado de asesorías y aplicación de mejoras para optimizar el diseño gráfico del proyecto.",
