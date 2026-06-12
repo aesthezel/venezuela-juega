@@ -177,7 +177,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                 progressStartRef.current = Date.now();
                 setProgress(0);
             }
-        }, 50);
+        }, 200);
 
         return () => clearInterval(progressInterval);
     }, [showcaseTab]);
@@ -243,18 +243,18 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             ref={containerRef}
             className="relative w-full min-h-screen overflow-hidden"
         >
-            {/* Background mosaic grid */}
+            {/* Background mosaic grid — grayscale aplicado al WRAPPER (1 filter op) en vez de per-image (N filters). */}
             <div
                 ref={gridRef}
-                className="pointer-events-none absolute w-[120vw] h-[200vh] -left-[10vw] -top-[50vh] -rotate-3 grid select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7 z-[-2]"
-                style={{ willChange: 'transform' }}
+                className="pointer-events-none absolute w-[120vw] h-[200vh] -left-[10vw] -top-[50vh] -rotate-3 grid select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7 z-[-2] grayscale"
+                style={{ willChange: 'transform', contain: 'paint' }}
             >
                 {mosaicGames.map((game) => (
                     <div key={game.id} className="relative h-full w-full overflow-hidden rounded-lg bg-base-200/50 border border-surface-700 shadow-xl">
                         <CoverImage
                             src={game.imageCover || game.imageUrl}
                             alt=""
-                            className="h-full w-full object-cover opacity-35 grayscale transition-all duration-700"
+                            className="h-full w-full object-cover opacity-35"
                             width={300}
                             height={400}
                         />

@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Theater mode: oculta header / footer / scrolltop cuando el stream está activo (StreamPlayer agrega body.vj-theater). */
+body.vj-theater .vj-header,
+body.vj-theater .vj-footer,
+body.vj-theater .vj-scrolltop {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.3s ease;
+}
+
 @plugin "daisyui";
 @plugin "daisyui/theme" {
   name: "vj-dark";

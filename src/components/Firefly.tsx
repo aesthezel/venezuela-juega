@@ -72,6 +72,8 @@ const Firefly = ({ x, y, id }: FireflyProps) => {
       style={{
         background: 'radial-gradient(circle, #22d3ee 0%, #0891b2 50%, transparent 100%)',
         boxShadow: '0 0 15px #22d3ee, 0 0 30px #22d3ee66',
+        willChange: 'transform, opacity',
+        contain: 'paint',
       }}
     >
       {/* Outer glow ring */}
