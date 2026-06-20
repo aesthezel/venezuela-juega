@@ -18,6 +18,7 @@ import { CatalogPageProps } from "@/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import type { CategoryPreset } from '@/components/hero';
+import { EventBanner } from '@/events';
 
 const CatalogPage = ({
     games,
@@ -127,6 +128,7 @@ const CatalogPage = ({
 
     return (
         <div className="w-full min-h-screen">
+            <EventBanner games={games} jamGames={jamGames ?? []} onGameClick={onGameClick} />
             {isLoading ? (
                 <div className="w-full h-[60vh] md:h-[70vh] skeleton rounded-none mb-8 opacity-70"></div>
             ) : (

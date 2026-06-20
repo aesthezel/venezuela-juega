@@ -1,12 +1,13 @@
-import { useRef, useEffect, useState } from 'preact/hooks';
+import { useRef, useEffect, useMemo, useState } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad, faTowerBroadcast } from '@fortawesome/free-solid-svg-icons';
 import { Game } from '@/types';
 import { route } from 'preact-router';
 import { trackNav } from '@/utils/analytics';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import UserProfile from './UserProfile';
+import { useEventsData, pickBannerEvent } from '@/events';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +24,9 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
     const headerRef = useRef<HTMLElement | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+
+    const { events } = useEventsData();
+    const hasActiveEvent = useMemo(() => !!pickBannerEvent(events, new Date()), [events]);
 
     const navigateTo = (path: string) => {
         trackNav(path, 'header');
@@ -83,6 +87,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
 
     const navItems = [
         { path: '/game-jams', label: 'Game Jams', icon: faGamepad },
+        { path: '/events', label: 'Eventos', icon: faTowerBroadcast },
         { path: '/calendar', label: 'Calendario', icon: faCalendarAlt },
         { path: '/charts', label: 'Métricas', icon: faChartBar },
         { path: '/about', label: 'Créditos', icon: faInfoCircle },
@@ -92,7 +97,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
         <>
             <header
                 ref={headerRef}
-                className={`fixed top-0 left-0 right-0 z-[60] h-20 w-full will-change-transform transition-[background-color,border-color,padding,backdrop-filter] duration-500 ${isScrolled
+                className={`vj-header fixed top-0 left-0 right-0 z-[60] h-20 w-full will-change-transform transition-[background-color,border-color,padding,backdrop-filter] duration-500 ${isScrolled
                     ? 'bg-base-100/80 backdrop-blur-lg border-b border-surface-700 shadow-xl py-0'
                     : 'bg-transparent border-b border-transparent py-2'
                     }`}
@@ -131,8 +136,8 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                                             <span>{item.label}</span>
                                         </button>
 
-                                        {/* Tooltip Bubble for Home page */}
-                                        {isGameJamsOnHome && !isScrolled && (
+                                        {/* Tooltip Bubble for Home page — suprimido si EventBanner activo (compite por atención) */}
+                                        {isGameJamsOnHome && !isScrolled && !hasActiveEvent && (
                                             <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-primary text-white text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xl animate-bounce z-50 pointer-events-none">
                                                 ¡Nuevos juegos!
                                                 <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rotate-45" />

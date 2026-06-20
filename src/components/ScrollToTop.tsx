@@ -107,7 +107,7 @@ const ScrollToTop = () => {
                 ref={desktopBtnRef}
                 onClick={scrollToTop}
                 aria-label="Ir arriba"
-                className="hidden md:flex fixed right-10 bottom-30 z-[70] w-14 h-14 rounded-full bg-base-300/80 backdrop-blur-md border border-surface-700 shadow-2xl items-center justify-center transition-all duration-300 group hover:border-accent-teal-dark/50 hover:bg-base-300/90 focus:outline-none"
+                className="vj-scrolltop hidden md:flex fixed right-10 bottom-30 z-[70] w-14 h-14 rounded-full bg-base-300/80 backdrop-blur-md border border-surface-700 shadow-2xl items-center justify-center transition-all duration-300 group hover:border-accent-teal-dark/50 hover:bg-base-300/90 focus:outline-none"
                 style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', pointerEvents: 'none' }}
             >
                 <FontAwesomeIcon
@@ -120,7 +120,7 @@ const ScrollToTop = () => {
             {/* Mantenemos bottom-6 fijo y usamos GSAP 'y' para desplazarlo hacia arriba si hace falta */}
             <div
                 ref={mobileBtnRef}
-                className="md:hidden fixed bottom-6 left-4 right-4 z-[10]"
+                className="vj-scrolltop md:hidden fixed bottom-6 left-4 right-4 z-[10]"
                 style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', pointerEvents: 'none', bottom: '1.5rem' }}
             >
                 <button
