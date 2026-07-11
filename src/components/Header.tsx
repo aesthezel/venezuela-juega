@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad, faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
 import { Game } from '@/types';
 import { route } from 'preact-router';
 import { trackNav } from '@/utils/analytics';
@@ -82,10 +82,11 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
     }, [isMenuOpen]);
 
     const navItems = [
-        { path: '/game-jams', label: 'Game Jams', icon: faGamepad },
-        { path: '/calendar', label: 'Calendario', icon: faCalendarAlt },
-        { path: '/charts', label: 'Métricas', icon: faChartBar },
-        { path: '/about', label: 'Créditos', icon: faInfoCircle },
+        { path: '/jam', label: 'Jam Benéfica', icon: faHandHoldingHeart, badge: 'NUEVO' },
+        { path: '/game-jams', label: 'Game Jams', icon: faGamepad, badge: null },
+        { path: '/calendar', label: 'Calendario', icon: faCalendarAlt, badge: null },
+        { path: '/charts', label: 'Métricas', icon: faChartBar, badge: null },
+        { path: '/about', label: 'Créditos', icon: faInfoCircle, badge: null },
     ];
 
     return (
@@ -129,6 +130,11 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                                         >
                                             <FontAwesomeIcon icon={item.icon} className={`text-xs ${active ? 'text-accent-teal' : 'text-base-content/70 group-hover/nav:text-base-content/70 transition-colors'}`} />
                                             <span>{item.label}</span>
+                                            {item.badge && (
+                                                <span className="badge badge-xs badge-secondary font-black text-[9px] px-1.5 py-0.5">
+                                                    {item.badge}
+                                                </span>
+                                            )}
                                         </button>
 
                                         {/* Tooltip Bubble for Home page */}
@@ -206,7 +212,12 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                                         }`}>
                                         <FontAwesomeIcon icon={item.icon} />
                                     </div>
-                                    <span className="font-bold">{item.label}</span>
+                                    <span className="font-bold flex-1">{item.label}</span>
+                                    {item.badge && (
+                                        <span className="badge badge-xs badge-secondary font-black text-[9px]">
+                                            {item.badge}
+                                        </span>
+                                    )}
                                 </button>
                             );
                         })}
