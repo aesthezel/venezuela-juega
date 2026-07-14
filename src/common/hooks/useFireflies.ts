@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'preact/hooks';
-import { useSpacetimeDB } from '../spacetimedb/connection';
+import { useSpacetimeDB } from '@/spacetimedb/connection';
 
 export const useFireflies = (currentPath: string) => {
   const { connection, identity, isConnected } = useSpacetimeDB();

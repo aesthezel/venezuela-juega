@@ -1,4 +1,4 @@
-import { useFireflyOverlay } from '../hooks/FireflyContext';
+import { useFireflyOverlay } from '@/common/hooks/FireflyContext';
 import Firefly from './Firefly';
 
 const FireflyOverlay = () => {

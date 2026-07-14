@@ -3,7 +3,7 @@ import { lazy, Suspense } from 'preact/compat';
 import { Router, route } from 'preact-router';
 import { Game } from "@/types";
 import { useGamesData, useMetadata, useCatalogFilters } from '@/hooks';
-import { FireflyProvider } from '@/hooks/FireflyContext';
+import { FireflyProvider } from '@/common/hooks/FireflyContext';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop, FireflyOverlay } from '@/components';
 import {
     CatalogPage,
@@ -20,6 +20,8 @@ const GameJamGalleryPage = lazy(() => import('@/pages/GameJamGalleryPage'));
 const AddGamePage = lazy(() => import('@/pages/AddGamePage'));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const DeveloperPage = lazy(() => import('@/pages/DeveloperPage'));
+const JamListPage = lazy(() => import('@/pages/JamListPage'));
+const JamDetailPage = lazy(() => import('@/pages/JamDetailPage'));
 
 import { SpacetimeDBProvider } from '@/spacetimedb/SpacetimeDBProvider';
 
@@ -104,6 +106,10 @@ const App = () => {
                                     <Redirect path="/gamejam-gallery/" to="/gamejam-gallery" />
                                     <GameJamsPage path="/game-jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
                                     <Redirect path="/game-jams/" to="/game-jams" />
+                                    <JamListPage path="/jam" />
+                                    <Redirect path="/jam/" to="/jam" />
+                                    <JamDetailPage path="/jam/:jamName" />
+                                    <JamDetailPage path="/jam/:jamName/:edition" />
                                     <CalendarPage path="/calendar" games={games} onNavigateToCatalog={navigateToCatalog} onEventClick={handleOpenModal} />
                                     <ChartsPage path="/charts" games={allGames} onNavigateToCatalog={navigateToCatalog} onGameClick={handleOpenModal} />
                                     <GameDetailPage path="/game/:gameSlug" games={allGames} />

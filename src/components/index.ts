@@ -1,31 +1,5 @@
-export * from './icons';
-
-export { default as FilterPanel } from './FilterPanel';
-export { default as Footer } from './Footer';
-export { default as GameCard } from './GameCard';
-export { default as GameCounter } from './GameCounter';
-export { default as GameGrid } from './GameGrid';
-export { default as Header } from './Header';
-export { default as HighlightCard } from './HighlightCard';
-export { default as Highlights } from './Highlights';
-export { default as LoadingSpinner } from './LoadingSpinner';
-export { default as Modal } from './Modal';
-export { default as SearchBar } from './SearchBar';
-export { default as ScrollToTop } from './ScrollToTop';
-export { default as BackButton } from './BackButton';
-export { default as GameList } from './GameList';
-export { default as ViewModeToggle } from './ViewModeToggle';
-export { default as AlphaFilter } from './AlphaFilter';
-export { default as CoverImage } from './CoverImage';
-export { default as StoreButton } from './StoreButton';
-export { default as StatusBadge } from './StatusBadge';
-export { default as GameJamPlusSection } from './GameJamPlusSection';
-export { default as PromoHeader } from './PromoHeader';
-export { default as LoadingOverlay } from './LoadingOverlay';
-export { default as HeroMosaic } from './HeroMosaic';
-export { default as ContributorCard } from './ContributorCard';
-export { default as Firefly } from './Firefly';
-export { default as FireflyOverlay } from './FireflyOverlay';
-export { default as UserProfile } from './UserProfile';
-export { default as PageTransition } from './PageTransition';
-export { default as ScreenshotLightbox } from './ScreenshotLightbox';
+// ── Shim de compatibilidad ────────────────────────────────────────────────
+// Este archivo redirige al nuevo punto de entrada: src/common/components
+// El alias @/components en vite.config.ts/tsconfig.json ya apunta ahí directamente.
+// Este shim es un fallback para cualquier import físico a 'src/components'.
+export * from '@/common/components';

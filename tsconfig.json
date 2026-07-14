@@ -17,9 +17,15 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"],
+      "@/common": ["./src/common"],
+      "@/common/*": ["./src/common/*"],
+      "@/features": ["./src/features"],
+      "@/features/*": ["./src/features/*"],
+      "@/components": ["./src/common/components"],
+      "@/components/*": ["./src/common/components/*"],
+      "@/hooks": ["./src/common/hooks"],
+      "@/hooks/*": ["./src/common/hooks/*"]
     },
     "allowImportingTsExtensions": true,
     "noEmit": true

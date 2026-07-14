@@ -1,7 +1,7 @@
 import { createContext } from 'preact';
 import { useContext, useState, useEffect, useCallback, useRef, useMemo } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
-import { useSpacetimeDB } from '../spacetimedb/connection';
+import { useSpacetimeDB } from '@/spacetimedb/connection';
 
 interface FireflyContextValue {
   otherFireflies: any[];

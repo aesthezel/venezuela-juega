@@ -9,10 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faHeart as faHeartSolid, faStar as faStarSolid, faEye } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-regular-svg-icons';
 import StoreButton from './StoreButton';
-import ScreenshotLightbox from './ScreenshotLightbox';
+import ScreenshotLightbox from '@/features/game-detail/components/ScreenshotLightbox';
 import { trackEvent } from '@/utils/analytics';
 import { generateSlug } from '@/utils';
-import { useGameStats } from '@/hooks/useGameStats';
+import { useGameStats } from '@/features/catalog/hooks/useGameStats';
 import { useSpacetimeDB } from '@/spacetimedb/connection';
 
 interface ModalProps {
