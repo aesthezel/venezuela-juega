@@ -39,7 +39,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
 
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-            
+
             if (!ticking) {
                 window.requestAnimationFrame(() => {
                     const direction = currentScrollY > lastScrollY ? 1 : -1;
@@ -82,7 +82,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
     }, [isMenuOpen]);
 
     const navItems = [
-        { path: '/jam', label: 'Jam Benéfica', icon: faHandHoldingHeart, badge: 'NUEVO' },
+        { path: '/jam', label: 'Juntos Game Jam', icon: faHandHoldingHeart, tooltip: '¡Dona a los afectados por el terremoto!' },
         { path: '/game-jams', label: 'Game Jams', icon: faGamepad, badge: null },
         { path: '/calendar', label: 'Calendario', icon: faCalendarAlt, badge: null },
         { path: '/charts', label: 'Métricas', icon: faChartBar, badge: null },
@@ -118,7 +118,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                         <nav className="hidden md:flex items-center gap-1">
                             {navItems.map((item) => {
                                 const active = currentPath === item.path;
-                                const isGameJamsOnHome = item.path === '/game-jams' && (currentPath === '/' || currentPath === '');
+                                const isHome = currentPath === '/' || currentPath === '';
                                 return (
                                     <div key={item.path} className="relative group/nav">
                                         <button
@@ -138,9 +138,9 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                                         </button>
 
                                         {/* Tooltip Bubble for Home page */}
-                                        {isGameJamsOnHome && !isScrolled && (
+                                        {item.tooltip && isHome && !isScrolled && (
                                             <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-primary text-white text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xl animate-bounce z-50 pointer-events-none">
-                                                ¡Nuevos juegos!
+                                                {item.tooltip}
                                                 <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rotate-45" />
                                             </div>
                                         )}

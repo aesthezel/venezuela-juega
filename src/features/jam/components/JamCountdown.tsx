@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import type { JSX } from 'preact';
 
 interface JamCountdownProps {
-    targetDate: string;
+    targetDate: Date;
     label?: string;
 }
 
@@ -14,8 +14,8 @@ interface TimeLeft {
     seconds: number;
 }
 
-function calcTimeLeft(target: string): TimeLeft {
-    const diff = Math.max(0, new Date(target).getTime() - Date.now());
+function calcTimeLeft(target: Date): TimeLeft {
+    const diff = Math.max(0, target.getTime() - Date.now());
     return {
         days: Math.floor(diff / 86400000),
         hours: Math.floor((diff % 86400000) / 3600000),

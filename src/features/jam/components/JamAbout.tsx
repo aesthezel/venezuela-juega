@@ -55,7 +55,7 @@ const JamAbout = ({ jam }: JamAboutProps) => {
                                         <img
                                             src={s.logo}
                                             alt={s.name}
-                                            className="h-12 w-auto object-contain filter brightness-0 invert"
+                                            className="h-12 w-auto object-contain"
                                         />
                                     </a>
                                 ) : (

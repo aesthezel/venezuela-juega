@@ -4,23 +4,26 @@ import type { JamEvent } from './types';
 
 const registry: JamEvent[] = [
     {
-        slug: 'jam-benefica',
+        slug: 'juntos-game-jam',
         edition: 'i',
-        name: 'Jam Benéfica Global',
-        shortName: 'Jam Benéfica',
-        tagline: 'Crea juegos. Salva vidas.',
+        name: 'Juntos: Game Jam para Venezuela',
+        shortName: 'Juntos Game Jam',
+        tagline: 'Ayuda a los afectados en el terremoto',
         status: 'upcoming',
-        startDate: null,
-        endDate: null,
-        submissionUrl: null,
-        platform: 'Itch.io',
+        startDate: new Date('2026-07-24T00:00:00-04:00'),
+        endDate: new Date('2026-07-26T23:59:59-04:00'),
+        submissionUrl: "https://itch.io/jam/juntos-game-jam-venezuela-earthquake-relief",
+        donationUrl: "https://tiltify.com/wfpusa/wfpusa-influencers?origin=https://venezuelajuega.com",
+        platform: 'itch.io',
         heroGradient: 'from-[#1a0a0d] via-[#0d0a11] to-[#0a0d1a]',
+        // heroImage: undefined,  // Asigna una URL cuando tengas la imagen de fondo
+        // logo: undefined,       // Asigna una URL cuando tengas el logotipo del evento
         accentColor: '#e34262',
         objectives: [
             {
                 title: 'Ayudar a las víctimas del terremoto',
                 description:
-                    'Venezuela sufrió un devastador terremoto. Cada juego publicado en esta jam recauda fondos directamente para las familias afectadas a través de organizaciones humanitarias verificadas.',
+                    'Venezuela sufrió un devastador terremoto. La participación es gratuita y las donaciones son completamente voluntarias. No es necesario hacer una donación para participar, ni participar en el Game Jam para realizar una donación.',
                 icon: '🫂',
             },
         ],
@@ -29,31 +32,17 @@ const registry: JamEvent[] = [
             {
                 label: 'Inscripciones',
                 description: 'Regístrate en Itch.io y forma tu equipo.',
-                startDate: null,
-                endDate: null,
+                startDate: new Date('2026-07-14T00:00:00-04:00'),
+                endDate: new Date('2026-07-23T23:59:59-04:00'),
                 icon: '📝',
             },
             {
                 label: 'Desarrollo',
                 description: '72 horas para crear tu juego desde cero.',
-                startDate: null,
-                endDate: null,
+                startDate: new Date('2026-07-24T00:00:00-04:00'),
+                endDate: new Date('2026-07-26T23:59:59-04:00'),
                 icon: '🎮',
-            },
-            {
-                label: 'Votación',
-                description: 'La comunidad vota los mejores proyectos.',
-                startDate: null,
-                endDate: null,
-                icon: '🗳️',
-            },
-            {
-                label: 'Premiación',
-                description: 'Anuncio de ganadores y distribución de fondos.',
-                startDate: null,
-                endDate: null,
-                icon: '🏆',
-            },
+            }
         ],
         faqs: [
             {
@@ -80,7 +69,7 @@ const registry: JamEvent[] = [
         sponsors: [
             {
                 name: 'Global Game Jam',
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/GGJ_Logo.png/320px-GGJ_Logo.png',
+                logo: 'https://s3-us-west-1.amazonaws.com/ggj/site/site-images/GGJ00_Logo_Light.svg',
                 url: 'https://globalgamejam.org',
             },
         ],

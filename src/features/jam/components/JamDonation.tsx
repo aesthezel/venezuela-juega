@@ -15,13 +15,13 @@ const JamDonation = ({ jam }: JamDonationProps) => {
                     </figure>
                     <div className="card-body">
                         <h2 className="card-title text-3xl font-black text-secondary">
-                            Evento Benéfico
+                            Evento benéfico
                         </h2>
                         <p className="text-base-content/80 text-lg my-4 leading-relaxed">
                             Esta jam no tiene premios competitivos. Nuestro único objetivo es recaudar fondos y ayudar a las víctimas de la crisis.
                             Cada juego publicado y cada aporte cuenta. Puedes donar directamente a las organizaciones verificadas.
                         </p>
-                        
+
                         {jam.donationGoal && (
                             <div className="w-full mb-4">
                                 <div className="flex justify-between text-sm font-bold mb-1">
@@ -31,11 +31,11 @@ const JamDonation = ({ jam }: JamDonationProps) => {
                                 <progress className="progress progress-secondary w-full" value="0" max="100"></progress>
                             </div>
                         )}
-                        
+
                         <div className="card-actions justify-end mt-4">
                             {jam.donationUrl ? (
                                 <a href={jam.donationUrl} target="_blank" rel="noopener noreferrer" className="btn btn-secondary font-black">
-                                    ❤️ Donar Ahora
+                                    ❤️ Dona ahora
                                 </a>
                             ) : (
                                 <button className="btn btn-secondary btn-outline font-black cursor-not-allowed">

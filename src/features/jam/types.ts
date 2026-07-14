@@ -18,8 +18,8 @@ export interface JamPrize {
 export interface JamPhase {
     label: string;
     description?: string;
-    startDate?: string | null;
-    endDate?: string | null;
+    startDate?: Date | null;
+    endDate?: Date | null;
     icon?: string;
 }
 
@@ -41,12 +41,14 @@ export interface JamEvent {
     shortName?: string;
     tagline?: string;
     status: JamStatus;
-    startDate: string | null;
-    endDate: string | null;
+    startDate: Date | null;
+    endDate: Date | null;
     submissionUrl: string | null;
     platform?: string;      // e.g. "Itch.io"
     heroGradient?: string;
+    heroImage?: string;     // URL de imagen de fondo del hero (opcional, reemplaza el gradiente)
     accentColor?: string;
+    logo?: string;          // URL del logotipo del evento (opcional)
     objectives: JamObjective[];
     prizes?: JamPrize[];
     isCharity?: boolean;
