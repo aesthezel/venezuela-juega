@@ -11,7 +11,7 @@ const JamDonation = ({ jam }: JamDonationProps) => {
             <div className="max-w-4xl mx-auto">
                 <div className="card lg:card-side bg-base-100 shadow-xl border border-secondary/20">
                     <figure className="lg:w-1/3 bg-secondary/10 flex items-center justify-center p-8">
-                        <span className="text-8xl">🫂</span>
+                        {/* Buscar imagen */}
                     </figure>
                     <div className="card-body">
                         <h2 className="card-title text-3xl font-black text-secondary">
@@ -34,7 +34,7 @@ const JamDonation = ({ jam }: JamDonationProps) => {
 
                         <div className="card-actions justify-end mt-4">
                             {jam.donationUrl ? (
-                                <a href={jam.donationUrl} target="_blank" rel="noopener noreferrer" className="btn btn-secondary font-black">
+                                <a href={jam.donationUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary font-black">
                                     ❤️ Dona ahora
                                 </a>
                             ) : (

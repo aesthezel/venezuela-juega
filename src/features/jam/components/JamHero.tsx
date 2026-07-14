@@ -92,7 +92,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
                 ))}
             </div>
 
-            <div className="text-center relative z-10 w-full max-w-5xl mx-auto px-6 flex flex-col items-center gap-4 -mt-30 md:-mt-60 pt-20">
+            <div className="text-center relative z-10 w-full max-w-5xl mx-auto px-6 flex flex-col items-center gap-10 -mt-60 md:-mt-60">
 
                 <div ref={badgeRef}>
                     <span className={`badge badge-md font-black tracking-widest text-xs uppercase ${statusColor[jam.status] ?? 'badge-neutral'}`}>
@@ -100,7 +100,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
                     </span>
                 </div>
 
-                <div ref={logoRef} className="flex flex-col items-center gap-3">
+                <div ref={logoRef} className="flex flex-col items-center gap-2">
                     {jam.logo ? (
                         <img
                             src={jam.logo}

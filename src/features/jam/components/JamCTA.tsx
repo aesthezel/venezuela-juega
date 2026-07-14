@@ -22,15 +22,14 @@ const JamCTA = ({ jam }: JamCTAProps) => {
             />
 
             <div className="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center gap-8">
-                <span className="text-6xl">🫀</span>
+                <span className="text-6xl">😊</span>
                 <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight">
-                    Tu juego puede cambiar<br />
+                    Tu donación puede cambiar<br />
                     <span style={{ color: jam.accentColor ?? '#e34262' }}>una vida real</span>
                 </h2>
                 <p className="text-base-content/60 text-lg max-w-xl leading-relaxed">
                     Venezuela necesita ayuda. Los desarrolladores de videojuegos tienen el poder
-                    de unir a comunidades y recaudar fondos de forma creativa. Únete a la Jam Benéfica
-                    y demuestra que los juegos son más que entretenimiento.
+                    de unir a comunidades y recaudar fondos de forma creativa. Únete a la {jam.shortName ?? "Jam benéfica"} y demuestra que los juegos pueden cambiar vidas.
                 </p>
 
                 <div className="flex flex-wrap gap-4 justify-center">
@@ -57,10 +56,6 @@ const JamCTA = ({ jam }: JamCTAProps) => {
                     >
                         Ver catálogo de juegos
                     </a>
-                </div>
-
-                <div className="text-xs text-base-content/30 uppercase tracking-widest mt-4">
-                    Venezuela Juega · {new Date().getFullYear()}
                 </div>
             </div>
         </section>

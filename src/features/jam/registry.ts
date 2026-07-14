@@ -15,30 +15,36 @@ const registry: JamEvent[] = [
         submissionUrl: "https://itch.io/jam/juntos-game-jam-venezuela-earthquake-relief",
         donationUrl: "https://tiltify.com/wfpusa/wfpusa-influencers?origin=https://venezuelajuega.com",
         platform: 'itch.io',
-        heroGradient: 'from-[#1a0a0d] via-[#0d0a11] to-[#0a0d1a]',
-        // heroImage: undefined,  // Asigna una URL cuando tengas la imagen de fondo
-        // logo: undefined,       // Asigna una URL cuando tengas el logotipo del evento
-        accentColor: '#e34262',
+        heroGradient: 'from-[#44276a] via-[#e5054b] to-[#44276a]',
+        //heroImage: undefined,
+        // logo: undefined,
+        accentColor: '#1696ab',
         objectives: [
             {
                 title: 'Ayudar a las víctimas del terremoto',
                 description:
                     'Venezuela sufrió un devastador terremoto. La participación es gratuita y las donaciones son completamente voluntarias. No es necesario hacer una donación para participar, ni participar en el Game Jam para realizar una donación.',
-                icon: '🫂',
+                icon: '❤️‍🩹',
             },
+            {
+                title: '¿A dónde va la ayuda?',
+                description:
+                    'El 100 % de los fondos recaudados será destinado directamente a las labores de asistencia que WFP está llevando a cabo en Venezuela.',
+                icon: '🤝',
+            }
         ],
         isCharity: true,
         phases: [
             {
                 label: 'Inscripciones',
-                description: 'Regístrate en Itch.io y forma tu equipo.',
+                description: 'Regístrate en itch.io y forma tu equipo.',
                 startDate: new Date('2026-07-14T00:00:00-04:00'),
                 endDate: new Date('2026-07-23T23:59:59-04:00'),
                 icon: '📝',
             },
             {
                 label: 'Desarrollo',
-                description: '72 horas para crear tu juego desde cero.',
+                description: '48 horas para crear tu juego desde cero.',
                 startDate: new Date('2026-07-24T00:00:00-04:00'),
                 endDate: new Date('2026-07-26T23:59:59-04:00'),
                 icon: '🎮',
@@ -54,17 +60,13 @@ const registry: JamEvent[] = [
                 answer: 'No. La jam es global y abierta a cualquier desarrollador del mundo que quiera ayudar a Venezuela.',
             },
             {
-                question: '¿Puedo participar en solitario?',
-                answer: 'Sí, puedes participar solo o en equipos de hasta 4 personas.',
+                question: 'Acerca de Global Game Jam',
+                answer: 'Global Game Jam es una organización sin fines de lucro cuya misión es brindar a personas de todo el mundo la oportunidad de aprender, experimentar y crear juntas mediante el desarrollo de videojuegos. Además de organizar el Game Jam más grande del mundo, con más de 800 sedes a nivel global, GGJ trabaja durante todo el año para apoyar, promover y fortalecer a la comunidad internacional de desarrollo de videojuegos.',
             },
             {
-                question: '¿Qué motor de juego puedo usar?',
-                answer: 'Cualquiera: Unity, Godot, GameMaker, Pygame, Construct, PICO-8, etc. Lo importante es el juego.',
-            },
-            {
-                question: '¿Cómo se garantiza que los fondos llegan a las víctimas?',
-                answer: 'Los fondos recaudados a través de Itch.io son canalizados por la organización Venezuela Juega en conjunto con ONGs humanitarias verificadas. Se publicará un reporte de transparencia al final.',
-            },
+                question: 'Acerca de World Food Program USA',
+                answer: 'World Food Program USA es una organización sin fines de lucro 501(c)(3), con sede en Washington D. C., que apoya la misión de World Food Programme movilizando a responsables políticos, empresas y personas de Estados Unidos para impulsar el esfuerzo global por poner fin al hambre.',
+            }
         ],
         sponsors: [
             {
