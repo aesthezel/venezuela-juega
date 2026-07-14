@@ -1,8 +1,8 @@
 import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { RoutableProps, route } from 'preact-router';
-import { getActiveJams } from '@/jam/registry';
-import type { JamEvent } from '@/jam/types';
+import { getActiveJams } from '@/features/jam/registry';
+import type { JamEvent } from '@/features/jam/types';
 
 const statusLabel: Record<string, string> = {
     upcoming: 'Próximamente',

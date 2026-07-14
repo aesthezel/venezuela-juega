@@ -6,7 +6,7 @@ interface JamPrizesProps {
 }
 
 const JamPrizes = ({ jam }: JamPrizesProps) => {
-    if (!jam.prizes.length) return null;
+    if (!jam.prizes?.length) return null;
 
     return (
         <section className="py-20 px-6 bg-base-200">

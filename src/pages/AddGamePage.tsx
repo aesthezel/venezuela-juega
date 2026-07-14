@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks';
 import { ComponentChildren, ComponentProps } from 'preact';
 import { JSX } from 'preact/jsx-runtime';
 import { Game, GameStatus } from "@/types";
-import CloseIcon from '../components/icons/CloseIcon.tsx';
+import CloseIcon from '@/common/components/icons/CloseIcon';
 import { AddGamePageProps } from "@/types";
 import { PageTransition } from '@/components';
 import { generateSlug } from '@/utils';

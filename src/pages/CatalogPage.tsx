@@ -17,7 +17,7 @@ import { ViewMode, GameOrigin } from '@/types';
 import { CatalogPageProps } from "@/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
-import type { CategoryPreset } from '@/components/hero';
+import type { CategoryPreset } from '@/features/catalog/components/hero';
 
 const CatalogPage = ({
     games,

@@ -1,16 +1,17 @@
 import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { RoutableProps } from 'preact-router';
-import { getJamBySlug } from '@/jam/registry';
+import { getJamBySlug } from '@/features/jam/registry';
 import {
     JamHero,
     JamStatBar,
     JamAbout,
     JamPrizes,
+    JamDonation,
     JamSchedule,
     JamFAQ,
     JamCTA,
-} from '@/jam/components';
+} from '@/features/jam/components';
 
 interface JamDetailPageProps extends RoutableProps {
     jamName?: string;
@@ -56,7 +57,7 @@ const JamDetailPage = ({ jamName, edition }: JamDetailPageProps) => {
             <JamHero jam={jam} />
             <JamStatBar jam={jam} />
             <JamAbout jam={jam} />
-            <JamPrizes jam={jam} />
+            {jam.isCharity ? <JamDonation jam={jam} /> : <JamPrizes jam={jam} />}
             <JamSchedule jam={jam} />
             <JamFAQ jam={jam} />
             <JamCTA jam={jam} />

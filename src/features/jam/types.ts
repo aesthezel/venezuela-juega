@@ -48,7 +48,10 @@ export interface JamEvent {
     heroGradient?: string;
     accentColor?: string;
     objectives: JamObjective[];
-    prizes: JamPrize[];
+    prizes?: JamPrize[];
+    isCharity?: boolean;
+    donationUrl?: string;
+    donationGoal?: string | number;
     phases: JamPhase[];
     faqs: JamFAQ[];
     sponsors: JamSponsor[];

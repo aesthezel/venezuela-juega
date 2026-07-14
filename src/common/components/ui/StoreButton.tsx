@@ -10,7 +10,7 @@ import {
     faMeta,
 } from '@fortawesome/free-brands-svg-icons';
 import { faGamepad, faGlobe } from '@fortawesome/free-solid-svg-icons';
-import { LinkIcon } from './icons';
+import { LinkIcon } from '@/common/components/icons';
 import { trackExternalStore } from '@/utils/analytics';
 
 interface StoreButtonProps {

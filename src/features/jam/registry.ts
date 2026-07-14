@@ -24,12 +24,7 @@ const registry: JamEvent[] = [
                 icon: '🫂',
             },
         ],
-        prizes: [
-            { category: 'Mejor Juego', emoji: '🥇', description: 'El juego más completo y pulido.', color: 'warning' },
-            { category: 'Mejor Arte', emoji: '🎨', description: 'Dirección de arte más destacada.', color: 'secondary' },
-            { category: 'Mejor Audio', emoji: '🎵', description: 'Banda sonora y efectos de sonido.', color: 'accent' },
-            { category: 'Mejor Concepto', emoji: '💡', description: 'La idea más original e innovadora.', color: 'info' },
-        ],
+        isCharity: true,
         phases: [
             {
                 label: 'Inscripciones',

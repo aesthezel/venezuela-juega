@@ -54,3 +54,19 @@ Espacio exclusivo para eventos como la **GameJam+ 25/26**, donde se muestran:
 - **Tiempo Real**: Sincronización instantánea mediante **SpacetimeDB** con actualizaciones de posición cada 2 segundos.
 - **Efectos Orgánicos**: Movimiento suave (lerp) y "revoloteo" aleatorio mediante GSAP para simular vida en los cursores de otros usuarios.
 - **No Obstructivo**: Capa visual de solo lectura que no interfiere con la interacción del usuario.
+
+---
+
+## Mapa Feature → Código
+
+Cada funcionalidad se implementa como una **feature autocontenida** en `src/features/`. Ver [architecture.md](architecture.md) para la guía completa.
+
+| Funcionalidad | Feature en código | Página |
+|---|---|---|
+| Catálogo, filtros, búsqueda | `src/features/catalog/` | `CatalogPage.tsx` |
+| Detalle de juego (modal + slug) | `src/features/game-detail/` | `GameDetailPage.tsx` |
+| Game Jams (landing, lista, detalle) | `src/features/jam/` | `JamListPage.tsx`, `JamDetailPage.tsx`, `GameJamsPage.tsx` |
+| Galería de Game Jam | `src/features/jam/` | `GameJamGalleryPage.tsx` |
+| Créditos / About | `src/features/contributors/` | `AboutPage.tsx` |
+| Luciérnagas / Presencia | `src/common/components/firefly/` + `src/common/hooks/` | (global — `App.tsx`) |
+| Header, Footer, navegación | `src/common/components/layout/` | (global — `App.tsx`) |

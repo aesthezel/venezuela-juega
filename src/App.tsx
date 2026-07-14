@@ -3,7 +3,7 @@ import { lazy, Suspense } from 'preact/compat';
 import { Router, route } from 'preact-router';
 import { Game } from "@/types";
 import { useGamesData, useMetadata, useCatalogFilters } from '@/hooks';
-import { FireflyProvider } from '@/hooks/FireflyContext';
+import { FireflyProvider } from '@/common/hooks/FireflyContext';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop, FireflyOverlay } from '@/components';
 import {
     CatalogPage,
