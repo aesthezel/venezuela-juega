@@ -35,10 +35,10 @@ const AccordionItem = ({ title, icon, isOpen, onClick, children, badgeCount }: {
     return (
         <div className={`collapse collapse-arrow bg-base-200/50 mb-2 border border-base-300 ${isOpen ? 'collapse-open' : 'collapse-close'}`}>
             <div 
-                className="collapse-title flex items-center gap-3 cursor-pointer min-h-0 py-3"
+                className="collapse-title flex items-center gap-3 cursor-pointer min-h-0 py-3 pl-3"
                 onClick={onClick}
             >
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${isOpen ? 'bg-accent-teal-dark text-white' : 'bg-base-300 text-base-content/70'}`}>
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${isOpen ? 'bg-accent-teal-dark text-white' : 'bg-transparent text-base-content/70'}`}>
                     <FontAwesomeIcon icon={icon} className="text-sm" />
                 </div>
                 <div className="flex flex-col items-start leading-tight">
