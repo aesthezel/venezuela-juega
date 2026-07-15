@@ -253,16 +253,16 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                     {game.description}
                 </p>
 
-                <div className="mt-2 min-h-6">
-                    {needsExpansion && (
+                {needsExpansion && (
+                    <div className="mt-2 min-h-6">
                         <button
                             onClick={handleReadMoreClick}
                             className="btn btn-link btn-sm text-accent hover:text-accent-focus p-0 h-auto min-h-0 self-start no-underline hover:underline"
                         >
                             {isExpanded ? 'Leer menos' : 'Leer más'}
                         </button>
-                    )}
-                </div>
+                    </div>
+                )}
 
                 <div className="card-actions mt-auto pt-4 flex flex-wrap gap-2">
                     {game.genre.slice(0, 2).map(g => (
