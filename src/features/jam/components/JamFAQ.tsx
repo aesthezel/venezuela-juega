@@ -1,5 +1,6 @@
 import { h } from 'preact';
 import type { JamEvent } from '../types';
+import { renderRichText } from '../renderRichText';
 
 interface JamFAQProps {
     jam: JamEvent;
@@ -26,8 +27,8 @@ const JamFAQ = ({ jam }: JamFAQProps) => {
                                 {faq.question}
                             </div>
                             <div className="collapse-content">
-                                <p className="text-base-content/70 text-sm leading-relaxed">
-                                    {faq.answer}
+                                <p className="text-base-content/70 text-sm leading-relaxed pt-2">
+                                    {renderRichText(faq.answer)}
                                 </p>
                             </div>
                         </div>

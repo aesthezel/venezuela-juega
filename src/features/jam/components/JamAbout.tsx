@@ -1,5 +1,6 @@
 import { h } from 'preact';
 import type { JamEvent } from '../types';
+import { renderRichText } from '../renderRichText';
 
 interface JamAboutProps {
     jam: JamEvent;
@@ -28,7 +29,7 @@ const JamAbout = ({ jam }: JamAboutProps) => {
                                     {obj.title}
                                 </h3>
                                 <p className="text-base-content/70 leading-relaxed">
-                                    {obj.description}
+                                    {renderRichText(obj.description)}
                                 </p>
                             </div>
                         </div>
