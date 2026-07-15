@@ -53,7 +53,7 @@ const AccordionItem = ({ title, icon, isOpen, onClick, children, badgeCount }: {
                 </div>
             </div>
 
-            <div className="collapse-content pb-4">
+            <div className="collapse-content">
                 {children}
             </div>
         </div>
