@@ -26,7 +26,7 @@ const JamFAQ = ({ jam }: JamFAQProps) => {
                                 {faq.question}
                             </div>
                             <div className="collapse-content">
-                                <p className="text-base-content/70 text-sm leading-relaxed pt-2">
+                                <p className="text-base-content/70 text-sm leading-relaxed">
                                     {faq.answer}
                                 </p>
                             </div>
