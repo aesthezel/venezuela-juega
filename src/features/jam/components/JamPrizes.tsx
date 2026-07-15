@@ -1,5 +1,6 @@
 import { h } from 'preact';
 import type { JamEvent } from '../types';
+import { renderRichText } from '../renderRichText';
 
 interface JamPrizesProps {
     jam: JamEvent;
@@ -31,7 +32,7 @@ const JamPrizes = ({ jam }: JamPrizesProps) => {
                                 </h3>
                                 {prize.description && (
                                     <p className="text-base-content/60 text-sm leading-relaxed">
-                                        {prize.description}
+                                        {renderRichText(prize.description)}
                                     </p>
                                 )}
                                 <div className={`badge badge-${prize.color ?? 'secondary'} badge-outline text-xs font-bold mt-2`}>
