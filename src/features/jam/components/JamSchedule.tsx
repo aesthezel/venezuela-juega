@@ -1,5 +1,6 @@
 import { h } from 'preact';
 import type { JamEvent } from '../types';
+import { renderRichText } from '../renderRichText';
 
 interface JamScheduleProps {
     jam: JamEvent;
@@ -58,7 +59,7 @@ const JamSchedule = ({ jam }: JamScheduleProps) => {
                                             </h3>
                                             {phase.description && (
                                                 <p className="text-base-content/70 leading-relaxed sm:text-lg">
-                                                    {phase.description}
+                                                    {renderRichText(phase.description)}
                                                 </p>
                                             )}
                                         </div>
