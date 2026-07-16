@@ -29,7 +29,7 @@ const registry: JamEvent[] = [
             {
                 title: '¿A dónde va la ayuda?',
                 description:
-                    'El 100 % de los fondos recaudados será destinado directamente a las labores de asistencia que WFP está llevando a cabo en Venezuela.',
+                    'El 100 % de los fondos recaudados será destinado directamente a las labores de asistencia que [World Food Programme](https://es.wfp.org) está llevando a cabo en Venezuela.',
                 icon: '🤝',
             }
         ],
