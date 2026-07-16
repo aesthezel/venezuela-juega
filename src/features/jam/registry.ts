@@ -10,7 +10,7 @@ const registry: JamEvent[] = [
         shortName: 'Juntos Game Jam',
         tagline: 'Ayuda a los afectados en el terremoto',
         status: 'upcoming',
-        startDate: new Date('2026-07-24T00:00:00-04:00'),
+        startDate: new Date('2026-07-24T13:00:00-04:00'),
         endDate: new Date('2026-07-26T23:59:59-04:00'),
         submissionUrl: "https://itch.io/jam/juntos-game-jam-venezuela-earthquake-relief",
         donationUrl: "https://tiltify.com/wfpusa/wfpusa-influencers?origin=https://venezuelajuega.com",
@@ -45,7 +45,7 @@ const registry: JamEvent[] = [
             {
                 label: 'Desarrollo',
                 description: '48 horas para crear tu juego desde cero.',
-                startDate: new Date('2026-07-24T00:00:00-04:00'),
+                startDate: new Date('2026-07-24T13:00:00-04:00'),
                 endDate: new Date('2026-07-26T23:59:59-04:00'),
                 icon: '🎮',
             }
