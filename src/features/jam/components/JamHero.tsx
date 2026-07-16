@@ -57,8 +57,8 @@ const JamHero = ({ jam }: JamHeroProps) => {
         : undefined;
 
     const heroClass = jam.heroImage
-        ? 'relative min-h-[100svh] flex flex-col justify-center items-center overflow-hidden'
-        : `relative min-h-[100svh] flex flex-col justify-center items-center overflow-hidden bg-gradient-to-br ${gradient}`;
+        ? 'relative min-h-[100svh] flex flex-col justify-center items-center overflow-hidden pt-20'
+        : `relative min-h-[100svh] flex flex-col justify-center items-center overflow-hidden pt-20 bg-gradient-to-br ${gradient}`;
 
     return (
         <div ref={heroRef} className={heroClass} style={heroStyle}>
@@ -95,7 +95,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
                 ))}
             </div>
 
-            <div className="text-center relative z-10 w-full max-w-5xl mx-auto px-6 flex flex-col items-center gap-10 -mt-60 md:-mt-60">
+            <div className="text-center relative z-10 w-full max-w-5xl mx-auto px-6 flex flex-col items-center gap-4 sm:gap-6 lg:gap-10 py-6">
 
                 <div ref={badgeRef}>
                     <span className={`badge badge-md font-black tracking-widest text-xs uppercase ${statusColor[jam.status] ?? 'badge-neutral'}`}>
@@ -108,7 +108,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
                         <img
                             src={jam.logo}
                             alt={`Logo de ${jam.shortName ?? jam.name}`}
-                            className="h-48 sm:h-72 w-auto object-contain drop-shadow-2xl"
+                            className="h-24 sm:h-40 md:h-56 lg:h-72 max-h-[25vh] w-auto object-contain drop-shadow-2xl"
                         />
                     ) : (
                         <div
