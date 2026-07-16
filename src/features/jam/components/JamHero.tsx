@@ -64,10 +64,13 @@ const JamHero = ({ jam }: JamHeroProps) => {
         <div ref={heroRef} className={heroClass} style={heroStyle}>
 
             {jam.heroImage ? (
-                <div
-                    className="absolute inset-0 z-0"
-                    style={{ backgroundColor: 'rgba(10,5,15,0.72)' }}
-                />
+                <>
+                    <div
+                        className="absolute inset-0 z-0"
+                        style={{ backgroundColor: 'rgba(10,5,20,0.60)' }}
+                    />
+                    <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/30 to-black/80 pointer-events-none" />
+                </>
             ) : (
                 <div
                     className="absolute inset-0 pointer-events-none z-0"
@@ -100,18 +103,18 @@ const JamHero = ({ jam }: JamHeroProps) => {
                     </span>
                 </div>
 
-                <div ref={logoRef} className="flex flex-col items-center gap-2">
+                <div ref={logoRef} className="flex flex-col items-center">
                     {jam.logo ? (
                         <img
                             src={jam.logo}
                             alt={`Logo de ${jam.shortName ?? jam.name}`}
-                            className="h-16 sm:h-24 w-auto object-contain drop-shadow-2xl"
+                            className="h-48 sm:h-72 w-auto object-contain drop-shadow-2xl"
                         />
                     ) : (
                         <div
                             className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl shadow-2xl border border-white/10"
                             style={{
-                                background: `linear-gradient(135deg, ${accent}33 0%, ${accent}11 100%)`,
+                                background: `linear-gradient(90deg, ${accent}33 0%, ${accent}11 100%)`,
                                 boxShadow: `0 0 40px ${accent}44`,
                             }}
                             aria-hidden="true"
@@ -124,7 +127,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
 
                 <h1
                     ref={titleRef}
-                    className="text-4xl sm:text-5xl lg:text-7xl font-black leading-none tracking-tight text-white mt-2"
+                    className="text-4xl sm:text-5xl lg:text-7xl font-black leading-none tracking-tight text-white"
                     style={{ textShadow: `0 0 80px ${accent}66` }}
                 >
                     {jam.name}
@@ -145,7 +148,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
                     {jam.startDate ? (
                         <JamCountdown targetDate={jam.startDate} label="para el inicio" />
                     ) : (
-                        <div className="flex flex-col items-center gap-2">
+                        <div className="flex flex-col items-center gap-1">
                             <span
                                 className="text-3xl font-black tracking-[0.3em] uppercase"
                                 style={{ color: accent }}

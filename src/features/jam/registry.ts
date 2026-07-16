@@ -15,10 +15,10 @@ const registry: JamEvent[] = [
         submissionUrl: "https://itch.io/jam/juntos-game-jam-venezuela-earthquake-relief",
         donationUrl: "https://tiltify.com/wfpusa/wfpusa-influencers?origin=https://venezuelajuega.com",
         platform: 'itch.io',
-        heroGradient: 'from-[#44276a] via-[#e5054b] to-[#44276a]',
-        //heroImage: undefined,
-        // logo: undefined,
-        accentColor: '#1696ab',
+        heroGradient: 'from-[#fbb916] via-[#1e96aa] to-[#44276a]',
+        heroImage: "https://venezuela-juega.s3.us-east-005.dream.io/globalgamejam/juntos/earthquake.jpg",
+        logo: 'https://venezuela-juega.s3.us-east-005.dream.io/globalgamejam/juntos/juntos-logo.png',
+        accentColor: '#fbb916',
         objectives: [
             {
                 title: 'Ayudar a las víctimas del terremoto',

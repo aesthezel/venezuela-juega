@@ -10,8 +10,8 @@ const JamDonation = ({ jam }: JamDonationProps) => {
         <section className="py-20 px-6 bg-base-200">
             <div className="max-w-4xl mx-auto">
                 <div className="card lg:card-side bg-base-100 shadow-xl border border-secondary/20">
-                    <figure className="lg:w-1/3 bg-secondary/10 flex items-center justify-center p-8">
-                        {/* Buscar imagen */}
+                    <figure className="lg:w-1/3 overflow-hidden">
+                        <img src="https://venezuela-juega.s3.us-east-005.dream.io/globalgamejam/juntos/donation-image.jpg" alt="Donación Venezuela Juega" className="w-full h-full object-cover" />
                     </figure>
                     <div className="card-body">
                         <h2 className="card-title text-3xl font-black text-secondary">
