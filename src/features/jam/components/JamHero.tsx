@@ -73,9 +73,9 @@ const JamHero = ({ jam }: JamHeroProps) => {
                 <>
                     <div
                         className="absolute inset-0 z-0"
-                        style={{ backgroundColor: 'rgba(10,5,20,0.60)' }}
+                        style={{ backgroundColor: 'rgba(10,5,20,0.70)' }}
                     />
-                    <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/30 to-black/80 pointer-events-none" />
+                    <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/20 to-black/90 pointer-events-none" />
                 </>
             ) : (
                 <div
@@ -85,22 +85,6 @@ const JamHero = ({ jam }: JamHeroProps) => {
                     }}
                 />
             )}
-
-            {/* ── Partículas decorativas ───────────────── */}
-            <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-                {Array.from({ length: 24 }).map((_, i) => (
-                    <div
-                        key={i}
-                        className="absolute rounded-full bg-white/5"
-                        style={{
-                            width: `${(i * 7 % 6) + 2}px`,
-                            height: `${(i * 7 % 6) + 2}px`,
-                            top: `${(i * 13 % 100)}%`,
-                            left: `${(i * 17 % 100)}%`,
-                        }}
-                    />
-                ))}
-            </div>
 
             {/* ── Contenido principal ──────────────────── */}
             <div
@@ -149,7 +133,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
                 <h1
                     ref={titleRef}
                     className="font-black leading-none tracking-tight text-white text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
-                    style={{ textShadow: `0 2px 40px ${accent}66` }}
+                    style={{ textShadow: `0 20px 200px ${accent}30` }}
                 >
                     {jam.name}
                 </h1>
