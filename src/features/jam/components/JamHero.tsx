@@ -51,6 +51,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
 
     const gradient = jam.heroGradient ?? 'from-[#1a0a0d] via-[#0d0a11] to-[#0a0d1a]';
     const accent = jam.accentColor ?? '#e34262';
+    const accentText = jam.accentTextColor ?? '#ffffff';
 
     const heroStyle: h.JSX.CSSProperties = jam.heroImage
         ? {
@@ -183,8 +184,8 @@ const JamHero = ({ jam }: JamHeroProps) => {
                             href={jam.submissionUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-sm sm:btn-md lg:btn-lg font-black text-white border-0 shadow-2xl mt-1"
-                            style={{ backgroundColor: accent }}
+                            className="btn btn-sm sm:btn-md lg:btn-lg font-black border-0 shadow-2xl mt-1"
+                            style={{ backgroundColor: accent, color: accentText }}
                             aria-label={`Participar en ${jam.name} en ${jam.platform ?? 'Itch.io'} (abre en nueva pestaña)`}
                         >
                             Participar en {jam.platform ?? 'Itch.io'}

@@ -19,6 +19,7 @@ const registry: JamEvent[] = [
         heroImage: "https://venezuela-juega.s3.us-east-005.dream.io/globalgamejam/juntos/earthquake.jpg",
         logo: 'https://venezuela-juega.s3.us-east-005.dream.io/globalgamejam/juntos/juntos-logo.png',
         accentColor: '#fbb916',
+        accentTextColor: '#44276a',
         objectives: [
             {
                 title: 'Ayudar a las víctimas del terremoto',

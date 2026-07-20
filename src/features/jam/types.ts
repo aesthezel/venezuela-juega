@@ -48,6 +48,7 @@ export interface JamEvent {
     heroGradient?: string;
     heroImage?: string;     // URL de imagen de fondo del hero (opcional, reemplaza el gradiente)
     accentColor?: string;
+    accentTextColor?: string; // Text color to use on top of accentColor
     logo?: string;          // URL del logotipo del evento (opcional)
     objectives: JamObjective[];
     prizes?: JamPrize[];

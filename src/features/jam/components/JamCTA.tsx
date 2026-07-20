@@ -39,8 +39,11 @@ const JamCTA = ({ jam }: JamCTAProps) => {
                             href={jam.submissionUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-lg font-black text-white border-0 shadow-2xl"
-                            style={{ backgroundColor: jam.accentColor ?? '#e34262' }}
+                            className="btn btn-lg font-black border-0 shadow-2xl"
+                            style={{ 
+                                backgroundColor: jam.accentColor ?? '#e34262',
+                                color: jam.accentTextColor ?? '#ffffff' 
+                            }}
                             aria-label={`Participar en ${jam.name} en ${jam.platform ?? 'Itch.io'}`}
                         >
                             🎮 Participar ahora
