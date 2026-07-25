@@ -9,7 +9,7 @@ const registry: JamEvent[] = [
         name: 'Juntos: Game Jam para Venezuela',
         shortName: 'Juntos Game Jam',
         tagline: 'Ayuda a los afectados en el terremoto',
-        status: 'upcoming',
+        status: 'active',
         startDate: new Date('2026-07-24T13:00:00-04:00'),
         endDate: new Date('2026-07-26T23:59:59-04:00'),
         submissionUrl: "https://itch.io/jam/juntos-game-jam-venezuela-earthquake-relief",

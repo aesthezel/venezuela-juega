@@ -151,20 +151,22 @@ const JamHero = ({ jam }: JamHeroProps) => {
 
                 {/* Countdown + CTA */}
                 <div ref={ctaRef} className="flex flex-col items-center gap-2 sm:gap-3 w-full">
-                    {jam.startDate ? (
-                        <JamCountdown targetDate={jam.startDate} label="para el inicio" />
-                    ) : (
-                        <div className="flex flex-col items-center gap-1">
-                            <span
-                                className="text-2xl sm:text-3xl font-black tracking-[0.3em] uppercase"
-                                style={{ color: accent }}
-                            >
-                                TBA
-                            </span>
-                            <span className="text-[10px] sm:text-xs text-white/50 uppercase tracking-widest">
-                                Fechas por confirmar
-                            </span>
-                        </div>
+                    {jam.status === 'upcoming' && (
+                        jam.startDate ? (
+                            <JamCountdown targetDate={jam.startDate} label="para el inicio" />
+                        ) : (
+                            <div className="flex flex-col items-center gap-1">
+                                <span
+                                    className="text-2xl sm:text-3xl font-black tracking-[0.3em] uppercase"
+                                    style={{ color: accent }}
+                                >
+                                    TBA
+                                </span>
+                                <span className="text-[10px] sm:text-xs text-white/50 uppercase tracking-widest">
+                                    Fechas por confirmar
+                                </span>
+                            </div>
+                        )
                     )}
 
                     {/* Rango de fechas */}
