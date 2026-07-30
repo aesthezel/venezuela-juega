@@ -9,7 +9,7 @@ const registry: JamEvent[] = [
         name: 'Juntos: Game Jam para Venezuela',
         shortName: 'Juntos Game Jam',
         tagline: 'Ayuda a los afectados en el terremoto',
-        status: 'active',
+        status: 'ended',
         startDate: new Date('2026-07-24T13:00:00-04:00'),
         endDate: new Date('2026-07-26T23:59:59-04:00'),
         submissionUrl: "https://itch.io/jam/juntos-game-jam-venezuela-earthquake-relief",
@@ -83,7 +83,7 @@ const registry: JamEvent[] = [
 
 /** Devuelve todas las jams (excepto draft/ended) */
 export function getActiveJams(): JamEvent[] {
-    return registry.filter((j) => j.status !== 'draft' && j.status !== 'ended');
+    return registry.filter((j) => j.status !== 'draft');
 }
 
 /** Devuelve la edición más reciente de un slug dado */

@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { RoutableProps } from 'preact-router';
 import { getJamBySlug } from '@/features/jam/registry';

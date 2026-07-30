@@ -1,5 +1,3 @@
-// Jam module — TypeScript interfaces
-
 export type JamStatus = 'draft' | 'upcoming' | 'open' | 'active' | 'voting' | 'ended';
 
 export interface JamSponsor {
@@ -12,7 +10,7 @@ export interface JamPrize {
     category: string;
     emoji: string;
     description?: string;
-    color?: string; // tailwind accent color token e.g. 'primary', 'secondary', 'accent'
+    color?: string;
 }
 
 export interface JamPhase {
@@ -35,21 +33,21 @@ export interface JamObjective {
 }
 
 export interface JamEvent {
-    slug: string;           // e.g. "jam-benefica"
-    edition: string;        // e.g. "i", "ii", "2026-julio"
-    name: string;           // display name
+    slug: string;
+    edition: string;
+    name: string;
     shortName?: string;
     tagline?: string;
     status: JamStatus;
     startDate: Date | null;
     endDate: Date | null;
     submissionUrl: string | null;
-    platform?: string;      // e.g. "Itch.io"
+    platform?: string;
     heroGradient?: string;
-    heroImage?: string;     // URL de imagen de fondo del hero (opcional, reemplaza el gradiente)
+    heroImage?: string;
     accentColor?: string;
-    accentTextColor?: string; // Text color to use on top of accentColor
-    logo?: string;          // URL del logotipo del evento (opcional)
+    accentTextColor?: string;
+    logo?: string;
     objectives: JamObjective[];
     prizes?: JamPrize[];
     isCharity?: boolean;
