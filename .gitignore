@@ -11,6 +11,7 @@ lerna-debug.log*
 # WIP for backend, not ready for production
 docs/backend
 docs/improvements
+docs/database
 
 node_modules
 dist
