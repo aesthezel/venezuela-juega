@@ -16,7 +16,7 @@ import {
 const ChartsPage = lazy(() => import('@/pages/ChartsPage'));
 const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
 const GameJamsPage = lazy(() => import('@/pages/GameJamsPage'));
-const GameJamGalleryPage = lazy(() => import('@/pages/GameJamGalleryPage'));
+
 const AddGamePage = lazy(() => import('@/pages/AddGamePage'));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const DeveloperPage = lazy(() => import('@/pages/DeveloperPage'));
@@ -102,8 +102,7 @@ const App = () => {
                                     <CatalogPage path="/" {...catalogPageProps} />
                                     <CatalogPage path="/game" {...catalogPageProps} />
                                     <CatalogPage path="/games" {...catalogPageProps} />
-                                    <GameJamGalleryPage path="/gamejam-gallery" games={games} onGameClick={handleOpenModal} />
-                                    <Redirect path="/gamejam-gallery/" to="/gamejam-gallery" />
+
                                     <GameJamsPage path="/game-jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
                                     <Redirect path="/game-jams/" to="/game-jams" />
                                     <JamListPage path="/jam" />

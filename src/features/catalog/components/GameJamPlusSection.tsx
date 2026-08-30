@@ -66,7 +66,7 @@ const GameJamPlusSection = ({ games, onGameClick }: GameJamPlusSectionProps) => 
                 </div>
                 {gameJamPlusGames.length > 6 && (
                     <button
-                        onClick={() => route('/gamejam-gallery')}
+                        onClick={() => route('/game-jams')}
                         className="hidden md:block px-4 py-2 bg-accent-orange/20 hover:bg-accent-orange/30
                                  text-accent-orange rounded-lg transition-colors border border-accent-orange/30"
                     >
@@ -89,7 +89,7 @@ const GameJamPlusSection = ({ games, onGameClick }: GameJamPlusSectionProps) => 
             {gameJamPlusGames.length > 6 && (
                 <div className="md:hidden mt-6 text-center">
                     <button
-                        onClick={() => route('/gamejam-gallery')}
+                        onClick={() => route('/game-jams')}
                         className="px-6 py-3 bg-accent-orange/20 hover:bg-accent-orange/30
                                  text-accent-orange rounded-lg transition-colors border border-accent-orange/30
                                  font-semibold"

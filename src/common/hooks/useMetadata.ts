@@ -21,10 +21,6 @@ const pageMetadata = {
         title: 'Acerca de la Iniciativa — Venezuela Juega',
         description: 'Conoce más sobre la iniciativa Venezuela Juega, sus colaboradores y cómo puedes contribuir.'
     },
-    '/gamejam-gallery': {
-        title: 'GameJam+ 25/26 — Venezuela Juega',
-        description: 'Todos los juegos que fueron realizados en menos de 48 horas.'
-    },
     '/game-jams': {
         title: 'Game Jams Venezuela — Venezuela Juega',
         description: 'Descubre los increíbles juegos creados en menos de 48 horas por desarrolladores venezolanos en eventos Game Jam.'
