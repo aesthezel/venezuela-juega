@@ -4,7 +4,8 @@ import { Router, route } from 'preact-router';
 import { Game } from "@/types";
 import { useGamesData, useMetadata, useCatalogFilters } from '@/hooks';
 import { FireflyProvider } from '@/hooks/FireflyContext';
-import { AuthProvider } from '@/hooks/AuthContext';
+import { AuthProvider } from 'react-oidc-context';
+import { oidcConfig } from '@/auth/oidcConfig';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop, FireflyOverlay } from '@/components';
 import {
     CatalogPage,
@@ -86,7 +87,7 @@ const App = () => {
     if (error) return <div className="text-center text-secondary text-2xl p-10">{error}</div>;
 
     return (
-        <AuthProvider>
+        <AuthProvider {...oidcConfig}>
         <SpacetimeDBProvider>
             <FireflyProvider currentPath={currentPath}>
                 <div className="relative min-h-screen font-sans flex flex-col overflow-x-clip isolate">

@@ -54,7 +54,7 @@ const getNum    = (r: Record<string, unknown>, c: string, s: string): number => 
 const getBool   = (r: Record<string, unknown>, c: string, s: string): boolean => !!getP(r, c, s);
 
 export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren }) => {
-    const { user, idToken, loading: authLoading } = useAuth();
+    const { user, idToken, sub, loading: authLoading } = useAuth();
     const [identity, setIdentity] = useState<string | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const [gameStatsMap, setGameStatsMap] = useState<Record<string, GameStats>>({});
@@ -125,16 +125,15 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
     }, [onStatEvt, onActivityEvt, syncStats, syncActivity]);
 
     useEffect(() => {
-        // Wait for Firebase to resolve the initial auth state before connecting.
+        // Wait for OIDC (SpacetimeAuth) to resolve the auth state before connecting.
         if (authLoading) return;
 
-        // Logged in but the ID token hasn't resolved yet (getIdToken is async):
-        // do NOT connect tokenless, or SpacetimeDB assigns a random anonymous
-        // identity instead of the JWT-derived one. Wait for idToken; this effect
-        // re-runs when it arrives (idToken is in the deps).
+        // Authenticated but the ID token isn't available yet: don't connect
+        // tokenless, or SpacetimeDB assigns a random anonymous identity instead
+        // of the JWT-derived one. The effect re-runs when idToken arrives (it's a dep).
         if (user && !idToken) return;
 
-        const desiredKey = user?.uid ?? 'anon';
+        const desiredKey = sub ?? 'anon';
         // Already connected for this identity — nothing to do (ignores ~1h token refreshes).
         if (connectedKeyRef.current === desiredKey && connInst) return;
 
@@ -148,7 +147,7 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
             setMyActivityMap({});
         }
 
-        // Logged in → use the Firebase JWT (SpacetimeDB validates it via OIDC).
+        // Logged in → use the SpacetimeAuth JWT (SpacetimeDB validates it via OIDC).
         // Anonymous → reuse the cached SpacetimeDB session token.
         const token = user ? (idToken ?? undefined) : (localStorage.getItem(AUTH_TOKEN_KEY) || undefined);
         connectedKeyRef.current = desiredKey;
@@ -159,7 +158,7 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
                 setIdentity(id.toHexString());
                 setIsConnected(true);
                 // Cache the issued session token only for the anonymous flow; never overwrite
-                // it with a Firebase-derived session.
+                // it with a SpacetimeAuth-derived session.
                 if (!user) localStorage.setItem(AUTH_TOKEN_KEY, t);
                 setup(c);
             })
@@ -168,7 +167,7 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
                 console.error('[SpacetimeDB] connect error', err);
             })
             .build();
-    }, [user, idToken, authLoading, setup]);
+    }, [sub, idToken, authLoading, setup]);
 
     const val = useMemo(() => ({ connection: connInst, identity, isConnected, error: null, gameStatsMap, myActivityMap }), 
         [identity, isConnected, gameStatsMap, myActivityMap]);
