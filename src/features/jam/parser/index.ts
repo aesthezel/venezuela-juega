@@ -35,6 +35,10 @@ export function parseJamContent(rawContent: string, defaultSlug?: string): JamEv
     const startDate = parseDate(attributes.startDate);
     const endDate = parseDate(attributes.endDate);
     const submissionUrl = attributes.submissionUrl || null;
+    const registrationUrl: string | undefined = attributes.registrationUrl || undefined;
+    const registrationLabel: string | undefined = attributes.registrationLabel || undefined;
+    const registrationOpenDate = attributes.registrationOpenDate ? parseDate(attributes.registrationOpenDate) : undefined;
+    const registrationCloseDate = attributes.registrationCloseDate ? parseDate(attributes.registrationCloseDate) : undefined;
     const platform = attributes.platform || 'itch.io';
     const heroGradient = attributes.heroGradient;
     const heroImage = attributes.heroImage;
@@ -139,6 +143,10 @@ export function parseJamContent(rawContent: string, defaultSlug?: string): JamEv
         startDate,
         endDate,
         submissionUrl,
+        registrationUrl,
+        registrationLabel,
+        registrationOpenDate,
+        registrationCloseDate,
         platform,
         heroGradient,
         heroImage,

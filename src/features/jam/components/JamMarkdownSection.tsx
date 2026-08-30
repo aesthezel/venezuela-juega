@@ -7,6 +7,70 @@ interface JamMarkdownSectionProps {
     accentColor?: string;
 }
 
+type ContentBlock =
+    | { kind: 'header'; text: string }
+    | { kind: 'quote'; lines: string[] }
+    | { kind: 'list'; items: string[] }
+    | { kind: 'paragraph'; lines: string[] };
+
+/**
+ * Agrupa el contenido en bloques semánticos: agrupa líneas consecutivas de
+ * viñetas (- / *) en una lista, citas (>) en blockquote, encabezados (###)
+ * por separado y el resto en párrafos. Las líneas en blanco separan bloques.
+ */
+export function buildContentBlocks(content: string): ContentBlock[] {
+    const blocks: ContentBlock[] = [];
+    let pending: Extract<ContentBlock, { kind: 'quote' | 'list' | 'paragraph' }> | null = null;
+
+    const flush = () => {
+        if (pending) {
+            blocks.push(pending);
+            pending = null;
+        }
+    };
+
+    for (const rawLine of content.split(/\r?\n/)) {
+        const line = rawLine.trim();
+        if (!line) {
+            flush();
+            continue;
+        }
+
+        if (line.startsWith('### ') || line.startsWith('#### ')) {
+            flush();
+            blocks.push({ kind: 'header', text: line.replace(/^#+\s*/, '') });
+            continue;
+        }
+
+        if (line.startsWith('>')) {
+            if (!pending || pending.kind !== 'quote') {
+                flush();
+                pending = { kind: 'quote', lines: [] };
+            }
+            pending.lines.push(line.replace(/^>\s*/, ''));
+            continue;
+        }
+
+        if (line.startsWith('- ') || line.startsWith('* ')) {
+            if (!pending || pending.kind !== 'list') {
+                flush();
+                pending = { kind: 'list', items: [] };
+            }
+            pending.items.push(line.slice(2));
+            continue;
+        }
+
+        if (!pending || pending.kind !== 'paragraph') {
+            flush();
+            pending = { kind: 'paragraph', lines: [] };
+        }
+        pending.lines.push(line);
+    }
+
+    flush();
+    return blocks;
+}
+
 const JamMarkdownSection = ({ section, accentColor = '#e34262' }: JamMarkdownSectionProps) => {
     const bgClass =
         section.theme === 'base-200'
@@ -52,8 +116,7 @@ const JamMarkdownSection = ({ section, accentColor = '#e34262' }: JamMarkdownSec
     }
 
     // Parse block lines into paragraphs, lists, and headers
-    const rawContent = section.content || '';
-    const paragraphs = rawContent.split(/\n\n+/);
+    const blocks = buildContentBlocks(section.content || '');
 
     return (
         <section className={`py-20 px-6 ${bgClass}`}>
@@ -85,43 +148,30 @@ const JamMarkdownSection = ({ section, accentColor = '#e34262' }: JamMarkdownSec
                 )}
 
                 <div className="space-y-6 text-base-content/80 text-base sm:text-lg leading-relaxed">
-                    {paragraphs.map((para, pIdx) => {
-                        const trimmed = para.trim();
-                        if (!trimmed) return null;
-
-                        // H3 / H4 Header
-                        if (trimmed.startsWith('### ') || trimmed.startsWith('#### ')) {
-                            const headerText = trimmed.replace(/^#+\s*/, '');
+                    {blocks.map((block, bIdx) => {
+                        if (block.kind === 'header') {
                             return (
-                                <h3 key={pIdx} className="text-2xl font-black text-white pt-4 pb-1">
-                                    {renderRichText(headerText)}
+                                <h3 key={bIdx} className="text-2xl font-black text-white pt-4 pb-1">
+                                    {renderRichText(block.text)}
                                 </h3>
                             );
                         }
 
-                        // Blockquote
-                        if (trimmed.startsWith('>')) {
-                            const quoteText = trimmed.replace(/^>\s*/gm, '');
+                        if (block.kind === 'quote') {
                             return (
                                 <div
-                                    key={pIdx}
+                                    key={bIdx}
                                     className="border-l-4 pl-4 py-2 italic bg-base-200/60 rounded-r-xl border-secondary"
                                 >
-                                    {renderRichText(quoteText)}
+                                    {renderRichText(block.lines.join('\n'))}
                                 </div>
                             );
                         }
 
-                        // Bullet list
-                        if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-                            const listItems = trimmed
-                                .split(/\n/)
-                                .filter((l) => l.trim().startsWith('- ') || l.trim().startsWith('* '))
-                                .map((l) => l.trim().slice(2));
-
+                        if (block.kind === 'list') {
                             return (
-                                <ul key={pIdx} className="space-y-2 list-disc list-inside bg-base-200/40 p-5 rounded-2xl border border-base-300">
-                                    {listItems.map((item, itemIdx) => (
+                                <ul key={bIdx} className="space-y-2 list-disc list-inside bg-base-200/40 p-5 rounded-2xl border border-base-300">
+                                    {block.items.map((item, itemIdx) => (
                                         <li key={itemIdx} className="leading-normal">
                                             {renderRichText(item)}
                                         </li>
@@ -130,8 +180,7 @@ const JamMarkdownSection = ({ section, accentColor = '#e34262' }: JamMarkdownSec
                             );
                         }
 
-                        // Regular paragraph
-                        return <p key={pIdx}>{renderRichText(trimmed)}</p>;
+                        return <p key={bIdx}>{renderRichText(block.lines.join(' '))}</p>;
                     })}
                 </div>
             </div>

@@ -53,6 +53,21 @@ const JamHero = ({ jam }: JamHeroProps) => {
     const accent = jam.accentColor ?? '#e34262';
     const accentText = jam.accentTextColor ?? '#ffffff';
 
+    // --- Registration window logic ---
+    const now = new Date();
+    const afterOpen = !jam.registrationOpenDate || now >= jam.registrationOpenDate;
+    const beforeClose = !jam.registrationCloseDate || now <= jam.registrationCloseDate;
+    const isRegistrationOpen = Boolean(jam.registrationUrl) && afterOpen && beforeClose;
+
+    // Hint text shown when the window is closed
+    const registrationHint = jam.registrationUrl
+        ? !afterOpen
+            ? `Inscripciones desde el ${jam.registrationOpenDate!.toLocaleDateString('es-VE', { day: 'numeric', month: 'short' })}`
+            : !beforeClose
+                ? 'Inscripciones cerradas'
+                : null
+        : null;
+
     const heroStyle: h.JSX.CSSProperties = jam.heroImage
         ? {
             backgroundImage: `url(${jam.heroImage})`,
@@ -180,26 +195,66 @@ const JamHero = ({ jam }: JamHeroProps) => {
                         </div>
                     )}
 
-                    {/* Botón CTA */}
+                    {/* Botón de Inscripción (opcional) */}
+                    {jam.registrationUrl && (
+                        isRegistrationOpen ? (
+                            <a
+                                href={jam.registrationUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-sm sm:btn-md lg:btn-lg font-black shadow-2xl mt-1 border-2"
+                                style={{
+                                    backgroundColor: accent,
+                                    color: accentText,
+                                    borderColor: accent,
+                                }}
+                                aria-label={`Inscribirse en ${jam.name} (abre en nueva pestaña)`}
+                            >
+                                {jam.registrationLabel ?? 'Inscribirse'}
+                            </a>
+                        ) : (
+                            <div className="flex flex-col items-center gap-1">
+                                <button
+                                    disabled
+                                    className="btn btn-sm sm:btn-md lg:btn-lg btn-disabled font-black mt-1 border-2"
+                                    aria-label={registrationHint ?? 'Inscripciones no disponibles'}
+                                >
+                                    {jam.registrationLabel ?? 'Inscribirse'}
+                                </button>
+                                {registrationHint && (
+                                    <span className="text-[10px] sm:text-xs text-white/40 uppercase tracking-widest">
+                                        {registrationHint}
+                                    </span>
+                                )}
+                            </div>
+                        )
+                    )}
+
+                    {/* Botón de participación / plataforma */}
                     {jam.submissionUrl ? (
                         <a
                             href={jam.submissionUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-sm sm:btn-md lg:btn-lg font-black border-0 shadow-2xl mt-1"
-                            style={{ backgroundColor: accent, color: accentText }}
+                            className={[
+                                'btn btn-sm sm:btn-md lg:btn-lg font-black border-2 shadow-lg mt-1',
+                                isRegistrationOpen ? 'btn-ghost border-white/20 text-white/70 hover:border-white/40' : 'border-0 shadow-2xl',
+                            ].join(' ')}
+                            style={isRegistrationOpen ? {} : { backgroundColor: accent, color: accentText }}
                             aria-label={`Participar en ${jam.name} en ${jam.platform ?? 'Itch.io'} (abre en nueva pestaña)`}
                         >
                             Participar en {jam.platform ?? 'Itch.io'}
                         </a>
                     ) : (
-                        <button
-                            disabled
-                            className="btn btn-sm sm:btn-md lg:btn-lg btn-disabled font-black mt-1"
-                            aria-label="Inscripciones próximamente"
-                        >
-                            Próximamente en {jam.platform ?? 'Itch.io'}
-                        </button>
+                        !isRegistrationOpen && !jam.registrationUrl && (
+                            <button
+                                disabled
+                                className="btn btn-sm sm:btn-md lg:btn-lg btn-disabled font-black mt-1"
+                                aria-label="Inscripciones próximamente"
+                            >
+                                Próximamente en {jam.platform ?? 'Itch.io'}
+                            </button>
+                        )
                     )}
                 </div>
 

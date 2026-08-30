@@ -8,10 +8,14 @@ status: upcoming
 startDate: 2026-10-16T07:00:00-04:00
 endDate: 2026-10-18T00:00:00-04:00
 submissionUrl: "#"
+registrationUrl: "#"
+registrationLabel: "Inscríbete"
+registrationOpenDate: 2026-09-01T00:00:00-04:00
+registrationCloseDate: 2026-10-15T23:59:59-04:00
 platform: "gamejamplus.com"
-heroGradient: "from-[#111827] via-[#312e81] to-[#4c1d95]"
-accentColor: "#6366f1"
-accentTextColor: "#ffffff"
+heroGradient: "from-[#fbb916] via-[#1e96aa] to-[#44276a]"
+accentColor: "#fbb916"
+accentTextColor: "#44276a"
 isCharity: false
 layout:
   - hero
@@ -100,22 +104,19 @@ Para asegurar una experiencia justa y enriquecedora para todos los participantes
 No es una jam cualquiera: es un programa de 6 meses que arranca con 48 horas de prototipado y lleva los mejores juegos hasta un pitch con publishers e inversores en la Final Global.
 
 ### ¿Cómo funciona el proceso de 6 meses?
-FASE 01 · Game Jam (48h) → FASE 02 · Incubación (3 meses) → FASE 03 · Semifinales Continentales → FASE 04 · Aceleración (1 mes) → FASE 05 · Final Global. Solo los mejores prototipos avanzan de fase.
+Es un programa que inicia con la **Game Jam** (48h), luego pasas a la **Incubación** (3 meses), después a las **Semifinales continentales**, luego a la **Aceleración** (1 mes) y finalmente a la **Final global**. Solo los mejores prototipos avanzan de fase.
 
 ### ¿Quién puede participar?
 Cualquier persona apasionada por el desarrollo de videojuegos, sin importar su nivel de experiencia previa. También puedes participar como organizador de sede, voluntario o partner.
 
 ### ¿El evento es presencial u online?
-Es un formato híbrido: sedes físicas aliadas en varias ciudades de Venezuela y participación online vía Discord e itch.io.
+En esta edición será un evento totalmente **online** a través de nuestra plataforma de Discord.
 
 ### ¿Cuánto cuesta participar?
-La participación es completamente gratuita en todas las fases, hasta la Final Global.
+La participación es completamente gratuita en todas las fases, hasta la Final global.
 
 ### ¿Qué pasa con los derechos de mi juego?
 Los juegos pertenecen a sus creadores. La incubación ofrece mentoría y acompañamiento; ningún partner o publisher tiene acceso a los juegos sin el consentimiento del equipo.
-
-### ¿Puedo abrir una sede en mi ciudad?
-Sí. La convocatoria para organizadores locales está abierta: postula tu ciudad y espacio para unirte a la red oficial de sedes.
 
 ### ¿Las fechas de las últimas fases están confirmadas?
 Las fechas de incubación, semifinales, aceleración y Final Global son referenciales y se confirmarán durante el desarrollo de la edición.

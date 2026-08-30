@@ -65,6 +65,10 @@ export interface JamEvent {
     startDate: Date | null;
     endDate: Date | null;
     submissionUrl: string | null;
+    registrationUrl?: string;
+    registrationLabel?: string;
+    registrationOpenDate?: Date | null;
+    registrationCloseDate?: Date | null;
     platform?: string;
     heroGradient?: string;
     heroImage?: string;
