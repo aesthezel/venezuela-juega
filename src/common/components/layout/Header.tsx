@@ -82,8 +82,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
     }, [isMenuOpen]);
 
     const navItems = [
-        { path: '/jam', label: 'Juntos Game Jam', icon: faHandHoldingHeart, tooltip: '¡Dona a los afectados por el terremoto!' },
-        { path: '/game-jams', label: 'Game Jams', icon: faGamepad, badge: null },
+        { path: '/jams', label: 'Game Jams', icon: faGamepad, tooltip: '¡Participa en la próxima!', badge: null },
         { path: '/calendar', label: 'Calendario', icon: faCalendarAlt, badge: null },
         { path: '/charts', label: 'Métricas', icon: faChartBar, badge: null },
         { path: '/about', label: 'Créditos', icon: faInfoCircle, badge: null },

@@ -7,4 +7,6 @@ export { default as JamSchedule } from './JamSchedule';
 export { default as JamFAQ } from './JamFAQ';
 export { default as JamCTA } from './JamCTA';
 export { default as JamDonation } from './JamDonation';
+export { default as JamMarkdownSection } from './JamMarkdownSection';
+export { default as JamSectionRenderer } from './JamSectionRenderer';
 export { default as PromoHeader } from './PromoHeader';

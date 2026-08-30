@@ -4,7 +4,7 @@ import { JSX } from 'preact/jsx-runtime';
 import { Game, GameStatus } from "@/types";
 import CloseIcon from '@/common/components/icons/CloseIcon';
 import { AddGamePageProps } from "@/types";
-import { PageTransition } from '@/components';
+import { PageLayout } from '@/components';
 import { generateSlug } from '@/utils';
 
 const initialGameState: Omit<Game, 'id'> = {
@@ -168,9 +168,8 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
     };
 
     return (
-        <PageTransition>
-            <main className="container mx-auto px-4 py-8">
-            {/* Status Toast */}
+        <PageLayout>
+        {/* Status Toast */}
             {submitStatus === 'success' && (
                 <div className="alert alert-success shadow-lg mb-6 animate-in fade-in slide-in-from-top-4 duration-300">
                     <span>🎉 ¡Juego guardado exitosamente! Tu envío está pendiente de revisión.</span>
@@ -261,8 +260,7 @@ const AddGamePage = ({ onAddNewGame, onNavigateToCatalog }: AddGamePageProps) =>
                     </button>
                 </div>
             </form>
-        </main>
-        </PageTransition>
+        </PageLayout>
     );
 };
 

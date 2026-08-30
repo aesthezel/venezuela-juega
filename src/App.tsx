@@ -102,11 +102,9 @@ const App = () => {
                                     <CatalogPage path="/" {...catalogPageProps} />
                                     <CatalogPage path="/game" {...catalogPageProps} />
                                     <CatalogPage path="/games" {...catalogPageProps} />
-
-                                    <GameJamsPage path="/game-jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
-                                    <Redirect path="/game-jams/" to="/game-jams" />
-                                    <JamListPage path="/jam" />
-                                    <Redirect path="/jam/" to="/jam" />
+                                    <JamListPage path="/jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
+                                    <Redirect path="/game-jams/" to="/jams" />
+                                    <Redirect path="/jams/" to="/jams" />
                                     <JamDetailPage path="/jam/:jamName" />
                                     <JamDetailPage path="/jam/:jamName/:edition" />
                                     <CalendarPage path="/calendar" games={games} onNavigateToCatalog={navigateToCatalog} onEventClick={handleOpenModal} />

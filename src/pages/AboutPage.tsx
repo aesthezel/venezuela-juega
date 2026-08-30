@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faInstagram, faLinkedin, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { BackButton, ContributorCard, PageTransition } from "@/components";
+import { ContributorCard, PageLayout } from "@/components";
 import { AboutPageProps } from "@/types";
 
 // Definimos los datos fuera para mantener el componente limpio
@@ -49,9 +49,7 @@ const Card = ({ children, className = "" }: { children: preact.ComponentChildren
 
 const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
     return (
-        <PageTransition>
-            <main className="container mx-auto px-4 py-8 text-base-content/70">
-                <BackButton onClick={onNavigateToCatalog} className="mb-6" />
+        <PageLayout backButton={{ onClick: onNavigateToCatalog }} className="text-base-content/70">
 
                 {/* Page header */}
                 <header className="mb-10">
@@ -125,9 +123,8 @@ const AboutPage = ({ onNavigateToCatalog }: AboutPageProps) => {
                         </Card>
                     </section>
                 </div>
-            </main>
-        </PageTransition>
-    );
-};
+            </PageLayout>
+        );
+    };
 
 export default AboutPage;

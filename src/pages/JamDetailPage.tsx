@@ -1,16 +1,7 @@
 import { useEffect } from 'preact/hooks';
 import { RoutableProps } from 'preact-router';
 import { getJamBySlug } from '@/features/jam/registry';
-import {
-    JamHero,
-    JamStatBar,
-    JamAbout,
-    JamPrizes,
-    JamDonation,
-    JamSchedule,
-    JamFAQ,
-    JamCTA,
-} from '@/features/jam/components';
+import { JamSectionRenderer } from '@/features/jam/components';
 
 interface JamDetailPageProps extends RoutableProps {
     jamName?: string;
@@ -33,9 +24,8 @@ const JamDetailPage = ({ jamName, edition }: JamDetailPageProps) => {
         }
         const rawDescription = jam.tagline
             ? `${jam.tagline} — ${jam.name} en Venezuela Juega.`
-            : `${jam.name}: participa en nuestra jam benéfica en Venezuela Juega.`;
+            : `${jam.name}: participa en nuestras jams en Venezuela Juega.`;
         meta.content = rawDescription.length > 155 ? rawDescription.slice(0, 152) + '...' : rawDescription;
-
     }, [jam]);
 
     if (!jam) {
@@ -51,17 +41,7 @@ const JamDetailPage = ({ jamName, edition }: JamDetailPageProps) => {
         );
     }
 
-    return (
-        <div className="relative min-h-screen bg-base-100 text-base-content">
-            <JamHero jam={jam} />
-            <JamStatBar jam={jam} />
-            <JamAbout jam={jam} />
-            {jam.isCharity ? <JamDonation jam={jam} /> : <JamPrizes jam={jam} />}
-            <JamSchedule jam={jam} />
-            <JamFAQ jam={jam} />
-            <JamCTA jam={jam} />
-        </div>
-    );
+    return <JamSectionRenderer jam={jam} />;
 };
 
 export default JamDetailPage;

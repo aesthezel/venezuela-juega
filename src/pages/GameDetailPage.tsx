@@ -10,7 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-regular-svg-icons';
 import { faSteam, faItchIo, faPlaystation, faXbox, faGooglePlay, faApple, faMeta } from '@fortawesome/free-brands-svg-icons';
-import { BackButton, LinkIcon, CoverImage, StoreButton, StatusBadge, PageTransition, ScreenshotLightbox } from "@/components";
+import { LinkIcon, CoverImage, StoreButton, StatusBadge, PageLayout, ScreenshotLightbox } from "@/components";
 import { useSpacetimeDB } from '@/spacetimedb/connection';
 import { useGameStats, useMeasure, useTextLayout } from '@/hooks';
 import { getTrailerInfo, generateSlug } from "@/utils";
@@ -133,7 +133,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
 
     if (!gameSlug) {
         return (
-            <main className="container mx-auto px-4 py-8">
+        <PageLayout>
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-white mb-4">Slug de juego inválido</h1>
                     <p className="text-base-content/70 mb-6">No se proporcionó un slug de juego válido.</p>
@@ -145,13 +145,13 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         Volver al catálogo
                     </button>
                 </div>
-            </main>
-        );
+        </PageLayout>
+    );
     }
 
     if (!game) {
         return (
-            <main className="container mx-auto px-4 py-8">
+        <PageLayout>
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-white mb-4">Juego no encontrado</h1>
                     <p className="text-base-content/70 mb-6">El juego que buscas no existe o ha sido eliminado.</p>
@@ -163,18 +163,13 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         Volver al catálogo
                     </button>
                 </div>
-            </main>
-        );
+        </PageLayout>
+    );
     }
 
     return (
         <>
-            <PageTransition>
-                <main className="container mx-auto px-4 py-8 relative z-10">
-
-                    <div className="animate-in fade-in slide-in-from-left-4 duration-500">
-                        <BackButton onClick={handleGoBack} className="mb-10 hover:translate-x-[-4px] transition-transform" />
-                    </div>
+            <PageLayout backButton={{ onClick: handleGoBack, className: 'mb-10 hover:translate-x-[-4px] transition-transform' }} className="relative z-10">
 
                     <div className="card lg:card-side bg-base-200 shadow-2xl border border-base-content/5 mb-12 animate-in zoom-in-95 duration-700">
                         <figure className="lg:w-[60%] relative aspect-video bg-base-300">
@@ -426,8 +421,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                             </div>
                         </div>
                     )}
-                </main>
-            </PageTransition>
+                </PageLayout>
 
             <ScreenshotLightbox
                 isOpen={isLightboxOpen}

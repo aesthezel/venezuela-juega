@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { Game, GameStatus, GameOrigin } from "@/types";
-import { BackButton, PageTransition } from "@/components";
+import { PageLayout } from "@/components";
 import { ChartsPageProps } from "@/types";
 import { Chart, registerables } from 'chart.js/auto';
 import { useSpacetimeDB } from '@/spacetimedb/connection';
@@ -469,9 +469,7 @@ const ChartsPage = ({ games, onNavigateToCatalog, onGameClick }: ChartsPageProps
     }, [games]);
 
     return (
-        <PageTransition>
-            <main className="container mx-auto px-4 py-8 relative z-10">
-                <BackButton onClick={onNavigateToCatalog} className="mb-6" />
+        <PageLayout backButton={{ onClick: onNavigateToCatalog }} className="relative z-10">
 
                 {/* Page Header */}
                 <header className="mb-10">
@@ -557,9 +555,7 @@ const ChartsPage = ({ games, onNavigateToCatalog, onGameClick }: ChartsPageProps
                 </div>
 
 
-            </main>
-
-        </PageTransition>
+            </PageLayout>
     );
 };
 

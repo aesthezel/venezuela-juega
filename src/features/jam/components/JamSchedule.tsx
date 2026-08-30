@@ -1,12 +1,92 @@
 import { h } from 'preact';
+import { useRef, useEffect } from 'preact/hooks';
 import type { JamEvent } from '../types';
 import { renderRichText } from '../renderRichText';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface JamScheduleProps {
     jam: JamEvent;
 }
 
 const JamSchedule = ({ jam }: JamScheduleProps) => {
+    const sectionRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) return;
+
+        const ctx = gsap.context(() => {
+            // Línea vertical central: se dibuja al pasar por la sección
+            const line = el.querySelector<HTMLElement>('[data-schedule-line]');
+            if (line) {
+                gsap.fromTo(
+                    line,
+                    { scaleY: 0 },
+                    {
+                        scaleY: 1,
+                        duration: 1.2,
+                        ease: 'power2.out',
+                        transformOrigin: 'top center',
+                        scrollTrigger: {
+                            trigger: el,
+                            start: 'top 70%',
+                            toggleActions: 'play none none none',
+                        },
+                    }
+                );
+            }
+
+            // Tarjetas de cada fase: entran desde afuera, alternando lado
+            el.querySelectorAll<HTMLElement>('[data-schedule-card]').forEach((card) => {
+                const fromLeft = card.dataset.scheduleFrom === 'left';
+                gsap.fromTo(
+                    card,
+                    { opacity: 0, x: fromLeft ? -220 : 220 },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: 1,
+                        ease: 'power3.out',
+                        immediateRender: true,
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top 85%',
+                            toggleActions: 'play none none none',
+                        },
+                    }
+                );
+            });
+
+            // Iconos centrales: pop con rebote
+            el.querySelectorAll<HTMLElement>('[data-schedule-icon]').forEach((icon) => {
+                gsap.fromTo(
+                    icon,
+                    { opacity: 0, scale: 0.5 },
+                    {
+                        opacity: 1,
+                        scale: 1,
+                        duration: 0.7,
+                        ease: 'back.out(1.7)',
+                        immediateRender: true,
+                        scrollTrigger: {
+                            trigger: icon,
+                            start: 'top 90%',
+                            toggleActions: 'play none none none',
+                        },
+                    }
+                );
+            });
+        }, el);
+
+        return () => ctx.revert();
+    }, []);
+
     if (!jam.phases.length) return null;
 
     const formatDate = (d: Date | null | undefined) => {
@@ -19,7 +99,7 @@ const JamSchedule = ({ jam }: JamScheduleProps) => {
     };
 
     return (
-        <section className="py-24 px-6 bg-base-100">
+        <section ref={sectionRef} className="py-24 px-6 bg-base-100">
             <div className="max-w-5xl mx-auto">
                 <div className="text-center mb-20">
                     <h2 className="text-3xl sm:text-4xl font-black text-center text-white mb-4 uppercase tracking-tight">
@@ -29,7 +109,10 @@ const JamSchedule = ({ jam }: JamScheduleProps) => {
 
                 <div className="relative">
                     {/* Línea vertical central simple */}
-                    <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-base-300 -translate-x-1/2 hidden md:block" />
+                    <div
+                        data-schedule-line
+                        className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-base-300 -translate-x-1/2 hidden md:block"
+                    />
 
                     <div className="flex flex-col gap-12 sm:gap-16">
                         {jam.phases.map((phase, i) => {
@@ -41,12 +124,19 @@ const JamSchedule = ({ jam }: JamScheduleProps) => {
                                     <div className="hidden md:block md:w-5/12" />
 
                                     {/* Icono central minimalista */}
-                                    <div className="relative z-10 flex items-center justify-center w-16 h-16 rounded-full bg-base-200 border-4 border-base-100 shrink-0 mb-6 md:mb-0">
+                                    <div
+                                        data-schedule-icon
+                                        className="relative z-10 flex items-center justify-center w-16 h-16 rounded-full bg-base-200 border-4 border-base-100 shrink-0 mb-6 md:mb-0"
+                                    >
                                         <span className="text-2xl">{phase.icon ?? '🎯'}</span>
                                     </div>
 
                                     {/* Tarjeta de contenido limpia */}
-                                    <div className="w-full md:w-5/12">
+                                    <div
+                                        data-schedule-card
+                                        data-schedule-from={isEven ? 'left' : 'right'}
+                                        className="w-full md:w-5/12"
+                                    >
                                         <div className={`p-8 rounded-3xl bg-base-200/50 border border-base-300 ${isEven ? 'md:text-right' : 'md:text-left'} text-center`}>
                                             <div className="text-base-content/50 font-mono text-sm tracking-wider mb-4">
                                                 {formatDate(phase.startDate)}

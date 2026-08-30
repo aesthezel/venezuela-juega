@@ -11,7 +11,7 @@ import {
     AlphaFilter,
     GameJamPlusSection,
     HeroMosaic,
-    PageTransition
+    PageLayout
 } from '@/components';
 import { ViewMode, GameOrigin } from '@/types';
 import { CatalogPageProps } from "@/types";
@@ -133,8 +133,7 @@ const CatalogPage = ({
                 <HeroMosaic games={games} jamGames={jamGames} onGameClick={onGameClick} onCategorySelect={handleCategorySelect} />
             )}
 
-            <PageTransition>
-                <main id="catalog-content" className="container mx-auto px-4 py-8 relative z-10">
+            <PageLayout id="catalog-content" className="relative z-10">
 
                     <div className="sticky top-0 z-30 bg-base-100/40 backdrop-blur-md py-4 -mx-4 px-4 border-b border-surface-700 mb-8 shadow-2xl transition-all duration-300 will-change-transform">
                         <div className="container mx-auto">
@@ -300,8 +299,7 @@ const CatalogPage = ({
                             )}
                         </section>
                     </div>
-                </main>
-            </PageTransition>
+            </PageLayout>
 
 
         </div>

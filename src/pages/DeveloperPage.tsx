@@ -8,7 +8,7 @@ import {
     faArrowLeft, faGamepad, faCode, faCubes, faCalendarAlt,
     faUsers, faLayerGroup, faGlobe
 } from '@fortawesome/free-solid-svg-icons';
-import { BackButton, GameCard, PageTransition } from '@/components';
+import { GameCard, PageLayout } from '@/components';
 
 /**
  * Generates a deterministic HSL color from a string (developer name).
@@ -44,7 +44,7 @@ const DeveloperPage = ({ devSlug, games, jamGames, onGameClick }: DeveloperPageP
 
     if (!devSlug) {
         return (
-            <main className="container mx-auto px-4 py-8">
+        <PageLayout>
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-white mb-4">Desarrollador inválido</h1>
                     <p className="text-base-content/70 mb-6">No se proporcionó un slug de desarrollador válido.</p>
@@ -53,13 +53,13 @@ const DeveloperPage = ({ devSlug, games, jamGames, onGameClick }: DeveloperPageP
                         Volver
                     </button>
                 </div>
-            </main>
-        );
+        </PageLayout>
+    );
     }
 
     if (!developer) {
         return (
-            <main className="container mx-auto px-4 py-8">
+        <PageLayout>
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-white mb-4">Desarrollador no encontrado</h1>
                     <p className="text-base-content/70 mb-6">El desarrollador que buscas no existe en el catálogo.</p>
@@ -68,8 +68,8 @@ const DeveloperPage = ({ devSlug, games, jamGames, onGameClick }: DeveloperPageP
                         Volver
                     </button>
                 </div>
-            </main>
-        );
+        </PageLayout>
+    );
     }
 
     // ── Main render ─────────────────────────────────────────────────────
@@ -78,12 +78,7 @@ const DeveloperPage = ({ devSlug, games, jamGames, onGameClick }: DeveloperPageP
     const hasJamGames = developer.jamGames.length > 0;
 
     return (
-        <PageTransition>
-            <main className="container mx-auto px-4 py-8 relative z-10">
-
-                <div className="animate-in fade-in slide-in-from-left-4 duration-500">
-                    <BackButton onClick={handleGoBack} className="mb-10 hover:translate-x-[-4px] transition-transform" />
-                </div>
+        <PageLayout backButton={{ onClick: handleGoBack, className: 'mb-10 hover:translate-x-[-4px] transition-transform' }} className="relative z-10">
 
                 {/* ── Hero Header ─────────────────────────────────────────── */}
                 <div
@@ -275,8 +270,7 @@ const DeveloperPage = ({ devSlug, games, jamGames, onGameClick }: DeveloperPageP
                         </div>
                     </section>
                 )}
-            </main>
-        </PageTransition>
+            </PageLayout>
     );
 };
 

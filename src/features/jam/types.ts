@@ -32,6 +32,29 @@ export interface JamObjective {
     icon?: string;
 }
 
+export interface JamCustomSection {
+    id: string;
+    type: 'markdown' | 'custom' | 'embed';
+    title?: string;
+    subtitle?: string;
+    badge?: string;
+    content?: string;
+    embedUrl?: string;
+    theme?: 'base-100' | 'base-200' | 'base-300' | 'neutral' | 'gradient';
+}
+
+export type JamSectionType =
+    | 'hero'
+    | 'countdown'
+    | 'stats'
+    | 'about'
+    | 'prizes'
+    | 'donation'
+    | 'schedule'
+    | 'faq'
+    | 'cta'
+    | string;
+
 export interface JamEvent {
     slug: string;
     edition: string;
@@ -61,4 +84,11 @@ export interface JamEvent {
         submissions?: number;
         countries?: number;
     };
+    /**
+     * Lista ordenada de identificadores de sección para renderizar en la página.
+     * Si no se especifica, se utiliza el orden estándar inteligente.
+     */
+    layout?: JamSectionType[];
+    /** Secciones de contenido personalizado adicionales o directivas libres */
+    customSections?: Record<string, JamCustomSection>;
 }

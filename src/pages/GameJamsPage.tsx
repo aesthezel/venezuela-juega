@@ -3,8 +3,8 @@ import { useMemo, useState, useEffect } from 'preact/hooks';
 import { useMeasure } from '@/hooks/useMeasure';
 import { useTextLayout } from '@/hooks/useTextLayout';
 import { Game } from '@/types';
-import { RoutableProps, route } from 'preact-router';
-import { SearchBar, AlphaFilter, CoverImage, BackButton, PageTransition } from '@/components';
+import { RoutableProps } from 'preact-router';
+import { SearchBar, AlphaFilter, CoverImage, PageLayout } from '@/components';
 import { getTrailerInfo } from '@/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -726,9 +726,7 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
     }, [processedData]);
 
     return (
-        <PageTransition>
-            <main className="container mx-auto px-4 py-8">
-                <BackButton onClick={() => route('/')} className="mb-6" />
+        <PageLayout backButton>
 
                 {/* Page header */}
                 <header className="mb-12">
@@ -837,8 +835,7 @@ const GameJamsPage = ({ games, settings, onGameClick }: GameJamsPageProps) => {
                     </div>
                 )}
 
-            </main>
-        </PageTransition>
+            </PageLayout>
     );
 };
 
