@@ -15,8 +15,25 @@ const Footer = () => {
         // Initial state: always start hidden (translated below the viewport)
         gsap.set(el, { yPercent: 100, opacity: 0 });
 
+        const UP_SCROLL_THRESHOLD = window.innerHeight * 0.75;
+
         let lastScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+        let upScrollAccumulated = 0;
+        let footerVisible = false;
         let ticking = false;
+
+        const setFooter = (visible: boolean) => {
+            if (footerVisible === visible) return;
+            footerVisible = visible;
+            gsap.to(el, {
+                yPercent: visible ? 0 : 100,
+                opacity: visible ? 1 : 0,
+                duration: 0.35,
+                pointerEvents: visible ? 'auto' : 'none',
+                ease: 'power2.out',
+                overwrite: 'auto',
+            });
+        };
 
         const handleScroll = () => {
             const y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
@@ -37,12 +54,17 @@ const Footer = () => {
                     }
 
                     if (isAtTop) {
-                        gsap.to(el, { yPercent: 100, opacity: 0, duration: 0.35, pointerEvents: 'none', ease: 'power2.out', overwrite: 'auto' });
-                    } else if (direction !== 0 || isAtBottom) {
-                        if (direction === 1 && !isAtBottom) {
-                            gsap.to(el, { yPercent: 100, opacity: 0, duration: 0.35, pointerEvents: 'none', ease: 'power2.out', overwrite: 'auto' });
-                        } else if (direction === -1 || isAtBottom) {
-                            gsap.to(el, { yPercent: 0, opacity: 1, duration: 0.35, pointerEvents: 'auto', ease: 'power2.out', overwrite: 'auto' });
+                        upScrollAccumulated = 0;
+                        setFooter(false);
+                    } else if (isAtBottom) {
+                        setFooter(true);
+                    } else if (direction === 1) {
+                        upScrollAccumulated = 0;
+                        setFooter(false);
+                    } else if (direction === -1) {
+                        upScrollAccumulated += lastScrollY - y;
+                        if (upScrollAccumulated >= UP_SCROLL_THRESHOLD) {
+                            setFooter(true);
                         }
                     }
 

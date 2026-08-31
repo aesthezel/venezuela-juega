@@ -50,14 +50,14 @@ No es una competencia: es un encuentro de 48 horas intensivas para aprender en g
 
 ![Foto del evento de la Women Game Jam Venezuela](https://www.womengamejam.org/data/countries/venezuela/images/asset_1787764572682.jpg){width=480, align=center}
 
-### 🏢 Sede presencial: Valencia, Edo. Carabobo
+### 🏢 Espacio presencial: Valencia, Edo. Carabobo
 Te esperamos en las instalaciones de **Tecninet**, un espacio cómodo y equipado para trabajar en equipo, recibir asesoría directa de las mentoras y compartir codo a codo con la comunidad. Quienes asistan en persona contarán con áreas de trabajo adaptadas, buena conexión a internet, zona para descansar, refrigerios durante la jornada, dinámicas grupales y sorpresas exclusivas.
 
 ![En la sede de Tecninet](https://www.womengamejam.org/data/countries/venezuela/images/asset_1787764722690.png){width=480, align=center}
 
 📍 Centro Comercial Mediterranean Plaza – Piso 1, Local L-36, Urbanización Sabana Larga, Valencia. [Ver en Google Maps](https://maps.app.goo.gl/MiT7zDPqjEmqxMu27)
 
-### 💻 Sede virtual: Discord
+### 💻 Espacio virtual: Discord
 A través de nuestro servidor oficial puedes conectarte desde cualquier rincón del país y del mundo. Esta modalidad te permite sumarte a la comunidad global de la WGJ, armar tu grupo a distancia, recibir mentorías en vivo y participar en todas las actividades del evento de forma totalmente remota.
 :::
 
@@ -68,11 +68,13 @@ A través de nuestro servidor oficial puedes conectarte desde cualquier rincón 
 ### 🌷 Organizadora
 Detrás de la organización de la primera sede oficial de la Women Game Jam en Venezuela está **Rosalinda Figueroa** ([@creativacompulsiva](https://www.instagram.com/creativacompulsiva/)), Asesora Creativa y Gestora Cultural, quien lidera la iniciativa con la firme convicción de crear espacios donde la creatividad sea la herramienta principal para conectar, transformar e impulsar a las personas.
 
-### 🤝 Partners estratégicos
+### 🤝 Aliados estratégicos
 Esta primera sede es una realidad gracias al respaldo de partners comprometidos con el crecimiento de la industria en el país:
 - **Jojoto Estudio** se suma como productor principal del evento, aportando su experiencia en formación técnica y profesional para las participantes.
 - **Venezuela Juega** aporta su impulso para conectar, visibilizar y promover el talento criollo.
 - **Tecninet** actúa como partner tecnológico, garantizando la conectividad e infraestructura del evento híbrido.
+
+![Partners estrategicos](https://www.womengamejam.org/data/countries/venezuela/images/asset_1787765173047.png){width=768, align=center}
 :::
 
 :::custom {id: "reglas-clave", title: "Reglas y recomendaciones", badge: "IMPORTANTE", theme: "base-100"}

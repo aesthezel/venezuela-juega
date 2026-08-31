@@ -1,4 +1,5 @@
 import { h } from 'preact';
+import type { CSSProperties } from 'preact';
 import { useRef, useEffect } from 'preact/hooks';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -36,6 +37,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
     const subRef = useRef<HTMLParagraphElement>(null);
     const badgeRef = useRef<HTMLDivElement>(null);
     const ctaRef = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -44,10 +46,20 @@ const JamHero = ({ jam }: JamHeroProps) => {
                 .from(logoRef.current, { scale: 0.85, opacity: 0, duration: 0.7 }, '-=0.2')
                 .from(titleRef.current, { y: 40, opacity: 0, duration: 0.7 }, '-=0.4')
                 .from(subRef.current, { y: 30, opacity: 0, duration: 0.6 }, '-=0.4')
-                .from(ctaRef.current, { y: 20, opacity: 0, duration: 0.5 }, '-=0.3');
+                .from(ctaRef.current, { y: 20, opacity: 0, duration: 0.5 }, '-=0.3')
+                .from(scrollRef.current, { opacity: 0, duration: 0.6, delay: 0.4 });
         }, heroRef);
         return () => ctx.revert();
     }, []);
+
+    const scrollToNextSection = () => {
+        const next = heroRef.current?.nextElementSibling;
+        if (next) {
+            next.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+        }
+    };
 
     const gradient = jam.heroGradient ?? 'from-[#1a0a0d] via-[#0d0a11] to-[#0a0d1a]';
     const accent = jam.accentColor ?? '#e34262';
@@ -68,7 +80,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
                 : null
         : null;
 
-    const heroStyle: h.JSX.CSSProperties = jam.heroImage
+    const heroStyle: CSSProperties = jam.heroImage
         ? {
             backgroundImage: `url(${jam.heroImage})`,
             backgroundSize: 'cover',
@@ -76,7 +88,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
         }
         : {};
 
-    const heroBase = 'relative w-full min-h-[100svh] flex flex-col justify-center items-center overflow-hidden';
+    const heroBase = 'relative w-full min-h-[90svh] flex flex-col justify-center items-center overflow-hidden';
     const heroClass = jam.heroImage
         ? heroBase
         : `${heroBase} bg-gradient-to-br ${gradient}`;
@@ -259,6 +271,36 @@ const JamHero = ({ jam }: JamHeroProps) => {
                 </div>
 
             </div>
+
+            {/* ── Scroll CTA ───────────────────────────── */}
+            <button
+                ref={scrollRef}
+                type="button"
+                onClick={scrollToNextSection}
+                className={[
+                    'absolute bottom-5 sm:bottom-8 left-1/2 -translate-x-1/2 z-10',
+                    'flex flex-col items-center gap-1.5 cursor-pointer',
+                    'text-white/60 hover:text-white transition-colors duration-300',
+                    'group outline-none',
+                ].join(' ')}
+                aria-label="Bajar para ver más contenido"
+            >
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest">
+                    Descubre más
+                </span>
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-6 h-6 animate-bounce group-hover:scale-110 transition-transform duration-300"
+                    aria-hidden="true"
+                >
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </button>
         </div>
     );
 };
