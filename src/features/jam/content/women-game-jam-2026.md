@@ -1,5 +1,5 @@
 ---
-slug: women-game-jam-venezuela-2026
+slug: women-game-jam-2026
 edition: "2026"
 name: "Women Game Jam Venezuela 2026"
 shortName: "WGJ Venezuela 2026"
