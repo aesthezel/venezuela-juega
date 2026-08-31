@@ -57,6 +57,27 @@ Sí, totalmente gratis.
         expect(blocks[2].type).toBe('faq');
     });
 
+    it('should not swallow a block that follows an empty-content block', () => {
+        const body = `
+:::embed {id: "mapa", title: "Ubicación", url: "https://example.com/map"}
+:::
+
+:::custom {id: "organizadores", title: "Quiénes lideran", badge: "EQUIPO"}
+### 🌷 Organizadora
+Detrás de la organización está **Rosalinda Figueroa**.
+:::
+`;
+
+        const blocks = extractDirectiveBlocks(body);
+        expect(blocks).toHaveLength(2);
+        expect(blocks[0].type).toBe('embed');
+        expect(blocks[0].content).toBe('');
+        expect(blocks[0].params.id).toBe('mapa');
+        expect(blocks[1].type).toBe('custom');
+        expect(blocks[1].params.id).toBe('organizadores');
+        expect(blocks[1].content).toContain('Rosalinda Figueroa');
+    });
+
     it('should parse H3 sections and prizes properly', () => {
         const rawPrizes = `### 🏆 Gran Premio
 Emoji: 🥇

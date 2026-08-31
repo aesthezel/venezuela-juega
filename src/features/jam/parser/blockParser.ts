@@ -43,7 +43,7 @@ export function extractDirectiveBlocks(body: string): DirectiveBlock[] {
     const blocks: DirectiveBlock[] = [];
     // Matches :::blockName {optional params on same line} \n content \n :::
     // Note: use [ \t] instead of \s so newlines are not swallowed as params
-    const blockRegex = /:::[ \t]*([a-zA-Z0-9_-]+)(?:[ \t]+([^\r\n]*))?[\r\n]+([\s\S]*?)[\r\n]+:::/g;
+    const blockRegex = /:::[ \t]*([a-zA-Z0-9_-]+)(?:[ \t]+([^\r\n]*))?([\s\S]*?)\r?\n[ \t]*:::[ \t]*(?=[\r\n]|$)/g;
     let match: RegExpExecArray | null;
 
     while ((match = blockRegex.exec(body)) !== null) {

@@ -2,12 +2,36 @@ import type { VNode } from 'preact';
 
 /**
  * Renderiza texto plano con soporte para markdown:
+ *   - imágenes: ![alt](url) o con opciones ![alt](url){width=300, height=200, align=center}
  *   - enlaces:  [texto](https://url)
  *   - negrita:  **texto**
  *   - cursiva:  *texto*
  *   - código:   `texto`
  */
-const TOKEN = /\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*|`([^`]+)`/g;
+const TOKEN = /!\[([^\]]+)\]\(([^)]+)\)(?:\s*\{([^}]*)\})?|\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*|`([^`]+)`/g;
+
+interface ImageAttrs {
+    width?: string;
+    height?: string;
+    align?: string;
+}
+
+function parseImageAttrs(raw: string | undefined): ImageAttrs {
+    const attrs: ImageAttrs = {};
+    if (!raw) return attrs;
+    const attrRegex = /(\w+)\s*[:=]\s*([^\s,}]+)/g;
+    let match: RegExpExecArray | null;
+    while ((match = attrRegex.exec(raw)) !== null) {
+        const key = match[1] as keyof ImageAttrs;
+        const val = match[2].trim();
+        if (key === 'width' || key === 'height') {
+            attrs[key] = /^\d+$/.test(val) ? `${val}px` : val;
+        } else if (key === 'align') {
+            attrs.align = val;
+        }
+    }
+    return attrs;
+}
 
 export function renderRichText(text: string): (string | VNode)[] {
     if (!text) return [];
@@ -18,8 +42,27 @@ export function renderRichText(text: string): (string | VNode)[] {
     while ((match = TOKEN.exec(text)) !== null) {
         if (match.index > last) parts.push(text.slice(last, match.index));
 
-        const [, linkLabel, linkUrl, boldText, italicText, codeText] = match;
-        if (linkUrl) {
+        const [, imgAlt, imgUrl, imgAttrs, linkLabel, linkUrl, boldText, italicText, codeText] = match;
+        if (imgUrl) {
+            const attrs = parseImageAttrs(imgAttrs);
+            const centered = attrs.align === 'center';
+            parts.push(
+                <img
+                    key={`img-${match.index}`}
+                    src={imgUrl}
+                    alt={imgAlt}
+                    loading="lazy"
+                    className={`rounded-2xl border border-base-300 shadow-lg max-w-full h-auto my-4 ${
+                        centered ? 'block mx-auto' : ''
+                    }`}
+                    style={
+                        attrs.width || attrs.height
+                            ? { width: attrs.width, height: attrs.height }
+                            : undefined
+                    }
+                />
+            );
+        } else if (linkUrl) {
             parts.push(
                 <a
                     key={`link-${match.index}`}

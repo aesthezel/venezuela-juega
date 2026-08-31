@@ -726,17 +726,6 @@ const LiveJamCard = ({ jam }: { jam: JamEvent }) => {
                         <span>Explorar Jam</span>
                         <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
                     </button>
-                    {jam.submissionUrl && (
-                        <a
-                            href={jam.submissionUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-ghost bg-base-200/60 border border-surface-700 text-white font-bold gap-2 hover:bg-base-200"
-                        >
-                            <span>Itch.io</span>
-                            <FontAwesomeIcon icon={faExternalLinkAlt} className="text-xs" />
-                        </a>
-                    )}
                 </div>
             </div>
         </div>
