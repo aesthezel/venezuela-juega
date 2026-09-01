@@ -10,8 +10,8 @@ endDate: 2026-10-18T00:00:00-04:00
 submissionUrl: "https://www.womengamejam.org/venezuela"
 platform: "womengamejam.org"
 logo: "https://www.womengamejam.org/data/countries/venezuela/images/nutria.png"
-heroGradient: "from-[#12002f] via-[#2c0d51] to-[#ff007a]"
-accentColor: "#ff007a"
+heroGradient: "from-[#24214d] via-[#4c2c85] to-[#e73a81]"
+accentColor: "#e73a81"
 accentTextColor: "#ffffff"
 isCharity: false
 layout:
@@ -21,7 +21,6 @@ layout:
   - premios
   - sedes
   - ubicacion
-  - organizadores
   - reglas-clave
   - faq
 ---
@@ -46,7 +45,7 @@ No es una competencia: es un encuentro de 48 horas intensivas para aprender en g
 - [🚀 Entrega final y showcase](2026-10-18T18:00:00-04:00 -> 2026-10-18T20:00:00-04:00): Cierre de entregas, muestras de los juegos y reconocimientos de la sede.
 :::
 
-:::custom {id: "sedes", title: "En dónde participamos", subtitle: "Formato híbrido: presencial y virtual", badge: "LOGÍSTICA", theme: "base-100"}
+:::custom {id: "sedes", title: "En dónde participamos", subtitle: "Formato híbrido: presencial y virtual", theme: "base-100"}
 
 ![Foto del evento de la Women Game Jam Venezuela](https://www.womengamejam.org/data/countries/venezuela/images/asset_1787764572682.jpg){width=480, align=center}
 
@@ -61,23 +60,10 @@ Te esperamos en las instalaciones de **Tecninet**, un espacio cómodo y equipado
 A través de nuestro servidor oficial puedes conectarte desde cualquier rincón del país y del mundo. Esta modalidad te permite sumarte a la comunidad global de la WGJ, armar tu grupo a distancia, recibir mentorías en vivo y participar en todas las actividades del evento de forma totalmente remota.
 :::
 
-:::embed {id: "ubicacion", title: "Ubicación de la sede", subtitle: "Mediterranean Plaza – Av. 107, Valencia", badge: "CÓMO LLEGAR", url: "https://www.google.com/maps?q=C.C.+Mediterranean+plaza,+Av.+107,+Valencia+2001,+Carabobo,+Venezuela&output=embed"}
+:::embed {id: "ubicacion", title: "Ubicación de la sede", subtitle: "Mediterranean Plaza – Av. 107, Valencia", url: "https://www.google.com/maps?q=C.C.+Mediterranean+plaza,+Av.+107,+Valencia+2001,+Carabobo,+Venezuela&output=embed"}
 :::
 
-:::custom {id: "organizadores", title: "Quiénes lideran la sede Venezuela", badge: "EQUIPO Y PARTNERS", theme: "base-200"}
-### 🌷 Organizadora
-Detrás de la organización de la primera sede oficial de la Women Game Jam en Venezuela está **Rosalinda Figueroa** ([@creativacompulsiva](https://www.instagram.com/creativacompulsiva/)), Asesora Creativa y Gestora Cultural, quien lidera la iniciativa con la firme convicción de crear espacios donde la creatividad sea la herramienta principal para conectar, transformar e impulsar a las personas.
-
-### 🤝 Aliados estratégicos
-Esta primera sede es una realidad gracias al respaldo de partners comprometidos con el crecimiento de la industria en el país:
-- **Jojoto Estudio** se suma como productor principal del evento, aportando su experiencia en formación técnica y profesional para las participantes.
-- **Venezuela Juega** aporta su impulso para conectar, visibilizar y promover el talento criollo.
-- **Tecninet** actúa como partner tecnológico, garantizando la conectividad e infraestructura del evento híbrido.
-
-![Partners estrategicos](https://www.womengamejam.org/data/countries/venezuela/images/asset_1787765173047.png){width=768, align=center}
-:::
-
-:::custom {id: "reglas-clave", title: "Reglas y recomendaciones", badge: "IMPORTANTE", theme: "base-100"}
+:::custom {id: "reglas-clave", title: "Reglas y recomendaciones", theme: "base-100"}
 Para asegurar una experiencia justa, inclusiva y segura para todas las participantes:
 - **Público**: el evento está diseñado para mujeres (cis y trans) y personas de la comunidad LGBTQ+. Las masculinidades positivas son bienvenidas a colaborar y formar equipo.
 - **Edad**: la participación es exclusiva para personas mayores de 18 años.

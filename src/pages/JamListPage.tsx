@@ -13,7 +13,7 @@ import {
     faTrophy, faMapMarkerAlt, faCalendarAlt, faUsers,
     faChevronDown, faChevronUp, faGamepad, faGlobe,
     faFire, faLocationDot, faLayerGroup, faArrowRight,
-    faExternalLinkAlt, faHeart, faClock, faRocket
+    faClock, faRocket
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faDiscord, faInstagram, faTwitter, faYoutube,
@@ -596,138 +596,157 @@ const EditionSection = ({
 
 // ─── Live In-Progress / Upcoming Jam Card ──────────────────────────────────────
 
+const statusBadgeText: Record<string, string> = {
+    active: 'EN CURSO',
+    open: 'INSCRIPCIONES ABIERTAS',
+    upcoming: 'PRÓXIMAMENTE',
+    voting: 'VOTACIÓN',
+    ended: 'FINALIZADA',
+    draft: 'BORRADOR',
+};
+
+const statusBadgeStyle: Record<string, { bg: string; border: string; text: string; dot: string; live?: boolean }> = {
+    active: { bg: 'bg-emerald-500/20', border: 'border-emerald-500/40', text: 'text-emerald-300', dot: 'bg-emerald-400', live: true },
+    open: { bg: 'bg-emerald-500/20', border: 'border-emerald-500/40', text: 'text-emerald-300', dot: 'bg-emerald-400', live: true },
+    upcoming: { bg: 'bg-[#fe9a00]/20', border: 'border-[#fe9a00]/40', text: 'text-[#ffd230]', dot: 'bg-[#ffd230]' },
+    voting: { bg: 'bg-sky-500/20', border: 'border-sky-500/40', text: 'text-sky-300', dot: 'bg-sky-400' },
+    ended: { bg: 'bg-white/5', border: 'border-white/10', text: 'text-white/50', dot: 'bg-white/40' },
+    draft: { bg: 'bg-white/5', border: 'border-white/10', text: 'text-white/40', dot: 'bg-white/30' },
+};
+
+const getDurationLabel = (start: Date | null, end: Date | null): string | null => {
+    if (!start || !end) return null;
+    const days = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+    if (days <= 0) return null;
+    if (days <= 3.5) return `${Math.max(24, Math.round(days) * 24)} horas`;
+    if (days < 60) return `${Math.round(days)} días`;
+    return `${Math.round(days / 30)} meses`;
+};
+
 const LiveJamCard = ({ jam }: { jam: JamEvent }) => {
     const isLive = jam.status === 'active' || jam.status === 'open';
-    const accent = jam.accentColor || '#f97316';
+    const accent = jam.accentColor || '#e34262';
+    const accentText = jam.accentTextColor || '#ffffff';
+    const badge = statusBadgeStyle[jam.status] ?? statusBadgeStyle.draft;
 
-    const statusBadgeText: Record<string, string> = {
-        active: 'EN CURSO',
-        open: 'INSCRIPCIONES ABIERTAS',
-        upcoming: 'PRÓXIMAMENTE',
-        voting: 'VOTACIÓN',
-        ended: 'FINALIZADA',
-        draft: 'BORRADOR',
-    };
+    const chips: string[] = [];
+    const duration = getDurationLabel(jam.startDate, jam.endDate);
+    if (duration) chips.push(duration);
+    if (jam.stats?.participants) chips.push(`${jam.stats.participants} participantes`);
+    if (jam.isCharity) chips.push('Benéfico');
+
+    const dateLabel = jam.startDate
+        ? new Date(jam.startDate).toLocaleDateString('es-VE', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        })
+        : null;
 
     return (
-        <div
-            className="group relative rounded-3xl overflow-hidden border border-surface-700 bg-base-300/60 backdrop-blur-xl shadow-2xl hover:border-secondary/60 transition-all duration-500 flex flex-col justify-between"
-            style={{
-                boxShadow: `0 10px 30px -10px rgba(0,0,0,0.5)`,
-            }}
-        >
-            {/* Background Cover / Hero Image with blur and opacity */}
-            {jam.heroImage ? (
-                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                    <img
-                        src={jam.heroImage}
-                        alt={jam.name}
-                        className="w-full h-full object-cover filter blur-[3px] opacity-30 group-hover:opacity-45 scale-105 group-hover:scale-110 transition-all duration-700 ease-out"
-                    />
-                    {/* Layered dark gradients for maximum text legibility */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-base-300 via-base-300/80 to-base-300/50" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-base-300/90 via-base-300/40 to-base-300/90" />
-                </div>
-            ) : (
-                <div
-                    className="absolute inset-0 z-0 opacity-25 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none"
-                    style={{
-                        background: jam.heroGradient
-                            ? undefined
-                            : `radial-gradient(ellipse 80% 80% at 50% 20%, ${accent}44 0%, transparent 80%)`,
-                    }}
-                />
-            )}
-
-            {/* Top Accent Strip */}
+        <div className="group relative rounded-3xl overflow-hidden border border-white/10 bg-[#1d1526]/80 backdrop-blur-xl shadow-[0_14px_30px_-8px_rgba(0,0,0,0.5)] hover:border-white/25 hover:-translate-y-0.5 transition-all duration-500 flex flex-col gap-4 p-6">
+            {/* Glow accent */}
             <div
-                className="relative z-10 h-1.5 w-full transition-all duration-300 group-hover:h-2"
+                className="absolute top-0 right-0 pointer-events-none"
+                style={{
+                    width: '100%',
+                    height: 180,
+                    background: `radial-gradient(ellipse 90% 100% at 85% 0%, ${accent}33 0%, transparent 70%)`,
+                }}
             />
 
-            {/* Card Body */}
-            <div className="relative z-10 p-6 sm:p-8 flex-1 flex flex-col justify-between gap-6">
-                <div>
-                    {/* Header Badges & Platform */}
-                    <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
-                        <div className="flex items-center gap-2">
-                            {isLive ? (
-                                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.3)] backdrop-blur-md">
-                                    <span className="relative flex h-2 w-2">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-                                    </span>
-                                    {statusBadgeText[jam.status] || jam.status}
-                                </span>
-                            ) : (
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 backdrop-blur-md">
-                                    <FontAwesomeIcon icon={faClock} className="text-[10px]" />
-                                    {statusBadgeText[jam.status] || jam.status}
-                                </span>
-                            )}
+            {/* Header: chip + status badge */}
+            <div className="relative z-10 flex items-center justify-between gap-3">
+                <div
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 overflow-hidden"
+                    style={{
+                        background: `linear-gradient(135deg, ${accent} 0%, ${accent}66 100%)`,
+                        border: `1px solid ${accent}4d`,
+                    }}
+                >
+                    {jam.logo ? (
+                        <img
+                            src={jam.logo}
+                            alt={`Logo ${jam.name}`}
+                            className="w-8 h-9 object-contain drop-shadow-md"
+                        />
+                    ) : (
+                        <FontAwesomeIcon
+                            icon={isLive ? faRocket : jam.status === 'ended' ? faTrophy : faClock}
+                            className="text-lg"
+                            style={{ color: '#ffffff' }}
+                        />
+                    )}
+                </div>
 
-                            {jam.isCharity && (
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 backdrop-blur-md">
-                                    <FontAwesomeIcon icon={faHeart} className="text-[10px]" />
-                                    Benéfico
-                                </span>
-                            )}
-                        </div>
-
-                        <span className="text-xs font-mono font-bold text-base-content/60 bg-base-300/80 px-2.5 py-1 rounded-lg border border-surface-700 uppercase tracking-wider backdrop-blur-md">
-                            Ed. {jam.edition.toUpperCase()} · {jam.platform ?? 'Itch.io'}
+                <span
+                    className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold backdrop-blur-md border ${badge.bg} ${badge.border} ${badge.text}`}
+                >
+                    {badge.live ? (
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
                         </span>
-                    </div>
-
-                    {/* Optional Jam Logo */}
-                    {jam.logo && (
-                        <div className="mb-3">
-                            <img
-                                src={jam.logo}
-                                alt={`Logo ${jam.name}`}
-                                className="h-10 sm:h-12 w-auto object-contain max-w-[160px] filter drop-shadow-md transition-transform duration-300 group-hover:scale-105"
-                            />
-                        </div>
+                    ) : (
+                        <span className={`h-1.5 w-1.5 rounded-full ${badge.dot}`} />
                     )}
-
-                    {/* Jam Title & Tagline */}
-                    <h3
-                        className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2 group-hover:text-secondary transition-colors cursor-pointer"
-                        onClick={() => route(`/jam/${jam.slug}`)}
-                    >
-                        {jam.name}
-                    </h3>
-                    {jam.tagline && (
-                        <p className="text-base-content/80 text-sm sm:text-base leading-relaxed mb-5 font-normal">
-                            {jam.tagline}
-                        </p>
-                    )}
-
-                    {/* Date / Time Details */}
-                    {jam.startDate && (
-                        <div className="flex items-center gap-2.5 text-xs font-bold text-secondary bg-secondary/15 px-4 py-2.5 rounded-xl border border-secondary/30 w-fit mb-2 backdrop-blur-md shadow-sm">
-                            <FontAwesomeIcon icon={faCalendarAlt} className="text-[12px]" />
-                            <span>
-                                {new Date(jam.startDate).toLocaleDateString('es-VE', {
-                                    day: '2-digit',
-                                    month: 'long',
-                                    year: 'numeric',
-                                })}
-                            </span>
-                        </div>
-                    )}
-                </div>
-
-                {/* Actions */}
-                <div className="pt-5 border-t border-surface-700/80 flex items-center gap-3 flex-wrap">
-                    <button
-                        onClick={() => route(`/jam/${jam.slug}`)}
-                        className="btn btn-secondary font-black flex-1 shadow-lg gap-2"
-                    >
-                        <span>Explorar Jam</span>
-                        <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-                    </button>
-                </div>
+                    {statusBadgeText[jam.status] || jam.status}
+                </span>
             </div>
+
+            {/* Body */}
+            <div className="relative z-10 flex flex-col gap-2.5">
+                <h3
+                    className="text-[22px] font-black text-white leading-[1.2] tracking-tight transition-colors cursor-pointer"
+                    onClick={() => route(`/jam/${jam.slug}`)}
+                >
+                    {jam.name}
+                </h3>
+                {jam.tagline && (
+                    <p className="text-sm text-white/70 leading-relaxed font-normal">
+                        {jam.tagline}
+                    </p>
+                )}
+
+                {chips.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                        {chips.slice(0, 3).map((chip) => (
+                            <span
+                                key={chip}
+                                className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-white/70"
+                            >
+                                {chip}
+                            </span>
+                        ))}
+                    </div>
+                )}
+
+                <span className="font-mono text-[11px] font-bold text-white/35 uppercase tracking-[0.5px] pt-0.5">
+                    Ed. {jam.edition.toUpperCase()} · {(jam.platform ?? 'Itch.io').toUpperCase()}
+                </span>
+            </div>
+
+            <div className="flex-1" />
+
+            {/* Date pill */}
+            {dateLabel && (
+                <div className="relative z-10 flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10">
+                    <FontAwesomeIcon icon={faCalendarAlt} className="text-sm" style={{ color: accent }} />
+                    <span className="text-[13px] font-bold" style={{ color: accent }}>
+                        {dateLabel}
+                    </span>
+                </div>
+            )}
+
+            {/* Button */}
+            <button
+                onClick={() => route(`/jam/${jam.slug}`)}
+                className="relative z-10 flex items-center justify-center gap-2 w-full h-11 rounded-xl font-black text-sm shadow-[0_8px_16px_rgba(0,0,0,0.25)] hover:brightness-110 transition-all duration-200"
+                style={{ backgroundColor: accent, color: accentText }}
+            >
+                <span>Explorar Jam</span>
+                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+            </button>
         </div>
     );
 };
@@ -991,7 +1010,7 @@ const JamListPage = ({ games = [], settings = [], onGameClick }: JamListPageProp
                         </div>
                     </div>
 
-                    <div className="grid gap-8 md:grid-cols-2">
+                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                         {inProgressOrUpcomingJams.map((jam) => (
                             <LiveJamCard key={`${jam.slug}-${jam.edition}`} jam={jam} />
                         ))}
@@ -1018,7 +1037,7 @@ const JamListPage = ({ games = [], settings = [], onGameClick }: JamListPageProp
                         </div>
                     </div>
 
-                    <div className="grid gap-8 md:grid-cols-2">
+                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                         {endedJams.map((jam) => (
                             <LiveJamCard key={`${jam.slug}-${jam.edition}`} jam={jam} />
                         ))}
