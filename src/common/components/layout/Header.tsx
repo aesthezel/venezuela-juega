@@ -1,9 +1,10 @@
-import { useRef, useEffect, useState } from 'preact/hooks';
+import { useRef, useEffect, useState, useMemo } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad, faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
 import { Game } from '@/types';
 import { route } from 'preact-router';
 import { trackNav } from '@/utils/analytics';
+import { getActiveJams } from '@/features/jam';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import UserProfile from './UserProfile';
@@ -81,8 +82,16 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
         return () => { document.body.style.overflow = overflow; };
     }, [isMenuOpen]);
 
+    const activeJamCount = useMemo(
+        () =>
+            getActiveJams().filter((j) =>
+                ['active', 'open', 'upcoming', 'voting'].includes(j.status)
+            ).length,
+        []
+    );
+
     const navItems = [
-        { path: '/jams', label: 'Game Jams', icon: faGamepad, tooltip: '¡Participa en la próxima!', badge: null },
+        { path: '/jams', label: 'Game Jams', icon: faGamepad, tooltip: '¡Participa en la próxima!', badge: activeJamCount > 0 ? activeJamCount : null },
         { path: '/calendar', label: 'Calendario', icon: faCalendarAlt, badge: null },
         { path: '/charts', label: 'Métricas', icon: faChartBar, badge: null },
         { path: '/about', label: 'Créditos', icon: faInfoCircle, badge: null },
@@ -130,7 +139,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                                             <FontAwesomeIcon icon={item.icon} className={`text-xs ${active ? 'text-accent-teal' : 'text-base-content/70 group-hover/nav:text-base-content/70 transition-colors'}`} />
                                             <span>{item.label}</span>
                                             {item.badge && (
-                                                <span className="badge badge-xs badge-secondary font-black text-[9px] px-1.5 py-0.5">
+                                                <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-accent-teal text-surface-900 text-[10px] font-black">
                                                     {item.badge}
                                                 </span>
                                             )}
@@ -138,9 +147,9 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
 
                                         {/* Tooltip Bubble for Home page */}
                                         {item.tooltip && isHome && !isScrolled && (
-                                            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-primary text-white text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xl animate-bounce z-50 pointer-events-none">
+                                            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-accent-teal text-white text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xl animate-bounce z-50 pointer-events-none">
                                                 {item.tooltip}
-                                                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rotate-45" />
+                                                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-accent-teal rotate-45" />
                                             </div>
                                         )}
                                     </div>
@@ -213,7 +222,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                                     </div>
                                     <span className="font-bold flex-1">{item.label}</span>
                                     {item.badge && (
-                                        <span className="badge badge-xs badge-secondary font-black text-[9px]">
+                                        <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-accent-orange text-surface-900 text-[10px] font-black shadow-[0_0_10px_rgba(249,115,22,0.4)]">
                                             {item.badge}
                                         </span>
                                     )}
