@@ -38,6 +38,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
     const badgeRef = useRef<HTMLDivElement>(null);
     const ctaRef = useRef<HTMLDivElement>(null);
     const scrollRef = useRef<HTMLButtonElement>(null);
+    const registerBtnRef = useRef<HTMLAnchorElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -49,8 +50,38 @@ const JamHero = ({ jam }: JamHeroProps) => {
                 .from(ctaRef.current, { y: 20, opacity: 0, duration: 0.5 }, '-=0.3')
                 .from(scrollRef.current, { opacity: 0, duration: 0.6, delay: 0.4 });
         }, heroRef);
-        return () => ctx.revert();
-    }, []);
+
+        const now = new Date();
+        const registrationOpen =
+            Boolean(jam.registrationUrl) &&
+            (!jam.registrationOpenDate || now >= jam.registrationOpenDate) &&
+            (!jam.registrationCloseDate || now <= jam.registrationCloseDate);
+
+        const btn = registerBtnRef.current;
+        let pulse: gsap.core.Tween | undefined;
+        const hoverHandlers: Array<[string, EventListener]> = [];
+
+        if (btn && registrationOpen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const accent = jam.accentColor ?? '#e34262';
+            pulse = gsap.to(btn, {
+                scale: 1.04,
+                boxShadow: `0 0 22px ${accent}99, 0 0 44px ${accent}44`,
+                duration: 1.1,
+                yoyo: true,
+                repeat: -1,
+                ease: 'sine.inOut',
+            });
+            const onEnter = () => pulse?.pause();
+            const onLeave = () => pulse?.resume();
+            hoverHandlers.push(['mouseenter', onEnter], ['mouseleave', onLeave]);
+            hoverHandlers.forEach(([event, handler]) => btn.addEventListener(event, handler));
+        }
+
+        return () => {
+            ctx.revert();
+            hoverHandlers.forEach(([event, handler]) => btn?.removeEventListener(event, handler));
+        };
+    }, [jam]);
 
     const scrollToNextSection = () => {
         const next = heroRef.current?.nextElementSibling;
@@ -211,6 +242,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
                     {jam.registrationUrl && (
                         isRegistrationOpen ? (
                             <a
+                                ref={registerBtnRef}
                                 href={jam.registrationUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"

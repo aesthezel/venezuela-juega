@@ -9,6 +9,10 @@ startDate: 2026-10-16T07:00:00-04:00
 endDate: 2026-10-18T00:00:00-04:00
 submissionUrl: "https://www.womengamejam.org/venezuela"
 platform: "womengamejam.org"
+registrationUrl: "https://www.womengamejam.org/register"
+registrationLabel: "Inscríbete"
+registrationOpenDate: 2026-09-01T00:00:00-04:00
+registrationCloseDate: 2026-10-15T23:59:59-04:00
 logo: "https://www.womengamejam.org/data/countries/venezuela/images/nutria.png"
 heroGradient: "from-[#24214d] via-[#4c2c85] to-[#e73a81]"
 accentColor: "#e73a81"
@@ -58,6 +62,8 @@ Te esperamos en las instalaciones de **Tecninet**, un espacio cómodo y equipado
 
 ### 💻 Espacio virtual: Discord
 A través de nuestro servidor oficial puedes conectarte desde cualquier rincón del país y del mundo. Esta modalidad te permite sumarte a la comunidad global de la WGJ, armar tu grupo a distancia, recibir mentorías en vivo y participar en todas las actividades del evento de forma totalmente remota.
+
+[Unirse al Discord](https://discord.gg/QJdn37EQdB)
 :::
 
 :::embed {id: "ubicacion", title: "Ubicación de la sede", subtitle: "Mediterranean Plaza – Av. 107, Valencia", url: "https://www.google.com/maps?q=C.C.+Mediterranean+plaza,+Av.+107,+Valencia+2001,+Carabobo,+Venezuela&output=embed"}
