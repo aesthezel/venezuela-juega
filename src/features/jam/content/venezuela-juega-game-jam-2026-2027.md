@@ -8,7 +8,7 @@ status: upcoming
 startDate: 2026-10-16T07:00:00-04:00
 endDate: 2026-10-18T00:00:00-04:00
 submissionUrl: "#"
-registrationUrl: "#"
+registrationUrl: "https://forms.gle/SGAByi2HeqXh8k757"
 registrationLabel: "Inscríbete"
 registrationOpenDate: 2026-09-01T00:00:00-04:00
 registrationCloseDate: 2026-10-15T23:59:59-04:00

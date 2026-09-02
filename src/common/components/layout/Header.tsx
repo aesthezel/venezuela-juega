@@ -222,7 +222,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                                     </div>
                                     <span className="font-bold flex-1">{item.label}</span>
                                     {item.badge && (
-                                        <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-accent-orange text-surface-900 text-[10px] font-black shadow-[0_0_10px_rgba(249,115,22,0.4)]">
+                                        <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-accent-teal text-surface-900 text-[10px] font-black">
                                             {item.badge}
                                         </span>
                                     )}
