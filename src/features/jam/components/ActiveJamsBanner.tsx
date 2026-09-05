@@ -159,7 +159,7 @@ const ActiveJamsBanner = () => {
                     <span aria-hidden="true">{jam.shortName ?? jam.name}</span>
                     {jam.registrationCloseDate && (
                         <span className="text-white/50 font-medium text-[10px] uppercase tracking-wide">
-                            cierra {jam.registrationCloseDate.toLocaleDateString('es-VE', { day: 'numeric', month: 'short' })}
+                            Inscribete antes del {jam.registrationCloseDate.toLocaleDateString('es-VE', { day: 'numeric', month: 'short' })}
                         </span>
                     )}
                     <FontAwesomeIcon icon={faArrowRight} className="text-[10px] text-brand-gold" />
