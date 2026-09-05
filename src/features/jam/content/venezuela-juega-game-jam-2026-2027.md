@@ -7,7 +7,6 @@ tagline: "6 meses de competencia: del prototipo de 48 horas al pitch con publish
 status: upcoming
 startDate: 2026-10-16T07:00:00-04:00
 endDate: 2026-10-18T00:00:00-04:00
-submissionUrl: "#"
 registrationUrl: "https://forms.gle/SGAByi2HeqXh8k757"
 registrationLabel: "Inscríbete"
 registrationOpenDate: 2026-09-01T00:00:00-04:00
