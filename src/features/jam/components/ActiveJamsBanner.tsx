@@ -179,7 +179,7 @@ const ActiveJamsBanner = () => {
     return (
         <div
             ref={barRef}
-            className="relative z-30 mt-20 w-full bg-base-200/80 backdrop-blur-md border-b border-surface-700 px-4 py-2.5 overflow-hidden"
+            className="relative z-30 w-full bg-base-200/80 backdrop-blur-md border-b border-surface-700 px-4 py-2.5 overflow-hidden"
         >
             <div
                 className="pointer-events-none absolute inset-0 opacity-60"
