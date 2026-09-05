@@ -2,7 +2,7 @@
 slug: vj-game-jam-plus-2026-2027
 edition: "2026"
 name: "Venezuela Juega GameJam+ 2026-2027"
-shortName: "Venezuela Juega GJ+ 26/27"
+shortName: "Venezuela Juega GameJam+"
 tagline: "6 meses de competencia: del prototipo de 48 horas al pitch con publishers"
 status: upcoming
 startDate: 2026-10-16T07:00:00-04:00

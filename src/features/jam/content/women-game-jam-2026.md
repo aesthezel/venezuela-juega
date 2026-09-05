@@ -2,7 +2,7 @@
 slug: women-game-jam-2026
 edition: "2026"
 name: "Women Game Jam Venezuela 2026"
-shortName: "WGJ Venezuela 2026"
+shortName: "Women Game Jam"
 tagline: "La primera sede oficial de la Women Game Jam en Venezuela: 48 horas para crear, conectar y hacer historia"
 status: upcoming
 startDate: 2026-10-16T07:00:00-04:00
