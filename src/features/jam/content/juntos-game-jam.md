@@ -20,6 +20,7 @@ layout:
   - hero
   - stats
   - about
+  - sponsors
   - donation
   - schedule
   - faq

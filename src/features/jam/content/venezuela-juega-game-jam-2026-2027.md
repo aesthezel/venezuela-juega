@@ -13,12 +13,14 @@ registrationLabel: "Inscríbete"
 registrationOpenDate: 2026-09-01T00:00:00-04:00
 registrationCloseDate: 2026-10-15T23:59:59-04:00
 platform: "gamejamplus.com"
-heroGradient: "from-[#fbb916] via-[#1e96aa] to-[#44276a]"
+logo: "https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_GameJamPlus.png"
+heroImage: "https://venezuela-juega.s3.us-east-005.dream.io/gamejamplus/gj%2B_destaque.png"
 accentColor: "#fbb916"
 accentTextColor: "#44276a"
 isCharity: false
 layout:
   - hero
+  - sponsors
   - about
   - schedule
   - premios
@@ -26,6 +28,12 @@ layout:
   - reglas-clave
   - faq
 ---
+
+:::sponsors
+- Valencia Game Jam | https://venezuela-juega.s3.us-east-005.dream.io/globalgamejam/valencia/logo.png | https://www.instagram.com/gamejamvalencia/ | 148
+- GameJam+ | https://venezuela-juega.s3.us-east-005.dream.io/gamejamplus/gj%2B_white.png | https://gamejamplus.com | 80
+- Maracay Game Jam | https://venezuela-juega.s3.us-east-005.dream.io/globalgamejam/maracay/logo.png | https://www.instagram.com/maracaygamejam/ | 152
+:::
 
 :::about {title: "¿Qué es la Venezuela Juega GameJam+?", subtitle: "Una competencia de 6 meses, no una jam cualquiera"}
 ### 🎮 Prototipa en 48 horas

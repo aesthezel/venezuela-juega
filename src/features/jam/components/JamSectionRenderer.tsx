@@ -3,6 +3,7 @@ import type { JamEvent } from '../types';
 import JamHero from './JamHero';
 import JamStatBar from './JamStatBar';
 import JamAbout from './JamAbout';
+import JamSponsors from './JamSponsors';
 import JamPrizes from './JamPrizes';
 import JamDonation from './JamDonation';
 import JamSchedule from './JamSchedule';
@@ -22,6 +23,7 @@ const JamSectionRenderer = ({ jam }: JamSectionRendererProps) => {
               'hero',
               'stats',
               'about',
+              'sponsors',
               jam.isCharity ? 'donation' : 'prizes',
               'schedule',
               ...Object.keys(jam.customSections || {}),
@@ -50,6 +52,11 @@ const JamSectionRenderer = ({ jam }: JamSectionRendererProps) => {
                     case 'about':
                     case 'objectives':
                         return <JamAbout key={`section-about-${index}`} jam={jam} />;
+
+                    case 'sponsors':
+                        return jam.sponsors.length > 0 ? (
+                            <JamSponsors key={`section-sponsors-${index}`} jam={jam} />
+                        ) : null;
 
                     case 'donation':
                         return jam.isCharity || jam.donationUrl ? (

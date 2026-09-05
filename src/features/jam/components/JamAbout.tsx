@@ -35,46 +35,6 @@ const JamAbout = ({ jam }: JamAboutProps) => {
                         </div>
                     ))}
                 </div>
-
-                {/* Sponsors */}
-                {jam.sponsors.length > 0 && (
-                    <div className="flex flex-col items-center gap-6">
-                        <h3 className="text-xs uppercase tracking-widest text-base-content/40 font-bold">
-                            Sponsors y aliados
-                        </h3>
-                        <div className="flex flex-wrap items-center justify-center gap-8">
-                            {jam.sponsors.map((s) =>
-                                s.url ? (
-                                    <a
-                                        key={s.name}
-                                        href={s.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="opacity-60 hover:opacity-100 transition-opacity"
-                                        aria-label={`Visitar sitio de ${s.name}`}
-                                    >
-                                        <img
-                                            src={s.logo}
-                                            alt={s.name}
-                                            className="h-12 w-auto object-contain"
-                                        />
-                                    </a>
-                                ) : (
-                                    <span
-                                        key={s.name}
-                                        className="opacity-60"
-                                    >
-                                        <img
-                                            src={s.logo}
-                                            alt={s.name}
-                                            className="h-12 w-auto object-contain filter brightness-0 invert"
-                                        />
-                                    </span>
-                                )
-                            )}
-                        </div>
-                    </div>
-                )}
             </div>
         </section>
     );

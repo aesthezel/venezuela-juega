@@ -132,10 +132,16 @@ export function parseSponsors(block: DirectiveBlock): JamSponsor[] {
             const clean = trimmed.replace(/^-\s*/, '');
             const parts = clean.split('|').map((s) => s.trim());
             if (parts.length >= 2) {
+                let height: number | undefined = undefined;
+                if (parts[3]) {
+                    const parsed = Number(parts[3]);
+                    if (!isNaN(parsed) && parsed > 0) height = parsed;
+                }
                 sponsors.push({
                     name: parts[0],
                     logo: parts[1],
                     url: parts[2] || undefined,
+                    height,
                 });
             }
             continue;
@@ -154,6 +160,9 @@ export function parseSponsors(block: DirectiveBlock): JamSponsor[] {
         } else if (trimmed.startsWith('url:') || trimmed.startsWith('Url:')) {
             const url = trimmed.replace(/^[uU]rl:\s*/, '').trim();
             if (currentSponsor) currentSponsor.url = url;
+        } else if (trimmed.startsWith('height:') || trimmed.startsWith('Height:')) {
+            const parsed = Number(trimmed.replace(/^[hH]eight:\s*/, '').trim());
+            if (!isNaN(parsed) && parsed > 0 && currentSponsor) currentSponsor.height = parsed;
         }
     }
 

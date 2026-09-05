@@ -92,7 +92,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
         }
     };
 
-    const gradient = jam.heroGradient ?? 'from-[#1a0a0d] via-[#0d0a11] to-[#0a0d1a]';
+    const gradient = jam.heroGradient;
     const accent = jam.accentColor ?? '#e34262';
     const accentText = jam.accentTextColor ?? '#ffffff';
 
@@ -120,7 +120,7 @@ const JamHero = ({ jam }: JamHeroProps) => {
         : {};
 
     const heroBase = 'relative w-full min-h-[90svh] flex flex-col justify-center items-center overflow-hidden';
-    const heroClass = jam.heroImage
+    const heroClass = jam.heroImage || !jam.heroGradient
         ? heroBase
         : `${heroBase} bg-gradient-to-br ${gradient}`;
 
@@ -134,7 +134,6 @@ const JamHero = ({ jam }: JamHeroProps) => {
                         className="absolute inset-0 z-0"
                         style={{ backgroundColor: 'rgba(10,5,20,0.70)' }}
                     />
-                    <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/20 to-black/90 pointer-events-none" />
                 </>
             ) : (
                 <div

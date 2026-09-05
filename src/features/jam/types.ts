@@ -4,6 +4,7 @@ export interface JamSponsor {
     name: string;
     logo: string;
     url?: string;
+    height?: number;
 }
 
 export interface JamPrize {
@@ -48,6 +49,7 @@ export type JamSectionType =
     | 'countdown'
     | 'stats'
     | 'about'
+    | 'sponsors'
     | 'prizes'
     | 'donation'
     | 'schedule'

@@ -126,6 +126,7 @@ export function parseJamContent(rawContent: string, defaultSlug?: string): JamEv
         'hero',
         'stats',
         'about',
+        'sponsors',
         isCharity ? 'donation' : 'prizes',
         'schedule',
         ...Object.keys(customSections),
