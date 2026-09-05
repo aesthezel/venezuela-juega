@@ -91,7 +91,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
     );
 
     const navItems = [
-        { path: '/jams', label: 'Game Jams', icon: faGamepad, tooltip: '¡Participa en la próxima!', badge: activeJamCount > 0 ? activeJamCount : null },
+        { path: '/jams', label: 'Game Jams', icon: faGamepad, badge: activeJamCount > 0 ? activeJamCount : null },
         { path: '/calendar', label: 'Calendario', icon: faCalendarAlt, badge: null },
         { path: '/charts', label: 'Métricas', icon: faChartBar, badge: null },
         { path: '/about', label: 'Créditos', icon: faInfoCircle, badge: null },

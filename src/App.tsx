@@ -24,6 +24,7 @@ const JamListPage = lazy(() => import('@/pages/JamListPage'));
 const JamDetailPage = lazy(() => import('@/pages/JamDetailPage'));
 
 import { SpacetimeDBProvider } from '@/spacetimedb/SpacetimeDBProvider';
+import ActiveJamsBanner from '@/features/jam/components/ActiveJamsBanner';
 
 const App = () => {
     const { games, loading, error, jamGames, jamSettings } = useGamesData();
@@ -96,6 +97,7 @@ const App = () => {
                     {/* Main Content Layers */}
                     <div className="relative flex flex-col min-h-screen">
                         <Header currentPath={currentPath} games={games} jamGames={jamGames} />
+                        <ActiveJamsBanner />
                         <div className="flex-grow app-content pb-24">
                             <Suspense fallback={<LoadingSpinner />}>
                                 <Router onChange={handleRouteChange}>
