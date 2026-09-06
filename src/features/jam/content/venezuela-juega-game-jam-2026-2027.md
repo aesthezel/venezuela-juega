@@ -3,7 +3,7 @@ slug: vj-game-jam-plus-2026-2027
 edition: "2026"
 name: "Venezuela Juega GameJam+ 2026-2027"
 shortName: "Venezuela Juega GameJam+"
-tagline: "6 meses de competencia: del prototipo de 48 horas al pitch con publishers"
+tagline: "Crea un videojuego en 48 horas y acompáñalo hasta la final global"
 status: upcoming
 startDate: 2026-10-16T07:00:00-04:00
 endDate: 2026-10-18T00:00:00-04:00
@@ -36,7 +36,7 @@ layout:
 
 :::about {title: "¿Qué es la Venezuela Juega GameJam+?", subtitle: "Una competencia de 6 meses, no una jam cualquiera"}
 ### 🎮 Prototipa en 48 horas
-El 16, 17 y 18 de octubre de 2026 creamos prototipos jugables en un fin de semana global de 48 horas, en sedes físicas aliadas y online vía Discord e itch.io.
+El 16, 17 y 18 de octubre de 2026 creamos prototipos jugables en un fin de semana global de 48 horas junto a un pitch de tu videojuego, en sedes físicas aliadas y online vía Discord y la plataforma de la GameJam+
 
 ### 🚀 Incubación de 3 meses
 Los mejores prototipos avanzan a un programa de incubación con acompañamiento técnico, sesiones con publishers y refino del prototipo hasta convertirlo en producto.
@@ -47,12 +47,13 @@ Cuatro regiones disputan su propia semifinal: África, Brasil/LATAM, Asia/Ocean�
 ### 💼 Aceleración de negocio
 Bootcamp de una semana enfocado en negocios: pitch deck, modelo de ingresos, estrategia de lanzamiento y conexión directa con inversores.
 
-### 🏆 Final Global
+### 🏆 Final global
 La competencia culmina en una final presencial con más de 15 premios, contratos con publishers y networking internacional.
 :::
 
 :::schedule {title: "JORNADA DE 6 MESES — PIPELINE COMPLETO"}
 - [🎮 Game Jam](2026-10-16T07:00:00-04:00 -> 2026-10-18T00:00:00-04:00): 48 horas para crear un prototipo jugable en equipos globales y en los hubs locales de Venezuela.
+- [📢 Creación de pitch](2026-10-16T07:00:00-04:00 -> 2026-10-20T00:00:00-04:00): Acompañando a tu videojuego hecho en 48 horas
 - [🚀 Incubación](2026-11-01T00:00:00-04:00 -> 2027-01-31T23:59:59-04:00): 3 meses de acompañamiento técnico, contenidos con publishers y refino del prototipo en producto.
 - [🌎 Semifinales continentales](2027-02-15T00:00:00-04:00 -> 2027-03-15T23:59:59-04:00): 4 eventos regionales (África, Brasil/LATAM, Asia/Oceanía, Europa/América del Norte) donde se definen los finalistas.
 - [💼 Aceleración](2027-03-22T00:00:00-04:00 -> 2027-04-18T23:59:59-04:00): 1 mes de bootcamp de negocios: pitch deck, modelo de ingresos y conexiones con inversores.
@@ -60,33 +61,33 @@ La competencia culmina en una final presencial con más de 15 premios, contratos
 :::
 
 :::prizes
-### 👑 Mejor Juego General
+### 👑 Mejor juego general
 Emoji: 👑
 Color: warning
 Descripción: El juego más completo, divertido y cohesionado de toda la edición. Obtiene cupo directo en la fase de incubación.
 
-### 🎨 Excelencia Artística
+### 🎨 Excelencia artística
 Emoji: 🎨
 Color: secondary
 Descripción: Reconocimiento a la mejor dirección de arte, animación y estilo visual.
 
-### 🎵 Mejor Banda Sonora y Audio
+### 🎵 Mejor banda sonora y audio
 Emoji: 🎧
 Color: info
 Descripción: Mejor diseño de sonido, música original e inmersión acústica.
 
-### 💡 Innovación y Mecánicas
+### 💡 Innovación y mecánicas
 Emoji: ⚡
 Color: accent
 Descripción: Las mecánicas de juego más ingeniosas y sorprendentes.
 
-### 🏆 Final Global
+### 🏆 Final global
 Emoji: 🏆
 Color: success
 Descripción: Los proyectos finalistas compiten en la Final Global por más de 15 premios, contratos con publishers y networking internacional.
 :::
 
-:::custom {id: "sedes", title: "En dónde participaras", subtitle: "Que está detrás de un evento", badge: "LOGÍSTICA", theme: "base-100"}
+:::custom {id: "sedes", title: "Dónde participaras", subtitle: "Que está detrás de un evento", badge: "LOGÍSTICA", theme: "base-100"}
 ### 🏢 ¿Qué es una sede?
 
 Es una ubicación en tu región en este caso Venezuela, el cuál puede ser un punto de encuentro físico o virtual donde los jammers se reúnen durante las horas planificadas para la jam, pueden ser: espacios universitarios, coworkings, estudios, espacios culturales aliados, o redes como Discord.
