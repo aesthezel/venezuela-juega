@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad, faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad, faHandHoldingHeart, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { Game } from '@/types';
 import { route } from 'preact-router';
 import { trackNav } from '@/utils/analytics';
@@ -15,11 +15,13 @@ interface HeaderProps {
     currentPath?: string;
     games?: Game[];
     jamGames?: Game[];
+    isRefreshing?: boolean;
+    onRefresh?: (force?: boolean) => void;
 }
 
 const LOGO_URL = "https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png";
 
-const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) => {
+const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = false, onRefresh }: HeaderProps) => {
     const isVisibleRef = useRef(true);
     const headerRef = useRef<HTMLElement | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -157,7 +159,23 @@ const Header = ({ currentPath = '/', games = [], jamGames = [] }: HeaderProps) =
                             })}
                         </nav>
 
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 md:gap-3">
+                            {onRefresh && (
+                                <button
+                                    onClick={() => onRefresh(true)}
+                                    disabled={isRefreshing}
+                                    className={`p-2 md:p-2.5 text-base-content/70 hover:text-white transition-all rounded-xl hover:bg-white/5 border border-surface-700 flex items-center justify-center ${isRefreshing ? 'opacity-70 pointer-events-none' : 'cursor-pointer'
+                                        }`}
+                                    title={isRefreshing ? 'Actualizando datos...' : 'Actualizar catálogo'}
+                                    aria-label="Actualizar catálogo"
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faRotateRight}
+                                        className={`text-sm ${isRefreshing ? 'animate-spin text-accent-teal' : ''}`}
+                                    />
+                                </button>
+                            )}
+
                             <UserProfile games={games} jamGames={jamGames} />
 
                             {/* Mobile Hamburger Trigger */}

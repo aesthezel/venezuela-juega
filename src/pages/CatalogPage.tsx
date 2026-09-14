@@ -16,7 +16,7 @@ import {
 import { ViewMode, GameOrigin } from '@/types';
 import { CatalogPageProps } from "@/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faTimes, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import type { CategoryPreset } from '@/features/catalog/components/hero';
 
 const CatalogPage = ({
@@ -37,7 +37,9 @@ const CatalogPage = ({
     yearRange,
     onYearRangeChange,
     jamGames,
-    isLoading
+    isLoading,
+    isRefreshing,
+    onRefresh,
 }: CatalogPageProps) => {
 
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -135,170 +137,187 @@ const CatalogPage = ({
 
             <PageLayout id="catalog-content" className="relative z-10">
 
-                    <div className="sticky top-0 z-30 bg-base-100/40 backdrop-blur-md py-4 -mx-4 px-4 border-b border-surface-700 mb-8 shadow-2xl transition-all duration-300 will-change-transform">
-                        <div className="container mx-auto">
-                            <div className="flex gap-2 md:gap-4 items-center justify-between">
-                                <div className="flex-1 relative group">
-                                    <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-teal-dark to-accent-mauve-deep rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
-                                    <div className="relative">
-                                        <SearchBar searchTerm={searchTerm} onSearchChange={onSearchChange} games={games} />
-                                    </div>
+                <div className="sticky top-0 z-30 bg-base-100/40 backdrop-blur-md py-4 -mx-4 px-4 border-b border-surface-700 mb-8 shadow-2xl transition-all duration-300 will-change-transform">
+                    <div className="container mx-auto">
+                        <div className="flex gap-2 md:gap-4 items-center justify-between">
+                            <div className="flex-1 relative group">
+                                <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-teal-dark to-accent-mauve-deep rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+                                <div className="relative">
+                                    <SearchBar searchTerm={searchTerm} onSearchChange={onSearchChange} games={games} />
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
+                                <button
+                                    onClick={() => (document.getElementById('mobile_filter_modal') as HTMLDialogElement)?.showModal()}
+                                    className="lg:hidden btn btn-square btn-neutral border-surface-700 shadow-lg relative"
+                                    title="Filtros"
+                                >
+                                    <FontAwesomeIcon icon={faFilter} />
+                                    {activeFilterCount > 0 && (
+                                        <span className="badge badge-primary badge-xs absolute -top-1 -right-1 animate-pulse border-none w-4 h-4 p-0">
+                                            {activeFilterCount}
+                                        </span>
+                                    )}
+                                </button>
+
+                                <div className="hidden md:block">
+                                    <GameCounter filteredCount={alpha ? alphaFilteredGames.length : filteredGames.length} totalCount={games.length} />
                                 </div>
 
-                                <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
+                                {onRefresh && (
                                     <button
-                                        onClick={() => (document.getElementById('mobile_filter_modal') as HTMLDialogElement)?.showModal()}
-                                        className="lg:hidden btn btn-square btn-neutral border-surface-700 shadow-lg relative"
-                                        title="Filtros"
+                                        onClick={() => onRefresh(true)}
+                                        disabled={isRefreshing}
+                                        className={`btn btn-square btn-neutral border-surface-700 shadow-lg text-base-content/70 hover:text-white hover:border-accent-teal/50 transition-all ${isRefreshing ? 'opacity-70 pointer-events-none' : 'cursor-pointer'
+                                            }`}
+                                        title={isRefreshing ? 'Actualizando datos...' : 'Actualizar catálogo'}
+                                        aria-label="Actualizar catálogo de videojuegos"
                                     >
-                                        <FontAwesomeIcon icon={faFilter} />
-                                        {activeFilterCount > 0 && (
-                                            <span className="badge badge-primary badge-xs absolute -top-1 -right-1 animate-pulse border-none w-4 h-4 p-0">
-                                                {activeFilterCount}
-                                            </span>
-                                        )}
+                                        <FontAwesomeIcon
+                                            icon={faRotateRight}
+                                            className={`text-sm ${isRefreshing ? 'animate-spin text-accent-teal' : ''}`}
+                                        />
                                     </button>
+                                )}
 
-                                    <div className="hidden md:block">
-                                        <GameCounter filteredCount={alpha ? alphaFilteredGames.length : filteredGames.length} totalCount={games.length} />
-                                    </div>
-                                    <ViewModeToggle mode={viewMode} onChange={setViewMode} />
-                                </div>
+                                <ViewModeToggle mode={viewMode} onChange={setViewMode} />
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className="mb-12 space-y-12">
+                <div className="mb-12 space-y-12">
+                    {isLoading ? (
+                        <div className="flex gap-4 overflow-hidden py-4">
+                            {[1, 2, 3, 4].map(i => (
+                                <div key={i} className="skeleton h-[350px] w-80 shrink-0 opacity-50"></div>
+                            ))}
+                        </div>
+                    ) : (
+                        <Highlights games={games} onGameClick={onGameClick} />
+                    )}
+                    {/*<GameJamPlusSection games={games} onGameClick={onGameClick}/>*/}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
+
+                    <aside className="hidden lg:block lg:col-span-3">
+                        <div className="card bg-base-200/50 shadow-xl border border-surface-700 p-6 sticky top-52 transition-all z-10 will-change-transform">
+
+                            {isLoading ? (
+                                <div className="space-y-6">
+                                    <div className="skeleton h-8 w-1/2 opacity-70"></div>
+                                    <div className="space-y-3">
+                                        <div className="skeleton h-4 w-full opacity-50"></div>
+                                        <div className="skeleton h-4 w-5/6 opacity-50"></div>
+                                        <div className="skeleton h-4 w-4/6 opacity-50"></div>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <div className="skeleton h-4 w-full opacity-50"></div>
+                                        <div className="skeleton h-4 w-3/4 opacity-50"></div>
+                                    </div>
+                                    <div className="skeleton h-10 w-full mt-6 opacity-70"></div>
+                                    <div className="skeleton h-10 w-full opacity-70"></div>
+                                </div>
+                            ) : (
+                                <FilterPanel
+                                    genres={allGenres}
+                                    platforms={allPlatforms}
+                                    stores={allStores}
+                                    activeFilters={activeFilters}
+                                    onFilterChange={onFilterChange}
+                                    onClearCategory={onClearCategory}
+                                    onClearAll={onClearAllFilters}
+                                    clearAllEnabled={hasActiveFilters}
+                                    minYear={minYear}
+                                    maxYear={maxYear}
+                                    yearRange={yearRange}
+                                    onYearRangeChange={onYearRangeChange}
+                                    alpha={alpha}
+                                    onAlphaChange={setAlpha}
+                                />
+                            )}
+                        </div>
+                    </aside>
+
+                    <dialog id="mobile_filter_modal" className="modal modal-bottom lg:hidden">
+                        <div className="modal-box p-0 max-h-[85vh] flex flex-col bg-base-100 border border-surface-700 rounded-t-3xl shadow-2xl">
+                            <div className="p-6 pb-4 flex items-center justify-between border-b border-surface-700 bg-base-100 sticky top-0 z-10">
+                                <h2 className="text-xl font-bold text-base-content flex items-center gap-2">
+                                    <FontAwesomeIcon icon={faFilter} className="text-primary" />
+                                    Filtros
+                                </h2>
+                                <form method="dialog">
+                                    <button className="btn btn-circle btn-ghost btn-sm">
+                                        <FontAwesomeIcon icon={faTimes} size="lg" />
+                                    </button>
+                                </form>
+                            </div>
+                            <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
+                                <FilterPanel
+                                    genres={allGenres}
+                                    platforms={allPlatforms}
+                                    stores={allStores}
+                                    activeFilters={activeFilters}
+                                    onFilterChange={onFilterChange}
+                                    onClearCategory={onClearCategory}
+                                    onClearAll={onClearAllFilters}
+                                    clearAllEnabled={hasActiveFilters}
+                                    minYear={minYear}
+                                    maxYear={maxYear}
+                                    yearRange={yearRange}
+                                    onYearRangeChange={onYearRangeChange}
+                                    alpha={alpha}
+                                    onAlphaChange={setAlpha}
+                                />
+                            </div>
+                            <div className="p-6 pt-4 border-t border-surface-700 bg-base-100 sticky bottom-0">
+                                <form method="dialog">
+                                    <button className="btn btn-primary w-full shadow-lg shadow-primary/50">
+                                        Ver {alphaFilteredGames.length} juegos
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <form method="dialog" className="modal-backdrop backdrop-blur-sm bg-base-300/80">
+                            <button>close</button>
+                        </form>
+                    </dialog>
+
+                    <section className="lg:col-span-9 min-h-[50vh]">
                         {isLoading ? (
-                            <div className="flex gap-4 overflow-hidden py-4">
-                                {[1, 2, 3, 4].map(i => (
-                                    <div key={i} className="skeleton h-[350px] w-80 shrink-0 opacity-50"></div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                                {[1, 2, 3, 4, 5, 6].map(i => (
+                                    <div key={i} className="flex flex-col gap-4 mb-4">
+                                        <div className="skeleton h-48 w-full opacity-70"></div>
+                                        <div className="skeleton h-6 w-3/4 opacity-50"></div>
+                                        <div className="skeleton h-4 w-1/2 opacity-50"></div>
+                                        <div className="skeleton h-4 w-full opacity-50"></div>
+                                        <div className="skeleton h-4 w-5/6 opacity-50"></div>
+                                    </div>
                                 ))}
                             </div>
                         ) : (
-                            <Highlights games={games} onGameClick={onGameClick} />
-                        )}
-                        {/*<GameJamPlusSection games={games} onGameClick={onGameClick}/>*/}
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
-
-                        <aside className="hidden lg:block lg:col-span-3">
-                            <div className="card bg-base-200/50 shadow-xl border border-surface-700 p-6 sticky top-52 transition-all z-10 will-change-transform">
-
-                                {isLoading ? (
-                                    <div className="space-y-6">
-                                        <div className="skeleton h-8 w-1/2 opacity-70"></div>
-                                        <div className="space-y-3">
-                                            <div className="skeleton h-4 w-full opacity-50"></div>
-                                            <div className="skeleton h-4 w-5/6 opacity-50"></div>
-                                            <div className="skeleton h-4 w-4/6 opacity-50"></div>
-                                        </div>
-                                        <div className="space-y-3">
-                                            <div className="skeleton h-4 w-full opacity-50"></div>
-                                            <div className="skeleton h-4 w-3/4 opacity-50"></div>
-                                        </div>
-                                        <div className="skeleton h-10 w-full mt-6 opacity-70"></div>
-                                        <div className="skeleton h-10 w-full opacity-70"></div>
-                                    </div>
-                                ) : (
-                                    <FilterPanel
-                                        genres={allGenres}
-                                        platforms={allPlatforms}
-                                        stores={allStores}
-                                        activeFilters={activeFilters}
-                                        onFilterChange={onFilterChange}
-                                        onClearCategory={onClearCategory}
-                                        onClearAll={onClearAllFilters}
-                                        clearAllEnabled={hasActiveFilters}
-                                        minYear={minYear}
-                                        maxYear={maxYear}
-                                        yearRange={yearRange}
-                                        onYearRangeChange={onYearRangeChange}
-                                        alpha={alpha}
-                                        onAlphaChange={setAlpha}
-                                    />
-                                )}
-                            </div>
-                        </aside>
-
-                        <dialog id="mobile_filter_modal" className="modal modal-bottom lg:hidden">
-                            <div className="modal-box p-0 max-h-[85vh] flex flex-col bg-base-100 border border-surface-700 rounded-t-3xl shadow-2xl">
-                                <div className="p-6 pb-4 flex items-center justify-between border-b border-surface-700 bg-base-100 sticky top-0 z-10">
-                                    <h2 className="text-xl font-bold text-base-content flex items-center gap-2">
-                                        <FontAwesomeIcon icon={faFilter} className="text-primary" />
-                                        Filtros
-                                    </h2>
-                                    <form method="dialog">
-                                        <button className="btn btn-circle btn-ghost btn-sm">
-                                            <FontAwesomeIcon icon={faTimes} size="lg" />
-                                        </button>
-                                    </form>
-                                </div>
-                                <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
-                                    <FilterPanel
-                                        genres={allGenres}
-                                        platforms={allPlatforms}
-                                        stores={allStores}
-                                        activeFilters={activeFilters}
-                                        onFilterChange={onFilterChange}
-                                        onClearCategory={onClearCategory}
-                                        onClearAll={onClearAllFilters}
-                                        clearAllEnabled={hasActiveFilters}
-                                        minYear={minYear}
-                                        maxYear={maxYear}
-                                        yearRange={yearRange}
-                                        onYearRangeChange={onYearRangeChange}
-                                        alpha={alpha}
-                                        onAlphaChange={setAlpha}
-                                    />
-                                </div>
-                                <div className="p-6 pt-4 border-t border-surface-700 bg-base-100 sticky bottom-0">
-                                    <form method="dialog">
-                                        <button className="btn btn-primary w-full shadow-lg shadow-primary/50">
-                                            Ver {alphaFilteredGames.length} juegos
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                            <form method="dialog" className="modal-backdrop backdrop-blur-sm bg-base-300/80">
-                                <button>close</button>
-                            </form>
-                        </dialog>
-
-                        <section className="lg:col-span-9 min-h-[50vh]">
-                            {isLoading ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                                    {[1, 2, 3, 4, 5, 6].map(i => (
-                                        <div key={i} className="flex flex-col gap-4 mb-4">
-                                            <div className="skeleton h-48 w-full opacity-70"></div>
-                                            <div className="skeleton h-6 w-3/4 opacity-50"></div>
-                                            <div className="skeleton h-4 w-1/2 opacity-50"></div>
-                                            <div className="skeleton h-4 w-full opacity-50"></div>
-                                            <div className="skeleton h-4 w-5/6 opacity-50"></div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <>
-                                    <div className="lg:hidden mb-6 flex justify-between items-center text-sm bg-base-200/50 p-3 rounded-lg border border-surface-700">
-                                        <span className="text-base-content/70 font-medium">{alphaFilteredGames.length} juegos encontrados</span>
-                                        {activeFilterCount > 0 && (
-                                            <span className="badge badge-primary font-bold">
-                                                {activeFilterCount} filtros activos
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {viewMode === 'grid' ? (
-                                        <GameGrid games={alphaFilteredGames} onGameClick={onGameClick} />
-                                    ) : (
-                                        <GameList games={alphaFilteredGames} onGameClick={onGameClick} />
+                            <>
+                                <div className="lg:hidden mb-6 flex justify-between items-center text-sm bg-base-200/50 p-3 rounded-lg border border-surface-700">
+                                    <span className="text-base-content/70 font-medium">{alphaFilteredGames.length} juegos encontrados</span>
+                                    {activeFilterCount > 0 && (
+                                        <span className="badge badge-primary font-bold">
+                                            {activeFilterCount} filtros activos
+                                        </span>
                                     )}
-                                </>
-                            )}
-                        </section>
-                    </div>
+                                </div>
+
+                                {viewMode === 'grid' ? (
+                                    <GameGrid games={alphaFilteredGames} onGameClick={onGameClick} />
+                                ) : (
+                                    <GameList games={alphaFilteredGames} onGameClick={onGameClick} />
+                                )}
+                            </>
+                        )}
+                    </section>
+                </div>
             </PageLayout>
 
 

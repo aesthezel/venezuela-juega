@@ -111,6 +111,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Rediseño de fondos decorativos del sitio web con grilla técnica estética de DaisyUI
 - [x] Paginas de jams en especifico, sistema reutilizable
 - [x] Mejorar el sistema de paginas de jams y otras secciones con un sistema mejorado de CMS
+- [x] Mejoras de cache
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar

@@ -27,7 +27,7 @@ import { SpacetimeDBProvider } from '@/spacetimedb/SpacetimeDBProvider';
 import ActiveJamsBanner from '@/features/jam/components/ActiveJamsBanner';
 
 const App = () => {
-    const { games, loading, error, jamGames, jamSettings } = useGamesData();
+    const { games, loading, error, jamGames, jamSettings, isRefreshing, refreshData } = useGamesData();
 
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -82,6 +82,8 @@ const App = () => {
         yearRange: filterState.yearRange,
         onYearRangeChange: handleYearRangeChange,
         isLoading: loading,
+        isRefreshing,
+        onRefresh: refreshData,
     };
 
     if (loading && !['/', '/game', '/games'].includes(currentPath)) return <LoadingSpinner />;
@@ -96,7 +98,13 @@ const App = () => {
 
                     {/* Main Content Layers */}
                     <div className="relative flex flex-col min-h-screen">
-                        <Header currentPath={currentPath} games={games} jamGames={jamGames} />
+                        <Header
+                            currentPath={currentPath}
+                            games={games}
+                            jamGames={jamGames}
+                            isRefreshing={isRefreshing}
+                            onRefresh={refreshData}
+                        />
                         <div className="flex-grow app-content pb-24">
                             <ActiveJamsBanner />
                             <Suspense fallback={<LoadingSpinner />}>
