@@ -101,7 +101,7 @@ En esta ocasión puedes participar 100% online vía [Discord](https://discord.co
 Para asegurar una experiencia justa y enriquecedora para todos los participantes:
 - **Originalidad**: Todo el código y los assets principales deben ser creados durante las 48 horas del jam.
 - **Motores libres**: Puedes usar cualquier motor o framework (Godot, Unity, Unreal, Phaser, Raylib, Bevy, etc.).
-- **Equipos**: Puedes participar individualmente o en equipos de hasta 5 integrantes, incluso desde distintas sedes o ciudades.
+- **Equipos**: Puedes participar individualmente o en equipos de sin límite de integrantes, incluso desde distintas sedes o ciudades.
 - **Derechos**: Los juegos pertenecen a sus creadores. Al avanzar a la incubación se firman los términos del programa para acompañamiento y mentoría.
 - **Evaluación**: Jurados locales y globales evalúan por fase: jugabilidad en el prototipo, progreso en la incubación y pitch en la aceleración.
 - **Respeto**: Se aplicará el código de conducta de la comunidad de Venezuela Juega en todo momento.
