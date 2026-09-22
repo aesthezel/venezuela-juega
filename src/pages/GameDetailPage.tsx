@@ -119,6 +119,128 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
         }
     }, [gameSlug, games]);
 
+    // ─── Sync SEO metadata dynamically for SPA navigation ────────────────────
+    useEffect(() => {
+        if (!game) return;
+
+        const SITE_ORIGIN = 'https://venezuelajuega.com';
+        const FALLBACK_IMAGE = 'https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_LogoColor.png';
+
+        const canonicalUrl = `${SITE_ORIGIN}/game/${game.slug}`;
+        const imageUrl = game.imageCover || game.imageHero || game.imageUrl || FALLBACK_IMAGE;
+        const rawDescription = (game.description || '').trim();
+        const description = rawDescription.length > 155
+            ? rawDescription.substring(0, 152) + '...'
+            : rawDescription || `${game.title} — Videojuego venezolano en Venezuela Juega.`;
+        const pageTitle = `${game.title} — Venezuela Juega`;
+
+        document.title = pageTitle;
+
+        const setMetaTag = (selector: string, attr: string, value: string, create?: () => HTMLElement) => {
+            let el = document.querySelector(selector);
+            if (!el && create) { el = create(); document.head.appendChild(el); }
+            if (el) el.setAttribute(attr, value);
+        };
+
+        setMetaTag('meta[name="description"]', 'content', description, () => {
+            const m = document.createElement('meta'); m.name = 'description'; return m;
+        });
+        setMetaTag('link[rel="canonical"]', 'href', canonicalUrl, () => {
+            const l = document.createElement('link'); l.rel = 'canonical'; return l;
+        });
+        setMetaTag('meta[property="og:title"]', 'content', pageTitle, () => {
+            const m = document.createElement('meta'); m.setAttribute('property', 'og:title'); return m;
+        });
+        setMetaTag('meta[property="og:description"]', 'content', description, () => {
+            const m = document.createElement('meta'); m.setAttribute('property', 'og:description'); return m;
+        });
+        setMetaTag('meta[property="og:image"]', 'content', imageUrl, () => {
+            const m = document.createElement('meta'); m.setAttribute('property', 'og:image'); return m;
+        });
+        setMetaTag('meta[property="og:url"]', 'content', canonicalUrl, () => {
+            const m = document.createElement('meta'); m.setAttribute('property', 'og:url'); return m;
+        });
+        setMetaTag('meta[property="og:type"]', 'content', 'website', () => {
+            const m = document.createElement('meta'); m.setAttribute('property', 'og:type'); return m;
+        });
+        setMetaTag('meta[name="twitter:card"]', 'content', 'summary_large_image', () => {
+            const m = document.createElement('meta'); m.name = 'twitter:card'; return m;
+        });
+        setMetaTag('meta[name="twitter:title"]', 'content', pageTitle, () => {
+            const m = document.createElement('meta'); m.name = 'twitter:title'; return m;
+        });
+        setMetaTag('meta[name="twitter:description"]', 'content', description, () => {
+            const m = document.createElement('meta'); m.name = 'twitter:description'; return m;
+        });
+        setMetaTag('meta[name="twitter:image"]', 'content', imageUrl, () => {
+            const m = document.createElement('meta'); m.name = 'twitter:image'; return m;
+        });
+
+        // Schema.org VideoGame JSON-LD
+        const schema: Record<string, any> = {
+            '@context': 'https://schema.org',
+            '@type': 'VideoGame',
+            name: game.title,
+            description,
+            image: [imageUrl],
+            url: canonicalUrl,
+            applicationCategory: 'Game',
+            inLanguage: 'es',
+        };
+
+        if (game.genre && game.genre.length > 0) schema.genre = game.genre;
+        if (game.platform && game.platform.length > 0) {
+            schema.gamePlatform = game.platform;
+            const osList: string[] = [];
+            for (const p of game.platform) {
+                const pl = p.toLowerCase();
+                if (pl.includes('pc') || pl.includes('windows')) osList.push('Windows');
+                if (pl.includes('mac') || pl.includes('osx')) osList.push('macOS');
+                if (pl.includes('linux')) osList.push('Linux');
+                if (pl.includes('android')) osList.push('Android');
+                if (pl.includes('ios')) osList.push('iOS');
+                if (pl.includes('switch')) osList.push('Nintendo Switch');
+                if (pl.includes('playstation') || pl.includes('ps4') || pl.includes('ps5')) osList.push('PlayStation');
+                if (pl.includes('xbox')) osList.push('Xbox');
+            }
+            const uniqueOS = Array.from(new Set(osList));
+            if (uniqueOS.length > 0) schema.operatingSystem = uniqueOS.join(', ');
+        }
+        if (game.developers && game.developers.length > 0) {
+            schema.author = { '@type': 'Organization', name: game.developers.join(', ') };
+        }
+        if (game.publishers && game.publishers.length > 0) {
+            schema.publisher = { '@type': 'Organization', name: game.publishers.join(', ') };
+        }
+        if (game.releaseDate && game.releaseDate !== 'No especificada') {
+            schema.datePublished = game.releaseDate;
+        }
+        const primaryStoreUrl = game.stores?.[0]?.url;
+        if (primaryStoreUrl) {
+            schema.offers = {
+                '@type': 'Offer',
+                url: primaryStoreUrl,
+                availability: 'https://schema.org/InStock',
+                price: '0',
+                priceCurrency: 'USD',
+            };
+        }
+
+        let scriptEl = document.getElementById('game-schema-ld') as HTMLScriptElement | null;
+        if (!scriptEl) {
+            scriptEl = document.createElement('script');
+            scriptEl.id = 'game-schema-ld';
+            scriptEl.type = 'application/ld+json';
+            document.head.appendChild(scriptEl);
+        }
+        scriptEl.textContent = JSON.stringify(schema, null, 2);
+
+        return () => {
+            const existing = document.getElementById('game-schema-ld');
+            if (existing) existing.remove();
+        };
+    }, [game]);
+
     const handleGoBack = () => {
         route('/');
     };
@@ -128,8 +250,6 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
         setCurrentShotIndex(index);
         setIsLightboxOpen(true);
     };
-
-
 
     if (!gameSlug) {
         return (

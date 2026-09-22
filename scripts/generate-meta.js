@@ -267,6 +267,76 @@ function generateJamEventSchema(jam, canonicalUrl) {
     return schema;
 }
 
+// ─── Build Schema.org VideoGame for a Game ──────────────────────────────────
+function generateVideoGameSchema(game, canonicalUrl) {
+    const imageUrl = game.imageCover || game.imageHero || game.imageUrl || FALLBACK_IMAGE;
+    const description = (game.description || `${game.title} — Videojuego venezolano en Venezuela Juega.`).trim();
+
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": game.title,
+        "description": description.length > 300 ? description.substring(0, 297) + '...' : description,
+        "image": [imageUrl],
+        "url": canonicalUrl,
+        "applicationCategory": "Game",
+        "inLanguage": "es"
+    };
+
+    if (game.genres && game.genres.length > 0) {
+        schema.genre = game.genres;
+    }
+
+    if (game.platforms && game.platforms.length > 0) {
+        schema.gamePlatform = game.platforms;
+        const osList = [];
+        for (const p of game.platforms) {
+            const pl = p.toLowerCase();
+            if (pl.includes('pc') || pl.includes('windows')) osList.push('Windows');
+            if (pl.includes('mac') || pl.includes('osx')) osList.push('macOS');
+            if (pl.includes('linux')) osList.push('Linux');
+            if (pl.includes('android')) osList.push('Android');
+            if (pl.includes('ios')) osList.push('iOS');
+            if (pl.includes('switch')) osList.push('Nintendo Switch');
+            if (pl.includes('playstation') || pl.includes('ps4') || pl.includes('ps5')) osList.push('PlayStation');
+            if (pl.includes('xbox')) osList.push('Xbox');
+        }
+        if (osList.length > 0) {
+            schema.operatingSystem = Array.from(new Set(osList)).join(', ');
+        }
+    }
+
+    if (game.developers && game.developers.length > 0) {
+        schema.author = {
+            "@type": "Organization",
+            "name": game.developers.join(', ')
+        };
+    }
+
+    if (game.publishers && game.publishers.length > 0) {
+        schema.publisher = {
+            "@type": "Organization",
+            "name": game.publishers.join(', ')
+        };
+    }
+
+    if (game.releaseDate && game.releaseDate !== 'No especificada') {
+        schema.datePublished = game.releaseDate;
+    }
+
+    if (game.storeUrl) {
+        schema.offers = {
+            "@type": "Offer",
+            "url": game.storeUrl,
+            "availability": "https://schema.org/InStock",
+            "price": "0",
+            "priceCurrency": "USD"
+        };
+    }
+
+    return schema;
+}
+
 // ─── Process HTML for Games ──────────────────────────────────────────────────
 const processGameHtml = (template, game) => {
     let html = template;
@@ -286,6 +356,11 @@ const processGameHtml = (template, game) => {
     html = html.replace(/<meta name="twitter:description" content=".*?"\s*\/>/, `<meta name="twitter:description" content="${description}" />`);
     html = html.replace(/<meta name="twitter:image" content=".*?"\s*\/>/, `<meta name="twitter:image" content="${imageUrl}" />`);
     html = html.replace(/<meta name="twitter:card" content=".*?"\s*\/>/, `<meta name="twitter:card" content="summary_large_image" />`);
+
+    // Inyectar Schema.org VideoGame JSON-LD
+    const gameSchema = generateVideoGameSchema(game, canonicalUrl);
+    const schemaScript = `    <script type="application/ld+json" id="game-schema">\n${JSON.stringify(gameSchema, null, 2)}\n    </script>\n</head>`;
+    html = html.replace('</head>', schemaScript);
 
     return html;
 };
@@ -474,6 +549,15 @@ async function main() {
             const portId = getIndex('Portada');
             const heroId = getIndex('Hero');
             const miniId = getIndex('Mini Image');
+            const devIdx = getIndex('Desarrollador(es)');
+            const pubIdx = getIndex('Distribuidor');
+            const platIdx = getIndex('Plataforma(s)');
+            const genreIdx = getIndex('Género(s)');
+            const releaseIdx = getIndex('Fecha de lanzamiento');
+
+            const storeCols = ['Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store', 'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'];
+            const storeIndices = storeCols.map(col => getIndex(col)).filter(idx => idx !== -1);
+            const parseList = (str) => (str ? String(str).split(',').map(s => s.trim()).filter(Boolean) : []);
 
             gameRows.forEach(row => {
                 const title = row[titleIdx];
@@ -482,13 +566,28 @@ async function main() {
                 const baseSlug = generateSlug(title);
                 const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
 
+                let storeUrl = '';
+                for (const sIdx of storeIndices) {
+                    const val = (row[sIdx] || '').trim();
+                    if (val.startsWith('http')) {
+                        storeUrl = val;
+                        break;
+                    }
+                }
+
                 games.push({
                     slug: uniqueSlug,
                     title: title,
                     description: row[descIdx],
                     imageCover: row[portId],
                     imageHero: row[heroId],
-                    imageUrl: row[miniId]
+                    imageUrl: row[miniId],
+                    developers: devIdx !== -1 ? parseList(row[devIdx]) : [],
+                    publishers: pubIdx !== -1 ? parseList(row[pubIdx]) : [],
+                    platforms: platIdx !== -1 ? parseList(row[platIdx]) : [],
+                    genres: genreIdx !== -1 ? parseList(row[genreIdx]) : [],
+                    releaseDate: releaseIdx !== -1 ? (row[releaseIdx] || '').trim() : '',
+                    storeUrl
                 });
             });
         }
@@ -516,6 +615,15 @@ async function main() {
             const jPortId = jGetIndex('Portada');
             const jHeroId = jGetIndex('Hero');
             const jMiniId = jGetIndex('Mini Image');
+            const jDevIdx = jGetIndex('Desarrollador(es)');
+            const jPubIdx = jGetIndex('Distribuidor');
+            const jPlatIdx = jGetIndex('Plataforma(s)');
+            const jGenreIdx = jGetIndex('Género(s)');
+            const jReleaseIdx = jGetIndex('Fecha de lanzamiento');
+
+            const jStoreCols = ['Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store', 'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'];
+            const jStoreIndices = jStoreCols.map(col => jGetIndex(col)).filter(idx => idx !== -1);
+            const parseList = (str) => (str ? String(str).split(',').map(s => s.trim()).filter(Boolean) : []);
 
             jamGameRows.forEach(row => {
                 const title = row[jTitleIdx];
@@ -524,13 +632,28 @@ async function main() {
                 const baseSlug = generateSlug(title);
                 const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
 
+                let storeUrl = '';
+                for (const sIdx of jStoreIndices) {
+                    const val = (row[sIdx] || '').trim();
+                    if (val.startsWith('http')) {
+                        storeUrl = val;
+                        break;
+                    }
+                }
+
                 games.push({
                     slug: uniqueSlug,
                     title: title,
                     description: row[jDescIdx],
                     imageCover: row[jPortId],
                     imageHero: row[jHeroId],
-                    imageUrl: row[jMiniId]
+                    imageUrl: row[jMiniId],
+                    developers: jDevIdx !== -1 ? parseList(row[jDevIdx]) : [],
+                    publishers: jPubIdx !== -1 ? parseList(row[jPubIdx]) : [],
+                    platforms: jPlatIdx !== -1 ? parseList(row[jPlatIdx]) : [],
+                    genres: jGenreIdx !== -1 ? parseList(row[jGenreIdx]) : [],
+                    releaseDate: jReleaseIdx !== -1 ? (row[jReleaseIdx] || '').trim() : '',
+                    storeUrl
                 });
             });
         }
