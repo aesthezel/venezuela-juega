@@ -16,6 +16,9 @@ logo: "https://venezuela-juega.s3.us-east-005.dream.io/globalgamejam/juntos/junt
 accentColor: "#fbb916"
 accentTextColor: "#44276a"
 isCharity: true
+attendanceMode: online
+onlineUrl: "https://itch.io/jam/juntos-game-jam-venezuela-earthquake-relief"
+organizerName: "Venezuela Juega & Global Game Jam"
 layout:
   - hero
   - stats

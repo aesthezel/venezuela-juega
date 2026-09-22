@@ -17,6 +17,9 @@ heroImage: "https://venezuela-juega.s3.us-east-005.dream.io/gamejamplus/gj%2B_de
 accentColor: "#fbb916"
 accentTextColor: "#44276a"
 isCharity: false
+attendanceMode: online
+onlineUrl: "https://discord.com/invite/YGtwvBRCEw"
+organizerName: "Venezuela Juega & GameJam+"
 layout:
   - hero
   - sponsors

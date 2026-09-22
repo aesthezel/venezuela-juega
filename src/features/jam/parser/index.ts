@@ -49,6 +49,16 @@ export function parseJamContent(rawContent: string, defaultSlug?: string): JamEv
     const donationUrl = attributes.donationUrl;
     const donationGoal = attributes.donationGoal;
 
+    // SEO / Event Schema.org properties
+    const attendanceMode = attributes.attendanceMode;
+    const locationVenue = attributes.locationVenue;
+    const locationAddress = attributes.locationAddress;
+    const locationCity = attributes.locationCity;
+    const locationState = attributes.locationState;
+    const locationCountry = attributes.locationCountry;
+    const onlineUrl = attributes.onlineUrl;
+    const organizerName = attributes.organizerName;
+
     // Stats
     const stats = attributes.stats
         ? {
@@ -165,5 +175,13 @@ export function parseJamContent(rawContent: string, defaultSlug?: string): JamEv
         stats,
         layout,
         customSections,
+        attendanceMode,
+        locationVenue,
+        locationAddress,
+        locationCity,
+        locationState,
+        locationCountry,
+        onlineUrl,
+        organizerName,
     };
 }

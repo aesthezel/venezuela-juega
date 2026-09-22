@@ -18,6 +18,14 @@ heroGradient: "from-[#24214d] via-[#4c2c85] to-[#e73a81]"
 accentColor: "#e73a81"
 accentTextColor: "#ffffff"
 isCharity: false
+attendanceMode: hybrid
+locationVenue: "Tecninet - Centro Comercial Mediterranean Plaza"
+locationAddress: "Piso 1, Local L-36, Urbanización Sabana Larga"
+locationCity: "Valencia"
+locationState: "Carabobo"
+locationCountry: "VE"
+onlineUrl: "https://discord.gg/QJdn37EQdB"
+organizerName: "Women Game Jam Venezuela & Venezuela Juega"
 layout:
   - hero
   - about

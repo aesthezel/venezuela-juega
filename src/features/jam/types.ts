@@ -97,4 +97,16 @@ export interface JamEvent {
     layout?: JamSectionType[];
     /** Secciones de contenido personalizado adicionales o directivas libres */
     customSections?: Record<string, JamCustomSection>;
+    /** Modalidad para SEO y Schema.org Event (online, offline, hybrid) */
+    attendanceMode?: 'online' | 'offline' | 'hybrid';
+    /** Información de sede física para eventos presenciales o híbridos */
+    locationVenue?: string;
+    locationAddress?: string;
+    locationCity?: string;
+    locationState?: string;
+    locationCountry?: string;
+    /** URL del espacio virtual si es online/híbrido (Discord, stream, etc.) */
+    onlineUrl?: string;
+    /** Nombre formal de los organizadores */
+    organizerName?: string;
 }

@@ -25,12 +25,21 @@ const pageMetadata = {
         title: 'Game Jams Venezuela — Venezuela Juega',
         description: 'Descubre los increíbles juegos creados en menos de 48 horas por desarrolladores venezolanos en eventos Game Jam.'
     },
+    '/jams': {
+        title: 'Game Jams — Venezuela Juega',
+        description: 'Explora y participa en las Game Jams de la comunidad de desarrollo de videojuegos en Venezuela: crea prototipos en 48 horas, colabora y compite.'
+    },
 };
 
 export const useMetadata = (currentPath: string, games: Game[]) => {
     useEffect(() => {
         // GA4 page view
         trackPageView(currentPath, document.title);
+
+        // Jam detail routes manage their own rich metadata and Event JSON-LD
+        if (currentPath.startsWith('/jam/')) {
+            return;
+        }
 
         const gameSlugMatch = currentPath.match(/^\/games?\/([^/]+)/);
 

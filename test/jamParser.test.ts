@@ -163,4 +163,33 @@ Descripción: Premio especial para el equipo ganador.
         expect(jam.faqs).toHaveLength(1);
         expect(jam.startDate).toBeInstanceOf(Date);
     });
+
+    it('should extract Event SEO metadata (attendanceMode, location, onlineUrl, organizerName)', () => {
+        const seoJamMd = `---
+slug: caracas-hybrid-jam
+edition: "2026"
+name: "Caracas Hybrid Jam"
+status: upcoming
+startDate: 2026-11-01T09:00:00-04:00
+attendanceMode: hybrid
+locationVenue: "Impact Hub Caracas"
+locationAddress: "Torre HP, Los Palos Grandes"
+locationCity: "Caracas"
+locationState: "Miranda"
+locationCountry: "VE"
+onlineUrl: "https://discord.gg/caracas"
+organizerName: "Caracas Game Devs & Venezuela Juega"
+---
+# Contenido
+`;
+        const jam = parseJamContent(seoJamMd);
+        expect(jam.attendanceMode).toBe('hybrid');
+        expect(jam.locationVenue).toBe('Impact Hub Caracas');
+        expect(jam.locationAddress).toBe('Torre HP, Los Palos Grandes');
+        expect(jam.locationCity).toBe('Caracas');
+        expect(jam.locationState).toBe('Miranda');
+        expect(jam.locationCountry).toBe('VE');
+        expect(jam.onlineUrl).toBe('https://discord.gg/caracas');
+        expect(jam.organizerName).toBe('Caracas Game Devs & Venezuela Juega');
+    });
 });
