@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad, faHandHoldingHeart, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad, faHandHoldingHeart, faRotateRight, faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { Game } from '@/types';
 import { route } from 'preact-router';
 import { trackNav } from '@/utils/analytics';
@@ -94,6 +94,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
 
     const navItems = [
         { path: '/jams', label: 'Game Jams', icon: faGamepad, tooltip: null, badge: activeJamCount > 0 ? activeJamCount : null },
+        { path: '/docs', label: 'Recursos', icon: faBookOpen, tooltip: null, badge: null },
         { path: '/calendar', label: 'Calendario', icon: faCalendarAlt, tooltip: null, badge: null },
         { path: '/charts', label: 'Métricas', icon: faChartBar, tooltip: null, badge: null },
         { path: '/about', label: 'Créditos', icon: faInfoCircle, tooltip: null, badge: null },

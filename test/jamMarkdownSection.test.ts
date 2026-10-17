@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parseJamContent } from '../src/features/jam/parser';
-import { buildContentBlocks } from '../src/features/jam/components/JamMarkdownSection';
+import { buildContentBlocks } from '../src/common/markdown';
 import rawContent from '../src/features/jam/content/venezuela-juega-game-jam-2026-2027.md?raw';
 
 describe('JamMarkdownSection content blocks', () => {
@@ -23,10 +23,10 @@ describe('JamMarkdownSection content blocks', () => {
         const section = jam.customSections['sedes'];
         const blocks = buildContentBlocks(section.content ?? '');
 
-        expect(blocks[0]).toEqual({ kind: 'header', text: '🏢 ¿Qué es una sede?' });
+        expect(blocks[0]).toEqual({ kind: 'header', level: 3, text: '🏢 ¿Qué es una sede?' });
         expect(blocks[1].kind).toBe('paragraph');
         expect(blocks[1].lines.join(' ')).toContain('punto de encuentro físico');
-        expect(blocks[2]).toEqual({ kind: 'header', text: '💻 Participación online' });
+        expect(blocks[2]).toEqual({ kind: 'header', level: 3, text: '💻 Participación online' });
         expect(blocks[3].kind).toBe('paragraph');
     });
 });

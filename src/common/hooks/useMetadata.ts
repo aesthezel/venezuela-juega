@@ -29,19 +29,25 @@ const pageMetadata = {
         title: 'Game Jams — Venezuela Juega',
         description: 'Explora y participa en las Game Jams de la comunidad de desarrollo de videojuegos en Venezuela: crea prototipos en 48 horas, colabora y compite.'
     },
+    '/docs': {
+        title: 'Recursos para Creadores — Venezuela Juega',
+        description: 'Documentos, guías y papers sobre propiedad intelectual, negocio, técnica y financiamiento para desarrolladores de videojuegos en Venezuela.'
+    },
 };
 
 export const useMetadata = (currentPath: string, games: Game[]) => {
+    const cleanPath = currentPath.split('?')[0];
+
     useEffect(() => {
         // GA4 page view
         trackPageView(currentPath, document.title);
 
-        // Jam detail routes manage their own rich metadata and Event JSON-LD
-        if (currentPath.startsWith('/jam/')) {
+        // Jam & doc detail routes manage their own rich metadata and JSON-LD
+        if (cleanPath.startsWith('/jam/') || cleanPath.startsWith('/docs/')) {
             return;
         }
 
-        const gameSlugMatch = currentPath.match(/^\/games?\/([^/]+)/);
+        const gameSlugMatch = cleanPath.match(/^\/games?\/([^/]+)/);
 
         if (gameSlugMatch && gameSlugMatch[1]) {
             const gameSlug = decodeURIComponent(gameSlugMatch[1]);
@@ -120,7 +126,7 @@ export const useMetadata = (currentPath: string, games: Game[]) => {
                 scriptEl.textContent = JSON.stringify(gameSchema, null, 2);
             }
         } else {
-            const metadata = pageMetadata[currentPath as keyof typeof pageMetadata] || pageMetadata['/'];
+            const metadata = pageMetadata[cleanPath as keyof typeof pageMetadata] || pageMetadata['/'];
 
             document.title = metadata.title;
             updateMetadata('meta[name="description"]', 'content', metadata.description);
@@ -133,7 +139,7 @@ export const useMetadata = (currentPath: string, games: Game[]) => {
             const existingGameSchema = document.getElementById('game-schema');
             if (existingGameSchema) existingGameSchema.remove();
 
-            if (currentPath === '/gamejam') {
+            if (cleanPath === '/gamejam') {
                 trackEvent('view_gamejam');
             }
         }

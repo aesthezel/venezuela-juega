@@ -9,5 +9,7 @@ export { default as CatalogPage } from './CatalogPage';
 export { default as GameJamsPage } from './GameJamsPage';
 export { default as JamListPage } from './JamListPage';
 export { default as JamDetailPage } from './JamDetailPage';
+export { default as DocsListPage } from './DocsListPage';
+export { default as DocDetailPage } from './DocDetailPage';
 export { default as NotFoundPage } from './NotFoundPage';
 export { default as Redirect } from './Redirect';

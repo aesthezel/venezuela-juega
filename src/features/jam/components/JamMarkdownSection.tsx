@@ -1,74 +1,76 @@
 import { h } from 'preact';
+import type { VNode } from 'preact';
 import type { JamCustomSection } from '../types';
-import { renderRichText } from '../renderRichText';
+import { renderRichText, buildContentBlocks } from '@/common/markdown';
+import type { ContentBlock } from '@/common/markdown';
+
+export { buildContentBlocks } from '@/common/markdown';
 
 interface JamMarkdownSectionProps {
     section: JamCustomSection;
     accentColor?: string;
 }
 
-type ContentBlock =
-    | { kind: 'header'; text: string }
-    | { kind: 'quote'; lines: string[] }
-    | { kind: 'list'; items: string[] }
-    | { kind: 'paragraph'; lines: string[] };
+function renderBlocks(blocks: ContentBlock[]): VNode[] {
+    return blocks.map((block, bIdx) => {
+        switch (block.kind) {
+            case 'header':
+                return (
+                    <h3 key={bIdx} className="text-2xl font-black text-white pt-4 pb-1">
+                        {renderRichText(block.text)}
+                    </h3>
+                );
 
-/**
- * Agrupa el contenido en bloques semánticos: agrupa líneas consecutivas de
- * viñetas (- / *) en una lista, citas (>) en blockquote, encabezados (###)
- * por separado y el resto en párrafos. Las líneas en blanco separan bloques.
- */
-export function buildContentBlocks(content: string): ContentBlock[] {
-    const blocks: ContentBlock[] = [];
-    let pending: Extract<ContentBlock, { kind: 'quote' | 'list' | 'paragraph' }> | null = null;
+            case 'quote':
+                return (
+                    <div
+                        key={bIdx}
+                        className="border-l-4 pl-4 py-2 italic bg-base-200/60 rounded-r-xl border-secondary"
+                    >
+                        {renderRichText(block.lines.join('\n'))}
+                    </div>
+                );
 
-    const flush = () => {
-        if (pending) {
-            blocks.push(pending);
-            pending = null;
+            case 'list':
+                return (
+                    <ul key={bIdx} className="space-y-2 list-disc list-inside bg-base-200/40 p-5 rounded-2xl border border-base-300">
+                        {block.items.map((item, itemIdx) => (
+                            <li key={itemIdx} className="leading-normal">
+                                {renderRichText(item)}
+                            </li>
+                        ))}
+                    </ul>
+                );
+
+            case 'ordered-list':
+                return (
+                    <ol key={bIdx} className="space-y-2 list-decimal list-inside bg-base-200/40 p-5 rounded-2xl border border-base-300">
+                        {block.items.map((item, itemIdx) => (
+                            <li key={itemIdx} className="leading-normal">
+                                {renderRichText(item)}
+                            </li>
+                        ))}
+                    </ol>
+                );
+
+            case 'code':
+                return (
+                    <pre key={bIdx} className="bg-base-300/70 border border-base-300 rounded-2xl p-4 overflow-x-auto text-sm">
+                        <code className="font-mono">{block.code}</code>
+                    </pre>
+                );
+
+            case 'directive':
+                return (
+                    <div key={bIdx} className="border-l-2 border-base-300 pl-4 space-y-4">
+                        {renderBlocks(buildContentBlocks(block.content))}
+                    </div>
+                );
+
+            default:
+                return <p key={bIdx}>{renderRichText(block.lines.join(' '))}</p>;
         }
-    };
-
-    for (const rawLine of content.split(/\r?\n/)) {
-        const line = rawLine.trim();
-        if (!line) {
-            flush();
-            continue;
-        }
-
-        if (line.startsWith('### ') || line.startsWith('#### ')) {
-            flush();
-            blocks.push({ kind: 'header', text: line.replace(/^#+\s*/, '') });
-            continue;
-        }
-
-        if (line.startsWith('>')) {
-            if (!pending || pending.kind !== 'quote') {
-                flush();
-                pending = { kind: 'quote', lines: [] };
-            }
-            pending.lines.push(line.replace(/^>\s*/, ''));
-            continue;
-        }
-
-        if (line.startsWith('- ') || line.startsWith('* ')) {
-            if (!pending || pending.kind !== 'list') {
-                flush();
-                pending = { kind: 'list', items: [] };
-            }
-            pending.items.push(line.slice(2));
-            continue;
-        }
-
-        if (!pending || pending.kind !== 'paragraph') {
-            flush();
-            pending = { kind: 'paragraph', lines: [] };
-        }
-        pending.lines.push(line);
-    }
-
-    flush();
-    return blocks;
+    });
 }
 
 const JamMarkdownSection = ({ section, accentColor = '#e34262' }: JamMarkdownSectionProps) => {
@@ -115,7 +117,7 @@ const JamMarkdownSection = ({ section, accentColor = '#e34262' }: JamMarkdownSec
         );
     }
 
-    // Parse block lines into paragraphs, lists, and headers
+    // Parse block lines into paragraphs, lists, headers and directives
     const blocks = buildContentBlocks(section.content || '');
 
     return (
@@ -148,40 +150,7 @@ const JamMarkdownSection = ({ section, accentColor = '#e34262' }: JamMarkdownSec
                 )}
 
                 <div className="space-y-6 text-base-content/80 text-base sm:text-lg leading-relaxed">
-                    {blocks.map((block, bIdx) => {
-                        if (block.kind === 'header') {
-                            return (
-                                <h3 key={bIdx} className="text-2xl font-black text-white pt-4 pb-1">
-                                    {renderRichText(block.text)}
-                                </h3>
-                            );
-                        }
-
-                        if (block.kind === 'quote') {
-                            return (
-                                <div
-                                    key={bIdx}
-                                    className="border-l-4 pl-4 py-2 italic bg-base-200/60 rounded-r-xl border-secondary"
-                                >
-                                    {renderRichText(block.lines.join('\n'))}
-                                </div>
-                            );
-                        }
-
-                        if (block.kind === 'list') {
-                            return (
-                                <ul key={bIdx} className="space-y-2 list-disc list-inside bg-base-200/40 p-5 rounded-2xl border border-base-300">
-                                    {block.items.map((item, itemIdx) => (
-                                        <li key={itemIdx} className="leading-normal">
-                                            {renderRichText(item)}
-                                        </li>
-                                    ))}
-                                </ul>
-                            );
-                        }
-
-                        return <p key={bIdx}>{renderRichText(block.lines.join(' '))}</p>;
-                    })}
+                    {renderBlocks(blocks)}
                 </div>
             </div>
         </section>

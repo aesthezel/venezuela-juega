@@ -1,100 +1,15 @@
-import type {
-    JamObjective,
-    JamSponsor,
-    JamPhase,
-    JamPrize,
-    JamFAQ,
-    JamCustomSection,
-} from '../types';
+import type { JamObjective, JamSponsor, JamPhase, JamFAQ, JamPrize } from '../types';
+import { parseH3Sections } from '@/common/markdown/blockParser';
 
-export interface DirectiveBlock {
-    type: string;
-    params: Record<string, string>;
-    content: string;
-}
+export {
+    extractDirectiveBlocks,
+    parseBlockParams,
+    stripDirectiveBlocks,
+    parseH3Sections,
+} from '@/common/markdown/blockParser';
+export type { DirectiveBlock } from '@/common/markdown/blockParser';
 
-/**
- * Parses block parameters like `{title: "¿Por qué esta jam?", subtitle: "Jugamos para ayudar", badge: "Nuevo"}`
- */
-export function parseBlockParams(paramStr: string): Record<string, string> {
-    const params: Record<string, string> = {};
-    if (!paramStr) return params;
-
-    const trimmed = paramStr.trim();
-    const clean = trimmed.startsWith('{') && trimmed.endsWith('}') ? trimmed.slice(1, -1) : trimmed;
-
-    // Match key: "value" or key: 'value' or key: value
-    const regex = /(\w+)\s*:\s*(?:"([^"]*)"|'([^']*)'|([^,\s}]+))/g;
-    let match: RegExpExecArray | null;
-
-    while ((match = regex.exec(clean)) !== null) {
-        const key = match[1];
-        const val = match[2] ?? match[3] ?? match[4] ?? '';
-        params[key] = val.trim();
-    }
-
-    return params;
-}
-
-/**
- * Extracts directive blocks `:::blockType {params} ... :::` from markdown body.
- */
-export function extractDirectiveBlocks(body: string): DirectiveBlock[] {
-    const blocks: DirectiveBlock[] = [];
-    // Matches :::blockName {optional params on same line} \n content \n :::
-    // Note: use [ \t] instead of \s so newlines are not swallowed as params
-    const blockRegex = /:::[ \t]*([a-zA-Z0-9_-]+)(?:[ \t]+([^\r\n]*))?([\s\S]*?)\r?\n[ \t]*:::[ \t]*(?=[\r\n]|$)/g;
-    let match: RegExpExecArray | null;
-
-    while ((match = blockRegex.exec(body)) !== null) {
-        const type = match[1].toLowerCase();
-        const paramStr = match[2] || '';
-        const content = match[3].trim();
-        const params = parseBlockParams(paramStr);
-
-        blocks.push({
-            type,
-            params,
-            content,
-        });
-    }
-
-    return blocks;
-}
-
-/**
- * Parses H3 sections like:
- * ### ❤️‍🩹 Title
- * Description...
- */
-export function parseH3Sections(content: string): { title: string; icon?: string; body: string }[] {
-    const sections: { title: string; icon?: string; body: string }[] = [];
-    // Split by ### whether at beginning of string or after a newline
-    const parts = content.split(/(?:^|[\r\n]+)###\s+/);
-
-    for (const part of parts) {
-        const trimmed = part.trim();
-        if (!trimmed) continue;
-
-        const lines = trimmed.split(/\r?\n/);
-        const header = lines[0].trim();
-        const body = lines.slice(1).join('\n').trim();
-
-        // Check if header starts with an emoji / icon
-        let icon: string | undefined = undefined;
-        let title = header;
-
-        const emojiMatch = header.match(/^([\p{Extended_Pictographic}\uD800-\uDBFF\uDC00-\uDFFF\u2600-\u27BF]+)\s*(.*)$/u);
-        if (emojiMatch && emojiMatch[2]) {
-            icon = emojiMatch[1].trim();
-            title = emojiMatch[2].trim();
-        }
-
-        sections.push({ title, icon, body });
-    }
-
-    return sections;
-}
+import type { DirectiveBlock } from '@/common/markdown/blockParser';
 
 /**
  * Parses Objectives from `:::about` or `:::objectives`

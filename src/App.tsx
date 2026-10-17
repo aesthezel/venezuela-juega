@@ -22,6 +22,8 @@ const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const DeveloperPage = lazy(() => import('@/pages/DeveloperPage'));
 const JamListPage = lazy(() => import('@/pages/JamListPage'));
 const JamDetailPage = lazy(() => import('@/pages/JamDetailPage'));
+const DocsListPage = lazy(() => import('@/pages/DocsListPage'));
+const DocDetailPage = lazy(() => import('@/pages/DocDetailPage'));
 
 import { SpacetimeDBProvider } from '@/spacetimedb/SpacetimeDBProvider';
 import ActiveJamsBanner from '@/features/jam/components/ActiveJamsBanner';
@@ -117,6 +119,10 @@ const App = () => {
                                     <Redirect path="/jams/" to="/jams" />
                                     <JamDetailPage path="/jam/:jamName" />
                                     <JamDetailPage path="/jam/:jamName/:edition" />
+                                    <DocsListPage path="/docs" />
+                                    <DocDetailPage path="/docs/:docSlug" />
+                                    <Redirect path="/recursos" to="/docs" />
+                                    <Redirect path="/docs/" to="/docs" />
                                     <CalendarPage path="/calendar" games={games} onNavigateToCatalog={navigateToCatalog} onEventClick={handleOpenModal} />
                                     <ChartsPage path="/charts" games={allGames} onNavigateToCatalog={navigateToCatalog} onGameClick={handleOpenModal} />
                                     <GameDetailPage path="/game/:gameSlug" games={allGames} />

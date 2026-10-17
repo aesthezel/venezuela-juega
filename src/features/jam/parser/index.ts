@@ -1,4 +1,5 @@
 import type { JamEvent, JamCustomSection, JamSectionType } from '../types';
+import { parseDate } from '@/common/markdown';
 import { extractFrontmatter } from './frontmatter';
 import {
     extractDirectiveBlocks,
@@ -11,13 +12,6 @@ import {
 
 export * from './frontmatter';
 export * from './blockParser';
-
-function parseDate(val: any): Date | null {
-    if (!val) return null;
-    if (val instanceof Date) return val;
-    const d = new Date(val);
-    return isNaN(d.getTime()) ? null : d;
-}
 
 /**
  * Parses raw file content (.md or .json) into a JamEvent object.
