@@ -4,7 +4,7 @@ edition: "2026"
 name: "Venezuela Juega GameJam+ 2026-2027"
 shortName: "Venezuela Juega GameJam+"
 tagline: "Crea un videojuego en 48 horas y acompáñalo hasta la final global"
-status: active
+status: ended
 startDate: 2026-10-16T07:00:00-04:00
 endDate: 2026-10-18T00:00:00-04:00
 registrationUrl: "https://forms.gle/SGAByi2HeqXh8k757"

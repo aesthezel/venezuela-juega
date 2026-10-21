@@ -4,7 +4,7 @@ edition: "2026"
 name: "Women Game Jam Venezuela 2026"
 shortName: "Women Game Jam"
 tagline: "La primera sede oficial de la Women Game Jam en Venezuela: 48 horas para crear, conectar y hacer historia"
-status: active
+status: ended
 startDate: 2026-10-16T07:00:00-04:00
 endDate: 2026-10-18T00:00:00-04:00
 platform: "womengamejam.org"
