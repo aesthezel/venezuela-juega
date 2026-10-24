@@ -80,4 +80,10 @@ export interface Game {
     
     /** Origin or context of the game development */
     origin?: GameOrigin;
+
+    /** Jam Organization UID if the game was developed during a jam */
+    Jam_Org_UID?: string;
+
+    /** Jam Edition if the game was developed during a jam */
+    Jam_Edition?: string;
 }

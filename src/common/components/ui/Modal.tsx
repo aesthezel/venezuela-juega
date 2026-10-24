@@ -118,6 +118,21 @@ const Modal = ({ game, onClose }: ModalProps) => {
 
     const handleViewFullInfo = () => {
         onClose();
+        if (typeof window !== 'undefined') {
+            const currentPath = window.location.pathname;
+            const isFromJams = currentPath.startsWith('/jams') ||
+                currentPath.startsWith('/game-jams') ||
+                currentPath.startsWith('/jam') ||
+                Boolean(game.Jam_Org_UID || game.Jam_Edition);
+
+            if (isFromJams) {
+                sessionStorage.setItem('game_return_to', '/jams');
+            } else if (currentPath === '/' || currentPath.startsWith('/game') || currentPath.startsWith('/games')) {
+                sessionStorage.setItem('game_return_to', '/');
+            } else if (currentPath) {
+                sessionStorage.setItem('game_return_to', currentPath);
+            }
+        }
         route(`/game/${game.slug}`);
     };
 

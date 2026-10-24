@@ -54,6 +54,18 @@ const App = () => {
     } = useCatalogFilters(games);
 
     const handleRouteChange = (e: any) => {
+        if (typeof window !== 'undefined') {
+            const prev = currentPath;
+            if (e.url.startsWith('/game/') || e.url.startsWith('/games/')) {
+                if (prev.startsWith('/jams') || prev.startsWith('/game-jams') || prev.startsWith('/jam')) {
+                    sessionStorage.setItem('game_return_to', '/jams');
+                } else if (prev === '/' || prev.startsWith('/game') || prev.startsWith('/games')) {
+                    sessionStorage.setItem('game_return_to', '/');
+                } else if (prev) {
+                    sessionStorage.setItem('game_return_to', prev);
+                }
+            }
+        }
         setCurrentPath(e.url);
         window.scrollTo(0, 0);
     };
@@ -115,6 +127,7 @@ const App = () => {
                                     <CatalogPage path="/game" {...catalogPageProps} />
                                     <CatalogPage path="/games" {...catalogPageProps} />
                                     <JamListPage path="/jams" games={jamGames} settings={jamSettings} onGameClick={handleOpenModal} />
+                                    <Redirect path="/game-jams" to="/jams" />
                                     <Redirect path="/game-jams/" to="/jams" />
                                     <Redirect path="/jams/" to="/jams" />
                                     <JamDetailPage path="/jam/:jamName" />

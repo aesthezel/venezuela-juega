@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { route } from 'preact-router';
-import { Game, GameDetailPageProps } from "@/types";
+import { Game, GameDetailPageProps, GameOrigin } from "@/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faArrowLeft, faGamepad, faGlobe, faCog, faTimes,
@@ -241,7 +241,32 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
         };
     }, [game]);
 
+    const isJamGame = useMemo(() => {
+        const target = game || games.find(g => g.slug.toLowerCase() === normalizedSlug);
+        if (!target) return false;
+        return Boolean(
+            target.Jam_Org_UID ||
+            target.Jam_Edition ||
+            target.origin === GameOrigin.GAME_JAM ||
+            target.origin === GameOrigin.GAME_JAM_PLUS_25_26
+        );
+    }, [game, games, normalizedSlug]);
+
     const handleGoBack = () => {
+        if (typeof window !== 'undefined') {
+            const storedReturnTo = sessionStorage.getItem('game_return_to');
+            if (storedReturnTo) {
+                sessionStorage.removeItem('game_return_to');
+                route(storedReturnTo);
+                return;
+            }
+        }
+
+        if (isJamGame) {
+            route('/jams');
+            return;
+        }
+
         route('/');
     };
 
@@ -262,7 +287,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         className="bg-accent-teal-dark hover:bg-accent-teal-dark text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2 mx-auto"
                     >
                         <FontAwesomeIcon icon={faArrowLeft} />
-                        Volver al catálogo
+                        {isJamGame ? 'Volver a Game Jams' : 'Volver al catálogo'}
                     </button>
                 </div>
         </PageLayout>
@@ -280,7 +305,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         className="bg-accent-teal-dark hover:bg-accent-teal-dark text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2 mx-auto"
                     >
                         <FontAwesomeIcon icon={faArrowLeft} />
-                        Volver al catálogo
+                        {isJamGame ? 'Volver a Game Jams' : 'Volver al catálogo'}
                     </button>
                 </div>
         </PageLayout>
