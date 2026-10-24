@@ -1,6 +1,7 @@
 import type { JamEvent, JamCustomSection, JamSectionType } from '../types';
 import { parseDate } from '@/common/markdown';
 import { extractFrontmatter } from './frontmatter';
+import { parseGameIds } from './gameIds';
 import {
     extractDirectiveBlocks,
     parseObjectives,
@@ -12,6 +13,7 @@ import {
 
 export * from './frontmatter';
 export * from './blockParser';
+export * from './gameIds';
 
 /**
  * Parses raw file content (.md or .json) into a JamEvent object.
@@ -72,6 +74,11 @@ export function parseJamContent(rawContent: string, defaultSlug?: string): JamEv
     let prizes = attributes.prizes || [];
     const customSections: Record<string, JamCustomSection> = {};
 
+    // Games made in this jam edition (IDs from the jam games spreadsheet)
+    let gameIds = parseGameIds(attributes.games ?? attributes.gameIds ?? attributes.gamesIds);
+    let gamesTitle: string | undefined = attributes.gamesTitle || undefined;
+    let gamesSubtitle: string | undefined = attributes.gamesSubtitle || undefined;
+
     for (const block of directiveBlocks) {
         switch (block.type) {
             case 'about':
@@ -94,6 +101,16 @@ export function parseJamContent(rawContent: string, defaultSlug?: string): JamEv
             case 'premios':
                 prizes = parsePrizes(block);
                 break;
+            case 'games':
+            case 'juegos': {
+                const ids = parseGameIds(
+                    block.params.ids ?? block.params.games ?? block.params.juegos ?? block.content
+                );
+                if (ids.length > 0) gameIds = ids;
+                gamesTitle = block.params.title || gamesTitle;
+                gamesSubtitle = block.params.subtitle || gamesSubtitle;
+                break;
+            }
             case 'custom':
             case 'markdown':
             case 'section':
@@ -126,7 +143,7 @@ export function parseJamContent(rawContent: string, defaultSlug?: string): JamEv
     }
 
     // Default or specified Layout
-    const layout: JamSectionType[] = attributes.layout || [
+    const layout: JamSectionType[] = [...(attributes.layout || [
         'hero',
         'stats',
         'about',
@@ -136,7 +153,18 @@ export function parseJamContent(rawContent: string, defaultSlug?: string): JamEv
         ...Object.keys(customSections),
         'faq',
         'cta',
-    ];
+    ])];
+
+    // If the jam declares games but its layout doesn't mention the section,
+    // surface it automatically before the FAQ (or at the end).
+    if (gameIds.length > 0 && !layout.some((section) => section === 'games' || section === 'juegos')) {
+        const faqIndex = layout.indexOf('faq');
+        if (faqIndex === -1) {
+            layout.push('games');
+        } else {
+            layout.splice(faqIndex, 0, 'games');
+        }
+    }
 
     return {
         slug,
@@ -166,6 +194,9 @@ export function parseJamContent(rawContent: string, defaultSlug?: string): JamEv
         phases,
         faqs,
         sponsors,
+        gameIds,
+        gamesTitle,
+        gamesSubtitle,
         stats,
         layout,
         customSections,

@@ -8,5 +8,7 @@ export { default as JamFAQ } from './JamFAQ';
 export { default as JamCTA } from './JamCTA';
 export { default as JamDonation } from './JamDonation';
 export { default as JamMarkdownSection } from './JamMarkdownSection';
+export { default as JamGames } from './JamGames';
+export { default as JamGameCard } from './JamGameCard';
 export { default as JamSectionRenderer } from './JamSectionRenderer';
 export { default as PromoHeader } from './PromoHeader';

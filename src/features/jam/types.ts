@@ -53,6 +53,7 @@ export type JamSectionType =
     | 'prizes'
     | 'donation'
     | 'schedule'
+    | 'games'
     | 'faq'
     | 'cta'
     | string;
@@ -85,6 +86,15 @@ export interface JamEvent {
     phases: JamPhase[];
     faqs: JamFAQ[];
     sponsors: JamSponsor[];
+    /**
+     * IDs de los juegos (hoja `Games` del spreadsheet de jams) que se muestran
+     * como "Juegos de esta edición". Se declaran con `games:` en el frontmatter.
+     */
+    gameIds?: number[];
+    /** Título personalizado de la sección de juegos de la edición */
+    gamesTitle?: string;
+    /** Subtítulo personalizado de la sección de juegos de la edición */
+    gamesSubtitle?: string;
     stats?: {
         participants?: number;
         submissions?: number;

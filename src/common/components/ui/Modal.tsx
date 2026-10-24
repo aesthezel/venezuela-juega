@@ -122,10 +122,12 @@ const Modal = ({ game, onClose }: ModalProps) => {
             const currentPath = window.location.pathname;
             const isFromJams = currentPath.startsWith('/jams') ||
                 currentPath.startsWith('/game-jams') ||
-                currentPath.startsWith('/jam') ||
-                Boolean(game.Jam_Org_UID || game.Jam_Edition);
+                currentPath.startsWith('/jam');
 
-            if (isFromJams) {
+            if (currentPath.startsWith('/jam/')) {
+                // Jam edition detail page: return to that exact edition
+                sessionStorage.setItem('game_return_to', currentPath);
+            } else if (isFromJams) {
                 sessionStorage.setItem('game_return_to', '/jams');
             } else if (currentPath === '/' || currentPath.startsWith('/game') || currentPath.startsWith('/games')) {
                 sessionStorage.setItem('game_return_to', '/');

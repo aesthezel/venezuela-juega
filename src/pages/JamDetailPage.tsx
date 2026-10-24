@@ -1,11 +1,15 @@
 import { useEffect } from 'preact/hooks';
 import { RoutableProps } from 'preact-router';
+import type { Game } from '@/types';
 import { getJamBySlug } from '@/features/jam/registry';
 import { JamSectionRenderer } from '@/features/jam/components';
 
 interface JamDetailPageProps extends RoutableProps {
     jamName?: string;
     edition?: string;
+    /** Juegos de jam para resolver la sección "Juegos de esta edición". */
+    games?: Game[];
+    onGameClick?: (game: Game) => void;
 }
 
 const SITE_ORIGIN = 'https://venezuelajuega.com';
@@ -22,7 +26,7 @@ function setMeta(selector: string, attr: string, value: string, createTag?: () =
     }
 }
 
-const JamDetailPage = ({ jamName, edition }: JamDetailPageProps) => {
+const JamDetailPage = ({ jamName, edition, games, onGameClick }: JamDetailPageProps) => {
     const jam = jamName ? getJamBySlug(jamName, edition) : undefined;
 
     useEffect(() => {
@@ -200,7 +204,7 @@ const JamDetailPage = ({ jamName, edition }: JamDetailPageProps) => {
         );
     }
 
-    return <JamSectionRenderer jam={jam} />;
+    return <JamSectionRenderer jam={jam} games={games} onGameClick={onGameClick} />;
 };
 
 export default JamDetailPage;

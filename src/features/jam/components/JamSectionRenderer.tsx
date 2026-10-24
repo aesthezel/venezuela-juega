@@ -1,4 +1,5 @@
 import { h } from 'preact';
+import type { Game } from '@/types';
 import type { JamEvent } from '../types';
 import JamHero from './JamHero';
 import JamStatBar from './JamStatBar';
@@ -7,6 +8,7 @@ import JamSponsors from './JamSponsors';
 import JamPrizes from './JamPrizes';
 import JamDonation from './JamDonation';
 import JamSchedule from './JamSchedule';
+import JamGames from './JamGames';
 import JamFAQ from './JamFAQ';
 import JamCTA from './JamCTA';
 import JamCountdown from './JamCountdown';
@@ -14,9 +16,12 @@ import JamMarkdownSection from './JamMarkdownSection';
 
 interface JamSectionRendererProps {
     jam: JamEvent;
+    /** Juegos disponibles para la sección "Juegos de esta edición". */
+    games?: Game[];
+    onGameClick?: (game: Game) => void;
 }
 
-const JamSectionRenderer = ({ jam }: JamSectionRendererProps) => {
+const JamSectionRenderer = ({ jam, games, onGameClick }: JamSectionRendererProps) => {
     const layout = jam.layout && jam.layout.length > 0
         ? jam.layout
         : [
@@ -73,6 +78,17 @@ const JamSectionRenderer = ({ jam }: JamSectionRendererProps) => {
                     case 'phases':
                     case 'timeline':
                         return <JamSchedule key={`section-schedule-${index}`} jam={jam} />;
+
+                    case 'games':
+                    case 'juegos':
+                        return jam.gameIds && jam.gameIds.length > 0 ? (
+                            <JamGames
+                                key={`section-games-${index}`}
+                                jam={jam}
+                                games={games}
+                                onGameClick={onGameClick}
+                            />
+                        ) : null;
 
                     case 'faq':
                     case 'faqs':

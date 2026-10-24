@@ -69,3 +69,35 @@ La participación es completamente libre y gratuita.
 
 ### Formato alternativo en JSON
 También puedes crear archivos `.json` con el schema completo de `JamEvent`.
+
+## Sección de juegos de la edición
+
+Puedes mostrar los juegos que se desarrollaron en la jam usando los IDs de la hoja **Games** del spreadsheet de jams. Basta con declarar `games:` en el frontmatter:
+
+```yaml
+games: 90-101          # rango inclusivo
+# games: [90, 91, 92]  # lista explícita
+# games: 90, 91, 92    # string separado por comas
+gamesTitle: "Juegos de la GameJam+"          # opcional
+gamesSubtitle: "Prototipos creados en 2026"  # opcional
+```
+
+La sección se inserta automáticamente antes del `faq` si no la incluyes en `layout`. Para ubicarla manualmente, agrega `games` en el layout:
+
+```yaml
+layout:
+  - hero
+  - about
+  - schedule
+  - games
+  - faq
+```
+
+También existe el bloque equivalente (útil para sobrescribir los IDs o el título desde el cuerpo):
+
+```markdown
+:::games {ids: "90-101", title: "Juegos de esta edición", subtitle: "48 horas de creatividad"}
+:::
+```
+
+Los IDs corresponden a la columna numérica final de la hoja `Games`; los juegos se muestran en el orden en que los declares y las IDs inexistentes se ignoran.

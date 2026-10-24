@@ -320,6 +320,22 @@ export const useGamesData = (): UseGamesDataReturn => {
                         const colIndex: Record<string, number> = {};
                         headerRow.forEach((name, i) => { if (name) colIndex[name] = i; });
 
+                        // The sheet ends with an unnamed incremental ID column. Those IDs are
+                        // referenced from the jam content files (`games:` in the frontmatter),
+                        // so prefer the real value over the row position when available.
+                        const findIdColumn = (): number => {
+                            const namedIdx = headerRow.findIndex(name => String(name).trim().toLowerCase() === 'id');
+                            if (namedIdx !== -1) return namedIdx;
+                            const bodyRows = data.slice(headerIndex + 1);
+                            for (let i = headerRow.length - 1; i >= 0; i--) {
+                                if (String(headerRow[i] ?? '').trim()) continue;
+                                const sample = bodyRows.find(row => String(row[i] ?? '').trim());
+                                if (sample && /^\d+$/.test(String(sample[i]).trim())) return i;
+                            }
+                            return -1;
+                        };
+                        const idIndex = findIdColumn();
+
                         const missingCols = JAM_REQUIRED_COLUMNS.filter(col => !(col in colIndex));
                         if (missingCols.length > 0) {
                             console.warn(`[useGamesData/jams] Columnas requeridas faltantes: ${missingCols.join(', ')}`);
@@ -337,9 +353,10 @@ export const useGamesData = (): UseGamesDataReturn => {
 
                             const baseSlug = generateSlug(title);
                             const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
+                            const explicitId = idIndex !== -1 ? Number(String(row[idIndex] ?? '').trim()) : NaN;
 
                             return {
-                                id: index + 1,
+                                id: Number.isInteger(explicitId) && explicitId > 0 ? explicitId : index + 1,
                                 slug: uniqueSlug,
                                 title,
                                 platform: parseStringToArray(col('Plataforma(s)', row)),

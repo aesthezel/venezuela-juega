@@ -57,7 +57,10 @@ const App = () => {
         if (typeof window !== 'undefined') {
             const prev = currentPath;
             if (e.url.startsWith('/game/') || e.url.startsWith('/games/')) {
-                if (prev.startsWith('/jams') || prev.startsWith('/game-jams') || prev.startsWith('/jam')) {
+                if (prev.startsWith('/jam/')) {
+                    // Keep the exact jam edition page (e.g. /jam/slug/2026)
+                    sessionStorage.setItem('game_return_to', prev);
+                } else if (prev.startsWith('/jams') || prev.startsWith('/game-jams')) {
                     sessionStorage.setItem('game_return_to', '/jams');
                 } else if (prev === '/' || prev.startsWith('/game') || prev.startsWith('/games')) {
                     sessionStorage.setItem('game_return_to', '/');
@@ -130,8 +133,8 @@ const App = () => {
                                     <Redirect path="/game-jams" to="/jams" />
                                     <Redirect path="/game-jams/" to="/jams" />
                                     <Redirect path="/jams/" to="/jams" />
-                                    <JamDetailPage path="/jam/:jamName" />
-                                    <JamDetailPage path="/jam/:jamName/:edition" />
+                                    <JamDetailPage path="/jam/:jamName" games={jamGames} onGameClick={handleOpenModal} />
+                                    <JamDetailPage path="/jam/:jamName/:edition" games={jamGames} onGameClick={handleOpenModal} />
                                     <DocsListPage path="/docs" />
                                     <DocDetailPage path="/docs/:docSlug" />
                                     <Redirect path="/recursos" to="/docs" />

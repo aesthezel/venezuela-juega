@@ -1,11 +1,15 @@
 import { h } from 'preact';
 import type { JamEvent } from '../types';
+import { scrollToJamGames } from '../scrollToJamGames';
 
 interface JamCTAProps {
     jam: JamEvent;
 }
 
 const JamCTA = ({ jam }: JamCTAProps) => {
+    const isEnded = jam.status === 'ended';
+    const hasGames = Boolean(jam.gameIds && jam.gameIds.length > 0);
+
     return (
         <section
             className="relative py-28 px-6 overflow-hidden"
@@ -33,7 +37,36 @@ const JamCTA = ({ jam }: JamCTAProps) => {
                 </p>
 
                 <div className="flex flex-wrap gap-4 justify-center">
-                    {jam.submissionUrl ? (
+                    {isEnded ? (
+                        hasGames ? (
+                            <button
+                                type="button"
+                                onClick={() => scrollToJamGames()}
+                                className="btn btn-lg font-black border-0 shadow-2xl"
+                                style={{
+                                    backgroundColor: jam.accentColor ?? '#e34262',
+                                    color: jam.accentTextColor ?? '#ffffff'
+                                }}
+                                aria-label={`Ver los juegos realizados en ${jam.name}`}
+                            >
+                                🎮 Ver los juegos realizados
+                            </button>
+                        ) : jam.submissionUrl ? (
+                            <a
+                                href={jam.submissionUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-lg font-black border-0 shadow-2xl"
+                                style={{
+                                    backgroundColor: jam.accentColor ?? '#e34262',
+                                    color: jam.accentTextColor ?? '#ffffff'
+                                }}
+                                aria-label={`Ver ${jam.name} en ${jam.platform ?? 'Itch.io'} (abre en nueva pestaña)`}
+                            >
+                                Ver en {jam.platform ?? 'Itch.io'}
+                            </a>
+                        ) : null
+                    ) : jam.submissionUrl ? (
                         <a
                             id="jam-register-cta"
                             href={jam.submissionUrl}
