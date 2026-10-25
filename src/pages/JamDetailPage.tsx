@@ -2,13 +2,14 @@ import { useEffect } from 'preact/hooks';
 import { RoutableProps } from 'preact-router';
 import type { Game } from '@/types';
 import { getJamBySlug } from '@/features/jam/registry';
+import type { JamGameData } from '@/features/jam/resolveJamGames';
 import { JamSectionRenderer } from '@/features/jam/components';
 
 interface JamDetailPageProps extends RoutableProps {
     jamName?: string;
     edition?: string;
-    /** Juegos de jam para resolver la sección "Juegos de esta edición". */
-    games?: Game[];
+    /** Juegos de jam (con Jam_Org_UID / Jam_Edition) para la sección de juegos. */
+    games?: JamGameData[];
     onGameClick?: (game: Game) => void;
 }
 

@@ -1,6 +1,8 @@
 import { h } from 'preact';
+import { useMemo } from 'preact/hooks';
 import type { Game } from '@/types';
 import type { JamEvent } from '../types';
+import { resolveJamGames, type JamGameData } from '../resolveJamGames';
 import JamHero from './JamHero';
 import JamStatBar from './JamStatBar';
 import JamAbout from './JamAbout';
@@ -16,12 +18,15 @@ import JamMarkdownSection from './JamMarkdownSection';
 
 interface JamSectionRendererProps {
     jam: JamEvent;
-    /** Juegos disponibles para la sección "Juegos de esta edición". */
-    games?: Game[];
+    /** Juegos de jam (con Jam_Org_UID / Jam_Edition) para la sección de juegos. */
+    games?: JamGameData[];
     onGameClick?: (game: Game) => void;
 }
 
 const JamSectionRenderer = ({ jam, games, onGameClick }: JamSectionRendererProps) => {
+    const jamGames = useMemo(() => resolveJamGames(jam, games ?? []), [jam, games]);
+    const hasGames = jamGames.length > 0;
+
     const layout = jam.layout && jam.layout.length > 0
         ? jam.layout
         : [
@@ -41,7 +46,7 @@ const JamSectionRenderer = ({ jam, games, onGameClick }: JamSectionRendererProps
             {layout.map((sectionName, index) => {
                 switch (sectionName) {
                     case 'hero':
-                        return <JamHero key={`section-hero-${index}`} jam={jam} />;
+                        return <JamHero key={`section-hero-${index}`} jam={jam} hasGames={hasGames} />;
 
                     case 'stats':
                     case 'statbar':
@@ -81,11 +86,11 @@ const JamSectionRenderer = ({ jam, games, onGameClick }: JamSectionRendererProps
 
                     case 'games':
                     case 'juegos':
-                        return jam.gameIds && jam.gameIds.length > 0 ? (
+                        return hasGames ? (
                             <JamGames
                                 key={`section-games-${index}`}
                                 jam={jam}
-                                games={games}
+                                games={jamGames}
                                 onGameClick={onGameClick}
                             />
                         ) : null;
@@ -95,7 +100,7 @@ const JamSectionRenderer = ({ jam, games, onGameClick }: JamSectionRendererProps
                         return <JamFAQ key={`section-faq-${index}`} jam={jam} />;
 
                     case 'cta':
-                        return <JamCTA key={`section-cta-${index}`} jam={jam} />;
+                        return <JamCTA key={`section-cta-${index}`} jam={jam} hasGames={hasGames} />;
 
                     default: {
                         // Check if it's a custom section registered in customSections

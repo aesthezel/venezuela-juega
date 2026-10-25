@@ -4,11 +4,12 @@ import { scrollToJamGames } from '../scrollToJamGames';
 
 interface JamCTAProps {
     jam: JamEvent;
+    /** Whether the jam has games to link to (resolved from the spreadsheet). */
+    hasGames?: boolean;
 }
 
-const JamCTA = ({ jam }: JamCTAProps) => {
+const JamCTA = ({ jam, hasGames = false }: JamCTAProps) => {
     const isEnded = jam.status === 'ended';
-    const hasGames = Boolean(jam.gameIds && jam.gameIds.length > 0);
 
     return (
         <section

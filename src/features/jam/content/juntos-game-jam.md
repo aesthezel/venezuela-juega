@@ -19,8 +19,13 @@ isCharity: true
 attendanceMode: online
 onlineUrl: "https://itch.io/jam/juntos-game-jam-venezuela-earthquake-relief"
 organizerName: "Venezuela Juega & Global Game Jam"
+# UID de la sede en la hoja JamSettings: los juegos se resuelven por UID + edición
+jamUid: "9"
+gamesTitle: "Juegos de la Juntos Game Jam"
+gamesSubtitle: "Prototipos creados en la edición 2026"
 layout:
   - hero
+  - games
   - stats
   - about
   - sponsors

@@ -59,8 +59,8 @@ describe('Jam CTAs when the jam has ended', () => {
     });
 
     it('hides the registration button and hint and shows the games CTA in the hero', () => {
-        const jam = makeJam({ ...registrationDates, gameIds: [1, 2, 3] });
-        const { getByRole, queryByText } = render(<JamHero jam={jam} />);
+        const jam = makeJam({ ...registrationDates, jamUid: '8' });
+        const { getByRole, queryByText } = render(<JamHero jam={jam} hasGames />);
 
         expect(queryByText('Inscríbete')).toBeNull();
         expect(queryByText(/inscripciones cerradas/i)).toBeNull();
@@ -74,8 +74,8 @@ describe('Jam CTAs when the jam has ended', () => {
         target.scrollIntoView = scrollIntoView;
         document.body.appendChild(target);
 
-        const jam = makeJam({ ...registrationDates, gameIds: [1, 2, 3] });
-        const { getByRole } = render(<JamHero jam={jam} />);
+        const jam = makeJam({ ...registrationDates, jamUid: '8' });
+        const { getByRole } = render(<JamHero jam={jam} hasGames />);
 
         fireEvent.click(getByRole('button', { name: /ver los juegos realizados/i }));
         expect(scrollIntoView).toHaveBeenCalledTimes(1);
@@ -90,8 +90,8 @@ describe('Jam CTAs when the jam has ended', () => {
     });
 
     it('shows the games CTA instead of "Participar ahora" in the final CTA', () => {
-        const jam = makeJam({ gameIds: [1, 2], submissionUrl: 'https://itch.io/jam/test' });
-        const { getByRole, queryByText } = render(<JamCTA jam={jam} />);
+        const jam = makeJam({ jamUid: '8', submissionUrl: 'https://itch.io/jam/test' });
+        const { getByRole, queryByText } = render(<JamCTA jam={jam} hasGames />);
 
         expect(getByRole('button', { name: /ver los juegos realizados/i })).toBeTruthy();
         expect(queryByText(/participar ahora/i)).toBeNull();

@@ -72,17 +72,23 @@ También puedes crear archivos `.json` con el schema completo de `JamEvent`.
 
 ## Sección de juegos de la edición
 
-Puedes mostrar los juegos que se desarrollaron en la jam usando los IDs de la hoja **Games** del spreadsheet de jams. Basta con declarar `games:` en el frontmatter:
+Puedes mostrar los juegos que se desarrollaron en la jam enlazando el evento con su sede del spreadsheet. En el frontmatter declara el **UID de la sede** (`JamSettings`) y la edición se toma automáticamente del año:
 
 ```yaml
-games: 90-101          # rango inclusivo
-# games: [90, 91, 92]  # lista explícita
-# games: 90, 91, 92    # string separado por comas
-gamesTitle: "Juegos de la GameJam+"          # opcional
+jamUid: "8"                                  # UID de la sede en JamSettings
+edition: "2026"                              # año usado para filtrar la edición
+gamesTitle: "Juegos de la Women Game Jam"    # opcional
 gamesSubtitle: "Prototipos creados en 2026"  # opcional
 ```
 
-La sección se inserta automáticamente antes del `faq` si no la incluyes en `layout`. Para ubicarla manualmente, agrega `games` en el layout:
+Reglas de resolución:
+
+- Se muestran los juegos de la hoja **Games** cuyo `Jam_Org_UID` coincide con `jamUid`.
+- Si `edition` es un año de 4 dígitos (ej. `"2026"`), se filtra también por `Jam_Edition`.
+- Si `edition` no es un año (ej. `"i"`), se usa el año de `startDate`. Los juegos sin `Jam_Edition` se incluyen siempre, porque la hoja no siempre rellena esa columna.
+- Los juegos se ordenan por su ID de la hoja.
+
+La sección se inserta automáticamente antes del `faq` si no la incluyes en `layout`. Para ubicarla manualmente:
 
 ```yaml
 layout:
@@ -93,11 +99,4 @@ layout:
   - faq
 ```
 
-También existe el bloque equivalente (útil para sobrescribir los IDs o el título desde el cuerpo):
-
-```markdown
-:::games {ids: "90-101", title: "Juegos de esta edición", subtitle: "48 horas de creatividad"}
-:::
-```
-
-Los IDs corresponden a la columna numérica final de la hoja `Games`; los juegos se muestran en el orden en que los declares y las IDs inexistentes se ignoran.
+> Si necesitas mostrar juegos puntuales, también puedes sobrescribir el título/subtítulo con `gamesTitle` y `gamesSubtitle`, pero la selección siempre se hace por sede + edición.

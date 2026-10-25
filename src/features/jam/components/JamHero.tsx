@@ -11,6 +11,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface JamHeroProps {
     jam: JamEvent;
+    /** Whether the jam has games to link to (resolved from the spreadsheet). */
+    hasGames?: boolean;
 }
 
 const statusLabel: Record<string, string> = {
@@ -31,7 +33,7 @@ const statusColor: Record<string, string> = {
     draft: 'badge-ghost',
 };
 
-const JamHero = ({ jam }: JamHeroProps) => {
+const JamHero = ({ jam, hasGames = false }: JamHeroProps) => {
     const heroRef = useRef<HTMLDivElement>(null);
     const logoRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
@@ -104,7 +106,6 @@ const JamHero = ({ jam }: JamHeroProps) => {
     const isRegistrationOpen = Boolean(jam.registrationUrl) && afterOpen && beforeClose;
 
     const isEnded = jam.status === 'ended';
-    const hasGames = Boolean(jam.gameIds && jam.gameIds.length > 0);
 
     // Hint text shown when the window is closed
     const registrationHint = jam.registrationUrl

@@ -25,8 +25,8 @@ locationState: "Carabobo"
 locationCountry: "VE"
 onlineUrl: "https://discord.gg/QJdn37EQdB"
 organizerName: "Women Game Jam Venezuela & Venezuela Juega"
-# IDs de la hoja "Games" del spreadsheet de jams que se muestran en la sección de juegos
-games: 75-89
+# UID de la sede en la hoja JamSettings: los juegos se resuelven por UID + edición
+jamUid: "8"
 gamesTitle: "Juegos de la Women Game Jam"
 gamesSubtitle: "Prototipos creados en la edición 2026"
 layout:

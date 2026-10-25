@@ -192,39 +192,28 @@ organizerName: "Caracas Game Devs & Venezuela Juega"
         expect(jam.organizerName).toBe('Caracas Game Devs & Venezuela Juega');
     });
 
-    it('should parse game IDs from frontmatter (ranges, lists and strings)', () => {
-        const build = (gamesValue: string) => `---
+    it('should parse the venue UID from frontmatter', () => {
+        const jam = parseJamContent(`---
 slug: games-jam
 edition: "2026"
 name: "Games Jam"
-games: ${gamesValue}
-layout:
-  - hero
-  - faq
----
-`;
-
-        const rangeJam = parseJamContent(build('90-92'));
-        expect(rangeJam.gameIds).toEqual([90, 91, 92]);
-
-        const listJam = parseJamContent(`---
-slug: games-jam
-edition: "2026"
-name: "Games Jam"
-games:
-  - 5
-  - 3
-  - 5
+jamUid: "8"
 ---
 
 Body`);
-        expect(listJam.gameIds).toEqual([5, 3]);
 
-        const inlineJam = parseJamContent(build('[10, 11, 12]'));
-        expect(inlineJam.gameIds).toEqual([10, 11, 12]);
+        expect(jam.jamUid).toBe('8');
 
-        const stringJam = parseJamContent(build('"20, 21, 22"'));
-        expect(stringJam.gameIds).toEqual([20, 21, 22]);
+        const numericUidJam = parseJamContent(`---
+slug: games-jam
+edition: "2026"
+name: "Games Jam"
+uid: 9
+---
+
+Body`);
+
+        expect(numericUidJam.jamUid).toBe('9');
     });
 
     it('should auto-insert the games section before faq and honor custom titles', () => {
@@ -232,7 +221,7 @@ Body`);
 slug: games-jam
 edition: "2026"
 name: "Games Jam"
-games: 1-3
+jamUid: "6"
 gamesTitle: "Juegos resultantes"
 gamesSubtitle: "Hechos en 48 horas"
 layout:
@@ -248,24 +237,24 @@ Body`);
         expect(jam.layout).toEqual(['hero', 'schedule', 'games', 'faq']);
     });
 
-    it('should allow overriding games via a :::games directive block', () => {
+    it('should keep an explicit games section placement', () => {
         const jam = parseJamContent(`---
 slug: games-jam
 edition: "2026"
 name: "Games Jam"
-games: 1
+jamUid: "6"
+layout:
+  - hero
+  - games
+  - faq
 ---
 
-:::games {ids: "7-9", title: "Juegos de la edición"}
-:::
-`);
+Body`);
 
-        expect(jam.gameIds).toEqual([7, 8, 9]);
-        expect(jam.gamesTitle).toBe('Juegos de la edición');
-        expect(jam.layout).toContain('games');
+        expect(jam.layout).toEqual(['hero', 'games', 'faq']);
     });
 
-    it('should not add a games section when no game IDs are declared', () => {
+    it('should not add a games section when no venue UID is declared', () => {
         const jam = parseJamContent(`---
 slug: no-games-jam
 edition: "2026"
@@ -277,7 +266,7 @@ layout:
 
 Body`);
 
-        expect(jam.gameIds).toEqual([]);
+        expect(jam.jamUid).toBeUndefined();
         expect(jam.layout).toEqual(['hero', 'faq']);
     });
 });

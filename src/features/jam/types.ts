@@ -87,10 +87,11 @@ export interface JamEvent {
     faqs: JamFAQ[];
     sponsors: JamSponsor[];
     /**
-     * IDs de los juegos (hoja `Games` del spreadsheet de jams) que se muestran
-     * como "Juegos de esta edición". Se declaran con `games:` en el frontmatter.
+     * UID de la sede/organización en la hoja `JamSettings` del spreadsheet de
+     * jams. Los juegos de la sección "Juegos de esta edición" se resuelven
+     * cruzando este UID con la edición (año) de la jam.
      */
-    gameIds?: number[];
+    jamUid?: string;
     /** Título personalizado de la sección de juegos de la edición */
     gamesTitle?: string;
     /** Subtítulo personalizado de la sección de juegos de la edición */

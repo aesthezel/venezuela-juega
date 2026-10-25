@@ -1,23 +1,19 @@
 import { h } from 'preact';
-import { useMemo } from 'preact/hooks';
 import { route } from 'preact-router';
 import type { Game } from '@/types';
 import type { JamEvent } from '../types';
-import { resolveJamGames } from '../resolveJamGames';
 import { JAM_GAMES_SECTION_ID } from '../scrollToJamGames';
 import JamGameCard from './JamGameCard';
 
 interface JamGamesProps {
     jam: JamEvent;
-    /** Juegos de la hoja `Games` del spreadsheet de jams. */
+    /** Juegos ya resueltos para esta edición (UID + año). */
     games?: Game[];
     onGameClick?: (game: Game) => void;
 }
 
 const JamGames = ({ jam, games = [], onGameClick }: JamGamesProps) => {
-    const jamGames = useMemo(() => resolveJamGames(jam, games), [jam, games]);
-
-    if (jamGames.length === 0) return null;
+    if (games.length === 0) return null;
 
     const accentColor = jam.accentColor || '#f97316';
 
@@ -53,12 +49,12 @@ const JamGames = ({ jam, games = [], onGameClick }: JamGamesProps) => {
                             border: `1px solid ${accentColor}35`,
                         }}
                     >
-                        {jamGames.length} {jamGames.length === 1 ? 'juego' : 'juegos'}
+                        {games.length} {games.length === 1 ? 'juego' : 'juegos'}
                     </span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                    {jamGames.map((game) => (
+                    {games.map((game) => (
                         <JamGameCard
                             key={game.id}
                             game={game}

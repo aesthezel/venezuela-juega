@@ -20,8 +20,8 @@ isCharity: false
 attendanceMode: online
 onlineUrl: "https://discord.com/invite/YGtwvBRCEw"
 organizerName: "Venezuela Juega & GameJam+"
-# IDs de la hoja "Games" del spreadsheet de jams que se muestran en la sección de juegos
-games: 90-101
+# UID de la sede en la hoja JamSettings: los juegos se resuelven por UID + edición
+jamUid: "6"
 gamesTitle: "Juegos de la GameJam+"
 gamesSubtitle: "Prototipos creados en la edición 2026"
 layout:
