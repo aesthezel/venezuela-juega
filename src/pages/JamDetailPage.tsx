@@ -1,7 +1,8 @@
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { RoutableProps } from 'preact-router';
 import type { Game } from '@/types';
-import { getJamBySlug } from '@/features/jam/registry';
+import { getJamBySlug, loadJamFullContent } from '@/features/jam/registry';
+import type { JamEvent } from '@/features/jam/types';
 import type { JamGameData } from '@/features/jam/resolveJamGames';
 import { JamSectionRenderer } from '@/features/jam/components';
 
@@ -28,7 +29,17 @@ function setMeta(selector: string, attr: string, value: string, createTag?: () =
 }
 
 const JamDetailPage = ({ jamName, edition, games, onGameClick }: JamDetailPageProps) => {
-    const jam = jamName ? getJamBySlug(jamName, edition) : undefined;
+    const [jam, setJam] = useState<JamEvent | undefined>(() => jamName ? getJamBySlug(jamName, edition) : undefined);
+
+    useEffect(() => {
+        if (!jamName) return;
+        const base = getJamBySlug(jamName, edition);
+        if (base) setJam(base);
+
+        loadJamFullContent(jamName, edition).then((full) => {
+            if (full) setJam(full);
+        });
+    }, [jamName, edition]);
 
     useEffect(() => {
         if (!jam) return;

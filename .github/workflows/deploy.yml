@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  # CRON: Recompila y publica automáticamente cada 6 horas para capturar cambios en Google Sheets
+  schedule:
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -23,13 +26,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      VITE_SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
-      VITE_SHEET_NAME: ${{ secrets.SHEET_NAME }}
-      VITE_GAMEJAMSHEET_NAME_GAMES: ${{ secrets.GAMEJAMSHEET_NAME_GAMES }}
-      VITE_GAMEJAMSHEET_NAME_SETTINGS: ${{ secrets.GAMEJAMSHEET_NAME_SETTINGS }}
-      VITE_GAMEJAMSHEET_ID: ${{ secrets.GAMEJAMSHEET_ID }}
-      VITE_SPACETIMEDB_URI: ${{ secrets.SPACETIMEDB_URI }}
-      VITE_SPACETIMEDB_MODULE_NAME: ${{ secrets.SPACETIMEDB_MODULE_NAME }}
+      VITE_SPREADSHEET_ID: ${{ secrets.VITE_SPREADSHEET_ID || secrets.SPREADSHEET_ID }}
+      VITE_SHEET_NAME: ${{ secrets.VITE_SHEET_NAME || secrets.SHEET_NAME }}
+      VITE_GAMEJAMSHEET_NAME_GAMES: ${{ secrets.VITE_GAMEJAMSHEET_NAME_GAMES || secrets.GAMEJAMSHEET_NAME_GAMES }}
+      VITE_GAMEJAMSHEET_NAME_SETTINGS: ${{ secrets.VITE_GAMEJAMSHEET_NAME_SETTINGS || secrets.GAMEJAMSHEET_NAME_SETTINGS }}
+      VITE_GAMEJAMSHEET_ID: ${{ secrets.VITE_GAMEJAMSHEET_ID || secrets.GAMEJAMSHEET_ID }}
+      VITE_SPACETIMEDB_URI: ${{ secrets.VITE_SPACETIMEDB_URI || secrets.SPACETIMEDB_URI }}
+      VITE_SPACETIMEDB_MODULE_NAME: ${{ secrets.VITE_SPACETIMEDB_MODULE_NAME || secrets.SPACETIMEDB_MODULE_NAME }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

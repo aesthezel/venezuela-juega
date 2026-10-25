@@ -7,14 +7,17 @@ describe('useGamesData Cache System', () => {
     beforeEach(() => {
         Object.keys(mockStorage).forEach(k => delete mockStorage[k]);
 
-        vi.stubGlobal('sessionStorage', {
+        const storageMock = {
             getItem: (key: string) => mockStorage[key] || null,
             setItem: (key: string, val: string) => { mockStorage[key] = val; },
             removeItem: (key: string) => { delete mockStorage[key]; },
             clear: () => { Object.keys(mockStorage).forEach(k => delete mockStorage[k]); },
             get length() { return Object.keys(mockStorage).length; },
             key: (index: number) => Object.keys(mockStorage)[index] || null,
-        });
+        };
+
+        vi.stubGlobal('localStorage', storageMock);
+        vi.stubGlobal('sessionStorage', storageMock);
     });
 
     it('writes and reads cache correctly when fresh', () => {
@@ -35,14 +38,14 @@ describe('useGamesData Cache System', () => {
         expect(cached).toBeNull();
     });
 
-    it('marks cache as isStale when older than 3 minutes', () => {
+    it('marks cache as isStale when older than 30 minutes', () => {
         const dummyData = [{ id: 2, title: 'Juego Dos' }];
-        const fourMinutesAgo = Date.now() - (4 * 60 * 1000);
+        const thirtyFiveMinutesAgo = Date.now() - (35 * 60 * 1000);
 
         // Manually inject older timestamp
         mockStorage['vj_games_sheet1'] = JSON.stringify({
             data: dummyData,
-            timestamp: fourMinutesAgo,
+            timestamp: thirtyFiveMinutesAgo,
             version: 'sheet1',
         });
 

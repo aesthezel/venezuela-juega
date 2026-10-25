@@ -2,6 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import Papa from 'papaparse';
 import * as dotenv from 'dotenv';
+import {
+    parseMainRows,
+    parseJamGamesRows,
+    parseJamSettingsRows,
+    generateSlug,
+    ensureUniqueSlug
+} from '../src/shared/catalogParser.ts';
 
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });
@@ -10,40 +17,14 @@ const SPREADSHEET_ID = process.env.VITE_SPREADSHEET_ID;
 const SHEET_NAME = process.env.VITE_SHEET_NAME;
 const JAM_SPREADSHEET_ID = process.env.VITE_GAMEJAMSHEET_ID;
 const JAM_GAMES_SHEET = process.env.VITE_GAMEJAMSHEET_NAME_GAMES;
+const JAM_SETTINGS_SHEET = process.env.VITE_GAMEJAMSHEET_NAME_SETTINGS || 'JamSettings';
 
 const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
 const JAM_GAMES_URL = `https://docs.google.com/spreadsheets/d/${JAM_SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${JAM_GAMES_SHEET}`;
+const JAM_SETTINGS_URL = `https://docs.google.com/spreadsheets/d/${JAM_SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${JAM_SETTINGS_SHEET}`;
 
 const SITE_ORIGIN = 'https://venezuelajuega.com';
 const FALLBACK_IMAGE = 'https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_LogoColor.png';
-
-// ─── Slug helpers matching src/utils/gameUtils.ts ────────────────────────────
-const generateSlug = (title) => {
-    return title
-        .toLowerCase()
-        .replace(/[áàâäã]/g, 'a')
-        .replace(/[éèêë]/g, 'e')
-        .replace(/[íìîï]/g, 'i')
-        .replace(/[óòôöõ]/g, 'o')
-        .replace(/[úùûü]/g, 'u')
-        .replace(/[ñ]/g, 'n')
-        .replace(/[ç]/g, 'c')
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-+|-+$/g, '');
-};
-
-const ensureUniqueSlug = (baseSlug, existingSlugs) => {
-    let slug = baseSlug;
-    let counter = 1;
-    while (existingSlugs.has(slug)) {
-        slug = `${baseSlug}-${counter}`;
-        counter++;
-    }
-    existingSlugs.add(slug);
-    return slug;
-};
 
 // ─── Lightweight YAML Frontmatter Parser ─────────────────────────────────────
 function parseScalar(val) {
@@ -283,14 +264,16 @@ function generateVideoGameSchema(game, canonicalUrl) {
         "inLanguage": "es"
     };
 
-    if (game.genres && game.genres.length > 0) {
-        schema.genre = game.genres;
+    const genres = game.genre || game.genres;
+    if (genres && genres.length > 0) {
+        schema.genre = genres;
     }
 
-    if (game.platforms && game.platforms.length > 0) {
-        schema.gamePlatform = game.platforms;
+    const platforms = game.platform || game.platforms;
+    if (platforms && platforms.length > 0) {
+        schema.gamePlatform = platforms;
         const osList = [];
-        for (const p of game.platforms) {
+        for (const p of platforms) {
             const pl = p.toLowerCase();
             if (pl.includes('pc') || pl.includes('windows')) osList.push('Windows');
             if (pl.includes('mac') || pl.includes('osx')) osList.push('macOS');
@@ -324,10 +307,11 @@ function generateVideoGameSchema(game, canonicalUrl) {
         schema.datePublished = game.releaseDate;
     }
 
-    if (game.storeUrl) {
+    const offerUrl = game.stores?.[0]?.url || game.storeUrl;
+    if (offerUrl) {
         schema.offers = {
             "@type": "Offer",
-            "url": game.storeUrl,
+            "url": offerUrl,
             "availability": "https://schema.org/InStock",
             "price": "0",
             "priceCurrency": "USD"
@@ -336,6 +320,7 @@ function generateVideoGameSchema(game, canonicalUrl) {
 
     return schema;
 }
+
 
 // ─── Process HTML for Games ──────────────────────────────────────────────────
 const processGameHtml = (template, game) => {
@@ -489,6 +474,10 @@ async function main() {
     const jams = loadJams(jamContentDir);
     console.log(`📦 Loaded ${jams.length} Game Jams from ${jamContentDir}`);
 
+    // Update manifest.json for lightweight client registry
+    const manifestPath = path.join(jamContentDir, 'manifest.json');
+    fs.writeFileSync(manifestPath, JSON.stringify(jams, null, 2));
+
     let createdJamPages = 0;
 
     // Render Jams catalog page /jams
@@ -527,140 +516,62 @@ async function main() {
 
     console.log(`✅ Successfully generated ${createdJamPages} pre-rendered Jam HTML pages with Event Schema.`);
 
-    // 2. Process Games from Google Sheets
+    // 2. Process Games & Jams from Google Sheets using shared catalogParser
     console.log(`Fetching main games from Google Sheets...`);
-    const games = [];
-    const existingSlugs = new Set();
-
+    let mainGames = [];
     try {
         const mainCsvRes = await fetch(SPREADSHEET_URL);
         const mainCsv = await mainCsvRes.text();
         const mainResults = Papa.parse(mainCsv, { header: false, skipEmptyLines: true });
-
-        const mainData = mainResults.data;
-        const headerIndex = mainData.findIndex(row => row[0] === 'Título del videojuego');
-        if (headerIndex !== -1) {
-            const gameRows = mainData.slice(headerIndex + 1);
-            const headers = mainData[headerIndex];
-            const getIndex = (name) => headers.indexOf(name);
-
-            const titleIdx = getIndex('Título del videojuego');
-            const descIdx = getIndex('Descripción');
-            const portId = getIndex('Portada');
-            const heroId = getIndex('Hero');
-            const miniId = getIndex('Mini Image');
-            const devIdx = getIndex('Desarrollador(es)');
-            const pubIdx = getIndex('Distribuidor');
-            const platIdx = getIndex('Plataforma(s)');
-            const genreIdx = getIndex('Género(s)');
-            const releaseIdx = getIndex('Fecha de lanzamiento');
-
-            const storeCols = ['Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store', 'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'];
-            const storeIndices = storeCols.map(col => getIndex(col)).filter(idx => idx !== -1);
-            const parseList = (str) => (str ? String(str).split(',').map(s => s.trim()).filter(Boolean) : []);
-
-            gameRows.forEach(row => {
-                const title = row[titleIdx];
-                if (!title) return;
-
-                const baseSlug = generateSlug(title);
-                const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
-
-                let storeUrl = '';
-                for (const sIdx of storeIndices) {
-                    const val = (row[sIdx] || '').trim();
-                    if (val.startsWith('http')) {
-                        storeUrl = val;
-                        break;
-                    }
-                }
-
-                games.push({
-                    slug: uniqueSlug,
-                    title: title,
-                    description: row[descIdx],
-                    imageCover: row[portId],
-                    imageHero: row[heroId],
-                    imageUrl: row[miniId],
-                    developers: devIdx !== -1 ? parseList(row[devIdx]) : [],
-                    publishers: pubIdx !== -1 ? parseList(row[pubIdx]) : [],
-                    platforms: platIdx !== -1 ? parseList(row[platIdx]) : [],
-                    genres: genreIdx !== -1 ? parseList(row[genreIdx]) : [],
-                    releaseDate: releaseIdx !== -1 ? (row[releaseIdx] || '').trim() : '',
-                    storeUrl
-                });
-            });
-        }
+        mainGames = parseMainRows(mainResults.data);
     } catch (err) {
         console.warn('⚠️ Warning: Failed to fetch main games from Google Sheets:', err.message);
     }
 
-    // Load Jam Games
+    console.log(`Fetching Jam games from Google Sheets...`);
+    let jamGames = [];
     try {
-        console.log(`Fetching Jam games from Google Sheets...`);
         const jamCsvRes = await fetch(JAM_GAMES_URL);
         const jamCsv = await jamCsvRes.text();
         const jamResults = Papa.parse(jamCsv, { header: false, skipEmptyLines: true });
-
-        const jamData = jamResults.data;
-        const jamHeaderIndex = jamData.findIndex(row => row[0] === 'Título del videojuego' && row[5] === 'Jam_Org_UID');
-
-        if (jamHeaderIndex !== -1) {
-            const jamGameRows = jamData.slice(jamHeaderIndex + 1);
-            const jamHeaders = jamData[jamHeaderIndex];
-            const jGetIndex = (name) => jamHeaders.indexOf(name);
-
-            const jTitleIdx = jGetIndex('Título del videojuego');
-            const jDescIdx = jGetIndex('Descripción');
-            const jPortId = jGetIndex('Portada');
-            const jHeroId = jGetIndex('Hero');
-            const jMiniId = jGetIndex('Mini Image');
-            const jDevIdx = jGetIndex('Desarrollador(es)');
-            const jPubIdx = jGetIndex('Distribuidor');
-            const jPlatIdx = jGetIndex('Plataforma(s)');
-            const jGenreIdx = jGetIndex('Género(s)');
-            const jReleaseIdx = jGetIndex('Fecha de lanzamiento');
-
-            const jStoreCols = ['Steam', 'Itch', 'Nintendo Shop', 'PlayStation Store', 'Microsoft Store', 'Play Store', 'App Store', 'Meta', 'GOG', 'Tienda externa'];
-            const jStoreIndices = jStoreCols.map(col => jGetIndex(col)).filter(idx => idx !== -1);
-            const parseList = (str) => (str ? String(str).split(',').map(s => s.trim()).filter(Boolean) : []);
-
-            jamGameRows.forEach(row => {
-                const title = row[jTitleIdx];
-                if (!title) return;
-
-                const baseSlug = generateSlug(title);
-                const uniqueSlug = ensureUniqueSlug(baseSlug, existingSlugs);
-
-                let storeUrl = '';
-                for (const sIdx of jStoreIndices) {
-                    const val = (row[sIdx] || '').trim();
-                    if (val.startsWith('http')) {
-                        storeUrl = val;
-                        break;
-                    }
-                }
-
-                games.push({
-                    slug: uniqueSlug,
-                    title: title,
-                    description: row[jDescIdx],
-                    imageCover: row[jPortId],
-                    imageHero: row[jHeroId],
-                    imageUrl: row[jMiniId],
-                    developers: jDevIdx !== -1 ? parseList(row[jDevIdx]) : [],
-                    publishers: jPubIdx !== -1 ? parseList(row[jPubIdx]) : [],
-                    platforms: jPlatIdx !== -1 ? parseList(row[jPlatIdx]) : [],
-                    genres: jGenreIdx !== -1 ? parseList(row[jGenreIdx]) : [],
-                    releaseDate: jReleaseIdx !== -1 ? (row[jReleaseIdx] || '').trim() : '',
-                    storeUrl
-                });
-            });
-        }
+        jamGames = parseJamGamesRows(jamResults.data);
     } catch (err) {
         console.warn('⚠️ Warning: Failed to fetch jam games from Google Sheets:', err.message);
     }
 
+    console.log(`Fetching Jam settings from Google Sheets...`);
+    let jamSettings = [];
+    try {
+        const settingsCsvRes = await fetch(JAM_SETTINGS_URL);
+        const settingsCsv = await settingsCsvRes.text();
+        const settingsResults = Papa.parse(settingsCsv, { header: true, skipEmptyLines: true });
+        jamSettings = parseJamSettingsRows(settingsResults.data);
+    } catch (err) {
+        console.warn('⚠️ Warning: Failed to fetch jam settings from Google Sheets:', err.message);
+    }
+
+    // Save JSON snapshots for fast static cold starts (Phase 1)
+    const publicDataDir = path.resolve(process.cwd(), 'public/data');
+    fs.mkdirSync(publicDataDir, { recursive: true });
+    fs.writeFileSync(path.join(publicDataDir, 'games.json'), JSON.stringify(mainGames, null, 2));
+    fs.writeFileSync(path.join(publicDataDir, 'jams.json'), JSON.stringify({
+        jamGames,
+        jamSettings,
+        version: Date.now(),
+    }, null, 2));
+
+    const distDataDir = path.join(distPath, 'data');
+    fs.mkdirSync(distDataDir, { recursive: true });
+    fs.writeFileSync(path.join(distDataDir, 'games.json'), JSON.stringify(mainGames, null, 2));
+    fs.writeFileSync(path.join(distDataDir, 'jams.json'), JSON.stringify({
+        jamGames,
+        jamSettings,
+        version: Date.now(),
+    }, null, 2));
+
+    console.log(`💾 Saved catalog snapshots to public/data and dist/data (${mainGames.length} main games, ${jamGames.length} jam games, ${jamSettings.length} jam venues).`);
+
+    const games = [...mainGames, ...jamGames];
     console.log(`Found ${games.length} total games. Generating HTML files...`);
 
     let createdGameCount = 0;

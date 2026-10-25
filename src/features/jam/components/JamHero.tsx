@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import type { CSSProperties } from 'preact';
+import type { CSSProperties } from 'preact/compat';
 import { useRef, useEffect } from 'preact/hooks';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';

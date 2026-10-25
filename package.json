@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/generate-meta.js",
+    "build": "vite build && tsx scripts/generate-meta.js",
+    "snapshot": "tsx scripts/generate-meta.js",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/preact": "^7.0.0-beta.8",
     "@fullcalendar/react": "^6.1.15",
+    "@preact/signals": "^2.0.2",
     "@tailwindcss/cli": "^4.3.0",
     "chart.js": "^4.5.1",
     "daisyui": "^5.5.19",
@@ -38,6 +40,7 @@
     "dotenv": "^17.3.1",
     "happy-dom": "^18.0.1",
     "tailwindcss": "^4.3.0",
+    "tsx": "^4.23.15",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
     "vitest": "^3.2.4"

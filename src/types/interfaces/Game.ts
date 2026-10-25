@@ -87,3 +87,19 @@ export interface Game {
     /** Jam Edition if the game was developed during a jam */
     Jam_Edition?: string;
 }
+
+export interface JamGame extends Game {
+    Jam_Org_UID?: string;
+    Jam_Edition?: string;
+}
+
+export interface JamSettingRow {
+    Organization: string;
+    Venue: string;
+    Venue_City: string;
+    Venue_Logo_URL?: string;
+    Venue_Logo?: string;
+    Venue_Socials?: string;
+    Order_Priority: string;
+    UID: string;
+}

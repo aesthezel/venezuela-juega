@@ -1,22 +1,19 @@
-import { useState, useMemo } from 'preact/hooks';
+import { useState, useMemo, useEffect } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
 import { Router, route } from 'preact-router';
-import { Game } from "@/types";
-import { useGamesData, useMetadata, useCatalogFilters } from '@/hooks';
+import { Game } from '@/types';
+import { useMetadata, useCatalogFilters } from '@/hooks';
 import { FireflyProvider } from '@/common/hooks/FireflyContext';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop, FireflyOverlay } from '@/components';
-import {
-    CatalogPage,
-    GameDetailPage,
-    NotFoundPage,
-    Redirect
-} from '@/pages';
+import CatalogPage from '@/pages/CatalogPage';
+import NotFoundPage from '@/pages/NotFoundPage';
+import Redirect from '@/pages/Redirect';
 
-// Heavy pages — loaded only when their route is visited
+// Heavy pages — code-split and loaded only when their route is visited
+const GameDetailPage = lazy(() => import('@/pages/GameDetailPage'));
 const ChartsPage = lazy(() => import('@/pages/ChartsPage'));
 const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
 const GameJamsPage = lazy(() => import('@/pages/GameJamsPage'));
-
 const AddGamePage = lazy(() => import('@/pages/AddGamePage'));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const DeveloperPage = lazy(() => import('@/pages/DeveloperPage'));
@@ -27,16 +24,50 @@ const DocDetailPage = lazy(() => import('@/pages/DocDetailPage'));
 
 import { SpacetimeDBProvider } from '@/spacetimedb/SpacetimeDBProvider';
 import ActiveJamsBanner from '@/features/jam/components/ActiveJamsBanner';
+import {
+    gamesSignal,
+    jamGamesSignal,
+    jamSettingsSignal,
+    catalogLoadingSignal,
+    catalogErrorSignal,
+    isRefreshingSignal,
+    allGamesSignal,
+    loadCatalogGames,
+    loadJamCatalogData,
+    refreshAllCatalog,
+} from '@/state/catalogSignals';
 
 const App = () => {
-    const { games, loading, error, jamGames, jamSettings, isRefreshing, refreshData } = useGamesData();
-
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
+    // Initial load: Main games only (Snapshot + Cache, 0 KB PapaParse)
+    useEffect(() => {
+        loadCatalogGames();
+
+        // Lazy fetch jams only if direct route entry requires it
+        const path = window.location.pathname;
+        if (path.startsWith('/jam') || path.startsWith('/game-jam')) {
+            loadJamCatalogData();
+        } else if (path.startsWith('/game/') || path.startsWith('/games/')) {
+            const slug = path.split('/')[2];
+            if (slug && !gamesSignal.value.some(g => g.slug === slug)) {
+                loadJamCatalogData();
+            }
+        }
+    }, []);
+
+    const games = gamesSignal.value;
+    const jamGames = jamGamesSignal.value;
+    const jamSettings = jamSettingsSignal.value;
+    const loading = catalogLoadingSignal.value;
+    const error = catalogErrorSignal.value;
+    const isRefreshing = isRefreshingSignal.value;
+    const allGames = allGamesSignal.value;
+
     useMetadata(currentPath, games);
 
-    // All filter state lives here — extracted from the God Object
+    // Catalog filtering
     const {
         filteredGames,
         state: filterState,
@@ -54,11 +85,22 @@ const App = () => {
     } = useCatalogFilters(games);
 
     const handleRouteChange = (e: any) => {
+        const url: string = e.url;
+
+        // Lazy load jam data on-demand if navigating into jams or an unknown game slug
+        if (url.startsWith('/jam') || url.startsWith('/game-jam')) {
+            loadJamCatalogData();
+        } else if (url.startsWith('/game/') || url.startsWith('/games/')) {
+            const slug = url.split('/')[2];
+            if (slug && !gamesSignal.value.some(g => g.slug === slug)) {
+                loadJamCatalogData();
+            }
+        }
+
         if (typeof window !== 'undefined') {
             const prev = currentPath;
-            if (e.url.startsWith('/game/') || e.url.startsWith('/games/')) {
+            if (url.startsWith('/game/') || url.startsWith('/games/')) {
                 if (prev.startsWith('/jam/')) {
-                    // Keep the exact jam edition page (e.g. /jam/slug/2026)
                     sessionStorage.setItem('game_return_to', prev);
                 } else if (prev.startsWith('/jams') || prev.startsWith('/game-jams')) {
                     sessionStorage.setItem('game_return_to', '/jams');
@@ -69,15 +111,13 @@ const App = () => {
                 }
             }
         }
-        setCurrentPath(e.url);
+        setCurrentPath(url);
         window.scrollTo(0, 0);
     };
 
     const handleOpenModal = (game: Game) => setSelectedGame(game);
     const handleCloseModal = () => setSelectedGame(null);
     const navigateToCatalog = () => route('/');
-
-    const allGames = useMemo(() => [...games, ...jamGames], [games, jamGames]);
 
     const catalogPageProps = {
         games,
@@ -100,7 +140,7 @@ const App = () => {
         onYearRangeChange: handleYearRangeChange,
         isLoading: loading,
         isRefreshing,
-        onRefresh: refreshData,
+        onRefresh: () => refreshAllCatalog(true),
     };
 
     if (loading && !['/', '/game', '/games'].includes(currentPath)) return <LoadingSpinner />;
@@ -117,10 +157,8 @@ const App = () => {
                     <div className="relative flex flex-col min-h-screen">
                         <Header
                             currentPath={currentPath}
-                            games={games}
-                            jamGames={jamGames}
                             isRefreshing={isRefreshing}
-                            onRefresh={refreshData}
+                            onRefresh={() => refreshAllCatalog(true)}
                         />
                         <div className="flex-grow app-content pb-24">
                             <ActiveJamsBanner />

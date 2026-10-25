@@ -3,11 +3,57 @@ import preact from '@preact/preset-vite';
 import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
 
+import fs from 'fs';
+
+function catalogApiDevPlugin(): import('vite').Plugin {
+    const serveSnapshot = (filePath: string, res: any) => {
+        if (fs.existsSync(filePath)) {
+            const data = fs.readFileSync(filePath, 'utf-8');
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=3600');
+            res.end(data);
+            return true;
+        }
+        return false;
+    };
+
+    return {
+        name: 'catalog-api-dev-middleware',
+        configureServer(server) {
+            server.middlewares.use((req, res, next) => {
+                if (req.url?.startsWith('/api/catalog')) {
+                    const snap = resolve(__dirname, './public/data/games.json');
+                    if (serveSnapshot(snap, res)) return;
+                }
+                if (req.url?.startsWith('/api/jams')) {
+                    const snap = resolve(__dirname, './public/data/jams.json');
+                    if (serveSnapshot(snap, res)) return;
+                }
+                next();
+            });
+        },
+        configurePreviewServer(server) {
+            server.middlewares.use((req, res, next) => {
+                if (req.url?.startsWith('/api/catalog')) {
+                    const snap = resolve(__dirname, './dist/data/games.json');
+                    if (serveSnapshot(snap, res)) return;
+                }
+                if (req.url?.startsWith('/api/jams')) {
+                    const snap = resolve(__dirname, './dist/data/jams.json');
+                    if (serveSnapshot(snap, res)) return;
+                }
+                next();
+            });
+        }
+    };
+}
+
 export default defineConfig({
     base: '/',
     plugins: [
         preact(),
         tailwindcss(),
+        catalogApiDevPlugin(),
     ],
     resolve: {
         alias: [
