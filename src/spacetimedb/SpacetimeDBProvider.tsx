@@ -118,7 +118,12 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
         });
     }, [syncActivity]);
 
+    const isSetupRef = useRef(false);
+
     const setup = useCallback((c: DbConnection) => {
+        if (isSetupRef.current) return;
+        isSetupRef.current = true;
+
         c.db.game_stats.onInsert(onStatEvt);
         c.db.game_stats.onUpdate(onStatEvt);
         c.db.my_activity.onInsert(onActivityEvt);
@@ -130,17 +135,45 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
     }, [onStatEvt, onActivityEvt, syncStats, syncActivity]);
 
     useEffect(() => {
-        if (connInst) return;
+        if (connInst) {
+            if (connInst.isActive && connInst.identity) {
+                const h = connInst.identity.toHexString();
+                if (identity !== h) setIdentity(h);
+                if (!isConnected) setIsConnected(true);
+                setup(connInst);
+            }
+            return;
+        }
 
         let cancelled = false;
         const initConnection = () => {
             if (cancelled || connInst) return;
-            connInst = DbConnection.builder().withUri(SPACETIMEDB_URI).withDatabaseName(MODULE_NAME)
-                .withToken(localStorage.getItem(AUTH_TOKEN_KEY) || undefined)
-                .onConnect((c: DbConnection, id: SdbIdentity, t: string) => {
-                    setIdentity(id.toHexString()); setIsConnected(true);
-                    localStorage.setItem(AUTH_TOKEN_KEY, t); setup(c);
-                }).build();
+            try {
+                connInst = DbConnection.builder()
+                    .withUri(SPACETIMEDB_URI)
+                    .withDatabaseName(MODULE_NAME)
+                    .withToken(localStorage.getItem(AUTH_TOKEN_KEY) || undefined)
+                    .onConnect((c: DbConnection, id: SdbIdentity, t: string) => {
+                        setIdentity(id.toHexString());
+                        setIsConnected(true);
+                        localStorage.setItem(AUTH_TOKEN_KEY, t);
+                        setup(c);
+                    })
+                    .onConnectError((_c, err) => {
+                        console.warn('[SpacetimeDB] Connection failed:', err);
+                        // Stale or invalid auth token: clear so subsequent attempt starts clean
+                        localStorage.removeItem(AUTH_TOKEN_KEY);
+                        setIsConnected(false);
+                    })
+                    .onDisconnect(() => {
+                        setIsConnected(false);
+                        isSetupRef.current = false;
+                    })
+                    .build();
+            } catch (err) {
+                console.warn('[SpacetimeDB] Error during builder init:', err);
+                localStorage.removeItem(AUTH_TOKEN_KEY);
+            }
         };
 
         // Defer WebSocket connection so it does not compete with initial paint / LCP
@@ -158,15 +191,6 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
                 clearTimeout(handle);
             }
         };
-    }, [setup]);
-
-    useEffect(() => {
-        if (connInst?.isActive && connInst.identity) {
-            const h = connInst.identity.toHexString();
-            if (identity !== h) setIdentity(h);
-            if (!isConnected) setIsConnected(true);
-            setup(connInst);
-        }
     }, [setup, identity, isConnected]);
 
     const val = useMemo(() => ({ connection: connInst, identity, isConnected, error: null, gameStatsMap, myActivityMap }), 

@@ -86,6 +86,15 @@ export const FireflyProvider = ({ currentPath, children }: FireflyProviderProps)
   useEffect(() => {
     if (!isConnected || !connection || !identity) return;
 
+    let rafId: number | null = null;
+    const scheduleCompute = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        computeFireflyData();
+      });
+    };
+
     const computeFireflyData = () => {
       if (!connection || !connection.db || !connection.db.firefly) return;
 
@@ -126,14 +135,15 @@ export const FireflyProvider = ({ currentPath, children }: FireflyProviderProps)
 
     computeFireflyData();
 
-    connection.db.firefly.onInsert(computeFireflyData);
-    connection.db.firefly.onUpdate(computeFireflyData);
-    connection.db.firefly.onDelete(computeFireflyData);
+    connection.db.firefly.onInsert(scheduleCompute);
+    connection.db.firefly.onUpdate(scheduleCompute);
+    connection.db.firefly.onDelete(scheduleCompute);
 
     return () => {
-      connection.db.firefly.removeOnInsert(computeFireflyData);
-      connection.db.firefly.removeOnUpdate(computeFireflyData);
-      connection.db.firefly.removeOnDelete(computeFireflyData);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      connection.db.firefly.removeOnInsert(scheduleCompute);
+      connection.db.firefly.removeOnUpdate(scheduleCompute);
+      connection.db.firefly.removeOnDelete(scheduleCompute);
     };
   }, [isConnected, connection, identity, currentPath]);
 
