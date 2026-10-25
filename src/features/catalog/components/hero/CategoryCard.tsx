@@ -44,7 +44,11 @@ const CategoryCard = ({ preset, gameCount, backgroundSrc, overrideImageUrl, onCl
                 <img
                     src={bgUrl}
                     alt=""
-                    loading="lazy"
+                    loading={index < 2 ? 'eager' : 'lazy'}
+                    fetchpriority={index === 0 ? 'high' : 'auto'}
+                    decoding="async"
+                    width="240"
+                    height="380"
                     className="absolute inset-0 w-full h-full object-cover
                                transition-all duration-500 ease-out
                                group-hover:scale-110 group-hover:blur-sm"

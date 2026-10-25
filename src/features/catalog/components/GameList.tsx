@@ -133,7 +133,7 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
         onClick={() => { trackGameCardClick({ slug: game.slug, title: game.title }, idx, 'list'); onGameClick(game); }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className={`game-list-row w-full text-left transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer relative ${fireflyCount > 0
+        className={`game-list-row [content-visibility:auto] [contain-intrinsic-size:0_80px] w-full text-left transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer relative ${fireflyCount > 0
           ? 'bg-base-300 hover:bg-base-300 border-l-2 border-l-accent-teal/60'
           : 'bg-base-300 hover:bg-base-300'
           }`}

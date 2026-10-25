@@ -146,6 +146,8 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                         alt={game.title}
                         className="w-full h-[250px] object-cover block"
                         imgClassName="w-full h-[250px] object-cover block"
+                        width={460}
+                        height={250}
                     />
                     {isHovered && trailerInfo && (
                         trailerInfo.type === 'youtube' ? (
@@ -189,6 +191,8 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                         alt={game.title}
                         className="absolute inset-0 w-full h-full object-cover"
                         imgClassName="absolute inset-0 w-full h-full object-cover"
+                        width={460}
+                        height={250}
                     />
                     {isHovered && trailerInfo && (
                         trailerInfo.type === 'youtube' ? (

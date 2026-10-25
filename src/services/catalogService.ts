@@ -266,9 +266,7 @@ export async function getCatalogGames(
             const initialGames: Game[] = await res.json();
             if (Array.isArray(initialGames) && initialGames.length > 0) {
                 writeCache(MAIN_CACHE_KEY, version, initialGames);
-                if (onBackgroundUpdate) {
-                    revalidateCatalogGames().then(onBackgroundUpdate).catch(console.error);
-                }
+                // Cold-start loads fresh build-time snapshot; avoid immediate PapaParse / Google Sheets download
                 return initialGames;
             }
         }
@@ -307,9 +305,7 @@ export async function getJamCatalogData(
             };
             if (payload.jamGames.length > 0 || payload.jamSettings.length > 0) {
                 writeCache(JAM_CACHE_KEY, version, payload);
-                if (onBackgroundUpdate) {
-                    revalidateJamData().then(onBackgroundUpdate).catch(console.error);
-                }
+                // Cold-start loads fresh build-time snapshot; avoid immediate PapaParse / Google Sheets download
                 return payload;
             }
         }

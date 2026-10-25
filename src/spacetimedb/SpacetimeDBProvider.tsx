@@ -120,12 +120,33 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
 
     useEffect(() => {
         if (connInst) return;
-        connInst = DbConnection.builder().withUri(SPACETIMEDB_URI).withDatabaseName(MODULE_NAME)
-            .withToken(localStorage.getItem(AUTH_TOKEN_KEY) || undefined)
-            .onConnect((c: DbConnection, id: SdbIdentity, t: string) => {
-                setIdentity(id.toHexString()); setIsConnected(true);
-                localStorage.setItem(AUTH_TOKEN_KEY, t); setup(c);
-            }).build();
+
+        let cancelled = false;
+        const initConnection = () => {
+            if (cancelled || connInst) return;
+            connInst = DbConnection.builder().withUri(SPACETIMEDB_URI).withDatabaseName(MODULE_NAME)
+                .withToken(localStorage.getItem(AUTH_TOKEN_KEY) || undefined)
+                .onConnect((c: DbConnection, id: SdbIdentity, t: string) => {
+                    setIdentity(id.toHexString()); setIsConnected(true);
+                    localStorage.setItem(AUTH_TOKEN_KEY, t); setup(c);
+                }).build();
+        };
+
+        // Defer WebSocket connection so it does not compete with initial paint / LCP
+        const idleCallback = typeof window !== 'undefined' && (window as any).requestIdleCallback;
+        const cancelIdle = typeof window !== 'undefined' && (window as any).cancelIdleCallback;
+        const handle = typeof idleCallback === 'function'
+            ? idleCallback(initConnection, { timeout: 2000 })
+            : setTimeout(initConnection, 1500);
+
+        return () => {
+            cancelled = true;
+            if (typeof cancelIdle === 'function') {
+                cancelIdle(handle);
+            } else {
+                clearTimeout(handle);
+            }
+        };
     }, [setup]);
 
     useEffect(() => {

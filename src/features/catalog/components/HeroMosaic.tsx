@@ -249,7 +249,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                 className="pointer-events-none absolute w-[120vw] h-[200vh] -left-[10vw] -top-[50vh] -rotate-3 grid select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7 z-[-2]"
                 style={{ willChange: 'transform' }}
             >
-                {mosaicGames.map((game) => (
+                {mosaicGames.map((game, idx) => (
                     <div key={game.id} className="relative h-full w-full overflow-hidden rounded-lg bg-base-200/50 border border-surface-700 shadow-xl">
                         <CoverImage
                             src={game.imageCover || game.imageUrl}
@@ -257,6 +257,9 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                             className="h-full w-full object-cover opacity-35 grayscale transition-all duration-700"
                             width={300}
                             height={400}
+                            loading={idx < 4 ? 'eager' : 'lazy'}
+                            fetchpriority={idx === 0 ? 'high' : 'auto'}
+                            decoding="async"
                         />
                     </div>
                 ))}

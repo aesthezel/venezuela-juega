@@ -32,7 +32,7 @@ const MasonryItem = ({ children }: { children: any }) => {
     return (
         <div 
             ref={ref} 
-            className="game-card-wrapper h-fit"
+            className="game-card-wrapper h-fit [content-visibility:auto] [contain-intrinsic-size:0_360px]"
             style={{ gridRowEnd: `span ${span}` }}
         >
             {children}

@@ -8,9 +8,22 @@ interface CoverImageProps {
   imgClassName?: string; // Class for the image element itself
   width?: string | number;
   height?: string | number;
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'sync' | 'auto';
+  fetchpriority?: 'high' | 'low' | 'auto';
 }
 
-const CoverImage = ({ src, alt, className = '', imgClassName = '', width, height }: CoverImageProps): JSX.Element => {
+const CoverImage = ({
+  src,
+  alt,
+  className = '',
+  imgClassName = '',
+  width,
+  height,
+  loading = 'lazy',
+  decoding = 'async',
+  fetchpriority = 'auto',
+}: CoverImageProps): JSX.Element => {
   const [hasError, setHasError] = useState(false);
 
   const handleError = () => {
@@ -23,7 +36,9 @@ const CoverImage = ({ src, alt, className = '', imgClassName = '', width, height
         src={src}
         alt={alt}
         className={imgClassName || className}
-        loading="lazy"
+        loading={loading}
+        decoding={decoding}
+        fetchpriority={fetchpriority}
         onError={handleError}
         width={width}
         height={height}
