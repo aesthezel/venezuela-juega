@@ -5,13 +5,20 @@ import { gsap } from 'gsap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { getAllJams } from '../registry';
-import type { JamEvent } from '../types';
+import type { JamEvent, JamStatus } from '../types';
 
-const isRegistrationOpen = (jam: JamEvent): boolean => {
-    if (!jam.registrationUrl) return false;
+const isJamActiveOrUpcoming = (jam: JamEvent): boolean => {
+    // 1. Descartar si la jam está finalizada o en borrador
+    if (jam.status === 'ended' || jam.status === 'draft') return false;
+
+    // 2. Solo permitir estados en curso o próximamente
+    const activeOrUpcomingStatuses: JamStatus[] = ['upcoming', 'open', 'active', 'voting'];
+    if (!activeOrUpcomingStatuses.includes(jam.status)) return false;
+
+    // 3. Si la fecha de culminación ya expiró, no mostrar
     const now = new Date();
-    if (jam.registrationOpenDate && now < jam.registrationOpenDate) return false;
-    if (jam.registrationCloseDate && now > jam.registrationCloseDate) return false;
+    if (jam.endDate && now > jam.endDate) return false;
+
     return true;
 };
 
@@ -23,7 +30,7 @@ const ActiveJamsBanner = () => {
     const [marqueeReady, setMarqueeReady] = useState(false);
     const [groupWidth, setGroupWidth] = useState(0);
 
-    const activeJams = useMemo(() => getAllJams().filter(isRegistrationOpen), []);
+    const activeJams = useMemo(() => getAllJams().filter(isJamActiveOrUpcoming), []);
 
     useEffect(() => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -157,9 +164,9 @@ const ActiveJamsBanner = () => {
                     aria-label={`Ir a ${jam.name}`}
                 >
                     <span aria-hidden="true">{jam.shortName ?? jam.name}</span>
-                    {jam.registrationCloseDate && (
+                    {jam.registrationCloseDate && jam.registrationCloseDate > new Date() && (
                         <span className="text-white/50 font-medium text-[10px] uppercase tracking-wide">
-                            Inscribete antes del {jam.registrationCloseDate.toLocaleDateString('es-VE', { day: 'numeric', month: 'short' })}
+                            Inscríbete antes del {jam.registrationCloseDate.toLocaleDateString('es-VE', { day: 'numeric', month: 'short' })}
                         </span>
                     )}
                     <FontAwesomeIcon icon={faArrowRight} className="text-[10px] text-brand-gold" />

@@ -38,14 +38,14 @@ describe('useGamesData Cache System', () => {
         expect(cached).toBeNull();
     });
 
-    it('marks cache as isStale when older than 30 minutes', () => {
+    it('marks cache as isStale when older than 1 hour TTL', () => {
         const dummyData = [{ id: 2, title: 'Juego Dos' }];
-        const thirtyFiveMinutesAgo = Date.now() - (35 * 60 * 1000);
+        const seventyMinutesAgo = Date.now() - (70 * 60 * 1000);
 
         // Manually inject older timestamp
         mockStorage['vj_games_sheet1'] = JSON.stringify({
             data: dummyData,
-            timestamp: thirtyFiveMinutesAgo,
+            timestamp: seventyMinutesAgo,
             version: 'sheet1',
         });
 

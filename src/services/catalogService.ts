@@ -3,11 +3,16 @@ import { parseMainRows, parseJamGamesRows, parseJamSettingsRows } from '@/shared
 
 // ─── Cache Configuration ──────────────────────────────────────────────────────
 
-/** Fresh TTL: 30 minutes (catalog doesn't change every 3 minutes) */
-export const CACHE_TTL_MS = 30 * 60 * 1000;
+/** Fresh TTL: 1 hour (GitHub Pages CDN cache + periodic revalidation) */
+export const CACHE_TTL_MS = 60 * 60 * 1000;
 
-export const MAIN_CACHE_KEY = 'vj_cache_v2_games';
-export const JAM_CACHE_KEY = 'vj_cache_v2_jams';
+export const MAIN_CACHE_KEY = 'vj_snapshot_games_v2';
+export const JAM_CACHE_KEY = 'vj_snapshot_jams_v2';
+
+const BASE_PATH = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+export const GAMES_SNAPSHOT_URL = `${BASE_PATH}/data/games.json`;
+export const JAMS_SNAPSHOT_URL = `${BASE_PATH}/data/jams.json`;
+
 
 export interface CacheEntry<T> {
     data: T;
@@ -114,7 +119,7 @@ export async function revalidateCatalogGames(): Promise<Game[]> {
         try {
             // 1. First attempt: Revalidate from GitHub Pages CDN static snapshot (TTFB < 30ms, 0 429 errors)
             try {
-                const snapRes = await fetch(`/data/games.json?_t=${Date.now()}`);
+                const snapRes = await fetch(`${GAMES_SNAPSHOT_URL}?_t=${Date.now()}`);
                 if (snapRes.ok) {
                     const freshGames: Game[] = await snapRes.json();
                     if (Array.isArray(freshGames) && freshGames.length > 0) {
@@ -171,7 +176,7 @@ export async function revalidateJamData(): Promise<JamCache> {
         try {
             // 1. First attempt: Revalidate from GitHub Pages CDN static snapshot (TTFB < 30ms)
             try {
-                const snapRes = await fetch(`/data/jams.json?_t=${Date.now()}`);
+                const snapRes = await fetch(`${JAMS_SNAPSHOT_URL}?_t=${Date.now()}`);
                 if (snapRes.ok) {
                     const freshData = await snapRes.json();
                     if (freshData && Array.isArray(freshData.jamGames)) {
@@ -256,7 +261,7 @@ export async function getCatalogGames(
 
     // Cold start: Load static JSON snapshot generated during build
     try {
-        const res = await fetch('/data/games.json');
+        const res = await fetch(GAMES_SNAPSHOT_URL);
         if (res.ok) {
             const initialGames: Game[] = await res.json();
             if (Array.isArray(initialGames) && initialGames.length > 0) {
@@ -293,7 +298,7 @@ export async function getJamCatalogData(
 
     // Cold start: Load static JSON snapshot generated during build
     try {
-        const res = await fetch('/data/jams.json');
+        const res = await fetch(JAMS_SNAPSHOT_URL);
         if (res.ok) {
             const initialJamData = await res.json();
             const payload: JamCache = {

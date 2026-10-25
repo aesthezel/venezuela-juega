@@ -127,6 +127,7 @@ function loadJams(contentDir) {
         const registrationUrl = attributes.registrationUrl || null;
         const registrationLabel = attributes.registrationLabel || 'Inscríbete';
         const registrationOpenDate = attributes.registrationOpenDate ? String(attributes.registrationOpenDate) : null;
+        const registrationCloseDate = attributes.registrationCloseDate ? String(attributes.registrationCloseDate) : null;
         const heroImage = attributes.heroImage || null;
         const logo = attributes.logo || null;
         const attendanceMode = attributes.attendanceMode || null;
@@ -151,6 +152,7 @@ function loadJams(contentDir) {
             registrationUrl,
             registrationLabel,
             registrationOpenDate,
+            registrationCloseDate,
             heroImage,
             logo,
             attendanceMode,
