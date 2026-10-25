@@ -69,7 +69,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
 
     // ── Stats ──────────────────────────────────────────────────────────────
     const stats = useMemo(() => {
-        const uniqueDevs = new Set(games.flatMap(g => g.developers));
+        const uniqueDevs = new Set(allGames.flatMap(g => g.developers).filter(Boolean));
         const years = allGames
             .map(g => parseInt(g.releaseDate.match(/\d{4}/)?.[0] || '0'))
             .filter(y => y > 1900 && y < 2999);

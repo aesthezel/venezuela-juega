@@ -12,7 +12,7 @@ import { faHeart as faHeartReg, faStar as faStarReg } from '@fortawesome/free-re
 import { faSteam, faItchIo, faPlaystation, faXbox, faGooglePlay, faApple, faMeta } from '@fortawesome/free-brands-svg-icons';
 import { LinkIcon, CoverImage, StoreButton, StatusBadge, PageLayout, ScreenshotLightbox } from "@/components";
 import { useSpacetimeDB } from '@/spacetimedb/connection';
-import { useGameStats, useMeasure, useTextLayout } from '@/hooks';
+import { useGameStats } from '@/hooks';
 import { getTrailerInfo, generateSlug } from "@/utils";
 
 interface DetailSectionProps {
@@ -67,17 +67,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
         toggleFavorite();
     };
 
-    const { ref: descRef, width: descWidth } = useMeasure<HTMLParagraphElement>();
-    const { lineCount: descLineCount } = useTextLayout(game?.description, descWidth, {
-        fontSize: 18,
-        lineHeight: 28
-    });
 
-    const { ref: pitchRef, width: pitchWidth } = useMeasure<HTMLParagraphElement>();
-    const { lineCount: pitchLineCount } = useTextLayout(game?.pitch, pitchWidth, {
-        fontSize: 16,
-        lineHeight: 24
-    });
 
     const trailerInfo = useMemo(() => game ? getTrailerInfo(game.trailerUrl) : null, [game?.trailerUrl]);
 
@@ -380,8 +370,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                             {/* Description with improved contrast */}
                             <div className="relative group animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
                                 <p
-                                    ref={descRef}
-                                    className={`text-base-content/80 mb-8 leading-relaxed text-base lg:text-lg font-medium opacity-90 ${descLineCount > 10 ? 'line-clamp-[10]' : ''}`}
+                                    className="text-base-content/80 mb-8 leading-relaxed text-base lg:text-lg font-medium opacity-90 line-clamp-[10]"
                                 >
                                     {game.description}
                                 </p>
@@ -504,7 +493,7 @@ const GameDetailPage = ({ gameSlug, games }: GameDetailPageProps) => {
                         {game.pitch && (
                             <div className="lg:col-span-2 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
                                 <DetailSection title="Pitch del Proyecto">
-                                    <p ref={pitchRef} className={`text-base-content/70 leading-relaxed text-lg italic opacity-80 ${pitchLineCount > 10 ? 'line-clamp-[12]' : ''}`}>
+                                    <p className="text-base-content/70 leading-relaxed text-lg italic opacity-80 line-clamp-[12]">
                                         {game.pitch}
                                     </p>
                                 </DetailSection>

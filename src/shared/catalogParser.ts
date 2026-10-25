@@ -237,7 +237,7 @@ export function parseJamGamesRows(data: string[][]): JamGame[] {
             isHighlighted: col('Destacado', row).toUpperCase() === 'TRUE',
             highlightReason: col('Descripción del Destacado', row) || '',
             screenshots: parseScreenshots(col('Screenshots', row)).map(s => ensureHttps(s) || ''),
-            origin: mapOrigin(col('Origen inicial', row)),
+            origin: mapOrigin(col('Origen inicial', row)) || GameOrigin.GAME_JAM,
             Jam_Org_UID: col('Jam_Org_UID', row).trim() || undefined,
             Jam_Edition: col('Jam_Edition', row).trim() || undefined,
         };

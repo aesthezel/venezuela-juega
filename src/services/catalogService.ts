@@ -265,7 +265,8 @@ export async function getCatalogGames(
         if (res.ok) {
             const initialGames: Game[] = await res.json();
             if (Array.isArray(initialGames) && initialGames.length > 0) {
-                writeCache(MAIN_CACHE_KEY, version, initialGames);
+                // Defer cache write so the UI paints before the blocking JSON.stringify + localStorage.setItem
+                setTimeout(() => writeCache(MAIN_CACHE_KEY, version, initialGames), 100);
                 // Cold-start loads fresh build-time snapshot; avoid immediate PapaParse / Google Sheets download
                 return initialGames;
             }
@@ -304,7 +305,7 @@ export async function getJamCatalogData(
                 jamSettings: initialJamData.jamSettings || [],
             };
             if (payload.jamGames.length > 0 || payload.jamSettings.length > 0) {
-                writeCache(JAM_CACHE_KEY, version, payload);
+                setTimeout(() => writeCache(JAM_CACHE_KEY, version, payload), 100);
                 // Cold-start loads fresh build-time snapshot; avoid immediate PapaParse / Google Sheets download
                 return payload;
             }

@@ -16,7 +16,7 @@ import {
 import { ViewMode, GameOrigin } from '@/types';
 import { CatalogPageProps } from "@/types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faTimes, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import type { CategoryPreset } from '@/features/catalog/components/hero';
 
 const CatalogPage = ({
@@ -165,21 +165,6 @@ const CatalogPage = ({
                                     <GameCounter filteredCount={alpha ? alphaFilteredGames.length : filteredGames.length} totalCount={games.length} />
                                 </div>
 
-                                {onRefresh && (
-                                    <button
-                                        onClick={() => onRefresh(true)}
-                                        disabled={isRefreshing}
-                                        className={`btn btn-square btn-neutral border-surface-700 shadow-lg text-base-content/70 hover:text-white hover:border-accent-teal/50 transition-all ${isRefreshing ? 'opacity-70 pointer-events-none' : 'cursor-pointer'
-                                            }`}
-                                        title={isRefreshing ? 'Actualizando datos...' : 'Actualizar catálogo'}
-                                        aria-label="Actualizar catálogo de videojuegos"
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faRotateRight}
-                                            className={`text-sm ${isRefreshing ? 'animate-spin text-accent-teal' : ''}`}
-                                        />
-                                    </button>
-                                )}
 
                                 <ViewModeToggle mode={viewMode} onChange={setViewMode} />
                             </div>

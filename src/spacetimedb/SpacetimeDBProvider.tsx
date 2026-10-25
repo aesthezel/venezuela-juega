@@ -1,6 +1,6 @@
 import { createContext } from 'preact';
 import { ComponentChildren } from 'preact';
-import { useContext, useEffect, useState, useMemo, useCallback } from 'preact/hooks';
+import { useContext, useEffect, useState, useMemo, useCallback, useRef } from 'preact/hooks';
 import { DbConnection } from './module_bindings';
 import { SPACETIMEDB_URI, MODULE_NAME, AUTH_TOKEN_KEY } from './config';
 import { generateSlug } from '@/utils/gameUtils';
@@ -99,12 +99,23 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
         setGameStatsMap(ns);
     }, []);
 
+    const statRafRef = useRef<number | null>(null);
+    const activityRafRef = useRef<number | null>(null);
+
     const onStatEvt = useCallback(() => {
-        if (connInst) syncStats(connInst);
+        if (statRafRef.current) return; // Already scheduled for this frame
+        statRafRef.current = requestAnimationFrame(() => {
+            statRafRef.current = null;
+            if (connInst) syncStats(connInst);
+        });
     }, [syncStats]);
 
     const onActivityEvt = useCallback(() => {
-        if (connInst) syncActivity(connInst);
+        if (activityRafRef.current) return;
+        activityRafRef.current = requestAnimationFrame(() => {
+            activityRafRef.current = null;
+            if (connInst) syncActivity(connInst);
+        });
     }, [syncActivity]);
 
     const setup = useCallback((c: DbConnection) => {

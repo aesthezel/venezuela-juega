@@ -89,5 +89,37 @@ describe('catalogParser module', () => {
             expect(settings[0].Organization).toBe('Valencia Game Jam');
             expect(settings[0].UID).toBe('8');
         });
+
+        it('normalizes JamGames rows and defaults origin to GAME_JAM when blank', () => {
+            const headerRow = [
+                'Título del videojuego', 'Plataforma(s)', 'Género(s)', 'Desarrollador(es)',
+                'Distribuidor', 'Jam_Org_UID', 'Jam_Edition', 'Fecha de lanzamiento',
+                '', 'Estado actual', 'Tiendas', 'Enlace(s)', 'Presskit', 'Pitch',
+                'Financiamiento', 'Motor', 'Origen inicial', 'Idioma(s) disponible(s)',
+                'Destacado', 'Descripción del Destacado', 'steam_appid', 'google_appid',
+                'Enlace directo', 'Steam', 'GOG', 'Itch', 'Nintendo Shop',
+                'PlayStation Store', 'Microsoft Store', 'Play Store', 'App Store', 'Meta',
+                'Tienda externa', 'Hero', 'Portada', 'Mini Image', 'Trailer', 'Screenshots', 'Descripción'
+            ];
+            const dataRow = new Array(headerRow.length).fill('');
+            const getIndex = (name: string) => headerRow.indexOf(name);
+
+            dataRow[getIndex('Título del videojuego')] = 'MaskMyth';
+            dataRow[getIndex('Plataforma(s)')] = 'Windows';
+            dataRow[getIndex('Género(s)')] = 'Rompecabezas';
+            dataRow[getIndex('Desarrollador(es)')] = 'KouHaruto, CarthDwigth';
+            dataRow[getIndex('Jam_Org_UID')] = '5';
+            dataRow[getIndex('Jam_Edition')] = '2026';
+            dataRow[getIndex('Estado actual')] = 'Lanzado';
+            dataRow[getIndex('Motor')] = 'Unity';
+            // Leave Origen inicial blank, as in the Google Sheet
+
+            const jamGames = parseJamGamesRows([headerRow, dataRow]);
+            expect(jamGames).toHaveLength(1);
+            expect(jamGames[0].title).toBe('MaskMyth');
+            expect(jamGames[0].Jam_Org_UID).toBe('5');
+            expect(jamGames[0].Jam_Edition).toBe('2026');
+            expect(jamGames[0].origin).toBe(GameOrigin.GAME_JAM);
+        });
     });
 });

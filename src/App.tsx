@@ -6,7 +6,7 @@ import { useMetadata, useCatalogFilters } from '@/hooks';
 import { FireflyProvider } from '@/common/hooks/FireflyContext';
 import { Header, Modal, LoadingSpinner, Footer, ScrollToTop, FireflyOverlay } from '@/components';
 import CatalogPage from '@/pages/CatalogPage';
-import NotFoundPage from '@/pages/NotFoundPage';
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 import Redirect from '@/pages/Redirect';
 
 // Heavy pages — code-split and loaded only when their route is visited
@@ -41,20 +41,10 @@ const App = () => {
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
-    // Initial load: Main games only (Snapshot + Cache, 0 KB PapaParse)
+    // Initial load: Main games & Game Jams (Fast static snapshots + local cache)
     useEffect(() => {
         loadCatalogGames();
-
-        // Lazy fetch jams only if direct route entry requires it
-        const path = window.location.pathname;
-        if (path.startsWith('/jam') || path.startsWith('/game-jam')) {
-            loadJamCatalogData();
-        } else if (path.startsWith('/game/') || path.startsWith('/games/')) {
-            const slug = path.split('/')[2];
-            if (slug && !gamesSignal.value.some(g => g.slug === slug)) {
-                loadJamCatalogData();
-            }
-        }
+        loadJamCatalogData();
     }, []);
 
     const games = gamesSignal.value;
@@ -87,14 +77,9 @@ const App = () => {
     const handleRouteChange = (e: any) => {
         const url: string = e.url;
 
-        // Lazy load jam data on-demand if navigating into jams or an unknown game slug
-        if (url.startsWith('/jam') || url.startsWith('/game-jam')) {
+        // Ensure jam data is loaded if not already present
+        if (jamGamesSignal.value.length === 0) {
             loadJamCatalogData();
-        } else if (url.startsWith('/game/') || url.startsWith('/games/')) {
-            const slug = url.split('/')[2];
-            if (slug && !gamesSignal.value.some(g => g.slug === slug)) {
-                loadJamCatalogData();
-            }
         }
 
         if (typeof window !== 'undefined') {
@@ -143,8 +128,7 @@ const App = () => {
         onRefresh: () => refreshAllCatalog(true),
     };
 
-    if (loading && !['/', '/game', '/games'].includes(currentPath)) return <LoadingSpinner />;
-    if (error) return <div className="text-center text-secondary text-2xl p-10">{error}</div>;
+    // Error display is now inline inside the layout — no more early returns that block Header/Footer.
 
     return (
         <SpacetimeDBProvider>
@@ -157,11 +141,12 @@ const App = () => {
                     <div className="relative flex flex-col min-h-screen">
                         <Header
                             currentPath={currentPath}
-                            isRefreshing={isRefreshing}
-                            onRefresh={() => refreshAllCatalog(true)}
                         />
                         <div className="flex-grow app-content pb-24">
                             <ActiveJamsBanner />
+                            {error ? (
+                                <div className="text-center text-secondary text-2xl p-10">{error}</div>
+                            ) : (
                             <Suspense fallback={<LoadingSpinner />}>
                                 <Router onChange={handleRouteChange}>
                                     <CatalogPage path="/" {...catalogPageProps} />
@@ -189,6 +174,7 @@ const App = () => {
                                     <NotFoundPage default games={games} onGameClick={handleOpenModal} />
                                 </Router>
                             </Suspense>
+                            )}
                         </div>
                     </div>
 

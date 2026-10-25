@@ -1,7 +1,5 @@
 import { h } from 'preact';
 import { useMemo, useState, useEffect } from 'preact/hooks';
-import { useMeasure } from '@/hooks/useMeasure';
-import { useTextLayout } from '@/hooks/useTextLayout';
 import { Game } from '@/types';
 import { RoutableProps } from 'preact-router';
 import { SearchBar, AlphaFilter, CoverImage, PageLayout } from '@/components';
@@ -239,24 +237,11 @@ const GameCard = ({ game, onGameClick, accentColor }: {
 }) => {
     const [hovered, setHovered] = useState(false);
     const trailerInfo = useMemo(() => getTrailerInfo(game.trailerUrl), [game.trailerUrl]);
-    const { ref: containerRef, width: containerWidth } = useMeasure<HTMLElement>();
 
-    // Medición del título (tamaño 14px, interlineado ajustado)
-    const { lineCount: titleLineCount } = useTextLayout(game.title, containerWidth - 32, {
-        fontSize: 14,
-        lineHeight: 18
-    });
-
-    // Medición de la descripción (tamaño 12px, interlineado ajustado)
     const descriptionText = game.pitch || game.description;
-    const { lineCount: descLineCount } = useTextLayout(descriptionText, containerWidth - 32, {
-        fontSize: 12,
-        lineHeight: 16
-    });
 
     return (
         <article
-            ref={containerRef}
             onClick={() => onGameClick(game)}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
@@ -316,7 +301,7 @@ const GameCard = ({ game, onGameClick, accentColor }: {
             {/* Content */}
             <div className="p-4 flex flex-col gap-2 flex-1">
                 <h3
-                    className={`text-sm font-bold leading-tight transition-colors duration-200 ${titleLineCount > 2 ? 'line-clamp-2' : ''}`}
+                    className="text-sm font-bold leading-tight transition-colors duration-200 line-clamp-2"
                     style={{ color: hovered ? accentColor : '#ffffff' }}
                 >
                     {game.title}
@@ -332,7 +317,7 @@ const GameCard = ({ game, onGameClick, accentColor }: {
                 )}
 
                 {descriptionText ? (
-                    <p className={`text-xs text-base-content/70 leading-relaxed flex-1 ${descLineCount > 2 ? 'line-clamp-2' : ''}`}>
+                    <p className="text-xs text-base-content/70 leading-relaxed flex-1 line-clamp-2">
                         {descriptionText}
                     </p>
                 ) : <div className="flex-1" />}

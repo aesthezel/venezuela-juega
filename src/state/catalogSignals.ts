@@ -106,13 +106,10 @@ export async function refreshAllCatalog(force = false): Promise<void> {
     }
 
     try {
-        const promises: Promise<any>[] = [revalidateCatalogGames()];
-        // If jam data was already requested/loaded, also revalidate jams
-        if (jamGamesSignal.value.length > 0 || jamSettingsSignal.value.length > 0) {
-            promises.push(revalidateJamData());
-        }
-
-        const [freshGames, freshJams] = await Promise.all(promises);
+        const [freshGames, freshJams] = await Promise.all([
+            revalidateCatalogGames(),
+            revalidateJamData(),
+        ]);
         if (freshGames && freshGames.length > 0) {
             gamesSignal.value = freshGames;
             catalogErrorSignal.value = null;

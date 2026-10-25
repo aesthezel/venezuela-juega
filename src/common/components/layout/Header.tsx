@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad, faHandHoldingHeart, faRotateRight, faBookOpen } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad, faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { Game } from '@/types';
 import { route } from 'preact-router';
 import { trackNav } from '@/utils/analytics';
@@ -92,6 +92,15 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
         []
     );
 
+    // Prefetch lazy route chunks on hover for instant navigation
+    const prefetchMap: Record<string, () => void> = {
+        '/jams': () => import('@/pages/JamListPage'),
+        '/calendar': () => import('@/pages/CalendarPage'),
+        '/charts': () => import('@/pages/ChartsPage'),
+        '/docs': () => import('@/pages/DocsListPage'),
+        '/about': () => import('@/pages/AboutPage'),
+    };
+
     const navItems = [
         { path: '/jams', label: 'Game Jams', icon: faGamepad, tooltip: null, badge: activeJamCount > 0 ? activeJamCount : null },
         { path: '/docs', label: 'Recursos', icon: faBookOpen, tooltip: null, badge: null },
@@ -134,6 +143,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
                                     <div key={item.path} className="relative group/nav">
                                         <button
                                             onClick={() => navigateTo(item.path)}
+                                            onMouseEnter={() => prefetchMap[item.path]?.()}
                                             className={`relative flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 cursor-pointer ${active
                                                 ? 'text-white bg-accent-teal-dark/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-accent-teal-dark/40'
                                                 : 'text-base-content/70 hover:text-white hover:bg-white/5'
@@ -161,22 +171,6 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
                         </nav>
 
                         <div className="flex items-center gap-2 md:gap-3">
-                            {onRefresh && (
-                                <button
-                                    onClick={() => onRefresh(true)}
-                                    disabled={isRefreshing}
-                                    className={`p-2 md:p-2.5 text-base-content/70 hover:text-white transition-all rounded-xl hover:bg-white/5 border border-surface-700 flex items-center justify-center ${isRefreshing ? 'opacity-70 pointer-events-none' : 'cursor-pointer'
-                                        }`}
-                                    title={isRefreshing ? 'Actualizando datos...' : 'Actualizar catálogo'}
-                                    aria-label="Actualizar catálogo"
-                                >
-                                    <FontAwesomeIcon
-                                        icon={faRotateRight}
-                                        className={`text-sm ${isRefreshing ? 'animate-spin text-accent-teal' : ''}`}
-                                    />
-                                </button>
-                            )}
-
                             <UserProfile games={games} jamGames={jamGames} />
 
                             {/* Mobile Hamburger Trigger */}
