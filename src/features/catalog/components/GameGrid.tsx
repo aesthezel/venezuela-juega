@@ -15,19 +15,8 @@ const GAMES_TO_LOAD_ON_SCROLL = 8;
 
 const MasonryItem = ({ children }: { children: any }) => {
     const { ref, height } = useMeasure<HTMLDivElement>();
-    const [span, setSpan] = useState(1);
-
-    useEffect(() => {
-        if (height > 0) {
-            // Usamos un incremento de 10px para las filas del grid.
-            // No sumamos el gap completo porque CSS Grid ya aplica el gap entre celdas,
-            // pero sí una pequeña corrección para redondear hacia arriba.
-            const rowHeight = 10;
-            const gap = 24;
-            const newSpan = Math.ceil((height + gap) / rowHeight);
-            setSpan(newSpan);
-        }
-    }, [height]);
+    // Usamos un incremento de 10px para las filas del grid.
+    const span = height > 0 ? Math.ceil((height + 24) / 10) : 1;
 
     return (
         <div 

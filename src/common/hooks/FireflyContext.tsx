@@ -1,17 +1,10 @@
 import { createContext } from 'preact';
-import { useContext, useState, useEffect, useCallback, useRef, useMemo } from 'preact/hooks';
+import { useContext, useState, useEffect, useCallback, useRef } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
 import { useSpacetimeDB } from '@/spacetimedb/connection';
 
-interface FireflyContextValue {
-  otherFireflies: any[];
-  presenceBySlug: Record<string, number>;
-}
-
-const FireflyContext = createContext<FireflyContextValue>({
-  otherFireflies: [],
-  presenceBySlug: {},
-});
+const FireflyOverlayContext = createContext<any[]>([]);
+const FireflyPresenceContext = createContext<Record<string, number>>({});
 
 interface FireflyProviderProps {
   currentPath: string;
@@ -20,9 +13,10 @@ interface FireflyProviderProps {
 
 /**
  * Single provider that:
- * 1. Tracks mouse/touch position and sends heartbeat (existing behavior)
+ * 1. Tracks mouse/touch position and sends heartbeat
  * 2. Iterates firefly table ONCE per update
- * 3. Produces otherFireflies (for overlay) AND presenceBySlug (for game cards)
+ * 3. Splits Overlay (mouse moves) from Presence (slug counts)
+ *    so mouse events NEVER trigger re-renders in GameCard/GameList.
  */
 export const FireflyProvider = ({ currentPath, children }: FireflyProviderProps) => {
   const { connection, identity, isConnected } = useSpacetimeDB();
@@ -30,7 +24,7 @@ export const FireflyProvider = ({ currentPath, children }: FireflyProviderProps)
   const [presenceBySlug, setPresenceBySlug] = useState<Record<string, number>>({});
   const mousePos = useRef({ x: 50, y: 50 });
 
-  // --- Mouse/Touch tracking (unchanged from original useFireflies) ---
+  // --- Mouse/Touch tracking ---
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     const scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
@@ -62,7 +56,7 @@ export const FireflyProvider = ({ currentPath, children }: FireflyProviderProps)
     };
   }, [handleMouseMove, handleTouch]);
 
-  // --- Heartbeat (unchanged) ---
+  // --- Heartbeat ---
 
   const sendUpdate = useCallback(() => {
     if (!isConnected || !connection) return;
@@ -143,12 +137,12 @@ export const FireflyProvider = ({ currentPath, children }: FireflyProviderProps)
     };
   }, [isConnected, connection, identity, currentPath]);
 
-  const value = useMemo(() => ({ otherFireflies, presenceBySlug }), [otherFireflies, presenceBySlug]);
-
   return (
-    <FireflyContext.Provider value={value}>
-      {children}
-    </FireflyContext.Provider>
+    <FireflyPresenceContext.Provider value={presenceBySlug}>
+      <FireflyOverlayContext.Provider value={otherFireflies}>
+        {children}
+      </FireflyOverlayContext.Provider>
+    </FireflyPresenceContext.Provider>
   );
 };
 
@@ -156,14 +150,15 @@ export const FireflyProvider = ({ currentPath, children }: FireflyProviderProps)
  * Used by FireflyOverlay — returns fireflies on same page.
  */
 export const useFireflyOverlay = () => {
-  const { otherFireflies } = useContext(FireflyContext);
+  const otherFireflies = useContext(FireflyOverlayContext);
   return { otherFireflies };
 };
 
 /**
  * Used by GameCard/GameList — returns firefly count for a specific game slug.
+ * Independent of overlay mouse movements so cards do not re-render on cursor movement!
  */
 export const useFireflyPresence = (slug: string): number => {
-  const { presenceBySlug } = useContext(FireflyContext);
+  const presenceBySlug = useContext(FireflyPresenceContext);
   return presenceBySlug[slug] || 0;
 };

@@ -71,4 +71,45 @@ export default defineConfig({
             { find: 'react', replacement: 'preact/compat' },
         ],
     },
-});
+    build: {
+        // Raise limit to 600KB to silence remaining warnings after splitting
+        chunkSizeWarningLimit: 600,
+        rollupOptions: {
+            output: {
+                manualChunks(id: string) {
+                    // ── Heavy calendar lib: FullCalendar and all its plugins ──
+                    if (id.includes('@fullcalendar')) {
+                        return 'fullcalendar';
+                    }
+                    // ── Charts library ───────────────────────────────────────
+                    if (id.includes('recharts') || id.includes('victory') ||
+                        id.includes('chart.js') || id.includes('echarts') ||
+                        id.includes('apexcharts') || id.includes('d3')) {
+                        return 'charts';
+                    }
+                    // ── GSAP animation engine ─────────────────────────────────
+                    if (id.includes('gsap')) {
+                        return 'gsap';
+                    }
+                    // ── FontAwesome icon packs ────────────────────────────────
+                    if (id.includes('@fortawesome')) {
+                        return 'fontawesome';
+                    }
+                    // ── SpacetimeDB client SDK ────────────────────────────────
+                    if (id.includes('@clockworklabs') || id.includes('spacetimedb') ||
+                        id.includes('module_bindings')) {
+                        return 'spacetimedb';
+                    }
+                    // ── Preact ecosystem (signals, compat, router) ────────────
+                    if (id.includes('preact') || id.includes('@preact')) {
+                        return 'preact';
+                    }
+                    // ── PapaParse: lazy-loaded, but included in vendor chunk ──
+                    if (id.includes('papaparse')) {
+                        return 'papaparse';
+                    }
+                },
+            },
+        },
+    },
+});

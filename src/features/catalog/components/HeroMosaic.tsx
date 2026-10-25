@@ -30,13 +30,14 @@ const AUTO_ROTATE_MS = 10000;
 const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
+    const progressBarRef = useRef<HTMLDivElement | null>(null);
 
     const categoryScrollRef = useRef<HTMLDivElement>(null);
     const [showHint, setShowHint] = useState(false);
     const [showcaseTab, setShowcaseTab] = useState<'stats' | 'explore'>('explore');
     const [statIndex, setStatIndex] = useState(0); // For mobile stat carousel
-    const [progress, setProgress] = useState(0);
     const progressStartRef = useRef(Date.now());
+    const rafRef = useRef<number | null>(null);
     const isPausedRef = useRef(false);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
@@ -128,14 +129,24 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
     }, [games, jamGames, allGames]);
 
     // ── Mosaic background games ────────────────────────────────────────────
+    const mosaicGamesRef = useRef<Game[]>([]);
+    const lastSourceGamesRef = useRef<Game[] | null>(null);
     const mosaicGames = useMemo(() => {
+        // Only recompute when games array reference changes AND we don't have a result yet
+        if (mosaicGamesRef.current.length > 0 && games === lastSourceGamesRef.current) {
+            return mosaicGamesRef.current;
+        }
         const withImages = games.filter(g => {
             const src = g.imageCover || g.imageUrl;
             return src && src.length > 5;
         });
         const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
         const count = isMobile ? 12 : 28;
-        return [...withImages].sort(() => 0.5 - Math.random()).slice(0, count);
+        // Shuffle once and store result
+        const shuffled = [...withImages].sort(() => 0.5 - Math.random()).slice(0, count);
+        lastSourceGamesRef.current = games;
+        mosaicGamesRef.current = shuffled;
+        return shuffled;
     }, [games]);
 
     // ── GSAP background animation ──────────────────────────────────────────
@@ -161,39 +172,51 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
         return () => ctx.revert();
     }, []);
 
-    // ── Auto-rotate tabs ───────────────────────────────────────────────────
+    // ── Auto-rotate tabs via RAF (no setState per frame) ──────────────────
     useEffect(() => {
         progressStartRef.current = Date.now();
-        setProgress(0);
+        // Reset CSS progress bar immediately
+        if (progressBarRef.current) {
+            progressBarRef.current.style.setProperty('--progress', '0%');
+        }
 
-        const progressInterval = setInterval(() => {
-            if (isPausedRef.current) return;
-            const elapsed = Date.now() - progressStartRef.current;
-            const pct = Math.min((elapsed / AUTO_ROTATE_MS) * 100, 100);
-            setProgress(pct);
+        const tick = () => {
+            if (!isPausedRef.current && progressBarRef.current) {
+                const elapsed = Date.now() - progressStartRef.current;
+                const pct = Math.min((elapsed / AUTO_ROTATE_MS) * 100, 100);
+                progressBarRef.current.style.setProperty('--progress', `${pct}%`);
 
-            if (pct >= 100) {
-                setShowcaseTab(prev => prev === 'stats' ? 'explore' : 'stats');
-                progressStartRef.current = Date.now();
-                setProgress(0);
+                if (pct >= 100) {
+                    setShowcaseTab(prev => prev === 'stats' ? 'explore' : 'stats');
+                    // The setShowcaseTab will trigger this effect to restart via dependency change
+                    return; // Stop RAF loop — will restart from new effect
+                }
             }
-        }, 50);
+            rafRef.current = requestAnimationFrame(tick);
+        };
 
-        return () => clearInterval(progressInterval);
+        rafRef.current = requestAnimationFrame(tick);
+        return () => {
+            if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+        };
     }, [showcaseTab]);
 
     const handleTabChange = useCallback((tab: 'stats' | 'explore') => {
         setShowcaseTab(tab);
         progressStartRef.current = Date.now();
-        setProgress(0);
+        if (progressBarRef.current) {
+            progressBarRef.current.style.setProperty('--progress', '0%');
+        }
     }, []);
 
     const handleShowcaseHover = useCallback((paused: boolean) => {
         isPausedRef.current = paused;
-        if (!paused) {
-            progressStartRef.current = Date.now() - (progress / 100) * AUTO_ROTATE_MS;
+        if (!paused && progressBarRef.current) {
+            // Adjust start time to preserve current progress position
+            const currentPct = parseFloat(progressBarRef.current.style.getPropertyValue('--progress') || '0');
+            progressStartRef.current = Date.now() - (currentPct / 100) * AUTO_ROTATE_MS;
         }
-    }, [progress]);
+    }, []);
 
     // ── Scroll hint ────────────────────────────────────────────────────────
     useEffect(() => {
@@ -485,7 +508,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                 <ProgressDots
                     activeTab={showcaseTab}
                     onTabChange={handleTabChange}
-                    progress={progress}
+                    ref={progressBarRef}
                 />
 
                 {/* ── Scroll Hint ── */}

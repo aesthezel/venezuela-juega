@@ -41,10 +41,18 @@ const App = () => {
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
-    // Initial load: Main games & Game Jams (Fast static snapshots + local cache)
+    // Initial load: Main games immediately, Game Jams deferred to idle callback
     useEffect(() => {
+        // Critical: load games as fast as possible (from cache or snapshot)
         loadCatalogGames();
-        loadJamCatalogData();
+
+        // Non-critical: defer jam data so it doesn't block initial paint
+        const ric = (window as any).requestIdleCallback;
+        if (typeof ric === 'function') {
+            ric(() => loadJamCatalogData(), { timeout: 3000 });
+        } else {
+            setTimeout(() => loadJamCatalogData(), 1000);
+        }
     }, []);
 
     const games = gamesSignal.value;

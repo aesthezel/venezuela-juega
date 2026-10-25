@@ -5,7 +5,9 @@ import {
     getJamCatalogData,
     revalidateCatalogGames,
     revalidateJamData,
-    clearCache
+    clearCache,
+    readCache,
+    MAIN_CACHE_KEY,
 } from '@/services/catalogService';
 
 // ─── Reactive Signals ────────────────────────────────────────────────────────
@@ -14,7 +16,16 @@ export const gamesSignal = signal<Game[]>([]);
 export const jamGamesSignal = signal<JamGame[]>([]);
 export const jamSettingsSignal = signal<JamSettingRow[]>([]);
 
-export const catalogLoadingSignal = signal<boolean>(true);
+// If the user has cached games, start with loading=false so the page renders instantly.
+// Otherwise start true so the spinner shows while the cold-start snapshot downloads.
+const _hasCachedGames = (() => {
+    try {
+        const cached = readCache<Game[]>(MAIN_CACHE_KEY, import.meta.env.VITE_SPREADSHEET_ID || 'v2');
+        return !!(cached && cached.data.length > 0);
+    } catch { return false; }
+})();
+
+export const catalogLoadingSignal = signal<boolean>(!_hasCachedGames);
 export const jamLoadingSignal = signal<boolean>(false);
 export const isRefreshingSignal = signal<boolean>(false);
 export const catalogErrorSignal = signal<string | null>(null);
