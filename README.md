@@ -113,6 +113,7 @@ Este repositorio sirve como una aplicación web que se despliega en [venezuelaju
 - [x] Mejorar el sistema de paginas de jams y otras secciones con un sistema mejorado de CMS
 - [x] Mejoras de cache
 - [x] Pre-renderizado de metadatos para SEO
+- [x] Optimización de carga de CSV y web estática al 100%
 - [ ] Agregar sistema de links extras
 - [ ] Agregar sistema de redes sociales
 - [ ] Conexión a API de IGDB o similar
