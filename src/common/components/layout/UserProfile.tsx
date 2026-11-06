@@ -12,6 +12,9 @@ interface UserProfileProps {
 
 const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
     const { connection, identity, isConnected } = useSpacetimeDB();
+    // `profileReady` becomes true once we have attempted a profile lookup after onApplied.
+    // Until then we show a skeleton badge so the header is never blank/frozen.
+    const [profileReady, setProfileReady] = useState(false);
     const [profile, setProfile] = useState<{ xp: bigint, level: number } | null>(null);
     const [showHistory, setShowHistory] = useState(false);
     const [favorites, setFavorites] = useState<any[]>([]);
@@ -37,6 +40,9 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
             if (myProfile) {
                 setProfile({ xp: myProfile.xp, level: Number(myProfile.level) });
             }
+            // Mark profile as ready after first attempt — even if no row exists yet.
+            // This unblocks the UI from showing "Nivel 0" while waiting.
+            setProfileReady(true);
         };
 
         const updateActivity = () => {
@@ -63,7 +69,19 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
         };
     }, [isConnected, identity, connection]);
 
-    if (!isConnected) return null;
+    // Show a lightweight skeleton badge while SpacetimeDB is still connecting.
+    // This keeps the header layout stable and avoids any perceived "freeze".
+    if (!isConnected) {
+        return (
+            <div className="flex items-center gap-2.5 bg-white/5 backdrop-blur-md px-1.5 py-1.5 md:pl-4 md:pr-1.5 md:py-1.5 rounded-full md:rounded-2xl border border-surface-700 shadow-lg opacity-50 pointer-events-none select-none" aria-hidden="true">
+                <div className="hidden md:flex flex-col items-end pr-1 gap-1">
+                    <div className="h-2.5 w-12 rounded bg-surface-700 animate-pulse" />
+                    <div className="h-1 w-16 rounded bg-surface-700 animate-pulse mt-0.5" />
+                </div>
+                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-base-300 border border-surface-700 animate-pulse" />
+            </div>
+        );
+    }
 
     const handleToggleHistory = () => {
         setShowHistory(!showHistory);
@@ -73,9 +91,10 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
         }
     };
 
-    const displayLevel = profile?.level.toString() || "0";
+    // Show "—" until the profile row has arrived from SpacetimeDB (avoids "Nivel 0" flicker).
+    const displayLevel = profileReady ? (profile?.level.toString() ?? '—') : '—';
     const displayXP = profile?.xp.toString() || "0";
-    const nextLevelXP = (Number(displayLevel) || 1) * 100;
+    const nextLevelXP = (Number(profile?.level) || 1) * 100;
     const progress = Math.min(100, (Number(displayXP) / nextLevelXP) * 100);
 
     return (
@@ -93,10 +112,20 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
                 )}
 
                 <div className="hidden md:flex flex-col items-end pr-1">
-                    <span className="text-[10px] font-black text-accent uppercase tracking-wider leading-none">
-                        Nivel {displayLevel}
-                    </span>
-                    <progress className="progress progress-accent w-16 h-1 mt-1.5 shadow-[0_0_8px_rgba(6,182,212,0.4)]" value={progress} max="100"></progress>
+                    {profileReady ? (
+                        <>
+                            <span className="text-[10px] font-black text-accent uppercase tracking-wider leading-none">
+                                Nivel {displayLevel}
+                            </span>
+                            <progress className="progress progress-accent w-16 h-1 mt-1.5 shadow-[0_0_8px_rgba(6,182,212,0.4)]" value={progress} max="100"></progress>
+                        </>
+                    ) : (
+                        // Skeleton while waiting for profile row from SpacetimeDB
+                        <div className="flex flex-col items-end gap-1">
+                            <div className="h-2.5 w-12 rounded bg-surface-700 animate-pulse" />
+                            <div className="h-1 w-16 rounded bg-surface-700 animate-pulse mt-0.5" />
+                        </div>
+                    )}
                 </div>
 
                 <div className="relative">
@@ -129,8 +158,8 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
                                 Luciernaga
                             </div>
                         </div>
-                        <div className="text-[10px] text-accent-teal uppercase font-black tracking-[0.2em] mb-1">Nivel {displayLevel}</div>
-                        <div className="text-5xl font-black text-white mb-2 tracking-tighter">{displayXP}</div>
+                        <div className="text-[10px] text-accent-teal uppercase font-black tracking-[0.2em] mb-1">Nivel {profileReady ? displayLevel : '…'}</div>
+                        <div className="text-5xl font-black text-white mb-2 tracking-tighter">{profileReady ? displayXP : '…'}</div>
                         <div className="text-[10px] text-base-content/70 uppercase font-black tracking-[0.2em] mb-4">Puntos de Experiencia</div>
                         <p className="text-xs text-base-content/70 leading-relaxed max-w-[220px] mx-auto">
                             Al descubrir juegos ganas puntos, estos puntos pronto podrás canjearlos por sorpresas.
