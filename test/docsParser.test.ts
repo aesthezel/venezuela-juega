@@ -99,11 +99,11 @@ describe('Docs CMS Parser', () => {
 });
 
 describe('Docs registry (contenido real del CMS)', () => {
-    it('ignores README.md and parses the example article', () => {
-        const doc = getDocBySlug('propiedad-intelectual-videojuegos');
+    it('ignores README.md and parses real content articles', () => {
+        const doc = getDocBySlug('sapi-registro-propiedad-intelectual-venezuela');
         expect(doc).toBeDefined();
         expect(doc!.toc.length).toBeGreaterThan(0);
-        expect(doc!.status).toBe('draft');
+        expect(doc!.status).toBe('published');
         expect(doc!.callouts.length).toBeGreaterThan(0);
         expect(doc!.sources?.length).toBeGreaterThan(0);
 
@@ -114,7 +114,6 @@ describe('Docs registry (contenido real del CMS)', () => {
     it('only exposes published documents in the public list', () => {
         const published = getAllDocs();
         expect(published.every((doc) => doc.status === 'published')).toBe(true);
-        expect(published.some((doc) => doc.slug === 'propiedad-intelectual-videojuegos')).toBe(false);
-        expect(getDocsByStatus('draft').some((doc) => doc.slug === 'propiedad-intelectual-videojuegos')).toBe(true);
+        expect(published.some((doc) => doc.slug === 'sapi-registro-propiedad-intelectual-venezuela')).toBe(true);
     });
 });

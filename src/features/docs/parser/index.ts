@@ -197,17 +197,18 @@ export function parseDocContent(
     const rawAuthorId = attributes.authorId ? String(attributes.authorId) : undefined;
     const authorProfile = getDocAuthor(rawAuthorId || rawAuthor);
 
-    const author = rawAuthor || authorProfile?.name;
-    const authorId = rawAuthorId || authorProfile?.id;
-    const authorRole = attributes.authorRole ? String(attributes.authorRole) : authorProfile?.role;
-    const authorBio = attributes.authorBio ? String(attributes.authorBio) : authorProfile?.bio;
-    const authorAvatar = attributes.authorAvatar ? String(attributes.authorAvatar) : authorProfile?.avatar;
-    const authorUrl = attributes.authorUrl ? String(attributes.authorUrl) : authorProfile?.url;
+    // Si el autor existe en authors.ts, este actúa como fuente centralizada
+    const author = authorProfile?.name || rawAuthor;
+    const authorId = authorProfile?.id || rawAuthorId;
+    const authorRole = authorProfile?.role || (attributes.authorRole ? String(attributes.authorRole) : undefined);
+    const authorBio = authorProfile?.bio || (attributes.authorBio ? String(attributes.authorBio) : undefined);
+    const authorAvatar = authorProfile?.avatar || (attributes.authorAvatar ? String(attributes.authorAvatar) : undefined);
+    const authorUrl = authorProfile?.url || (attributes.authorUrl ? String(attributes.authorUrl) : undefined);
 
     const parsedAuthorLinks = parseAuthorLinks(attributes.authorLinks);
-    const authorLinks = parsedAuthorLinks.length > 0
-        ? parsedAuthorLinks
-        : (authorProfile?.links && authorProfile.links.length > 0 ? authorProfile.links : undefined);
+    const authorLinks = authorProfile?.links && authorProfile.links.length > 0
+        ? authorProfile.links
+        : (parsedAuthorLinks.length > 0 ? parsedAuthorLinks : undefined);
 
     return {
         slug,

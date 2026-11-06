@@ -17,14 +17,13 @@ beforeAll(() => {
 
 describe('DocArticleRenderer', () => {
     it('renders hero, anchored headings, callouts and sources', () => {
-        const doc = getDocBySlug('propiedad-intelectual-videojuegos');
+        const doc = getDocBySlug('sapi-registro-propiedad-intelectual-venezuela');
         expect(doc).toBeDefined();
 
         const { container } = render(<DocArticleRenderer article={doc!} />);
 
         // Hero + badges
         expect(container.textContent).toContain(doc!.title);
-        expect(container.textContent).toContain('Borrador');
 
         // Heading anchors generated for the TOC
         for (const item of doc!.toc) {
@@ -32,7 +31,7 @@ describe('DocArticleRenderer', () => {
         }
 
         // Callouts and sources
-        expect(container.textContent).toContain('Este documento es informativo');
+        expect(container.textContent).toContain('Aviso legal');
         expect(container.textContent).toContain('Fuentes y referencias');
         expect(container.querySelector('a[href="https://sapi.gob.ve/"]')).not.toBeNull();
     });

@@ -8,14 +8,6 @@ tags: [propiedad-intelectual, marcas, derechos-de-autor, videojuegos, tributacio
 status: published
 author: "Edgar E. Sakellariou"
 authorId: "edgar-sakellariou"
-authorUrl: "https://www.linkedin.com/in/edgaresakellariou/"
-authorLinks:
-  - platform: "Instagram"
-    url: "https://www.instagram.com/edobledd"
-  - platform: "GitHub"
-    url: "https://github.com/Eddiusccc"
-  - platform: "LinkedIn"
-    url: "https://www.linkedin.com/in/edgaresakellariou/"
 publishedDate: 2026-11-05
 icon: "⚖️"
 accentColor: "#6366f1"
