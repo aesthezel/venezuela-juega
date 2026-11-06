@@ -30,7 +30,7 @@ export const DOC_AUTHORS: Record<string, DocAuthorProfile> = {
         avatar: 'https://venezuela-juega.s3.us-east-005.dream.io/collaborators/edgar-sakellariou.png',
         role: 'Ingeniero Mecánico & Desarrollador de Software',
         bio: 'Soy Ingeniero Mecánico con trayectoria en la gestión de proyectos y producción; adicionalmente Desarrollador de Videojuegos, con ganas de aportar toda información que sea de utilidad para la comunidad.',
-        url: 'https://www.linkedin.com/in/edgaresakellariou/',
+        url: 'https://github.com/Eddiusccc',
         links: [
             { platform: 'Instagram', url: 'https://www.instagram.com/edobledd' },
             { platform: 'GitHub', url: 'https://github.com/Eddiusccc' },

@@ -4,7 +4,7 @@ title: "Propiedad Intelectual y Marco Legal para Videojuegos en Venezuela"
 subtitle: "Preguntas frecuentes sobre protección legal, SAPI, marcas, contenido y tributación"
 description: "Guía de preguntas frecuentes sobre protección legal de videojuegos, marcas de estudios y normativas vigentes para el desarrollo de software interactivo en Venezuela."
 category: legal
-tags: [propiedad-intelectual, legal, sapi, marcas, derechos-de-autor, videojuegos, tributacion, licencias, faq]
+tags: [propiedad-intelectual, marcas, derechos-de-autor, videojuegos, tributacion, licencias, faq]
 status: published
 author: "Edgar E. Sakellariou"
 authorId: "edgar-sakellariou"
@@ -34,7 +34,7 @@ La información contenida en esta guía es de carácter orientativo y educativo.
 
 ### ¿Puedo patentar un videojuego en Venezuela?
 
-La respuesta directa es un **no**. En Venezuela, el software no califica dentro del concepto legal de "invención patentable" regulado por el SAPI. Ni un videojuego, ni una aplicación informática, ni un algoritmo pueden ser patentados como invenciones.
+La respuesta directa es **no**. En Venezuela, el software no califica dentro del concepto legal de "invención patentable" regulado por el SAPI. Ni un videojuego, aplicación informática o algoritmo pueden ser patentados como invenciones.
 
 Sin embargo, aunque no exista la vía de patentes, puedes resguardar tu videojuego frente a copias no autorizadas mediante dos vías complementarias:
 
