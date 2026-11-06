@@ -1,10 +1,16 @@
 export { default as DocArticleRenderer } from './DocArticleRenderer';
+export { default as DocAuthorCard } from './DocAuthorCard';
+export { default as DocAuthorPanel } from './DocAuthorPanel';
 export { default as DocBreadcrumbs } from './DocBreadcrumbs';
 export { default as DocCard } from './DocCard';
+export { default as DocContributions } from './DocContributions';
 export { default as DocHero } from './DocHero';
 export { default as DocInfoBox } from './DocInfoBox';
 export { default as DocMarkdownBody } from './DocMarkdownBody';
 export { default as DocMetaBar } from './DocMetaBar';
+export { default as DocReadingProgress } from './DocReadingProgress';
 export { default as DocRelated } from './DocRelated';
+export { default as DocRelatedSidebar } from './DocRelatedSidebar';
+export { default as DocSchemaOrg } from './DocSchemaOrg';
 export { default as DocSources } from './DocSources';
 export { default as DocTableOfContents } from './DocTableOfContents';

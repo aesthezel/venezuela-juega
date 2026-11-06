@@ -41,6 +41,13 @@ export interface DocSource {
     url: string;
 }
 
+/** Enlace de red social o perfil del autor. */
+export interface DocAuthorLink {
+    /** Nombre corto de la red o plataforma (ej. "GitHub", "LinkedIn", "Instagram"). */
+    platform: string;
+    url: string;
+}
+
 export interface DocArticle {
     slug: string;
     title: string;
@@ -51,7 +58,13 @@ export interface DocArticle {
     tags: string[];
     status: DocStatus;
     author?: string;
+    authorId?: string;
+    authorRole?: string;
+    authorBio?: string;
+    authorAvatar?: string;
     authorUrl?: string;
+    /** Perfiles y redes sociales del autor (complementan `authorUrl`). */
+    authorLinks?: DocAuthorLink[];
     publishedDate: Date | null;
     updatedDate?: Date | null;
     /** Minutos estimados (auto-calculado) */
@@ -74,6 +87,10 @@ export interface DocArticle {
     customSections?: Record<string, DocSection>;
     /** Fuentes/referencias externas */
     sources?: DocSource[];
+    /** Nombre del archivo markdown fuente (ej: 'sapi-registro-propiedad-intelectual.md') */
+    sourceFile?: string;
+    /** Ruta relativa del archivo fuente en el repositorio para enlaces de edición y GitHub */
+    sourcePath?: string;
     /** Destacar en el listado */
     featured?: boolean;
     /** Orden manual dentro de su categoría (menor = primero) */

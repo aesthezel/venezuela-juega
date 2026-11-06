@@ -43,7 +43,7 @@ function loadDocsFromContent(): DocArticle[] {
         if (isIgnoredFile(filename)) continue;
 
         try {
-            docs.push(parseDocContent(rawContent, filename));
+            docs.push(parseDocContent(rawContent, filename, path));
         } catch (err) {
             console.error(`[Docs CMS] Error parsing markdown doc at ${path}:`, err);
         }
@@ -79,6 +79,20 @@ export function getDocsByCategory(category: DocCategory): DocArticle[] {
 export function getDocsByTag(tag: string): DocArticle[] {
     const normalized = tag.toLowerCase();
     return getAllDocs().filter((d) => d.tags.some((t) => t.toLowerCase() === normalized));
+}
+
+/**
+ * Obtiene los artículos redactados por un autor determinado (por nombre o authorId),
+ * excluyendo opcionalmente el artículo actual.
+ */
+export function getDocsByAuthor(authorIdOrName: string, excludeSlug?: string): DocArticle[] {
+    const norm = authorIdOrName.toLowerCase().trim();
+    return getAllDocs().filter((d) => {
+        if (excludeSlug && d.slug === excludeSlug) return false;
+        const authorMatch = d.author?.toLowerCase().trim() === norm;
+        const idMatch = d.authorId?.toLowerCase().trim() === norm;
+        return authorMatch || idMatch;
+    });
 }
 
 /**

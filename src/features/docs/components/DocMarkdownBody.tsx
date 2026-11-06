@@ -46,11 +46,11 @@ function renderSectionBlock(section: DocSection): VNode {
     }
 
     return (
-        <div className="space-y-6">{renderBlocks(buildContentBlocks(section.content || ''), new Map())}</div>
+        <div className="space-y-6">{renderBlocks(buildContentBlocks(section.content || ''), new Map(), '#6366f1')}</div>
     );
 }
 
-function renderBlocks(blocks: ContentBlock[], headingIds: Map<number, string>): VNode[] {
+function renderBlocks(blocks: ContentBlock[], headingIds: Map<number, string>, accentColor: string): VNode[] {
     return blocks.map((block, idx) => {
         switch (block.kind) {
             case 'header': {
@@ -60,21 +60,31 @@ function renderBlocks(blocks: ContentBlock[], headingIds: Map<number, string>): 
                         <h2
                             key={idx}
                             id={id}
-                            className="scroll-mt-24 text-2xl sm:text-3xl font-black text-white pt-8 leading-tight"
+                            className="scroll-mt-28 text-2xl sm:text-3xl font-black text-white pt-10 pb-2 flex items-center gap-3 border-b border-surface-700/50"
                         >
+                            <span
+                                className="flex-shrink-0 w-1 h-8 rounded-full"
+                                style={{ background: accentColor }}
+                                aria-hidden="true"
+                            />
                             {renderRichText(block.text)}
                         </h2>
                     );
                 }
                 if (block.level === 3) {
                     return (
-                        <h3 key={idx} id={id} className="scroll-mt-24 text-xl sm:text-2xl font-black text-white pt-6">
+                        <h3
+                            key={idx}
+                            id={id}
+                            className="scroll-mt-28 text-xl sm:text-2xl font-black text-white pt-8 flex items-baseline gap-2"
+                        >
+                            <span className="text-accent-teal text-sm font-black" aria-hidden="true">›</span>
                             {renderRichText(block.text)}
                         </h3>
                     );
                 }
                 return (
-                    <h4 key={idx} id={id} className="scroll-mt-24 text-lg font-bold text-white pt-4">
+                    <h4 key={idx} id={id} className="scroll-mt-28 text-lg font-bold text-white pt-4">
                         {renderRichText(block.text)}
                     </h4>
                 );
@@ -92,18 +102,18 @@ function renderBlocks(blocks: ContentBlock[], headingIds: Map<number, string>): 
 
             case 'list':
                 return (
-                    <ul key={idx} className="list-disc list-outside pl-6 space-y-2 marker:text-accent-teal">
+                    <ul key={idx} className="list-disc list-outside pl-6 space-y-2.5 marker:text-accent-teal">
                         {block.items.map((item, i) => (
-                            <li key={i}>{renderRichText(item)}</li>
+                            <li key={i} className="leading-[1.8] text-base-content/80">{renderRichText(item)}</li>
                         ))}
                     </ul>
                 );
 
             case 'ordered-list':
                 return (
-                    <ol key={idx} className="list-decimal list-outside pl-6 space-y-2 marker:text-accent-teal marker:font-bold">
+                    <ol key={idx} className="list-decimal list-outside pl-6 space-y-2.5 marker:text-accent-teal marker:font-bold">
                         {block.items.map((item, i) => (
-                            <li key={i}>{renderRichText(item)}</li>
+                            <li key={i} className="leading-[1.8] text-base-content/80">{renderRichText(item)}</li>
                         ))}
                     </ol>
                 );
@@ -174,25 +184,33 @@ function renderBlocks(blocks: ContentBlock[], headingIds: Map<number, string>): 
                 // Unknown directive: render its inner content as plain blocks
                 return (
                     <div key={idx} className="space-y-6">
-                        {renderBlocks(buildContentBlocks(block.content), new Map())}
+                        {renderBlocks(buildContentBlocks(block.content), new Map(), accentColor)}
                     </div>
                 );
             }
 
             default:
-                return <p key={idx}>{renderRichText(block.lines.join(' '))}</p>;
+                return (
+                    <p key={idx} className="leading-[1.8] text-base-content/80">
+                        {renderRichText(block.lines.join(' '))}
+                    </p>
+                );
         }
     });
 }
 
 const DocMarkdownBody = ({ article }: DocMarkdownBodyProps) => {
+    const accentColor = article.accentColor || '#6366f1';
     const blocks = useMemo(() => buildContentBlocks(article.body), [article.body]);
     const headingIds = useMemo(() => resolveHeadingIds(blocks, article.toc), [blocks, article.toc]);
 
     return (
-        <div className="flex flex-col gap-6 text-base sm:text-lg leading-relaxed text-base-content/80">
-            {renderBlocks(blocks, headingIds)}
-        </div>
+        <article
+            lang="es"
+            className="flex flex-col gap-6 text-base sm:text-lg leading-relaxed text-base-content/80"
+        >
+            {renderBlocks(blocks, headingIds, accentColor)}
+        </article>
     );
 };
 
