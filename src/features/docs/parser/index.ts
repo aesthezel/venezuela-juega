@@ -1,5 +1,6 @@
 import type {
     DocArticle,
+    DocAuthorLink,
     DocCallout,
     DocCalloutKind,
     DocCategory,
@@ -8,6 +9,7 @@ import type {
     DocStatus,
 } from '../types';
 import { getDocCategoryMeta } from '../categories';
+import { getDocAuthor } from '../authors';
 import {
     extractDirectiveBlocks,
     extractFrontmatter,
@@ -18,7 +20,7 @@ import {
 } from '@/common/markdown';
 
 /** Orden de secciones por defecto del renderizador de artículos. */
-export const DEFAULT_DOC_LAYOUT = ['hero', 'meta', 'body', 'toc', 'sources', 'related'];
+export const DEFAULT_DOC_LAYOUT = ['hero', 'meta', 'body', 'toc', 'sources', 'contributions', 'related'];
 
 const CALLOUT_KINDS: Record<string, DocCalloutKind> = {
     info: 'info',
@@ -90,6 +92,29 @@ function parseFrontmatterSources(value: unknown): DocSource[] {
     return sources;
 }
 
+function parseAuthorLinks(value: unknown): DocAuthorLink[] {
+    if (!Array.isArray(value)) return [];
+    const links: DocAuthorLink[] = [];
+    for (const item of value) {
+        if (item && typeof item === 'object' && item.url) {
+            links.push({
+                platform: item.platform ? String(item.platform) : String(item.url),
+                url: String(item.url),
+            });
+        } else if (typeof item === 'string') {
+            try {
+                const url = new URL(item);
+                const host = url.hostname.replace(/^www\./, '');
+                const platform = host.split('.')[0];
+                links.push({ platform: platform.charAt(0).toUpperCase() + platform.slice(1), url: item });
+            } catch {
+                /* skip malformed */
+            }
+        }
+    }
+    return links;
+}
+
 function dedupeSources(sources: DocSource[]): DocSource[] {
     const seen = new Set<string>();
     return sources.filter((s) => {
@@ -105,7 +130,11 @@ function dedupeSources(sources: DocSource[]): DocSource[] {
  * Reutiliza la librería común `@/common/markdown` para frontmatter,
  * directivas, TOC y tiempo de lectura.
  */
-export function parseDocContent(rawContent: string, defaultSlug?: string): DocArticle {
+export function parseDocContent(
+    rawContent: string,
+    defaultSlug?: string,
+    rawPath?: string
+): DocArticle {
     const { attributes, body } = extractFrontmatter(rawContent);
 
     const slug = String(attributes.slug || defaultSlug || 'documento');
@@ -114,6 +143,11 @@ export function parseDocContent(rawContent: string, defaultSlug?: string): DocAr
     const category = (attributes.category as DocCategory) || 'community';
     const meta = getDocCategoryMeta(category);
     const status = normalizeStatus(attributes.status);
+
+    const sourceFile = defaultSlug ? `${defaultSlug}.md` : `${slug}.md`;
+    const sourcePath = rawPath
+        ? rawPath.replace(/^\.\//, 'src/features/docs/').replace(/^\//, '')
+        : `src/features/docs/content/${sourceFile}`;
 
     const directiveBlocks = extractDirectiveBlocks(body);
 
@@ -159,6 +193,22 @@ export function parseDocContent(rawContent: string, defaultSlug?: string): DocAr
         ? attributes.layout.map(String)
         : DEFAULT_DOC_LAYOUT;
 
+    const rawAuthor = attributes.author ? String(attributes.author) : undefined;
+    const rawAuthorId = attributes.authorId ? String(attributes.authorId) : undefined;
+    const authorProfile = getDocAuthor(rawAuthorId || rawAuthor);
+
+    const author = rawAuthor || authorProfile?.name;
+    const authorId = rawAuthorId || authorProfile?.id;
+    const authorRole = attributes.authorRole ? String(attributes.authorRole) : authorProfile?.role;
+    const authorBio = attributes.authorBio ? String(attributes.authorBio) : authorProfile?.bio;
+    const authorAvatar = attributes.authorAvatar ? String(attributes.authorAvatar) : authorProfile?.avatar;
+    const authorUrl = attributes.authorUrl ? String(attributes.authorUrl) : authorProfile?.url;
+
+    const parsedAuthorLinks = parseAuthorLinks(attributes.authorLinks);
+    const authorLinks = parsedAuthorLinks.length > 0
+        ? parsedAuthorLinks
+        : (authorProfile?.links && authorProfile.links.length > 0 ? authorProfile.links : undefined);
+
     return {
         slug,
         title,
@@ -167,8 +217,13 @@ export function parseDocContent(rawContent: string, defaultSlug?: string): DocAr
         category,
         tags: toStringArray(attributes.tags),
         status,
-        author: attributes.author ? String(attributes.author) : undefined,
-        authorUrl: attributes.authorUrl ? String(attributes.authorUrl) : undefined,
+        author,
+        authorId,
+        authorRole,
+        authorBio,
+        authorAvatar,
+        authorUrl,
+        authorLinks,
         publishedDate: parseDate(attributes.publishedDate ?? attributes.date),
         updatedDate: attributes.updatedDate ? parseDate(attributes.updatedDate) : undefined,
         readingTime: estimateReadingTime(body),
@@ -182,6 +237,8 @@ export function parseDocContent(rawContent: string, defaultSlug?: string): DocAr
         callouts,
         customSections: Object.keys(customSections).length > 0 ? customSections : undefined,
         sources: sources.length > 0 ? dedupeSources(sources) : undefined,
+        sourceFile,
+        sourcePath,
         featured: Boolean(attributes.featured),
         order: attributes.order !== undefined ? Number(attributes.order) : undefined,
     };

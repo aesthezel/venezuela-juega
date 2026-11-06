@@ -1,7 +1,8 @@
 import { h } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt, faClock, faPenNib, faRotate } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarAlt, faClock, faPenNib, faRotate, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import type { DocArticle } from '../types';
+import { getDocEditUrl } from '../constants';
 
 interface DocMetaBarProps {
     article: DocArticle;
@@ -49,6 +50,18 @@ const DocMetaBar = ({ article }: DocMetaBarProps) => {
                         <MetaItem icon={faRotate}>Actualizado el {updated}</MetaItem>
                     )}
                     {article.readingTime ? <MetaItem icon={faClock}>{article.readingTime} min</MetaItem> : null}
+
+                    {/* Acceso rápido a sugerir cambio en GitHub */}
+                    <a
+                        href={getDocEditUrl(article.sourcePath, article.slug)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-auto inline-flex items-center gap-1.5 text-xs text-base-content/40 hover:text-accent-teal transition-colors"
+                        title="Sugerir una edición a este documento en GitHub"
+                    >
+                        <FontAwesomeIcon icon={faPenToSquare} className="text-[11px]" />
+                        <span className="hidden sm:inline">Sugerir cambio</span>
+                    </a>
                 </div>
             )}
 

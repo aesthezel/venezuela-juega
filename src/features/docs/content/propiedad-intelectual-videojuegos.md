@@ -11,7 +11,7 @@ publishedDate: 2026-10-01
 updatedDate: 2026-10-01
 icon: "⚖️"
 accentColor: "#6366f1"
-layout: [hero, meta, body, toc, sources, related]
+layout: [hero, meta, body, toc, sources, contributions, related]
 ---
 
 ## Introducción

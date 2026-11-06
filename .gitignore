@@ -12,6 +12,7 @@ lerna-debug.log*
 docs/backend
 docs/improvements
 docs/database
+docs/content
 
 node_modules
 dist

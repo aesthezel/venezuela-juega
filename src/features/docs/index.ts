@@ -18,10 +18,13 @@ export {
     getDocsByStatus,
     getDocsByCategory,
     getDocsByTag,
+    getDocsByAuthor,
     getRelatedDocs,
     getDocCategories,
     getDocTags,
 } from './registry';
 
+export * from './authors';
+export * from './constants';
 export * from './parser';
 export * from './components';
