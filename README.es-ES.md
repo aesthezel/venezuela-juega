@@ -1,0 +1,135 @@
+
+
+# Venezuela Juega
+Este repositorio sirve como una aplicación web que se despliega en [venezuelajuega.com](https://venezuelajuega.com) que organiza y presenta videojuegos desarrollados en Venezuela. La plataforma permite explorar, filtrar y descubrir juegos venezolanos de la manera más intuitiva, buscando ofrecer información detallada sobre cada título.
+
+## 🎯 Características principales
+- **Catálogo de juegos**: Visualización completa de videojuegos venezolanos
+- **Filtros avanzados**: Búsqueda por género, plataforma y estado de desarrollo
+- **Juegos destacados**: Sección especial para títulos destacados
+- **Vista de calendario**: Visualización de lanzamientos por fechas
+- **Estadísticas**: Gráficos y análisis del ecosistema de videojuegos
+- **Detalles del juego**: Páginas individuales con información completa
+- **Modo responsivo**: Optimizado para dispositivos móviles y escritorio
+
+## 🛠️ Tecnologías utilizadas
+### Librerías principales
+- **Preact** 10.22.1
+- **SpacetimeDB** 2.1.0
+- **TypeScript** 5.8.2
+- **Preact Router** 4.1.2
+- **Vite** 6.2.0
+- **GSAP** 3.13.0
+
+### Librerías anexadas estáticas
+- **Tailwind CSS** 4.3.0
+- **DaisyUI** 5.5.19
+- **Chart.js** 4.5.1
+- **Bootstrap Icons** 1.13.1
+- **FullCalendar** 6.1.15
+
+### Librerías extras
+- **Papa Parse** 5.5.3
+- **Dotenv** 17.3.1
+- **FontAwesome** 7.0.0
+- **Vitest** 3.2.4
+- **Happy DOM** 18.0.1
+- **Pretext** 0.0.4
+
+## 🚀 Funcionalidades del sitio web
+
+### 1. Gestión de datos
+- **Fuente de datos**: Google Sheets como CMS
+- **Parser CSV**: Procesamiento automático de datos
+- **Validación**: Mapeo y validación de estados de juegos
+- **Generación de slugs**: URLs amigables para cada juego
+- **Pre-renderizado de Metadatos**: Script de post-build para inyectar SEO (OpenGraph/Twitter) en cada juego.
+
+### 2. Interfaz de usuario
+- **Búsqueda en tiempo real**: Búsqueda con debounce
+- **Filtros múltiples**: Por estado, género y plataforma
+- **Previsualización de Videos**: Trailers incrustados en hover (YouTube y Steam)
+- **Modal de detalles**: Vista enriquecida con Hero dinámico y layout 60/40
+
+### 3. Estadísticas en tiempo real
+- **Gráficos en tiempo real**: Gráficos que se actualizan en tiempo real
+- **Contadores en tiempo real**: Contadores que se actualizan en tiempo real
+- **Luciernagas**: Sistema de luciernagas que se actualizan en tiempo real con la posición de los usuarios en el sitio web
+
+### 4. Perfiles de Desarrolladores y Estudios
+- **Páginas de Perfil Dedicadas**: Portafolios centralizados para desarrolladores y estudios que agrupan sus videojuegos.
+- **Relaciones de Co-Desarrollo**: Asociación y vinculación dinámica de estudios que colaboraron en el mismo juego.
+- **Estadísticas de Estudio**: Agregación automática de plataformas, motores, géneros utilizados y fechas clave de lanzamientos.
+- **URLs Amigables**: Generación y enrutamiento dinámico mediante slugs normalizados en minúsculas.
+
+## 📋 TO-DO
+- [x] Scraping de CSV de la lista de videojuegos
+- [x] Parseo de datos de la lista de videojuegos
+- [x] Gráficos
+- [x] Buscador en tiempo real
+- [x] Completación en la búsqueda
+- [x] Filtros de búsqueda
+- [x] Modal de detalles
+- [x] Página de contacto
+- [x] Calendario de lanzamientos
+- [x] Página con slug de los juegos por separado
+- [x] Ajustar la sección del header y footer para cuando se hace scroll se retraigan
+- [x] Cambiar de modo grid a modo listado
+- [x] Modo lista y búsqueda por #-A-Z para los juegos
+- [x] Burger menu en versión móvil
+- [x] Agregar capturas de pantalla a los juegos
+- [x] Conexión a API de STEAM para obtener datos de los juegos
+- [x] Solucionar los tamaños de los grid, mejorar el responsive
+- [x] Solucionar persistencia del router cuando se cambia de página
+- [x] Añadir botón para ir a tiendas y la página de steam (si la tiene)
+- [x] Analíticas en tiempo real
+- [x] Ajuste de metadatos a nivel servidor cuando navegas por paginas
+- [x] Filtro de ordenar búsqueda por un rango de fecha de lanzamiento
+- [x] Filtro para ordenar juegos por tiendas
+- [x] Juego destacado mejor proporcionado
+- [x] Añadida página de eventos especiales como la GJ+ 25/26
+- [x] Mejora de estadisticas en la sección de calendario
+- [x] Creación de páginas con resultados de juegos hechos en la GJ+ 25/26
+- [x] Componente Hero para presentación de página
+- [x] Mejora de disposición de los filtros
+- [x] Migración a Tailwind CSS v4 local
+- [x] Mejoras de accesibilidad, UI/UX y soporte para animaciones
+- [x] Agregar trailers a los juegos interactivos desde YouTube o Steam
+- [x] Ajustar metadatos pre-renderizados para cada juego y página
+- [x] Agregado el paquete @chenglou/pretext para mejor manejo de textos
+- [x] MANSORY GRID VIEW ahora si funciona gracias a pretext
+- [x] Solucionar el problema de los tamaños de las imágenes en el grid
+- [x] Solución de saneamiento y origen mixto que causa error SSL
+- [x] Estadísticas rediseñadas
+- [x] Optimización de renderizado de juegos mediante pre-renderizado estático en build time
+- [x] Design tokens y tailwind mejorados
+- [x] Agregar DaisyUI y mejorar el Tailwind
+- [x] Mejorar diseño de la página de los juegos por separado
+- [x] Implementación de Skeletons (DaisyUI) para mejorar la experiencia de carga percibida
+- [x] Consolidación de diseño Glassmorphism e interfaz móvil (filtros y menú) optimizada
+- [x] Refactorización arquitectónica usando alias de ruta (`@/`) centralizados
+- [x] Optimización de rendimiento general (GSAP ScrollTrigger, mitigación de Layout Shift y diferimiento de cargas pesadas)
+- [x] Páginas de perfil de Desarrolladores/Estudios con portafolios de juegos y co-desarrollo vinculados
+- [x] Rediseño de fondos decorativos del sitio web con grilla técnica estética de DaisyUI
+- [x] Paginas de jams en especifico, sistema reutilizable
+- [ ] Mejorar el sistema de paginas de jams y otras secciones con un sistema mejorado de CMS
+- [ ] Agregar sistema de links extras
+- [ ] Agregar sistema de redes sociales
+- [ ] Conexión a API de IGDB o similar
+- [ ] Terminar formulario para agregar nuevos juegos
+- [ ] Optimizar el filtrado del CSV para mejorar el rendimiento
+- [ ] Mejorar el responsive del calendario en móvil
+- [ ] Mejorar la carga de juegos y secciones, en base a un cache o IndexDB
+
+### Tiempo real
+- [x] Integrar SpacetimeDB y inicio de futuras implementaciones
+- [x] Sistema de me gusta, favoritos y visitas en tiempo real
+- [x] Sistema de experiencia ganada por el usuario
+- [x] Solucionado el problema de los contadores de me gusta y visitas
+- [x] Luciernagas
+- [x] Estadísticas en tiempo real
+
+## 🤝 Colaboración
+¡Toda ayuda es bienvenida! Para colaborar, por favor consulta nuestra [Guía de Contribución](./CONTRIBUTING.md) para conocer el flujo de trabajo, las reglas del proyecto y cómo configurar tu entorno.
+
+También puedes reportar cualquier error o sugerencia abriendo un [Issue](https://github.com/aesthezel/venezuela-juega/issues).
