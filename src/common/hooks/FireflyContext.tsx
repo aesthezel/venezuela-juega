@@ -23,15 +23,22 @@ export const FireflyProvider = ({ currentPath, children }: FireflyProviderProps)
   const [otherFireflies, setOtherFireflies] = useState<any[]>([]);
   const [presenceBySlug, setPresenceBySlug] = useState<Record<string, number>>({});
   const mousePos = useRef({ x: 50, y: 50 });
+  // RAF handle to throttle mousemove reads to once-per-frame (~60/s instead of ~120/s raw events)
+  const moveRafRef = useRef<number | null>(null);
 
   // --- Mouse/Touch tracking ---
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    const scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
-    const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-    const x = (e.pageX / scrollWidth) * 100;
-    const y = (e.pageY / scrollHeight) * 100;
-    mousePos.current = { x, y };
+    if (moveRafRef.current !== null) return; // Already scheduled this frame — skip
+    moveRafRef.current = requestAnimationFrame(() => {
+      moveRafRef.current = null;
+      const scrollWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
+      const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+      mousePos.current = {
+        x: (e.pageX / scrollWidth) * 100,
+        y: (e.pageY / scrollHeight) * 100,
+      };
+    });
   }, []);
 
   const handleTouch = useCallback((e: TouchEvent) => {

@@ -101,8 +101,12 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
 
     const statRafRef = useRef<number | null>(null);
     const activityRafRef = useRef<number | null>(null);
+    // Prevents RAF updates from firing during the initial SpacetimeDB snapshot flood.
+    // Set to true only inside onApplied, once the full initial state has arrived.
+    const isInitialSyncDoneRef = useRef(false);
 
     const onStatEvt = useCallback(() => {
+        if (!isInitialSyncDoneRef.current) return; // Block RAF during initial snapshot
         if (statRafRef.current) return; // Already scheduled for this frame
         statRafRef.current = requestAnimationFrame(() => {
             statRafRef.current = null;
@@ -111,6 +115,7 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
     }, [syncStats]);
 
     const onActivityEvt = useCallback(() => {
+        if (!isInitialSyncDoneRef.current) return; // Block RAF during initial snapshot
         if (activityRafRef.current) return;
         activityRafRef.current = requestAnimationFrame(() => {
             activityRafRef.current = null;
@@ -129,9 +134,17 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
         c.db.my_activity.onInsert(onActivityEvt);
         c.db.my_activity.onUpdate(onActivityEvt);
         c.db.my_activity.onDelete(onActivityEvt);
-        
-        c.subscriptionBuilder().subscribeToAllTables();
-        setTimeout(() => { syncStats(c); syncActivity(c); }, 500);
+
+        // onApplied fires once when the full initial snapshot has been processed.
+        // This is the single safe moment to do the first bulk state sync,
+        // replacing the blind setTimeout(500) that could race with the snapshot arrival.
+        c.subscriptionBuilder()
+            .onApplied(() => {
+                isInitialSyncDoneRef.current = true;
+                syncStats(c);
+                syncActivity(c);
+            })
+            .subscribeToAllTables();
     }, [onStatEvt, onActivityEvt, syncStats, syncActivity]);
 
     useEffect(() => {

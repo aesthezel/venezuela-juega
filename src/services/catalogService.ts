@@ -99,6 +99,21 @@ export function clearCache(key?: string): void {
 
 // ─── Revalidation & Edge Fallbacks ───────────────────────────────────────────
 
+/**
+ * Wraps fetch with an AbortController timeout so a slow/unresponsive CDN
+ * never blocks the UI indefinitely. Defaults to 4 s, which is enough for
+ * GitHub Pages under any realistic network condition.
+ */
+async function fetchWithTimeout(url: string, ms = 4000): Promise<Response> {
+    const ctrl = new AbortController();
+    const id = setTimeout(() => ctrl.abort(), ms);
+    try {
+        return await fetch(url, { signal: ctrl.signal });
+    } finally {
+        clearTimeout(id);
+    }
+}
+
 const SPREADSHEET_ID = import.meta.env.VITE_SPREADSHEET_ID;
 const SHEET_NAME = import.meta.env.VITE_SHEET_NAME;
 
@@ -119,7 +134,7 @@ export async function revalidateCatalogGames(): Promise<Game[]> {
         try {
             // 1. First attempt: Revalidate from GitHub Pages CDN static snapshot (TTFB < 30ms, 0 429 errors)
             try {
-                const snapRes = await fetch(`${GAMES_SNAPSHOT_URL}?_t=${Date.now()}`);
+                const snapRes = await fetchWithTimeout(`${GAMES_SNAPSHOT_URL}?_t=${Date.now()}`);
                 if (snapRes.ok) {
                     const freshGames: Game[] = await snapRes.json();
                     if (Array.isArray(freshGames) && freshGames.length > 0) {
@@ -176,7 +191,7 @@ export async function revalidateJamData(): Promise<JamCache> {
         try {
             // 1. First attempt: Revalidate from GitHub Pages CDN static snapshot (TTFB < 30ms)
             try {
-                const snapRes = await fetch(`${JAMS_SNAPSHOT_URL}?_t=${Date.now()}`);
+                const snapRes = await fetchWithTimeout(`${JAMS_SNAPSHOT_URL}?_t=${Date.now()}`);
                 if (snapRes.ok) {
                     const freshData = await snapRes.json();
                     if (freshData && Array.isArray(freshData.jamGames)) {
@@ -261,7 +276,7 @@ export async function getCatalogGames(
 
     // Cold start: Load static JSON snapshot generated during build
     try {
-        const res = await fetch(GAMES_SNAPSHOT_URL);
+        const res = await fetchWithTimeout(GAMES_SNAPSHOT_URL);
         if (res.ok) {
             const initialGames: Game[] = await res.json();
             if (Array.isArray(initialGames) && initialGames.length > 0) {
@@ -297,7 +312,7 @@ export async function getJamCatalogData(
 
     // Cold start: Load static JSON snapshot generated during build
     try {
-        const res = await fetch(JAMS_SNAPSHOT_URL);
+        const res = await fetchWithTimeout(JAMS_SNAPSHOT_URL);
         if (res.ok) {
             const initialJamData = await res.json();
             const payload: JamCache = {
