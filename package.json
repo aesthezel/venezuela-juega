@@ -5,7 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:debug": "vite --mode debug --port 5199 --strictPort",
     "build": "vite build && tsx scripts/generate-meta.js",
+    "build:debug": "vite build --mode debug --sourcemap && tsx scripts/generate-meta.js",
+    "preview:debug": "vite preview --mode debug --port 4199 --strictPort",
+    "trace:analyze": "node scripts/analyze-sdb-trace.mjs",
     "snapshot": "tsx scripts/generate-meta.js",
     "preview": "vite preview"
   },

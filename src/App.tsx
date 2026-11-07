@@ -23,6 +23,7 @@ const DocsListPage = lazy(() => import('@/pages/DocsListPage'));
 const DocDetailPage = lazy(() => import('@/pages/DocDetailPage'));
 
 import { SpacetimeDBProvider } from '@/spacetimedb/SpacetimeDBProvider';
+import SdbDebugOverlay from '@/spacetimedb/debug/SdbDebugOverlay';
 import ActiveJamsBanner from '@/features/jam/components/ActiveJamsBanner';
 import {
     gamesSignal,
@@ -196,6 +197,7 @@ const App = () => {
                     )}
                 </div>
             </FireflyProvider>
+            <SdbDebugOverlay />
         </SpacetimeDBProvider>
     );
 };

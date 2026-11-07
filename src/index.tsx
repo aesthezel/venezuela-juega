@@ -1,3 +1,5 @@
+// Must be the first import: installs WebSocket + long-task tracing before any app module loads.
+import '@/spacetimedb/debug/sdbTrace';
 import '@/styles';
 import { render } from 'preact';
 import App from './App';

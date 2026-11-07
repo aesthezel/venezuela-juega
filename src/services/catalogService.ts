@@ -1,5 +1,6 @@
 import { Game, JamGame, JamSettingRow } from '@/types';
 import { parseMainRows, parseJamGamesRows, parseJamSettingsRows } from '@/shared/catalogParser';
+import { measureSync, trace } from '@/spacetimedb/debug/sdbTrace';
 
 // ─── Cache Configuration ──────────────────────────────────────────────────────
 
@@ -158,13 +159,19 @@ export async function revalidateCatalogGames(): Promise<Game[]> {
             const papaModule = await import('papaparse');
             const Papa = papaModule.default || papaModule;
 
+            trace('catalog:revalidate-games', { source: 'google-sheets' });
+
             return await new Promise<Game[]>((resolve) => {
                 Papa.parse(url, {
                     download: true,
                     header: false,
                     skipEmptyLines: true,
                     complete: (results) => {
-                        const parsed = parseMainRows(results.data as string[][]);
+                        const parsed = measureSync(
+                            'catalog:parse-games',
+                            () => parseMainRows(results.data as string[][]),
+                            (games) => ({ rows: results.data.length, games: games.length }),
+                        );
                         if (parsed.length > 0) {
                             writeCache(MAIN_CACHE_KEY, SPREADSHEET_ID, parsed);
                         }
@@ -218,13 +225,19 @@ export async function revalidateJamData(): Promise<JamCache> {
             const papaModule = await import('papaparse');
             const Papa = papaModule.default || papaModule;
 
+            trace('catalog:revalidate-jams', { source: 'google-sheets' });
+
             const [loadedJamGames, loadedSettings] = await Promise.all([
                 new Promise<JamGame[]>((resolve) => {
                     Papa.parse(gamesUrl, {
                         download: true,
                         header: false,
                         skipEmptyLines: true,
-                        complete: (results) => resolve(parseJamGamesRows(results.data as string[][])),
+                        complete: (results) => resolve(measureSync(
+                            'catalog:parse-jam-games',
+                            () => parseJamGamesRows(results.data as string[][]),
+                            (games) => ({ rows: results.data.length, games: games.length }),
+                        )),
                         error: () => resolve([]),
                     });
                 }),
@@ -233,7 +246,11 @@ export async function revalidateJamData(): Promise<JamCache> {
                         download: true,
                         header: true,
                         skipEmptyLines: true,
-                        complete: (results) => resolve(parseJamSettingsRows(results.data as Record<string, string>[])),
+                        complete: (results) => resolve(measureSync(
+                            'catalog:parse-jam-settings',
+                            () => parseJamSettingsRows(results.data as Record<string, string>[]),
+                            (settings) => ({ rows: results.data.length, settings: settings.length }),
+                        )),
                         error: () => resolve([]),
                     });
                 }),
@@ -266,6 +283,11 @@ export async function getCatalogGames(
 ): Promise<Game[]> {
     const version = SPREADSHEET_ID || 'v2';
     const cached = readCache<Game[]>(MAIN_CACHE_KEY, version);
+    trace('catalog:get-games', {
+        cacheHit: !!cached,
+        stale: cached?.isStale ?? null,
+        rows: cached?.data.length ?? 0,
+    });
 
     if (cached && cached.data.length > 0) {
         if (cached.isStale && onBackgroundUpdate) {
@@ -280,6 +302,7 @@ export async function getCatalogGames(
         if (res.ok) {
             const initialGames: Game[] = await res.json();
             if (Array.isArray(initialGames) && initialGames.length > 0) {
+                trace('catalog:snapshot-games', { source: GAMES_SNAPSHOT_URL, rows: initialGames.length });
                 // Defer cache write so the UI paints before the blocking JSON.stringify + localStorage.setItem
                 setTimeout(() => writeCache(MAIN_CACHE_KEY, version, initialGames), 100);
                 // Cold-start loads fresh build-time snapshot; avoid immediate PapaParse / Google Sheets download
@@ -302,6 +325,12 @@ export async function getJamCatalogData(
 ): Promise<JamCache> {
     const version = JAM_SPREADSHEET_ID || 'v2';
     const cached = readCache<JamCache>(JAM_CACHE_KEY, version);
+    trace('catalog:get-jams', {
+        cacheHit: !!cached,
+        stale: cached?.isStale ?? null,
+        games: cached?.data.jamGames?.length ?? 0,
+        settings: cached?.data.jamSettings?.length ?? 0,
+    });
 
     if (cached && (cached.data.jamGames?.length > 0 || cached.data.jamSettings?.length > 0)) {
         if (cached.isStale && onBackgroundUpdate) {
@@ -320,6 +349,11 @@ export async function getJamCatalogData(
                 jamSettings: initialJamData.jamSettings || [],
             };
             if (payload.jamGames.length > 0 || payload.jamSettings.length > 0) {
+                trace('catalog:snapshot-jams', {
+                    source: JAMS_SNAPSHOT_URL,
+                    games: payload.jamGames.length,
+                    settings: payload.jamSettings.length,
+                });
                 setTimeout(() => writeCache(JAM_CACHE_KEY, version, payload), 100);
                 // Cold-start loads fresh build-time snapshot; avoid immediate PapaParse / Google Sheets download
                 return payload;
