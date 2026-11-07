@@ -1,14 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Venezuela Juega">
-  <defs>
-    <linearGradient id="vj" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f2b63d" />
-      <stop offset="50%" stop-color="#457cd6" />
-      <stop offset="100%" stop-color="#e34262" />
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="#0d0a11" />
-  <rect x="4" y="4" width="56" height="56" rx="11" fill="none" stroke="url(#vj)" stroke-width="2" />
-  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle"
-        font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif"
-        font-size="26" font-weight="800" letter-spacing="-1.5" fill="url(#vj)">VJ</text>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:affinity="https://www.affinity.studio/" style="fill-rule:evenodd;clip-rule:evenodd;">
+    <path d="M50,0C57.727,0 64,6.273 64,14L64,50C64,57.727 57.727,64 50,64L14,64C6.273,64 0,57.727 0,50L0,14C0,6.273 6.273,0 14,0L50,0Z" style="fill:rgb(13,10,17);"/>
+    <path d="M49,4C55.071,4 60,8.929 60,15L60,49C60,55.071 55.071,60 49,60L15,60C8.929,60 4,55.071 4,49L4,15C4,8.929 8.929,4 15,4L49,4Z" style="fill:none;stroke:url(#_Linear1);stroke-width:2px;"/>
+    <g transform="matrix(1,0,0,1,30.19375,43.764)">
+        <text x="-18.598px" y="0px" style="font-family:'Barlow-ExtraBoldItalic', 'Barlow';font-weight:800;font-style:italic;font-size:34px;fill:white;">V<tspan x="-0.714px " y="0px ">J</tspan></text>
+    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(56,56,-56,56,4,4)"><stop offset="0" style="stop-color:rgb(242,182,61);stop-opacity:1"/><stop offset="0.5" style="stop-color:rgb(69,124,214);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(227,66,98);stop-opacity:1"/></linearGradient>
+    </defs>
 </svg>

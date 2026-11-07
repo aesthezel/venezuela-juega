@@ -351,7 +351,7 @@ article, .game-card-item {
 
 @keyframes firefly-flutter {
     0%, 100% { transform: translate(0, 0) scale(0.9); opacity: 0.65; }
-    50% { transform: translate(7px, -7px) scale(1.2); opacity: 1; }
+    50% { transform: translate(2px, -2px) scale(1.15); opacity: 1; }
 }
 
 /* ─── Respect reduced-motion preferences globally ─── */

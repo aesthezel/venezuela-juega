@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, fireEvent, cleanup } from '@testing-library/preact';
-import { GameDetailPage } from '../src/pages';
+import GameDetailPage from '../src/pages/GameDetailPage';
 import { Game, GameStatus, GameOrigin } from '../src/types';
 import * as preactRouter from 'preact-router';
 
