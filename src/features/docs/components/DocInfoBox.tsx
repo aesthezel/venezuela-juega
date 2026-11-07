@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import type { DocCallout, DocCalloutKind } from '../types';
 import { buildContentBlocks, renderRichText } from '@/common/markdown';
-import type { ContentBlock } from '@/common/markdown';
+import type { ContentBlock, ListItem } from '@/common/markdown';
 
 interface DocInfoBoxProps {
     callout: DocCallout;
@@ -64,6 +64,30 @@ const CALLOUT_STYLES: Record<DocCalloutKind, CalloutStyle> = {
     },
 };
 
+function renderCalloutListItem(item: ListItem, index: number): VNode {
+    if (typeof item === 'string') {
+        return <li key={index}>{renderRichText(item)}</li>;
+    }
+
+    const isSubOrdered = item.ordered ?? false;
+    return (
+        <li key={index} className="space-y-1">
+            <div>{renderRichText(item.text)}</div>
+            {item.subItems && item.subItems.length > 0 && (
+                isSubOrdered ? (
+                    <ol className="list-[lower-alpha] list-inside pl-4 space-y-1" style={{ listStyleType: 'lower-alpha' }}>
+                        {item.subItems.map((sub, sIdx) => renderCalloutListItem(sub, sIdx))}
+                    </ol>
+                ) : (
+                    <ul className="list-disc list-inside pl-4 space-y-1">
+                        {item.subItems.map((sub, sIdx) => renderCalloutListItem(sub, sIdx))}
+                    </ul>
+                )
+            )}
+        </li>
+    );
+}
+
 /** Compact renderer for callout inner content (no heading anchors). */
 function renderCalloutBlocks(blocks: ContentBlock[]): VNode[] {
     return blocks.map((block, idx) => {
@@ -83,17 +107,13 @@ function renderCalloutBlocks(blocks: ContentBlock[]): VNode[] {
             case 'list':
                 return (
                     <ul key={idx} className="list-disc list-inside space-y-1">
-                        {block.items.map((item, i) => (
-                            <li key={i}>{renderRichText(item)}</li>
-                        ))}
+                        {block.items.map((item, i) => renderCalloutListItem(item, i))}
                     </ul>
                 );
             case 'ordered-list':
                 return (
-                    <ol key={idx} className="list-decimal list-inside space-y-1">
-                        {block.items.map((item, i) => (
-                            <li key={i}>{renderRichText(item)}</li>
-                        ))}
+                    <ol key={idx} start={block.start} className="list-decimal list-inside space-y-1">
+                        {block.items.map((item, i) => renderCalloutListItem(item, i))}
                     </ol>
                 );
             case 'code':

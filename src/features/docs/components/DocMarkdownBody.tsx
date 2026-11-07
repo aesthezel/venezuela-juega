@@ -5,7 +5,7 @@ import type { DocArticle, DocSection } from '../types';
 import { getCalloutKind } from '../parser';
 import DocInfoBox from './DocInfoBox';
 import { buildContentBlocks, renderRichText, slugifyHeading } from '@/common/markdown';
-import type { ContentBlock, TocItem } from '@/common/markdown';
+import type { ContentBlock, ListItem, TocItem } from '@/common/markdown';
 
 interface DocMarkdownBodyProps {
     article: DocArticle;
@@ -47,6 +47,37 @@ function renderSectionBlock(section: DocSection): VNode {
 
     return (
         <div className="space-y-6">{renderBlocks(buildContentBlocks(section.content || ''), new Map(), '#6366f1')}</div>
+    );
+}
+
+function renderDocListItem(item: ListItem, index: number): VNode {
+    if (typeof item === 'string') {
+        return (
+            <li key={index} className="leading-[1.8] text-base-content/80">
+                {renderRichText(item)}
+            </li>
+        );
+    }
+
+    const isSubOrdered = item.ordered ?? false;
+    return (
+        <li key={index} className="leading-[1.8] text-base-content/80 space-y-2">
+            <div>{renderRichText(item.text)}</div>
+            {item.subItems && item.subItems.length > 0 && (
+                isSubOrdered ? (
+                    <ol
+                        className="list-[lower-alpha] list-outside pl-6 space-y-2 marker:text-accent-teal/80 marker:font-semibold"
+                        style={{ listStyleType: 'lower-alpha' }}
+                    >
+                        {item.subItems.map((sub, sIdx) => renderDocListItem(sub, sIdx))}
+                    </ol>
+                ) : (
+                    <ul className="list-disc list-outside pl-6 space-y-2 marker:text-accent-teal/70">
+                        {item.subItems.map((sub, sIdx) => renderDocListItem(sub, sIdx))}
+                    </ul>
+                )
+            )}
+        </li>
     );
 }
 
@@ -103,18 +134,18 @@ function renderBlocks(blocks: ContentBlock[], headingIds: Map<number, string>, a
             case 'list':
                 return (
                     <ul key={idx} className="list-disc list-outside pl-6 space-y-2.5 marker:text-accent-teal">
-                        {block.items.map((item, i) => (
-                            <li key={i} className="leading-[1.8] text-base-content/80">{renderRichText(item)}</li>
-                        ))}
+                        {block.items.map((item, i) => renderDocListItem(item, i))}
                     </ul>
                 );
 
             case 'ordered-list':
                 return (
-                    <ol key={idx} className="list-decimal list-outside pl-6 space-y-2.5 marker:text-accent-teal marker:font-bold">
-                        {block.items.map((item, i) => (
-                            <li key={i} className="leading-[1.8] text-base-content/80">{renderRichText(item)}</li>
-                        ))}
+                    <ol
+                        key={idx}
+                        start={block.start}
+                        className="list-decimal list-outside pl-6 space-y-2.5 marker:text-accent-teal marker:font-bold"
+                    >
+                        {block.items.map((item, i) => renderDocListItem(item, i))}
                     </ol>
                 );
 

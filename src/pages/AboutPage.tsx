@@ -20,7 +20,7 @@ const CONTRIBUTORS = [
     {
         name: "Edgar E. Sakellariou",
         role: "Contribuidor, redactor y documentador",
-        description: "Soy Ingeniero Mecánico con trayectoria en la gestión de proyectos y producción; adicionalmente Desarrollador de Videojuegos, con ganas de aportar toda información que sea de utilidad para la comunidad.",
+        description: "Gestor de recursos técnicos y creador de contenido de utilidad.",
         avatarUrl: "https://venezuela-juega.s3.us-east-005.dream.io/collaborators/edgar-sakellariou.png",
         socials: [
             { icon: faGithub, url: "https://github.com/Eddiusccc" },

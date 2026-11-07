@@ -42,7 +42,15 @@ function extractFaqItems(body: string): FaqItem[] {
             } else if (block.kind === 'paragraph') {
                 answerLines.push(block.lines.join(' '));
             } else if (block.kind === 'list' || block.kind === 'ordered-list') {
-                answerLines.push(block.items.join('. '));
+                const textItems = block.items.map((item) => {
+                    if (typeof item === 'string') return item;
+                    const subText =
+                        item.subItems && item.subItems.length > 0
+                            ? ` (${item.subItems.map((s) => (typeof s === 'string' ? s : s.text)).join(', ')})`
+                            : '';
+                    return item.text + subText;
+                });
+                answerLines.push(textItems.join('. '));
             }
         }
     }

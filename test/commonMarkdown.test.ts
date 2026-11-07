@@ -154,6 +154,55 @@ Con **negrita**.
 
         expect(blocks[2]).toEqual({ kind: 'header', level: 3, text: 'Sub' });
     });
+
+    it('attaches indented sub-items to parent item without breaking ordered list numbering', () => {
+        const content = `1. **Búsqueda fonética y gráfica (Para Marcas):** Solicitud previa.
+2. **Presentación de la Solicitud:** Llenado de planillas.
+3. **Consignación de Recaudos Técnicos:**
+   - Para Código Fuente / Software: Depósito de copia digital.
+   - Para Arte / Música / Audiovisual: Muestras en alta resolución.
+4. **Examen de Forma y Sustancia:** Evaluación legal.
+5. **Pago de derechos y certificado:** Una vez concedida.`;
+
+        const blocks = buildContentBlocks(content);
+        expect(blocks).toHaveLength(1);
+        expect(blocks[0].kind).toBe('ordered-list');
+
+        if (blocks[0].kind !== 'ordered-list') throw new Error('expected ordered-list');
+        expect(blocks[0].items).toHaveLength(5);
+        expect(blocks[0].items[0]).toContain('Búsqueda');
+        expect(blocks[0].items[1]).toContain('Presentación');
+
+        const item3 = blocks[0].items[2];
+        if (typeof item3 === 'string') throw new Error('expected item 3 to have subItems');
+        expect(item3.text).toBe('**Consignación de Recaudos Técnicos:**');
+        expect(item3.ordered).toBe(false);
+        expect(item3.subItems).toHaveLength(2);
+        expect(item3.subItems?.[0]).toContain('Para Código Fuente');
+        expect(item3.subItems?.[1]).toContain('Para Arte');
+
+        expect(blocks[0].items[3]).toContain('Examen de Forma');
+        expect(blocks[0].items[4]).toContain('Pago de derechos');
+    });
+
+    it('supports lettered sub-items (a., b.) and start offset on ordered lists', () => {
+        const content = `3. Paso tres:
+   a. Sub-paso A
+   b. Sub-paso B
+4. Paso cuatro`;
+
+        const blocks = buildContentBlocks(content);
+        expect(blocks).toHaveLength(1);
+        const list = blocks[0];
+        if (list.kind !== 'ordered-list') throw new Error('expected ordered-list');
+        expect(list.start).toBe(3);
+        expect(list.items).toHaveLength(2);
+
+        const first = list.items[0];
+        if (typeof first === 'string') throw new Error('expected sub-items');
+        expect(first.ordered).toBe(true);
+        expect(first.subItems).toEqual(['Sub-paso A', 'Sub-paso B']);
+    });
 });
 
 describe('common markdown — TOC', () => {

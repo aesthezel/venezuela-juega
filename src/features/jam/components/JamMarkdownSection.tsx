@@ -2,13 +2,41 @@ import { h } from 'preact';
 import type { VNode } from 'preact';
 import type { JamCustomSection } from '../types';
 import { renderRichText, buildContentBlocks } from '@/common/markdown';
-import type { ContentBlock } from '@/common/markdown';
+import type { ContentBlock, ListItem } from '@/common/markdown';
 
 export { buildContentBlocks } from '@/common/markdown';
 
 interface JamMarkdownSectionProps {
     section: JamCustomSection;
     accentColor?: string;
+}
+
+function renderJamListItem(item: ListItem, index: number): VNode {
+    if (typeof item === 'string') {
+        return (
+            <li key={index} className="leading-normal">
+                {renderRichText(item)}
+            </li>
+        );
+    }
+
+    const isSubOrdered = item.ordered ?? false;
+    return (
+        <li key={index} className="leading-normal space-y-1">
+            <div>{renderRichText(item.text)}</div>
+            {item.subItems && item.subItems.length > 0 && (
+                isSubOrdered ? (
+                    <ol className="list-[lower-alpha] list-inside pl-4 space-y-1" style={{ listStyleType: 'lower-alpha' }}>
+                        {item.subItems.map((sub, sIdx) => renderJamListItem(sub, sIdx))}
+                    </ol>
+                ) : (
+                    <ul className="list-disc list-inside pl-4 space-y-1">
+                        {item.subItems.map((sub, sIdx) => renderJamListItem(sub, sIdx))}
+                    </ul>
+                )
+            )}
+        </li>
+    );
 }
 
 function renderBlocks(blocks: ContentBlock[]): VNode[] {
@@ -34,22 +62,14 @@ function renderBlocks(blocks: ContentBlock[]): VNode[] {
             case 'list':
                 return (
                     <ul key={bIdx} className="space-y-2 list-disc list-inside bg-base-200/40 p-5 rounded-2xl border border-base-300">
-                        {block.items.map((item, itemIdx) => (
-                            <li key={itemIdx} className="leading-normal">
-                                {renderRichText(item)}
-                            </li>
-                        ))}
+                        {block.items.map((item, itemIdx) => renderJamListItem(item, itemIdx))}
                     </ul>
                 );
 
             case 'ordered-list':
                 return (
-                    <ol key={bIdx} className="space-y-2 list-decimal list-inside bg-base-200/40 p-5 rounded-2xl border border-base-300">
-                        {block.items.map((item, itemIdx) => (
-                            <li key={itemIdx} className="leading-normal">
-                                {renderRichText(item)}
-                            </li>
-                        ))}
+                    <ol key={bIdx} start={block.start} className="space-y-2 list-decimal list-inside bg-base-200/40 p-5 rounded-2xl border border-base-300">
+                        {block.items.map((item, itemIdx) => renderJamListItem(item, itemIdx))}
                     </ol>
                 );
 
