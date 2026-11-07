@@ -349,9 +349,48 @@ article, .game-card-item {
     animation-play-state: paused;
 }
 
-@keyframes firefly-flutter {
-    0%, 100% { transform: translate(0, 0) scale(0.9); opacity: 0.65; }
-    50% { transform: translate(2px, -2px) scale(1.15); opacity: 1; }
+/* ─── Firefly: the halo and the core share one wandering body ─── */
+.vj-firefly-body {
+    animation: firefly-wander 7s ease-in-out infinite;
+    will-change: transform;
+}
+
+.vj-firefly-halo {
+    background: radial-gradient(
+        circle,
+        rgba(34, 211, 238, 0.8) 0%,
+        rgba(8, 145, 178, 0.4) 42%,
+        transparent 72%
+    );
+    box-shadow: 0 0 10px #22d3ee, 0 0 22px rgba(34, 211, 238, 0.35);
+    animation: firefly-glow 3.4s ease-in-out infinite;
+}
+
+.vj-firefly-core {
+    box-shadow: 0 0 6px #fff, 0 0 14px #22d3ee;
+    animation: firefly-glow 3.4s ease-in-out infinite;
+}
+
+@keyframes firefly-wander {
+    0% { transform: translate3d(0, 0, 0); }
+    18% { transform: translate3d(4px, -5px, 0); }
+    37% { transform: translate3d(-3px, -8px, 0); }
+    56% { transform: translate3d(-6px, 2px, 0); }
+    76% { transform: translate3d(3px, 6px, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes firefly-glow {
+    0%, 100% { opacity: 0.65; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vj-firefly-body,
+    .vj-firefly-halo,
+    .vj-firefly-core {
+        animation: none;
+    }
 }
 
 /* ─── Respect reduced-motion preferences globally ─── */
