@@ -1,5 +1,6 @@
 import { h } from 'preact';
 import { useMemo, useEffect, useRef, useState, useCallback } from 'preact/hooks';
+import { memo } from 'preact/compat';
 import { route } from 'preact-router';
 import { Game } from '@/types';
 import { CoverImage } from '@/components';
@@ -9,13 +10,8 @@ import {
     faChartBar, faCompass, faChevronLeft, faChevronRight,
     faArrowRight, faClock, faTrophy, faDatabase
 } from '@fortawesome/free-solid-svg-icons';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
 import { CategoryCard, TabButton, ProgressDots, CompactStat, CATEGORY_PRESETS } from './hero';
 import type { CategoryPreset } from './hero';
-
-gsap.registerPlugin(ScrollTrigger);
 
 // ─── HeroMosaic ──────────────────────────────────────────────────────────────
 interface HeroMosaicProps {
@@ -23,11 +19,31 @@ interface HeroMosaicProps {
     jamGames?: Game[];
     onGameClick: (game: Game) => void;
     onCategorySelect?: (categoryId: string, preset: CategoryPreset) => void;
+    isLoading?: boolean;
 }
 
 const AUTO_ROTATE_MS = 10000;
 
-const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps) => {
+/**
+ * The H1 is the mobile LCP element. Memoizing it prevents the catalog/jam
+ * data arriving later from re-painting it and pushing the LCP timestamp.
+ */
+const HeroHeading = memo(() => (
+    <h1
+        className="mb-2 md:mb-4 text-center text-4xl sm:text-6xl md:text-8xl font-extrabold leading-[1.1] md:leading-none tracking-tight drop-shadow-2xl bg-clip-text text-transparent"
+        style={{
+            backgroundImage: 'linear-gradient(to right, #f2b63d 0%, #457cd6 50%, #e34262 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+        }}
+    >
+        VENEZUELA
+        <br className="md:hidden" />
+        <span className="ml-0 md:ml-4">JUEGA</span>
+    </h1>
+));
+
+const HeroMosaic = ({ games, jamGames = [], onCategorySelect, isLoading = false }: HeroMosaicProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
     const progressBarRef = useRef<HTMLDivElement | null>(null);
@@ -41,6 +57,15 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
     const isPausedRef = useRef(false);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
+    const [isInView, setIsInView] = useState(true);
+    const [isMobileViewport] = useState(() =>
+        typeof window !== 'undefined' ? window.innerWidth < 768 : false
+    );
+    const [prefersReducedMotion] = useState(() =>
+        typeof window !== 'undefined' && window.matchMedia
+            ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            : false
+    );
 
     // ── Category scroll helpers ─────────────────────────────────────────
     const updateScrollArrows = useCallback(() => {
@@ -141,7 +166,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             return src && src.length > 5;
         });
         const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-        const count = isMobile ? 12 : 28;
+        const count = isMobile ? 6 : 28;
         // Shuffle once and store result
         const shuffled = [...withImages].sort(() => 0.5 - Math.random()).slice(0, count);
         lastSourceGamesRef.current = games;
@@ -149,27 +174,43 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
         return shuffled;
     }, [games]);
 
-    // ── GSAP background animation ──────────────────────────────────────────
+    // ── Lightweight parallax for the desktop mosaic (no GSAP/ScrollTrigger) ─
     useEffect(() => {
         const el = gridRef.current;
-        const container = containerRef.current;
-        if (!el || !container) return;
+        if (!el || typeof window === 'undefined') return;
+        if (window.innerWidth < 768) return;
+        if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
 
-        const ctx = gsap.context(() => {
-            gsap.fromTo(el,
-                { opacity: 0, scale: 1.2 },
-                { opacity: 1, scale: 1, duration: 1.5, ease: 'power2.out' },
-            );
-            ScrollTrigger.create({
-                trigger: container,
-                start: 'top top',
-                end: 'bottom top',
-                scrub: true,
-                animation: gsap.to(el, { y: 150, ease: 'none', force3D: true }),
+        let ticking = false;
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(() => {
+                const offset = Math.min(window.scrollY * 0.15, 150);
+                el.style.transform = `translate3d(0, ${offset}px, 0) rotate(-3deg)`;
+                ticking = false;
             });
-        }, container);
+        };
 
-        return () => ctx.revert();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            el.style.transform = '';
+        };
+    }, []);
+
+    // ── Pause the auto-rotation when the hero leaves the viewport ─────────
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container || typeof IntersectionObserver === 'undefined') return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsInView(entry.isIntersecting),
+            { threshold: 0.05 }
+        );
+        observer.observe(container);
+        return () => observer.disconnect();
     }, []);
 
     // ── Auto-rotate tabs via RAF (no setState per frame) ──────────────────
@@ -180,8 +221,15 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             progressBarRef.current.style.setProperty('--progress', '0%');
         }
 
+        if (prefersReducedMotion || !isInView) {
+            if (progressBarRef.current) {
+                progressBarRef.current.style.setProperty('--progress', '0%');
+            }
+            return;
+        }
+
         const tick = () => {
-            if (!isPausedRef.current && progressBarRef.current) {
+            if (!isPausedRef.current && progressBarRef.current && !document.hidden) {
                 const elapsed = Date.now() - progressStartRef.current;
                 const pct = Math.min((elapsed / AUTO_ROTATE_MS) * 100, 100);
                 progressBarRef.current.style.setProperty('--progress', `${pct}%`);
@@ -199,7 +247,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
         return () => {
             if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
         };
-    }, [showcaseTab]);
+    }, [showcaseTab, isInView, prefersReducedMotion]);
 
     const handleTabChange = useCallback((tab: 'stats' | 'explore') => {
         setShowcaseTab(tab);
@@ -267,12 +315,16 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             className="relative w-full min-h-screen overflow-hidden"
         >
             {/* Background mosaic grid */}
+            {/*
+              Decorative mosaic: desktop only. On mobile these large, third-party
+              covers were the LCP element and accounted for most of the transfer
+              size, so the gradient background is used instead.
+            */}
             <div
                 ref={gridRef}
-                className="pointer-events-none absolute w-[120vw] h-[200vh] -left-[10vw] -top-[50vh] -rotate-3 grid select-none grid-cols-4 gap-4 opacity-0 md:grid-cols-7 z-[-2]"
-                style={{ willChange: 'transform' }}
+                className="pointer-events-none absolute w-[120vw] h-[200vh] -left-[10vw] -top-[50vh] -rotate-3 hidden md:grid select-none grid-cols-7 gap-4 z-[-2] will-change-transform"
             >
-                {mosaicGames.map((game, idx) => (
+                {mosaicGames.map((game) => (
                     <div key={game.id} className="relative h-full w-full overflow-hidden rounded-lg bg-base-200/50 border border-surface-700 shadow-xl">
                         <CoverImage
                             src={game.imageCover || game.imageUrl}
@@ -280,8 +332,8 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                             className="h-full w-full object-cover opacity-35 grayscale transition-all duration-700"
                             width={300}
                             height={400}
-                            loading={idx < 4 ? 'eager' : 'lazy'}
-                            fetchpriority={idx === 0 ? 'high' : 'auto'}
+                            loading="lazy"
+                            fetchpriority="low"
                             decoding="async"
                         />
                     </div>
@@ -293,7 +345,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
             <div className="pointer-events-none absolute inset-0 z-[-2] bg-[radial-gradient(circle_at_center,transparent_0%,#0d0a11_100%)] opacity-90" />
 
             {/* Hero content */}
-            <div className="relative z-10 w-full flex flex-col items-center px-4 pt-24 pb-8 md:pt-28 md:pb-12 mx-auto max-w-6xl animate-hero-fade-in">
+            <div className="relative z-10 w-full flex flex-col items-center px-4 pt-24 pb-8 md:pt-28 md:pb-12 mx-auto max-w-6xl animate-fade-in">
 
                 {/* Badge */}
                 <div className="mb-3 md:mb-5 inline-flex items-center gap-2 rounded-full border border-surface-700 bg-white/5 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-base-content/70 backdrop-blur-md md:text-sm shadow-xl">
@@ -305,18 +357,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                 </div>
 
                 {/* Title */}
-                <h1
-                    className="mb-2 md:mb-4 text-center text-4xl sm:text-6xl md:text-8xl font-extrabold leading-[1.1] md:leading-none tracking-tight drop-shadow-2xl bg-clip-text text-transparent"
-                    style={{
-                        backgroundImage: 'linear-gradient(to right, #f2b63d 0%, #457cd6 50%, #e34262 100%)',
-                        WebkitBackgroundClip: 'text',
-                        backgroundClip: 'text',
-                    }}
-                >
-                    VENEZUELA
-                    <br className="md:hidden" />
-                    <span className="ml-0 md:ml-4">JUEGA</span>
-                </h1>
+                <HeroHeading />
 
                 {/* Subtitle */}
                 <p className="mb-6 md:mb-8 text-center max-w-[280px] sm:max-w-2xl text-sm sm:text-base font-light leading-relaxed text-base-content/70 md:text-xl drop-shadow-lg">
@@ -343,7 +384,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                     className="relative w-full max-w-5xl"
                     onMouseEnter={() => handleShowcaseHover(true)}
                     onMouseLeave={() => handleShowcaseHover(false)}
-                    style={{ minHeight: showcaseTab === 'explore' ? '460px' : '280px', transition: 'min-height 0.4s ease' }}
+                    style={{ minHeight: '460px' }}
                 >
                     {/* Stats Panel */}
                     <div className={`
@@ -362,12 +403,14 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                                         <button
                                             onClick={() => setStatIndex(prev => (prev - 1 + stats.length) % stats.length)}
                                             className="w-10 h-10 rounded-full bg-base-200/80 border border-surface-700 flex items-center justify-center text-white pointer-events-auto active:scale-95 transition-transform"
+                                            aria-label="Estadística anterior"
                                         >
                                             <FontAwesomeIcon icon={faChevronLeft} />
                                         </button>
                                         <button
                                             onClick={() => setStatIndex(prev => (prev + 1) % stats.length)}
                                             className="w-10 h-10 rounded-full bg-base-200/80 border border-surface-700 flex items-center justify-center text-white pointer-events-auto active:scale-95 transition-transform"
+                                            aria-label="Estadística siguiente"
                                         >
                                             <FontAwesomeIcon icon={faChevronRight} />
                                         </button>
@@ -388,7 +431,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                                                     transition-all duration-300
                                                 `}>
                                                     <CompactStat
-                                                        value={stat.value}
+                                                        value={isLoading ? '…' : stat.value}
                                                         label={stat.label}
                                                         icon={stat.icon}
                                                         accentColor={stat.color}
@@ -488,6 +531,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                                             backgroundSrc={cat.backgroundSrc}
                                             onClick={() => handleCategoryClick(cat.preset)}
                                             index={i}
+                                            showBackground={!isMobileViewport}
                                         />
                                     </div>
                                 ))}
@@ -516,7 +560,7 @@ const HeroMosaic = ({ games, jamGames = [], onCategorySelect }: HeroMosaicProps)
                     <button
                         onClick={scrollDown}
                         className="group flex flex-col items-center gap-2 p-2 transition-opacity duration-300 hover:opacity-80 cursor-pointer"
-                        aria-label="Desplazar hacia abajo"
+                        aria-label="Descubre el catálogo completo"
                     >
                         <span className="text-base-content/70 text-xs md:text-sm font-medium tracking-wide transition-colors group-hover:text-base-content/70">
                             Descubre el catálogo completo

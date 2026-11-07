@@ -58,4 +58,8 @@ if (!rootElement) {
     throw new Error("Could not find root element to mount to");
 }
 
+// Remove the instant-paint splash right before mounting. Preact does not
+// guarantee that it clears pre-existing children on the first render, and a
+// fixed overlay left behind would cover the whole app.
+document.getElementById('boot-splash')?.remove();
 render(<App />, rootElement);

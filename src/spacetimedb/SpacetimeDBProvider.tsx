@@ -1,7 +1,7 @@
 import { createContext } from 'preact';
 import { ComponentChildren } from 'preact';
 import { useContext, useEffect, useState, useMemo, useCallback, useRef } from 'preact/hooks';
-import { DbConnection, tables } from './module_bindings';
+import type { DbConnection } from './module_bindings';
 import { SPACETIMEDB_URI, MODULE_NAME, AUTH_TOKEN_KEY } from './config';
 import { generateSlug } from '@/utils/gameUtils';
 import { trace, traceTableCounts, measureSync, countEvent } from './debug/sdbTrace';
@@ -29,6 +29,11 @@ const SpacetimeDBContext = createContext<SpacetimeDBContextType>({
 });
 
 let connInst: DbConnection | null = null;
+/**
+ * Generated table definitions. They are imported lazily together with the
+ * SpacetimeDB SDK so the ~40 KB SDK bundle does not compete with LCP.
+ */
+let tablesRef: typeof import('./module_bindings').tables | null = null;
 /** Timestamp (performance.now) of the last builder attempt, used by the trace. */
 let connectionRequestedAt = 0;
 
@@ -160,6 +165,10 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
             return;
         }
         if (isSetupRef.current) return;
+        if (!tablesRef) {
+            trace('subscription:skipped', { reason: 'tables-not-loaded' });
+            return;
+        }
         isSetupRef.current = true;
 
         trace('subscription:listeners', {
@@ -204,10 +213,10 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
             // `my_activity` has no index in the generated schema; if the server
             // rejects the filtered query, add an index on player_id server-side.
             .subscribe([
-                tables.game_stats,
-                tables.my_activity.where((row) => row.playerId.eq(identity)),
-                tables.profile.where((row) => row.id.eq(identity)),
-                tables.firefly,
+                tablesRef.game_stats,
+                tablesRef.my_activity.where((row) => row.playerId.eq(identity)),
+                tablesRef.profile.where((row) => row.id.eq(identity)),
+                tablesRef.firefly,
             ]);
         trace('subscription:requested', {
             mode: 'targeted',
@@ -240,11 +249,27 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
         }
 
         let cancelled = false;
-        const initConnection = () => {
+        const initConnection = async () => {
             if (cancelled || connInst) {
                 trace('conn:skipped', { cancelled, hasConnection: !!connInst });
                 return;
             }
+
+            // Lazy-load the generated bindings + SDK on idle. Keeping this out
+            // of the initial bundle removes ~40 KB of JavaScript from LCP.
+            let DbConnectionRuntime: typeof import('./module_bindings').DbConnection;
+            try {
+                const bindings = await import('./module_bindings');
+                DbConnectionRuntime = bindings.DbConnection;
+                tablesRef = bindings.tables;
+            } catch (err) {
+                trace('conn:import-error', {
+                    error: err instanceof Error ? `${err.name}: ${err.message}` : String(err),
+                });
+                return;
+            }
+
+            if (cancelled || connInst) return;
 
             trace('conn:builder-start', {
                 uri: SPACETIMEDB_URI,
@@ -254,7 +279,7 @@ export const SpacetimeDBProvider = ({ children }: { children: ComponentChildren 
             connectionRequestedAt = performance.now();
 
             try {
-                connInst = DbConnection.builder()
+                connInst = DbConnectionRuntime.builder()
                     .withUri(SPACETIMEDB_URI)
                     .withDatabaseName(MODULE_NAME)
                     .withToken(localStorage.getItem(AUTH_TOKEN_KEY) || undefined)

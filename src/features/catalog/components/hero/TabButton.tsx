@@ -11,7 +11,10 @@ export interface TabButtonProps {
 
 const TabButton = ({ icon, label, isActive, onClick }: TabButtonProps) => (
     <button
+        type="button"
         onClick={onClick}
+        aria-label={label}
+        aria-pressed={isActive}
         className={`
             flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5
             rounded-xl text-[11px] md:text-xs font-bold uppercase tracking-[0.12em]

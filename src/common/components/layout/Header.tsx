@@ -4,12 +4,8 @@ import { faChartBar, faInfoCircle, faCalendarAlt, faBars, faXmark, faGamepad, fa
 import { Game } from '@/types';
 import { route } from 'preact-router';
 import { trackNav } from '@/utils/analytics';
-import { getActiveJams } from '@/features/jam';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { getActiveJams } from '@/features/jam/registry';
 import UserProfile from './UserProfile';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface HeaderProps {
     currentPath?: string;
@@ -19,13 +15,13 @@ interface HeaderProps {
     onRefresh?: (force?: boolean) => void;
 }
 
-const LOGO_URL = "https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png";
+const LOGO_URL = "/brand/venezuela-juega-white.png";
 
 const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = false, onRefresh }: HeaderProps) => {
-    const isVisibleRef = useRef(true);
     const headerRef = useRef<HTMLElement | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
     const navigateTo = (path: string) => {
         trackNav(path, 'header');
@@ -50,20 +46,11 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
                     setIsScrolled(currentScrollY > 20);
 
                     if (currentScrollY <= 50) {
-                        if (!isVisibleRef.current) {
-                            gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
-                            isVisibleRef.current = true;
-                        }
+                        setIsHeaderVisible(true);
                     } else if (direction === 1 && currentScrollY > 200) {
-                        if (isVisibleRef.current) {
-                            gsap.to(el, { y: -100, opacity: 0, duration: 0.3, ease: 'power2.in', overwrite: true });
-                            isVisibleRef.current = false;
-                        }
+                        setIsHeaderVisible(false);
                     } else if (direction === -1) {
-                        if (!isVisibleRef.current) {
-                            gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
-                            isVisibleRef.current = true;
-                        }
+                        setIsHeaderVisible(true);
                     }
 
                     lastScrollY = currentScrollY;
@@ -113,7 +100,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
         <>
             <header
                 ref={headerRef}
-                className={`fixed top-0 left-0 right-0 z-[60] h-20 w-full will-change-transform transition-[background-color,border-color,padding,backdrop-filter] duration-500 ${isScrolled
+                className={`fixed top-0 left-0 right-0 z-[60] h-20 w-full will-change-transform transition-all duration-300 ${isHeaderVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'} ${isScrolled
                     ? 'bg-base-100/80 backdrop-blur-lg border-b border-surface-700 shadow-xl py-0'
                     : 'bg-transparent border-b border-transparent py-2'
                     }`}
@@ -128,6 +115,9 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
                         <img
                             src={LOGO_URL}
                             alt="Venezuela Juega"
+                            width="1000"
+                            height="1000"
+                            decoding="async"
                             className={`w-auto object-contain transition-all duration-500 ${isScrolled ? 'h-7 md:h-8' : 'h-8 md:h-10'
                                 } drop-shadow-lg`}
                         />
@@ -135,7 +125,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
 
                     {/* Desktop Navigation & Profile */}
                     <div className="flex items-center gap-6 lg:gap-10">
-                        <nav className="hidden md:flex items-center gap-1">
+                        <nav className="hidden md:flex items-center gap-1" aria-label="Navegación principal">
                             {navItems.map((item) => {
                                 const active = currentPath === item.path;
                                 const isHome = currentPath === '/' || currentPath === '';
@@ -144,6 +134,7 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
                                         <button
                                             onClick={() => navigateTo(item.path)}
                                             onMouseEnter={() => prefetchMap[item.path]?.()}
+                                            aria-current={active ? 'page' : undefined}
                                             className={`relative flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 cursor-pointer ${active
                                                 ? 'text-white bg-accent-teal-dark/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-accent-teal-dark/40'
                                                 : 'text-base-content/70 hover:text-white hover:bg-white/5'
@@ -176,8 +167,10 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
                             {/* Mobile Hamburger Trigger */}
                             <button
                                 onClick={() => setIsMenuOpen(true)}
-                                className="md:hidden p-2.5 text-base-content hover:text-white transition-all rounded-xl hover:bg-white/5 border border-surface-700 cursor-pointer"
-                                aria-label="Abrir menú"
+                                className="md:hidden w-12 h-12 flex items-center justify-center text-base-content hover:text-white transition-all rounded-xl hover:bg-white/5 border border-surface-700 cursor-pointer"
+                                aria-label="Abrir menú de navegación"
+                                aria-expanded={isMenuOpen}
+                                aria-controls="mobile-navigation"
                             >
                                 <FontAwesomeIcon icon={faBars} size="lg" />
                             </button>
@@ -196,34 +189,38 @@ const Header = ({ currentPath = '/', games = [], jamGames = [], isRefreshing = f
                     className={`absolute inset-0 bg-base-100/60 backdrop-blur-sm transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0'
                         }`}
                     onClick={() => setIsMenuOpen(false)}
+                    aria-hidden="true"
                 />
 
                 {/* Sidebar Panel */}
                 <div
+                    id="mobile-navigation"
                     className={`absolute top-0 right-0 h-full w-[280px] sm:w-[320px] bg-base-200 border-l border-surface-700 shadow-2xl transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
                         }`}
                 >
                     {/* Sidebar Header */}
                     <div className="p-6 flex items-center justify-between border-b border-surface-700">
-                        <button onClick={() => navigateTo('/')} className="cursor-pointer hover:opacity-80 transition-opacity">
-                            <img src={LOGO_URL} alt="Logo" className="h-6 w-auto" />
+                        <button onClick={() => navigateTo('/')} className="cursor-pointer hover:opacity-80 transition-opacity" aria-label="Ir al inicio">
+                            <img src={LOGO_URL} alt="Venezuela Juega" width="1000" height="1000" className="h-6 w-auto" />
                         </button>
                         <button
                             onClick={() => setIsMenuOpen(false)}
-                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-base-300 text-base-content/70 hover:text-white transition-colors"
+                            className="w-12 h-12 flex items-center justify-center rounded-xl bg-base-300 text-base-content/70 hover:text-white transition-colors"
+                            aria-label="Cerrar menú de navegación"
                         >
                             <FontAwesomeIcon icon={faXmark} />
                         </button>
                     </div>
 
                     {/* Sidebar Nav */}
-                    <nav className="p-4 flex flex-col gap-2">
+                    <nav className="p-4 flex flex-col gap-2" aria-label="Navegación móvil">
                         {navItems.map((item) => {
                             const active = currentPath === item.path;
                             return (
                                 <button
                                     key={item.path}
                                     onClick={() => navigateTo(item.path)}
+                                    aria-current={active ? 'page' : undefined}
                                     className={`flex items-center gap-4 p-4 rounded-2xl transition-all border cursor-pointer ${active
                                         ? 'bg-accent-teal-dark/20 border-accent-teal-dark/40 text-white shadow-[0_0_20px_rgba(6,182,212,0.15)]'
                                         : 'bg-white/5 border-transparent text-base-content/70'

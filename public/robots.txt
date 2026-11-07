@@ -1,4 +1,44 @@
+# Venezuela Juega — robots.txt
+# El contenido es público y puede ser rastreado por buscadores y agentes de IA.
+
 User-agent: *
+Allow: /
+
+# Buscadores y asistentes de IA (acceso explícito)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://venezuelajuega.com/sitemap.xml

@@ -143,6 +143,8 @@ const App = () => {
         <SpacetimeDBProvider>
             <FireflyProvider currentPath={currentPath}>
                 <div className="relative min-h-screen font-sans flex flex-col overflow-x-clip isolate">
+                    <a href="#main-content" className="skip-link">Saltar al contenido principal</a>
+
                     {/* Deep Layers */}
                     <FireflyOverlay />
 
@@ -150,8 +152,10 @@ const App = () => {
                     <div className="relative flex flex-col min-h-screen">
                         <Header
                             currentPath={currentPath}
+                            games={games}
+                            jamGames={jamGames}
                         />
-                        <div className="flex-grow app-content pb-24">
+                        <main id="main-content" className="flex-grow app-content pb-24" tabIndex={-1}>
                             <ActiveJamsBanner />
                             {error ? (
                                 <div className="text-center text-secondary text-2xl p-10">{error}</div>
@@ -184,7 +188,7 @@ const App = () => {
                                 </Router>
                             </Suspense>
                             )}
-                        </div>
+                        </main>
                     </div>
 
                     <Footer />

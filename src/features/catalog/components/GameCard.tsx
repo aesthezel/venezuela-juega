@@ -115,6 +115,14 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
         <div
             ref={containerRef}
             onClick={onClick}
+            role="link"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onClick();
+                }
+            }}
             className={`card bg-base-200 overflow-hidden shadow-xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group flex flex-col relative ${
                 fireflyCount > 0
                     ? 'ring-1 ring-accent-teal/40 hover:shadow-accent-teal-dark/50'
@@ -234,7 +242,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
 
             <div className="card-body p-5 flex flex-col flex-grow">
                 <div className="flex justify-between items-start gap-4">
-                    <h3 className="text-xl font-bold text-white truncate flex-1">{game.title}</h3>
+                    <h3 id={`game-title-${game.id}`} className="text-xl font-bold text-white truncate flex-1">{game.title}</h3>
                     <button
                         onClick={handleToggleLike}
                         disabled={!isReady}
@@ -243,7 +251,10 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                         } ${!isReady ? 'opacity-50 cursor-not-allowed' : ''}`}
                         title={!isReady ? "Iniciando conexión..." : (hasLiked ? "Quitar me gusta" : "Me gusta")}
                     >
-                        <span className="text-xs font-bold">{totalHearts > 0 ? totalHearts : ''}</span>
+                        <span className="sr-only">
+                            {!isReady ? 'Iniciando conexión…' : (hasLiked ? `Quitar me gusta a ${game.title}` : `Me gusta ${game.title}`)}
+                        </span>
+                        <span className="text-xs font-bold" aria-hidden="true">{totalHearts > 0 ? totalHearts : ''}</span>
                         <FontAwesomeIcon 
                             icon={hasLiked ? faHeartSolid : faHeartReg} 
                             className={`text-lg transition-transform duration-300 ${hasLiked ? "scale-110 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]" : "group-hover/like:scale-110"}`} 
@@ -261,7 +272,7 @@ const GameCard = ({ game, onClick, layout = 'grid' }: GameCardProps) => {
                     <div className="mt-2 min-h-6">
                         <button
                             onClick={handleReadMoreClick}
-                            className="btn btn-link btn-sm text-accent hover:text-accent-focus p-0 h-auto min-h-0 self-start no-underline hover:underline"
+                            className="btn btn-link btn-sm text-accent hover:text-accent-focus px-1 py-1 min-h-6 self-start no-underline hover:underline"
                         >
                             {isExpanded ? 'Leer menos' : 'Leer más'}
                         </button>

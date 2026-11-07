@@ -29,6 +29,7 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
 
     useEffect(() => {
         if (!hasMultipleGames) return;
+        if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
         const timer = setTimeout(goToNext, 5000); // Auto-slide every 5 seconds
         return () => clearTimeout(timer);
     }, [currentIndex, hasMultipleGames, goToNext]);
@@ -39,6 +40,7 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
 
     return (
         <section className="mb-12" aria-labelledby="highlights-title">
+            <h2 id="highlights-title" className="sr-only">Juegos destacados</h2>
             <div className="relative group">
                 <div className="w-full h-56 overflow-hidden rounded-lg">
                     <div
@@ -71,15 +73,18 @@ const Highlights = ({ games, onGameClick }: HighlightsProps) => {
                             <IndicatorRightIcon />
                         </button>
 
-                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                        <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex z-10">
                             {highlightedGames.map((_, index) => (
                                 <button
                                     key={index}
+                                    type="button"
                                     onClick={() => setCurrentIndex(index)}
-                                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${currentIndex === index ? 'bg-accent-teal' : 'bg-base-300/80 hover:bg-base-300'}`}
-                                    aria-current={currentIndex === index}
+                                    className="w-11 h-11 flex items-center justify-center"
+                                    aria-current={currentIndex === index ? 'true' : undefined}
                                     aria-label={`Ir al juego ${index + 1}`}
-                                />
+                                >
+                                    <span className={`block w-2.5 h-2.5 rounded-full transition-all duration-300 ${currentIndex === index ? 'bg-accent-teal' : 'bg-base-300/80'}`} />
+                                </button>
                             ))}
                         </div>
                     </>

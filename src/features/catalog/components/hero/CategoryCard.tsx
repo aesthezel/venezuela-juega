@@ -17,9 +17,11 @@ export interface CategoryCardProps {
     overrideImageUrl?: string;
     onClick: () => void;
     index: number;
+    /** On mobile the decorative cover is skipped to keep LCP and payload small. */
+    showBackground?: boolean;
 }
 
-const CategoryCard = ({ preset, gameCount, backgroundSrc, overrideImageUrl, onClick, index }: CategoryCardProps) => {
+const CategoryCard = ({ preset, gameCount, backgroundSrc, overrideImageUrl, onClick, index, showBackground = true }: CategoryCardProps) => {
     const tintRgb = hexToRgb(preset.accentFrom);
     const bgUrl = overrideImageUrl || backgroundSrc;
 
@@ -40,12 +42,12 @@ const CategoryCard = ({ preset, gameCount, backgroundSrc, overrideImageUrl, onCl
             style={{ animationDelay: `${index * 80}ms` }}
         >
             {/* Background Image — blurs on hover for readability */}
-            {bgUrl ? (
+            {bgUrl && showBackground ? (
                 <img
                     src={bgUrl}
                     alt=""
-                    loading={index < 2 ? 'eager' : 'lazy'}
-                    fetchpriority={index === 0 ? 'high' : 'auto'}
+                    loading="lazy"
+                    fetchpriority="low"
                     decoding="async"
                     width="240"
                     height="380"
@@ -79,10 +81,10 @@ const CategoryCard = ({ preset, gameCount, backgroundSrc, overrideImageUrl, onCl
 
                 {/* Top: Title only — uppercase, larger */}
                 <div className="flex flex-col items-center pt-3">
-                    <h3 className="text-base sm:text-lg md:text-xl font-extrabold text-white uppercase tracking-wide
+                    <h2 className="text-base sm:text-lg md:text-xl font-extrabold text-white uppercase tracking-wide
                                    drop-shadow-lg leading-tight max-w-[200px]">
                         {preset.label}
-                    </h3>
+                    </h2>
                 </div>
 
                 {/* Center: Game count — big number like GOG's discount */}

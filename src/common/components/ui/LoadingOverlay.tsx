@@ -1,8 +1,7 @@
 // TODO: tweak and create a mask!
 
 import { h } from 'preact';
-import { useEffect, useRef, useState } from 'preact/hooks';
-import { gsap } from 'gsap';
+import { useEffect, useState } from 'preact/hooks';
 
 interface LoadingOverlayProps {
     isLoading: boolean;
@@ -10,62 +9,58 @@ interface LoadingOverlayProps {
     onAnimationComplete?: () => void;
 }
 
-const DEFAULT_LOGO_SRC = "https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png";
+const DEFAULT_LOGO_SRC = "/brand/venezuela-juega-white.png";
 
+/**
+ * Full-screen loading overlay with a CSS-only fade-out.
+ * (The previous GSAP timeline forced the 45 KB animation runtime into the
+ * initial bundle for a component that is not even used on the home route.)
+ */
 const LoadingOverlay = ({
-                            isLoading,
-                            logoSrc = DEFAULT_LOGO_SRC,
-                            onAnimationComplete
-                        }: LoadingOverlayProps) => {
-
-    const overlayRef = useRef<HTMLDivElement>(null);
-    const logoRef = useRef<HTMLImageElement>(null);
-    const [isVisible, setIsVisible] = useState(true); // Controla la visibilidad real del elemento
+    isLoading,
+    logoSrc = DEFAULT_LOGO_SRC,
+    onAnimationComplete,
+}: LoadingOverlayProps) => {
+    const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
         if (!isLoading && isVisible) {
-            gsap.to(overlayRef.current, {
-                opacity: 0,
-                duration: 1.2,
-                ease: "power2.out",
-                onComplete: () => {
-                    setIsVisible(false);
-                    if (onAnimationComplete) {
-                        onAnimationComplete();
-                    }
-                }
-            });
+            const timer = window.setTimeout(() => {
+                setIsVisible(false);
+                onAnimationComplete?.();
+            }, 400);
+            return () => window.clearTimeout(timer);
+        }
 
-            gsap.to(logoRef.current, {
-                scale: 100,
-                opacity: 0,
-                duration: 1,
-                ease: "power2.out"
-            });
-        } else if (isLoading && !isVisible) {
+        if (isLoading && !isVisible) {
             setIsVisible(true);
-            gsap.set(overlayRef.current, { opacity: 1 });
-            gsap.set(logoRef.current, { scale: 1, opacity: 1 });
         }
     }, [isLoading, isVisible, onAnimationComplete]);
 
-    if (!isVisible) {
-        return null;
-    }
+    if (!isVisible) return null;
 
     return (
         <div
-            ref={overlayRef}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-base-200 overflow-hidden"
-            style={{ opacity: 1 }}
+            className={`fixed inset-0 z-50 flex items-center justify-center bg-base-200 overflow-hidden transition-opacity duration-300 ${isLoading ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            aria-hidden={!isLoading}
         >
-            <img
-                ref={logoRef}
-                src={logoSrc}
-                alt="Venezuela Juega Logo"
-                className="w-32 h-32 object-contain"
-                style={{ transform: 'scale(1)', opacity: 1 }}
-            />
+            <div
+                className="vj-logo-shine w-32 h-32 transition-transform duration-300"
+                style={{
+                    transform: isLoading ? 'scale(1)' : 'scale(1.5)',
+                    // Used as an alpha mask for the moving diagonal shine.
+                    '--vj-logo': `url("${logoSrc}")`,
+                } as Record<string, string>}
+            >
+                <img
+                    src={logoSrc}
+                    alt=""
+                    width="128"
+                    height="128"
+                    className="w-full h-full object-contain"
+                />
+                <span className="vj-logo-sweep" aria-hidden="true" />
+            </div>
         </div>
     );
 };

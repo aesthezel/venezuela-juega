@@ -44,6 +44,20 @@ const CatalogPage = ({
 
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
     const [alpha, setAlpha] = useState<string | null>(null);
+    // Avoid rendering both the desktop filter panel and the mobile dialog at
+    // once: duplicating ~120 filter rows delayed first paint on mobile.
+    const [isDesktopViewport, setIsDesktopViewport] = useState(() =>
+        typeof window !== 'undefined' ? window.matchMedia('(min-width: 1024px)').matches : true
+    );
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const query = window.matchMedia('(min-width: 1024px)');
+        const onChange = (event: MediaQueryListEvent) => setIsDesktopViewport(event.matches);
+        query.addEventListener('change', onChange);
+        return () => query.removeEventListener('change', onChange);
+    }, []);
 
     const activeFilterCount = useMemo(() => {
         let count = 0;
@@ -129,13 +143,17 @@ const CatalogPage = ({
 
     return (
         <div className="w-full min-h-screen">
-            {isLoading ? (
-                <div className="w-full h-[60vh] md:h-[70vh] skeleton rounded-none mb-8 opacity-70"></div>
-            ) : (
-                <HeroMosaic games={games} jamGames={jamGames} onGameClick={onGameClick} onCategorySelect={handleCategorySelect} />
-            )}
+            {/* Render the hero immediately: it is the LCP and must not wait for the catalog snapshot. */}
+            <HeroMosaic
+                games={games}
+                jamGames={jamGames}
+                onGameClick={onGameClick}
+                onCategorySelect={handleCategorySelect}
+                isLoading={isLoading}
+            />
 
             <PageLayout id="catalog-content" className="relative z-10">
+                <h2 className="sr-only">Catálogo de videojuegos venezolanos</h2>
 
                 <div className="sticky top-0 z-30 bg-base-100/40 backdrop-blur-md py-4 -mx-4 px-4 border-b border-surface-700 mb-8 shadow-2xl transition-all duration-300 will-change-transform">
                     <div className="container mx-auto">
@@ -149,9 +167,13 @@ const CatalogPage = ({
 
                             <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
                                 <button
-                                    onClick={() => (document.getElementById('mobile_filter_modal') as HTMLDialogElement)?.showModal()}
-                                    className="lg:hidden btn btn-square btn-neutral border-surface-700 shadow-lg relative"
+                                    onClick={() => {
+                                        setIsFilterOpen(true);
+                                        (document.getElementById('mobile_filter_modal') as HTMLDialogElement)?.showModal();
+                                    }}
+                                    className="lg:hidden btn btn-square btn-neutral border-surface-700 shadow-lg relative w-12 h-12"
                                     title="Filtros"
+                                    aria-label="Abrir filtros del catálogo"
                                 >
                                     <FontAwesomeIcon icon={faFilter} />
                                     {activeFilterCount > 0 && (
@@ -187,6 +209,7 @@ const CatalogPage = ({
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
 
+                    {isDesktopViewport && (
                     <aside className="hidden lg:block lg:col-span-3">
                         <div className="card bg-base-200/50 shadow-xl border border-surface-700 p-6 sticky top-52 transition-all z-10 will-change-transform">
 
@@ -225,37 +248,41 @@ const CatalogPage = ({
                             )}
                         </div>
                     </aside>
+                    )}
 
-                    <dialog id="mobile_filter_modal" className="modal modal-bottom lg:hidden">
+                    {!isDesktopViewport && (
+                    <dialog id="mobile_filter_modal" className="modal modal-bottom lg:hidden" aria-labelledby="mobile-filter-title" onClose={() => setIsFilterOpen(false)}>
                         <div className="modal-box p-0 max-h-[85vh] flex flex-col bg-base-100 border border-surface-700 rounded-t-3xl shadow-2xl">
                             <div className="p-6 pb-4 flex items-center justify-between border-b border-surface-700 bg-base-100 sticky top-0 z-10">
-                                <h2 className="text-xl font-bold text-base-content flex items-center gap-2">
+                                <h2 id="mobile-filter-title" className="text-xl font-bold text-base-content flex items-center gap-2">
                                     <FontAwesomeIcon icon={faFilter} className="text-primary" />
                                     Filtros
                                 </h2>
                                 <form method="dialog">
-                                    <button className="btn btn-circle btn-ghost btn-sm">
+                                    <button className="btn btn-circle btn-ghost btn-sm w-12 h-12" aria-label="Cerrar filtros">
                                         <FontAwesomeIcon icon={faTimes} size="lg" />
                                     </button>
                                 </form>
                             </div>
                             <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
-                                <FilterPanel
-                                    genres={allGenres}
-                                    platforms={allPlatforms}
-                                    stores={allStores}
-                                    activeFilters={activeFilters}
-                                    onFilterChange={onFilterChange}
-                                    onClearCategory={onClearCategory}
-                                    onClearAll={onClearAllFilters}
-                                    clearAllEnabled={hasActiveFilters}
-                                    minYear={minYear}
-                                    maxYear={maxYear}
-                                    yearRange={yearRange}
-                                    onYearRangeChange={onYearRangeChange}
-                                    alpha={alpha}
-                                    onAlphaChange={setAlpha}
-                                />
+                                {isFilterOpen && (
+                                    <FilterPanel
+                                        genres={allGenres}
+                                        platforms={allPlatforms}
+                                        stores={allStores}
+                                        activeFilters={activeFilters}
+                                        onFilterChange={onFilterChange}
+                                        onClearCategory={onClearCategory}
+                                        onClearAll={onClearAllFilters}
+                                        clearAllEnabled={hasActiveFilters}
+                                        minYear={minYear}
+                                        maxYear={maxYear}
+                                        yearRange={yearRange}
+                                        onYearRangeChange={onYearRangeChange}
+                                        alpha={alpha}
+                                        onAlphaChange={setAlpha}
+                                    />
+                                )}
                             </div>
                             <div className="p-6 pt-4 border-t border-surface-700 bg-base-100 sticky bottom-0">
                                 <form method="dialog">
@@ -266,9 +293,10 @@ const CatalogPage = ({
                             </div>
                         </div>
                         <form method="dialog" className="modal-backdrop backdrop-blur-sm bg-base-300/80">
-                            <button>close</button>
+                            <button aria-label="Cerrar filtros">Cerrar</button>
                         </form>
                     </dialog>
+                    )}
 
                     <section className="lg:col-span-9 min-h-[50vh]">
                         {isLoading ? (

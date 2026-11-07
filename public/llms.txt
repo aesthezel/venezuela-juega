@@ -1,0 +1,35 @@
+# Venezuela Juega
+
+> Venezuela Juega es un catálogo colaborativo y una base de datos abierta sobre la industria de los videojuegos en Venezuela. Reúne juegos, estudios, plataformas, lanzamientos, Game Jams y recursos para creadores.
+
+Venezuela Juega documenta la historia y el presente del desarrollo de videojuegos venezolano desde 2020. El sitio es una aplicación web en español con datos públicos obtenidos de hojas de cálculo comunitarias y publicados como una instantánea JSON estática. Es útil para responder preguntas sobre juegos hechos en Venezuela, estudios locales, fechas de lanzamiento, plataformas disponibles, Game Jams y material formativo para desarrolladores.
+
+## Contenido principal
+
+- [Catálogo de videojuegos venezolanos](https://venezuelajuega.com/): buscador y filtros por género, plataforma, tienda, estado y año. Incluye juegos comerciales y prototipos de Game Jams.
+- [Game Jams de Venezuela](https://venezuelajuega.com/jams): eventos activos y pasados, ediciones, sedes, fechas y juegos creados en cada jam.
+- [Recursos para creadores](https://venezuelajuega.com/docs): guías y artículos sobre propiedad intelectual, negocio, financiamiento y técnica para estudios de videojuegos.
+- [Propiedad Intelectual y Marco Legal para Videojuegos en Venezuela](https://venezuelajuega.com/docs/sapi-registro-propiedad-intelectual-venezuela): preguntas frecuentes sobre SAPI, marcas, derechos de autor y tributación.
+- [Calendario de lanzamientos](https://venezuelajuega.com/calendar): próximos estrenos de videojuegos venezolanos.
+- [Estadísticas de la industria](https://venezuelajuega.com/charts): métricas sobre plataformas, motores, géneros y estudios.
+- [Acerca de la iniciativa](https://venezuelajuega.com/about): misión, colaboradores y cómo contribuir.
+- [Añadir un juego](https://venezuelajuega.com/add-game): formulario para enviar un videojuego al catálogo.
+
+## Datos para agentes
+
+- [Catálogo completo en JSON](https://venezuelajuega.com/data/games.json): array de juegos con título, slug, plataformas, géneros, desarrolladores, fechas, estado, tiendas y descripción.
+- [Game Jams en JSON](https://venezuelajuega.com/data/jams.json): juegos de jams y configuración de sedes/ediciones.
+- [Mapa del sitio](https://venezuelajuega.com/sitemap.xml): listado canónico de páginas indexables.
+- [Archivo robots.txt](https://venezuelajuega.com/robots.txt): reglas de rastreo; el contenido es abierto para buscadores y agentes de IA.
+
+## Notas de uso
+
+- Los datos se publican en español y usan el español de Venezuela para fechas y nombres propios.
+- Las fichas de juego viven en `https://venezuelajuega.com/game/<slug>`.
+- Las ediciones de Game Jams viven en `https://venezuelajuega.com/jam/<slug>/<edición>`.
+- El catálogo se regenera periódicamente; para datos actualizados conviene consultar los JSON enlazados arriba.
+
+## Optional
+
+- [Repositorio del proyecto en GitHub](https://github.com/aesthezel/venezuela-juega): código fuente, incidencias y guía de contribución.
+- [Créditos](https://venezuelajuega.com/credits): personas y organizaciones que mantienen el proyecto.

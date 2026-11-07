@@ -195,8 +195,9 @@ const SearchBar = ({ searchTerm, onSearchChange, games, onSelectGame, renderSugg
                 />
                 <input
                     ref={searchRef}
-                    type="text"
+                    type="search"
                     placeholder="Buscar juegos..."
+                    aria-label="Buscar juegos por título o desarrollador"
                     value={localSearchTerm}
                     onInput={handleInputChange}
                     onKeyDown={handleKeyDown}

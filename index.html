@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2PXQQ9S5B6"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-2PXQQ9S5B6');
-    </script>
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Venezuela Juega — Industria de videojuegos en Venezuela</title>
     <meta name="description" content="Venezuela Juega es un catálogo de videojuegos desarrollados en Venezuela: busca, filtra y descubre títulos, estudios y lanzamientos de la industria venezolana." />
     <meta name="keywords" content="videojuegos Venezuela, industria de videojuegos, juegos venezolanos, catálogo de videojuegos, desarrolladores venezolanos" />
-    <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#0d0a11" />
+    <meta name="format-detection" content="telephone=no" />
 
-    <link rel="icon" type="image/png" href="https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_LogoColor.png" />
-    <link rel="shortcut icon" type="image/png" href="https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_LogoColor.png" />
+    <!-- Warm up connections to the image CDNs used above the fold and to analytics. -->
+    <link rel="preconnect" href="https://venezuela-juega.s3.us-east-005.dream.io" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.akamai.steamstatic.com" />
+    <link rel="dns-prefetch" href="https://shared.akamai.steamstatic.com" />
+    <link rel="dns-prefetch" href="https://img.itch.zone" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/brand/venezuela-juega-white.png" />
+
+    <!-- Machine-readable site summary for AI agents (Agentic Browsing / llms.txt) -->
+    <link rel="describedby" type="text/markdown" href="https://venezuelajuega.com/llms.txt" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Venezuela Juega" />
+    <meta property="og:locale" content="es_VE" />
     <meta property="og:title" content="Venezuela Juega — Industria de videojuegos en Venezuela" />
     <meta property="og:description" content="Catálogo de videojuegos hechos en Venezuela: explora títulos, filtra por plataforma y género, y conoce los estudios locales." />
     <meta property="og:url" content="https://venezuelajuega.com/" />
@@ -39,9 +42,11 @@
 
     <link rel="canonical" href="https://venezuelajuega.com/" />
     <link rel="alternate" href="https://venezuelajuega.com/" hreflang="es" />
+    <link rel="alternate" href="https://venezuelajuega.com/" hreflang="es-VE" />
+    <link rel="alternate" href="https://venezuelajuega.com/" hreflang="x-default" />
 
-    <!-- Preload games snapshot so it starts downloading before JS initializes -->
-    <link rel="preload" href="/data/games.json" as="fetch" crossorigin="anonymous" />
+    <!-- Catalog snapshot: needed below the fold, so keep it out of the LCP critical path -->
+    <link rel="preload" href="/data/games.json" as="fetch" crossorigin="anonymous" fetchpriority="low" />
 
 
     <script>
@@ -74,13 +79,169 @@
             "description": "Catálogo de videojuegos desarrollados en Venezuela.",
             "publisher": {
                 "@type": "Organization",
-                "name": "Venezuela Juega"
+                "name": "Venezuela Juega",
+                "url": "https://venezuelajuega.com/",
+                "logo": "https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png",
+                "sameAs": [
+                    "https://github.com/aesthezel/venezuela-juega",
+                    "https://x.com/venezuelajuega",
+                    "https://www.youtube.com/@venezuelajuega",
+                    "https://www.instagram.com/venezuelajuega"
+                ]
             }
         }
     </script>
+
+    <!--
+      Instant first paint. The SPA needs ~1 s to download/evaluate its bundle;
+      this lightweight splash paints the brand immediately and is removed by
+      src/index.tsx as soon as the app is mounted. It is a fixed overlay, so
+      removing it does not cause layout shift.
+    -->
+    <style>
+        #boot-splash {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0d0a11;
+            color: #fff;
+            font-family: Inter, 'SF Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            text-align: center;
+            transition: opacity 250ms ease-out;
+        }
+        #boot-splash.boot-hide { opacity: 0; pointer-events: none; }
+        #boot-splash .vj-logo-shine {
+            width: min(220px, 60vw);
+            aspect-ratio: 1;
+        }
+        #boot-splash .vj-logo-shine > img {
+            filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.45));
+        }
+        .vj-logo-shine {
+            position: relative;
+            display: inline-block;
+        }
+        .vj-logo-shine > img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .vj-logo-sweep {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(
+                115deg,
+                transparent 32%,
+                rgba(242, 182, 61, 0.95) 44%,
+                rgba(69, 124, 214, 0.95) 50%,
+                rgba(227, 66, 98, 0.95) 56%,
+                transparent 68%
+            );
+            background-size: 250% 100%;
+            background-repeat: no-repeat;
+            -webkit-mask-image: var(--vj-logo);
+            mask-image: var(--vj-logo);
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            animation: vj-logo-sweep 2.2s linear infinite;
+            opacity: 0.9;
+        }
+        @keyframes vj-logo-sweep {
+            from { background-position: 200% 0; }
+            to { background-position: -100% 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #boot-splash { transition: none; }
+            .vj-logo-sweep { animation: none; opacity: 0; }
+        }
+    </style>
+    <noscript><style>#boot-splash { display: none !important; }</style></noscript>
+
+    <!--
+      Google Analytics: queued immediately so no events are lost, but the
+      180 KB gtag.js bundle is only fetched when the user interacts or the
+      browser is idle. This keeps the main thread free during LCP.
+    -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-2PXQQ9S5B6', { send_page_view: false });
+
+        (function () {
+            var loaded = false;
+            function loadAnalytics() {
+                if (loaded) return;
+                loaded = true;
+                var script = document.createElement('script');
+                script.async = true;
+                script.src = 'https://www.googletagmanager.com/gtag/js?id=G-2PXQQ9S5B6';
+                document.head.appendChild(script);
+            }
+
+            ['pointerdown', 'keydown', 'touchstart'].forEach(function (eventName) {
+                window.addEventListener(eventName, loadAnalytics, { once: true, passive: true });
+            });
+
+            function scheduleAnalytics() {
+                if ('requestIdleCallback' in window) {
+                    window.requestIdleCallback(loadAnalytics, { timeout: 6000 });
+                } else {
+                    window.setTimeout(loadAnalytics, 6000);
+                }
+            }
+
+            // Never compete with the LCP: wait for the load event first.
+            if (document.readyState === 'complete') {
+                scheduleAnalytics();
+            } else {
+                window.addEventListener('load', scheduleAnalytics, { once: true });
+            }
+        })();
+    </script>
 </head>
 <body class="bg-surface-900">
-    <div id="root"></div>
+    <div id="root">
+        <div id="boot-splash" aria-hidden="true">
+            <div
+                class="vj-logo-shine"
+                style="--vj-logo: url('/brand/venezuela-juega-white.png');"
+            >
+                <img
+                    src="/brand/venezuela-juega-white.png"
+                    alt=""
+                    width="1000"
+                    height="1000"
+                    fetchpriority="high"
+                />
+                <span class="vj-logo-sweep" aria-hidden="true"></span>
+            </div>
+        </div>
+    </div>
+    <noscript>
+        <main style="max-width: 42rem; margin: 0 auto; padding: 2rem 1rem; font-family: system-ui, sans-serif; color: #eae7ec; background: #0d0a11;">
+            <h1>Venezuela Juega — Industria de videojuegos en Venezuela</h1>
+            <p>Venezuela Juega es un catálogo colaborativo de videojuegos desarrollados en Venezuela. Explora títulos, estudios, plataformas y lanzamientos de la industria nacional.</p>
+            <p>Activa JavaScript para usar el catálogo interactivo, o consulta nuestro <a href="/sitemap.xml" style="color: #7dd3fc;">mapa del sitio</a> y el resumen para agentes en <a href="/llms.txt" style="color: #7dd3fc;">llms.txt</a>.</p>
+            <h2>Secciones principales</h2>
+            <ul>
+                <li><a href="/" style="color: #7dd3fc;">Catálogo de juegos venezolanos</a></li>
+                <li><a href="/jams" style="color: #7dd3fc;">Game Jams de Venezuela</a></li>
+                <li><a href="/docs" style="color: #7dd3fc;">Recursos para creadores</a></li>
+                <li><a href="/calendar" style="color: #7dd3fc;">Calendario de lanzamientos</a></li>
+                <li><a href="/about" style="color: #7dd3fc;">Acerca de la iniciativa</a></li>
+            </ul>
+        </main>
+    </noscript>
     <script type="module" src="/src/index.tsx"></script>
 </body>
 </html>

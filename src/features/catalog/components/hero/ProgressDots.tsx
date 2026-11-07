@@ -15,26 +15,32 @@ export interface ProgressDotsProps {
  */
 const ProgressDots = forwardRef<HTMLDivElement, ProgressDotsProps>(
     ({ activeTab, onTabChange }, ref) => (
-        <div className="flex items-center gap-3 mt-4">
+        <div className="flex items-center gap-1 mt-4">
             {(['explore', 'stats'] as const).map((tab) => (
                 <button
                     key={tab}
+                    type="button"
                     onClick={() => onTabChange(tab)}
-                    className={`relative h-1.5 rounded-full overflow-hidden transition-all duration-300 cursor-pointer ${activeTab === tab ? 'w-10 bg-white/20' : 'w-4 bg-white/10 hover:bg-white/15'
-                        }`}
+                    className="w-11 h-11 flex items-center justify-center cursor-pointer"
                     aria-label={tab === 'stats' ? 'Ver métricas' : 'Ver categorías'}
+                    aria-pressed={activeTab === tab}
                 >
-                    {activeTab === tab && (
-                        <div
-                            ref={ref}
-                            className="absolute inset-y-0 left-0 rounded-full"
-                            style={{
-                                // --progress is set imperatively via ref; falls back to 0% if not provided
-                                width: 'var(--progress, 0%)',
-                                background: 'linear-gradient(to right, #f2b63d, #e34262)',
-                            }}
-                        />
-                    )}
+                    <span
+                        className={`relative h-1.5 rounded-full overflow-hidden transition-all duration-300 ${activeTab === tab ? 'w-10 bg-white/20' : 'w-4 bg-white/10 hover:bg-white/15'
+                            }`}
+                    >
+                        {activeTab === tab && (
+                            <div
+                                ref={ref}
+                                className="absolute inset-y-0 left-0 rounded-full"
+                                style={{
+                                    // --progress is set imperatively via ref; falls back to 0% if not provided
+                                    width: 'var(--progress, 0%)',
+                                    background: 'linear-gradient(to right, #f2b63d, #e34262)',
+                                }}
+                            />
+                        )}
+                    </span>
                 </button>
             ))}
         </div>

@@ -1,7 +1,7 @@
 import {FunctionComponent, h} from 'preact';
 import {useRef} from "preact/hooks";
 
-const DEFAULT_LOGO_SRC = "https://venezuela-juega.s3.us-east-005.dream.io/brand/VenezuelaJuega_White.png";
+const DEFAULT_LOGO_SRC = "/brand/venezuela-juega-white.png";
 
 interface LoadingSpinnerProps {
     logoSrc?: string;

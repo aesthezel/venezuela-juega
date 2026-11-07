@@ -248,3 +248,120 @@ article, .game-card-item {
     content-visibility: auto;
     contain-intrinsic-size: 0 340px;
 }
+
+/* ─── Accessibility: skip link + visible keyboard focus ─── */
+.skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 200;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--color-base-200);
+    color: var(--color-base-content);
+    font-weight: 700;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    transform: translateY(-250%);
+    transition: transform 150ms ease-out;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+:where(a, button, input, select, textarea, summary, [role="button"], [tabindex]):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+#main-content:focus {
+    outline: none;
+}
+
+/* ─── Logo shine: diagonal gradient sweep clipped to the logo alpha ─── */
+.vj-logo-shine {
+    position: relative;
+    display: inline-block;
+}
+
+.vj-logo-shine > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.vj-logo-sweep {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        115deg,
+        transparent 32%,
+        rgba(242, 182, 61, 0.95) 44%,
+        rgba(69, 124, 214, 0.95) 50%,
+        rgba(227, 66, 98, 0.95) 56%,
+        transparent 68%
+    );
+    background-size: 250% 100%;
+    background-repeat: no-repeat;
+    -webkit-mask-image: var(--vj-logo);
+    mask-image: var(--vj-logo);
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    animation: vj-logo-sweep 2.2s linear infinite;
+    opacity: 0.9;
+}
+
+@keyframes vj-logo-sweep {
+    from { background-position: 200% 0; }
+    to { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vj-logo-sweep {
+        animation: none;
+        opacity: 0;
+    }
+}
+
+/* ─── CSS marquee (replaces GSAP on the active jams banner) ─── */
+@keyframes vj-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(var(--marquee-distance, 0px)); }
+}
+
+.vj-marquee {
+    animation-name: vj-marquee;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+}
+
+.vj-marquee:hover {
+    animation-play-state: paused;
+}
+
+@keyframes firefly-flutter {
+    0%, 100% { transform: translate(0, 0) scale(0.9); opacity: 0.65; }
+    50% { transform: translate(7px, -7px) scale(1.2); opacity: 1; }
+}
+
+/* ─── Respect reduced-motion preferences globally ─── */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

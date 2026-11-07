@@ -95,11 +95,9 @@ export default defineConfig({
                     if (id.includes('@fortawesome')) {
                         return 'fontawesome';
                     }
-                    // ── SpacetimeDB client SDK ────────────────────────────────
-                    if (id.includes('@clockworklabs') || id.includes('spacetimedb') ||
-                        id.includes('module_bindings')) {
-                        return 'spacetimedb';
-                    }
+                    // SpacetimeDB bindings are loaded with a dynamic import,
+                    // so let Rollup keep them in their own lazy chunk instead
+                    // of forcing a preloaded vendor chunk.
                     // ── Preact ecosystem (signals, compat, router) ────────────
                     if (id.includes('preact') || id.includes('@preact')) {
                         return 'preact';

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Venezuela Juega">
+  <defs>
+    <linearGradient id="vj" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f2b63d" />
+      <stop offset="50%" stop-color="#457cd6" />
+      <stop offset="100%" stop-color="#e34262" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0d0a11" />
+  <rect x="4" y="4" width="56" height="56" rx="11" fill="none" stroke="url(#vj)" stroke-width="2" />
+  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle"
+        font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif"
+        font-size="26" font-weight="800" letter-spacing="-1.5" fill="url(#vj)">VJ</text>
+</svg>

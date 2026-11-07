@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { gsap } from 'gsap';
 
 const SCROLL_SHOW_THRESHOLD = 300;
 const FOOTER_OFFSET = 128; // Diferencia en px entre bottom-6 (24px) y bottom-38 (152px)
@@ -11,9 +10,6 @@ const ScrollToTop = () => {
     const [isScrollingUp, setIsScrollingUp] = useState(false);
     const [isAtBottom, setIsAtBottom] = useState(false);
     const lastScrollY = useRef(0);
-    const desktopBtnRef = useRef<HTMLButtonElement | null>(null);
-    const mobileBtnRef = useRef<HTMLDivElement | null>(null);
-    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -50,51 +46,23 @@ const ScrollToTop = () => {
         };
     }, []);
 
-    // Efecto coordinado de animación (Visibilidad + Posición de evitación del Footer)
-    useEffect(() => {
-        const desktopEl = desktopBtnRef.current;
-        const mobileEl = mobileBtnRef.current;
-        if (!desktopEl || !mobileEl) return;
+    // El botón sube si estamos haciendo scroll up (aparece el footer) o al final de la página
+    const shouldMoveUp = isScrollingUp || isAtBottom;
+    const mobileTargetY = visible ? (shouldMoveUp ? -FOOTER_OFFSET : 0) : 20;
 
-        if (prefersReducedMotion) {
-            desktopEl.style.opacity = visible ? '1' : '0';
-            desktopEl.style.transform = visible ? 'translateY(0)' : 'translateY(20px)';
-            desktopEl.style.pointerEvents = visible ? 'auto' : 'none';
+    const desktopStyle = {
+        opacity: visible ? 1 : 0,
+        transform: `translateY(${visible ? 0 : 20}px) scale(${visible ? 1 : 0.95})`,
+        pointerEvents: visible ? 'auto' : 'none',
+        transition: 'opacity 300ms ease, transform 300ms ease',
+    } as const;
 
-            mobileEl.style.opacity = visible ? '1' : '0';
-            // En modo reducido, simplemente saltamos a la posición sin animación
-            const targetY = visible ? (isScrollingUp ? -FOOTER_OFFSET : 0) : 20;
-            mobileEl.style.transform = `translateY(${targetY}px)`;
-            mobileEl.style.pointerEvents = visible ? 'auto' : 'none';
-            return;
-        }
-
-        // ── Animación Desktop ──
-        gsap.to(desktopEl, {
-            opacity: visible ? 1 : 0,
-            y: visible ? 0 : 20,
-            scale: visible ? 1 : 0.95,
-            duration: visible ? 0.5 : 0.3,
-            ease: visible ? 'back.out(1.7)' : 'power2.in',
-            pointerEvents: visible ? 'auto' : 'none'
-        });
-
-        // ── Animación Mobile ──
-        // El botón sube si estamos haciendo scroll up (aparece el footer) o si estamos al final de la página
-        const shouldMoveUp = isScrollingUp || isAtBottom;
-        const targetY = visible ? (shouldMoveUp ? -FOOTER_OFFSET : 0) : 20;
-
-        gsap.to(mobileEl, {
-            opacity: visible ? 1 : 0,
-            y: targetY,
-            scale: visible ? 1 : 0.95,
-            duration: 0.5,
-            ease: shouldMoveUp ? 'power3.out' : 'power2.out',
-            pointerEvents: visible ? 'auto' : 'none',
-            force3D: true
-        });
-
-    }, [visible, isScrollingUp, isAtBottom, prefersReducedMotion]);
+    const mobileStyle = {
+        opacity: visible ? 1 : 0,
+        transform: `translateY(${mobileTargetY}px) scale(${visible ? 1 : 0.95})`,
+        pointerEvents: visible ? 'auto' : 'none',
+        transition: 'opacity 300ms ease, transform 300ms ease',
+    } as const;
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -104,11 +72,11 @@ const ScrollToTop = () => {
         <>
             {/* ── Desktop Version (Circular) ── */}
             <button
-                ref={desktopBtnRef}
+                type="button"
                 onClick={scrollToTop}
                 aria-label="Ir arriba"
-                className="hidden md:flex fixed right-10 bottom-30 z-[70] w-14 h-14 rounded-full bg-base-300/80 backdrop-blur-md border border-surface-700 shadow-2xl items-center justify-center transition-all duration-300 group hover:border-accent-teal-dark/50 hover:bg-base-300/90 focus:outline-none"
-                style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', pointerEvents: 'none' }}
+                className="hidden md:flex fixed right-10 bottom-30 z-[70] w-14 h-14 rounded-full bg-base-300/80 backdrop-blur-md border border-surface-700 shadow-2xl items-center justify-center group hover:border-accent-teal-dark/50 hover:bg-base-300/90"
+                style={desktopStyle}
             >
                 <FontAwesomeIcon
                     icon={faChevronUp}
@@ -119,19 +87,19 @@ const ScrollToTop = () => {
             {/* ── Mobile Version (Horizontal Bar) ── */}
             {/* Mantenemos bottom-6 fijo y usamos GSAP 'y' para desplazarlo hacia arriba si hace falta */}
             <div
-                ref={mobileBtnRef}
                 className="md:hidden fixed bottom-6 left-4 right-4 z-[10]"
-                style={{ opacity: 0, transform: 'translateY(20px) scale(0.95)', pointerEvents: 'none', bottom: '1.5rem' }}
+                style={mobileStyle}
             >
                 <button
+                    type="button"
                     onClick={scrollToTop}
-                    className="flex items-center justify-between w-full px-6 py-4 bg-base-200/95 backdrop-blur-2xl border border-surface-700 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] active:scale-[0.98] transition-all duration-200 group"
+                    className="flex items-center justify-between w-full px-6 py-4 bg-base-200/95 backdrop-blur-2xl border border-surface-700 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] active:scale-[0.98] transition-transform duration-200 group"
                 >
                     <div className="flex items-center gap-4">
                         <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-accent-teal-dark/20 text-accent-teal group-hover:bg-accent-teal-dark/30 transition-colors">
                             <FontAwesomeIcon icon={faChevronUp} className="text-sm" />
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/90">
+                        <span className="text-xs font-black uppercase tracking-[0.2em] text-base-content/90">
                             Ir hacia arriba
                         </span>
                     </div>

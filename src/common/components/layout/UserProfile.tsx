@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'preact/hooks';
+import { useState, useEffect, useMemo, useRef } from 'preact/hooks';
 import { route } from 'preact-router';
 import { useSpacetimeDB } from '@/spacetimedb/connection';
 import { Game } from '@/types';
@@ -22,6 +22,28 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
         if (typeof window === 'undefined') return true;
         return localStorage.getItem('vj_profile_interacted') === 'true';
     });
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Close the panel when clicking outside or pressing Escape.
+    useEffect(() => {
+        if (!showHistory) return;
+
+        const onPointerDown = (event: MouseEvent) => {
+            if (!dropdownRef.current?.contains(event.target as Node)) {
+                setShowHistory(false);
+            }
+        };
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setShowHistory(false);
+        };
+
+        document.addEventListener('mousedown', onPointerDown);
+        document.addEventListener('keydown', onKeyDown);
+        return () => {
+            document.removeEventListener('mousedown', onPointerDown);
+            document.removeEventListener('keydown', onKeyDown);
+        };
+    }, [showHistory]);
 
     const allGamesMap = useMemo(() => {
         const map = new Map();
@@ -69,22 +91,8 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
         };
     }, [isConnected, identity, connection]);
 
-    // Show a lightweight skeleton badge while SpacetimeDB is still connecting.
-    // This keeps the header layout stable and avoids any perceived "freeze".
-    if (!isConnected) {
-        return (
-            <div className="flex items-center gap-2.5 bg-white/5 backdrop-blur-md px-1.5 py-1.5 md:pl-4 md:pr-1.5 md:py-1.5 rounded-full md:rounded-2xl border border-surface-700 shadow-lg opacity-50 pointer-events-none select-none" aria-hidden="true">
-                <div className="hidden md:flex flex-col items-end pr-1 gap-1">
-                    <div className="h-2.5 w-12 rounded bg-surface-700 animate-pulse" />
-                    <div className="h-1 w-16 rounded bg-surface-700 animate-pulse mt-0.5" />
-                </div>
-                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-base-300 border border-surface-700 animate-pulse" />
-            </div>
-        );
-    }
-
     const handleToggleHistory = () => {
-        setShowHistory(!showHistory);
+        setShowHistory(prev => !prev);
         if (!hasInteracted) {
             setHasInteracted(true);
             localStorage.setItem('vj_profile_interacted', 'true');
@@ -98,46 +106,50 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
     const progress = Math.min(100, (Number(displayXP) / nextLevelXP) * 100);
 
     return (
-        <div className={`dropdown dropdown-end ${showHistory ? 'dropdown-open' : ''}`}>
+        <div ref={dropdownRef} className={`dropdown dropdown-end ${showHistory ? 'dropdown-open' : ''}`}>
             {/* User Badge Trigger */}
-            <div
+            <button
+                type="button"
+                aria-expanded={showHistory}
+                aria-controls="profile-menu"
                 className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 backdrop-blur-md px-1.5 py-1.5 md:pl-4 md:pr-1.5 md:py-1.5 rounded-full md:rounded-2xl border border-surface-700 hover:border-surface-700 shadow-lg cursor-pointer transition-all group relative"
                 onClick={handleToggleHistory}
             >
+                <span className="sr-only">Abrir perfil y actividad</span>
                 {/* Notification Badge */}
                 {!hasInteracted && (
-                    <div className="absolute -top-0.5 -left-0.5 z-50">
-                        <div className="w-3 h-3 bg-secondary rounded-full border-2 border-base-100 shadow-[0_0_12px_rgba(239,68,68,0.8)] animate-pulse" />
-                    </div>
+                    <span className="absolute -top-0.5 -left-0.5 z-50" aria-hidden="true">
+                        <span className="block w-3 h-3 bg-secondary rounded-full border-2 border-base-100 shadow-[0_0_12px_rgba(239,68,68,0.8)] animate-pulse" />
+                    </span>
                 )}
 
-                <div className="hidden md:flex flex-col items-end pr-1">
+                <span className="hidden md:flex flex-col items-end pr-1">
                     {profileReady ? (
                         <>
                             <span className="text-[10px] font-black text-accent uppercase tracking-wider leading-none">
                                 Nivel {displayLevel}
                             </span>
-                            <progress className="progress progress-accent w-16 h-1 mt-1.5 shadow-[0_0_8px_rgba(6,182,212,0.4)]" value={progress} max="100"></progress>
+                            <progress className="progress progress-accent w-16 h-1 mt-1.5 shadow-[0_0_8px_rgba(6,182,212,0.4)]" value={progress} max="100" aria-label="Progreso de experiencia"></progress>
                         </>
                     ) : (
                         // Skeleton while waiting for profile row from SpacetimeDB
-                        <div className="flex flex-col items-end gap-1">
-                            <div className="h-2.5 w-12 rounded bg-surface-700 animate-pulse" />
-                            <div className="h-1 w-16 rounded bg-surface-700 animate-pulse mt-0.5" />
-                        </div>
+                        <span className="flex flex-col items-end gap-1" aria-hidden="true">
+                            <span className="block h-2.5 w-12 rounded bg-surface-700 animate-pulse" />
+                            <span className="block h-1 w-16 rounded bg-surface-700 animate-pulse mt-0.5" />
+                        </span>
                     )}
-                </div>
+                </span>
 
-                <div className="relative">
-                    <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-base-300 flex items-center justify-center text-accent shadow-inner border border-surface-700 transition-all group-hover:scale-95">
+                <span className="relative" aria-hidden="true">
+                    <span className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-base-300 flex items-center justify-center text-accent shadow-inner border border-surface-700 transition-all group-hover:scale-95">
                         <FontAwesomeIcon icon={faUser} className="text-sm md:text-base" />
-                    </div>
-                </div>
-            </div>
+                    </span>
+                </span>
+            </button>
 
             {/* Dropdown Menu */}
             {showHistory && (
-                <div className="dropdown-content menu p-0 mt-5 w-[320px] max-w-[calc(100vw-32px)] bg-base-200 border border-base-300 rounded-box shadow-2xl z-[100] overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                <div id="profile-menu" className="dropdown-content menu p-0 mt-5 w-[320px] max-w-[calc(100vw-32px)] bg-base-200 border border-base-300 rounded-box shadow-2xl z-[100] overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                     {/* Header */}
                     <div className="p-5 border-b border-surface-700 flex justify-between items-center bg-base-300/20">
                         <div className="flex items-center gap-3">
@@ -146,7 +158,7 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
                             </div>
                             <h3 className="text-xs font-bold text-white uppercase tracking-wide">Experiencia del visitante</h3>
                         </div>
-                        <button onClick={() => setShowHistory(false)} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5 text-base-content/70 hover:text-white transition-colors">
+                        <button onClick={() => setShowHistory(false)} className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-white/5 text-base-content/70 hover:text-white transition-colors" aria-label="Cerrar panel de perfil">
                             <FontAwesomeIcon icon={faClose} />
                         </button>
                     </div>
@@ -158,8 +170,12 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
                                 Luciernaga
                             </div>
                         </div>
-                        <div className="text-[10px] text-accent-teal uppercase font-black tracking-[0.2em] mb-1">Nivel {profileReady ? displayLevel : '…'}</div>
-                        <div className="text-5xl font-black text-white mb-2 tracking-tighter">{profileReady ? displayXP : '…'}</div>
+                        <div className="text-[10px] text-accent-teal uppercase font-black tracking-[0.2em] mb-1">
+                            {isConnected ? `Nivel ${profileReady ? displayLevel : '…'}` : 'Conectando…'}
+                        </div>
+                        <div className="text-5xl font-black text-white mb-2 tracking-tighter">
+                            {isConnected && profileReady ? displayXP : '…'}
+                        </div>
                         <div className="text-[10px] text-base-content/70 uppercase font-black tracking-[0.2em] mb-4">Puntos de Experiencia</div>
                         <p className="text-xs text-base-content/70 leading-relaxed max-w-[220px] mx-auto">
                             Al descubrir juegos ganas puntos, estos puntos pronto podrás canjearlos por sorpresas.
@@ -192,6 +208,9 @@ const UserProfile = ({ games = [], jamGames = [] }: UserProfileProps) => {
                                                             <img
                                                                 src={game.imageUrl}
                                                                 alt={game.title}
+                                                                width="40"
+                                                                height="40"
+                                                                loading="lazy"
                                                                 className="w-full h-full object-cover transition-transform group-hover/item:scale-110"
                                                             />
                                                         ) : (

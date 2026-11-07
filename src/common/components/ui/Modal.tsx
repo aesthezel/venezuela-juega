@@ -141,13 +141,14 @@ const Modal = ({ game, onClose }: ModalProps) => {
     const embedUrl = getYoutubeEmbedUrl(game.trailerUrl);
 
     return (
-        <dialog className="modal modal-open z-[100] bg-black/70 backdrop-blur-md animate-in fade-in">
+        <dialog className="modal modal-open z-[100] bg-black/70 backdrop-blur-md animate-in fade-in" aria-modal="true" aria-labelledby="game-modal-title">
             <div className="modal-box p-0 bg-base-200 shadow-2xl w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] flex flex-col overflow-hidden relative">
                 <form method="dialog">
                     <button
                         onClick={onClose}
-                        className="btn btn-circle btn-ghost absolute top-3 right-3 md:top-4 md:right-4 z-20 h-10 w-10 min-h-0 bg-base-100/60 text-base-content/70 hover:text-white hover:bg-error/80 backdrop-blur-md border border-base-content/10 hover:border-transparent flex items-center justify-center"
+                        className="btn btn-circle btn-ghost absolute top-3 right-3 md:top-4 md:right-4 z-20 h-11 w-11 min-h-0 bg-base-100/60 text-base-content/70 hover:text-white hover:bg-error/80 backdrop-blur-md border border-base-content/10 hover:border-transparent flex items-center justify-center"
                         title="Cerrar"
+                        aria-label="Cerrar ficha del juego"
                     >
                         <CloseIcon />
                     </button>
@@ -159,6 +160,9 @@ const Modal = ({ game, onClose }: ModalProps) => {
                         <img
                             src={game.imageHero || game.imageCover || game.imageUrl}
                             alt={game.title}
+                            width="1280"
+                            height="720"
+                            decoding="async"
                             className="w-full h-full object-cover opacity-80"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-base-200 via-base-200/60 to-transparent"></div>
@@ -175,7 +179,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
                     <div className="px-6 md:px-10 pb-10 -mt-16 md:-mt-32 relative z-10 w-full flex flex-col gap-6 md:gap-8">
 
                         <div className="flex flex-col md:pr-56">
-                            <h2 className="text-3xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight leading-tight">{game.title}</h2>
+                            <h2 id="game-modal-title" className="text-3xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight leading-tight">{game.title}</h2>
                             <p className="text-primary font-bold tracking-wide uppercase text-xs mt-2">
                                 {game.developers.map((dev, i) => (
                                     <span key={dev}>
@@ -368,7 +372,7 @@ const Modal = ({ game, onClose }: ModalProps) => {
             </div>
 
             <form method="dialog" className="modal-backdrop" onClick={onClose}>
-                <button>close</button>
+                <button aria-label="Cerrar ficha del juego">Cerrar</button>
             </form>
 
             <ScreenshotLightbox

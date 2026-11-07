@@ -99,6 +99,27 @@ function extractFrontmatter(rawContent) {
     return { attributes, body: bodyStr.trim() };
 }
 
+// ─── Read published docs from src/features/docs/content/*.md ─────────────────
+function loadDocs(contentDir) {
+    if (!fs.existsSync(contentDir)) return [];
+
+    return fs.readdirSync(contentDir)
+        .filter(file => file.endsWith('.md') && file.toLowerCase() !== 'readme.md' && !file.startsWith('_'))
+        .map(file => {
+            const filePath = path.join(contentDir, file);
+            const stat = fs.statSync(filePath);
+            const { attributes } = extractFrontmatter(fs.readFileSync(filePath, 'utf-8'));
+            return {
+                slug: attributes.slug || file.replace(/\.md$/, ''),
+                title: attributes.title || 'Recurso',
+                description: attributes.description || '',
+                status: attributes.status || 'draft',
+                lastmod: (attributes.updatedDate || attributes.publishedDate || stat.mtime.toISOString().split('T')[0]).toString().split('T')[0],
+            };
+        })
+        .filter(doc => doc.status === 'published');
+}
+
 // ─── Read all Jam files from src/features/jam/content/*.md ────────────────────
 function loadJams(contentDir) {
     if (!fs.existsSync(contentDir)) return [];
@@ -403,7 +424,7 @@ const processCatalogHtml = (template, { title, description, canonicalUrl, imageU
 };
 
 // ─── Generate dynamic sitemap.xml ───────────────────────────────────────────
-function buildSitemapXml({ staticRoutes, jams, games }) {
+function buildSitemapXml({ staticRoutes, jams, games, docs = [] }) {
     const today = new Date().toISOString().split('T')[0];
 
     const urls = [];
@@ -450,6 +471,16 @@ function buildSitemapXml({ staticRoutes, jams, games }) {
     </url>`);
     }
 
+    // Docs / recursos para creadores
+    for (const doc of docs) {
+        urls.push(`    <url>
+        <loc>${SITE_ORIGIN}/docs/${doc.slug}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <lastmod>${doc.lastmod || today}</lastmod>
+    </url>`);
+    }
+
     return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.join('\n')}
@@ -475,6 +506,10 @@ async function main() {
     const jamContentDir = path.resolve(process.cwd(), 'src/features/jam/content');
     const jams = loadJams(jamContentDir);
     console.log(`📦 Loaded ${jams.length} Game Jams from ${jamContentDir}`);
+
+    const docsContentDir = path.resolve(process.cwd(), 'src/features/docs/content');
+    const docs = loadDocs(docsContentDir);
+    console.log(`📚 Loaded ${docs.length} published docs from ${docsContentDir}`);
 
     // Update manifest.json for lightweight client registry
     const manifestPath = path.join(jamContentDir, 'manifest.json');
@@ -593,6 +628,7 @@ async function main() {
     const staticRoutes = [
         { path: '/', changefreq: 'daily', priority: '1.0' },
         { path: '/jams', changefreq: 'weekly', priority: '0.9' },
+        { path: '/docs', changefreq: 'weekly', priority: '0.8' },
         { path: '/calendar', changefreq: 'weekly', priority: '0.8' },
         { path: '/charts', changefreq: 'weekly', priority: '0.7' },
         { path: '/about', changefreq: 'monthly', priority: '0.6' },
@@ -600,13 +636,13 @@ async function main() {
         { path: '/credits', changefreq: 'monthly', priority: '0.4' },
     ];
 
-    const sitemapContent = buildSitemapXml({ staticRoutes, jams, games });
+    const sitemapContent = buildSitemapXml({ staticRoutes, jams, games, docs });
     const distSitemapPath = path.join(distPath, 'sitemap.xml');
     const publicSitemapPath = path.resolve(process.cwd(), 'public/sitemap.xml');
 
     fs.writeFileSync(distSitemapPath, sitemapContent);
     fs.writeFileSync(publicSitemapPath, sitemapContent);
-    console.log(`✅ Sitemap successfully written to ${distSitemapPath} and ${publicSitemapPath} (${staticRoutes.length + (jams.length * 2) + games.length} URLs registered).`);
+    console.log(`✅ Sitemap successfully written to ${distSitemapPath} and ${publicSitemapPath} (${staticRoutes.length + (jams.length * 2) + games.length + docs.length} URLs registered).`);
 }
 
 main().catch(console.error);

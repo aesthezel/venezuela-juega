@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
 import { useMeasure } from '@/hooks/useMeasure';
 import { Game } from '@/types';
 import { GameCard } from '@/components';
-import { gsap } from 'gsap';
 import { trackGameCardClick } from '@/utils/analytics';
 
 interface GameGridProps {
@@ -13,6 +12,12 @@ interface GameGridProps {
 const INITIAL_GAMES_TO_SHOW = 12;
 const GAMES_TO_LOAD_ON_SCROLL = 8;
 
+/** On phones the grid is single-column, so fewer cards are needed above the fold. */
+const getInitialGamesToShow = () =>
+    typeof window !== 'undefined' && window.innerWidth < 640
+        ? 6
+        : INITIAL_GAMES_TO_SHOW;
+
 const MasonryItem = ({ children }: { children: any }) => {
     const { ref, height } = useMeasure<HTMLDivElement>();
     // Usamos un incremento de 10px para las filas del grid.
@@ -21,7 +26,7 @@ const MasonryItem = ({ children }: { children: any }) => {
     return (
         <div 
             ref={ref} 
-            className="game-card-wrapper h-fit [content-visibility:auto] [contain-intrinsic-size:0_360px]"
+            className="game-card-wrapper h-fit animate-fade-in-up [content-visibility:auto] [contain-intrinsic-size:0_360px]"
             style={{ gridRowEnd: `span ${span}` }}
         >
             {children}
@@ -30,10 +35,9 @@ const MasonryItem = ({ children }: { children: any }) => {
 };
 
 const GameGrid = ({ games, onGameClick }: GameGridProps) => {
-    const [displayedCount, setDisplayedCount] = useState(INITIAL_GAMES_TO_SHOW);
+    const [displayedCount, setDisplayedCount] = useState(getInitialGamesToShow);
 
     const gridRef = useRef<HTMLDivElement | null>(null);
-    const prevCountRef = useRef(0);
     const prevGamesSignatureRef = useRef<string>('');
     const observer = useRef<IntersectionObserver | null>(null);
     const loadingMoreRef = useRef<boolean>(false);
@@ -42,48 +46,11 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
         const signature = games.map(g => g.id).join('|');
         if (signature !== prevGamesSignatureRef.current) {
             prevGamesSignatureRef.current = signature;
-            prevCountRef.current = 0;
-            setDisplayedCount(INITIAL_GAMES_TO_SHOW);
+            setDisplayedCount(getInitialGamesToShow());
         }
     }, [games]);
 
     const gamesToShow = games.slice(0, displayedCount);
-
-    useEffect(() => {
-        const container = gridRef.current;
-        if (!container) return;
-
-        const cards = Array.from(container.querySelectorAll('.game-card-wrapper')) as HTMLElement[];
-        const prev = prevCountRef.current;
-        const curr = displayedCount;
-
-        if (curr <= prev) {
-            prevCountRef.current = curr;
-            return;
-        }
-
-        const newCards = cards.slice(prev, curr);
-        if (newCards.length === 0) {
-            prevCountRef.current = curr;
-            return;
-        }
-
-        let ctx: gsap.Context | null = null;
-        ctx = gsap.context(() => {
-            gsap.fromTo(
-                newCards,
-                { opacity: 0, y: 16, willChange: 'transform, opacity' },
-                { opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: 'power3.out', clearProps: 'will-change' }
-            );
-        }, container);
-
-        prevCountRef.current = curr;
-
-        return () => {
-            if (ctx) ctx.revert();
-            gsap.killTweensOf(newCards);
-        };
-    }, [displayedCount]);
 
     const loadMoreRef = useCallback((node: HTMLDivElement | null) => {
         if (observer.current) {
@@ -145,7 +112,7 @@ const GameGrid = ({ games, onGameClick }: GameGridProps) => {
 
             {hasMoreGames && (
                 <div ref={loadMoreRef} className="text-center p-8">
-                    <p className="text-accent-teal animate-pulse">Cargando más juegos...</p>
+                    <p className="text-accent-teal">Cargando más juegos...</p>
                 </div>
             )}
         </>

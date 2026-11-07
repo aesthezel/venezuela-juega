@@ -8,7 +8,6 @@ import { faHeart as faHeartReg } from '@fortawesome/free-regular-svg-icons';
 import { CoverImage, StatusBadge } from '@/components';
 import { trackGameCardClick } from '@/utils/analytics';
 import { getTrailerInfo } from '@/utils';
-import { gsap } from 'gsap';
 
 interface GameListProps {
   games: Game[];
@@ -22,7 +21,6 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
   const [displayedCount, setDisplayedCount] = useState(INITIAL_GAMES_TO_SHOW);
 
   const listRef = useRef<HTMLDivElement | null>(null);
-  const prevCountRef = useRef(0);
   const prevGamesSignatureRef = useRef<string>('');
   const observer = useRef<IntersectionObserver | null>(null);
   const loadingMoreRef = useRef<boolean>(false);
@@ -31,48 +29,11 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
     const signature = games.map(g => g.id).join('|');
     if (signature !== prevGamesSignatureRef.current) {
       prevGamesSignatureRef.current = signature;
-      prevCountRef.current = 0;
       setDisplayedCount(INITIAL_GAMES_TO_SHOW);
     }
   }, [games]);
 
   const gamesToShow = games.slice(0, displayedCount);
-
-  useEffect(() => {
-    const container = listRef.current;
-    if (!container) return;
-
-    const rows = Array.from(container.querySelectorAll('.game-list-row')) as HTMLElement[];
-    const prev = prevCountRef.current;
-    const curr = displayedCount;
-
-    if (curr <= prev) {
-      prevCountRef.current = curr;
-      return;
-    }
-
-    const newRows = rows.slice(prev, curr);
-    if (newRows.length === 0) {
-      prevCountRef.current = curr;
-      return;
-    }
-
-    let ctx: gsap.Context | null = null;
-    ctx = gsap.context(() => {
-      gsap.fromTo(
-        newRows,
-        { opacity: 0, y: 10, willChange: 'transform, opacity' },
-        { opacity: 1, y: 0, duration: 0.35, stagger: 0.05, ease: 'power3.out', clearProps: 'will-change' }
-      );
-    }, container);
-
-    prevCountRef.current = curr;
-
-    return () => {
-      if (ctx) ctx.revert();
-      gsap.killTweensOf(newRows);
-    };
-  }, [displayedCount]);
 
   // Carga incremental con IntersectionObserver
   const loadMoreRef = useCallback((node: HTMLDivElement | null) => {
@@ -133,7 +94,15 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
         onClick={() => { trackGameCardClick({ slug: game.slug, title: game.title }, idx, 'list'); onGameClick(game); }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className={`game-list-row [content-visibility:auto] [contain-intrinsic-size:0_80px] w-full text-left transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer relative ${fireflyCount > 0
+        role="link"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onGameClick(game);
+          }
+        }}
+        className={`game-list-row animate-fade-in-up [content-visibility:auto] [contain-intrinsic-size:0_80px] w-full text-left transition-colors rounded-lg p-3 flex gap-3 items-center group/row cursor-pointer relative ${fireflyCount > 0
           ? 'bg-base-300 hover:bg-base-300 border-l-2 border-l-accent-teal/60'
           : 'bg-base-300 hover:bg-base-300'
           }`}
@@ -182,7 +151,7 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h3 className="text-base md:text-lg font-semibold text-white truncate">{game.title}</h3>
+            <h3 id={`game-list-title-${game.id}`} className="text-base md:text-lg font-semibold text-white truncate">{game.title}</h3>
             {game.isHighlighted && (
               <span className="badge badge-warning badge-sm badge-outline border-amber-500/30 text-amber-300">
                 Destacado
@@ -209,18 +178,23 @@ const GameList = ({ games, onGameClick }: GameListProps) => {
             </div>
           )}
           <StatusBadge status={game.status} size="xs" variant="solid" className="rounded-md px-2 py-1 shadow-sm" />
-          <div
+          <button
+            type="button"
             onClick={isReady ? handleToggleLike : undefined}
+            disabled={!isReady}
             className={`btn btn-ghost btn-sm flex items-center gap-1.5 transition-all duration-300 group/like px-2 py-1 rounded-md ${hasLiked ? 'text-rose-400 hover:bg-rose-400/10' : 'text-base-content/70 hover:text-base-content'
               } ${!isReady ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             title={!isReady ? "Iniciando conexión..." : (hasLiked ? "Quitar me gusta" : "Me gusta")}
           >
-            <span className="text-xs font-bold">{totalHearts > 0 ? totalHearts : ''}</span>
+            <span className="sr-only">
+              {!isReady ? 'Iniciando conexión…' : (hasLiked ? `Quitar me gusta a ${game.title}` : `Me gusta ${game.title}`)}
+            </span>
+            <span className="text-xs font-bold" aria-hidden="true">{totalHearts > 0 ? totalHearts : ''}</span>
             <FontAwesomeIcon
               icon={hasLiked ? faHeartSolid : faHeartReg}
               className={`text-base transition-transform duration-300 ${hasLiked ? "scale-110 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]" : "group-hover/like:scale-110"}`}
             />
-          </div>
+          </button>
         </div>
       </div>
     );

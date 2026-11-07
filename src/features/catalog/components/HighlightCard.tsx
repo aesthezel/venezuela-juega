@@ -24,13 +24,25 @@ const HighlightCard = ({ game, onClick, fullWidth = false }: HighlightCardProps)
             ref={containerRef}
             onClick={() => onClick(game)}
             className={`card shadow-xl cursor-pointer group h-full flex-shrink-0 snap-start overflow-hidden rounded-lg relative ${fullWidth ? 'w-full' : 'w-80'}`}
-            aria-label={`Ver detalles de ${game.title}`}
             role="button"
             tabIndex={0}
-            onKeyPress={(e) => (e.key === 'Enter' || e.key === ' ') && onClick(game)}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onClick(game);
+                }
+            }}
         >
             <figure className="absolute inset-0 m-0 p-0 z-0 w-full h-full">
-                <img src={game.imageHero || game.imageCover || game.imageUrl} alt={game.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                <img
+                    src={game.imageHero || game.imageCover || game.imageUrl}
+                    alt={game.title}
+                    width="1280"
+                    height="720"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-surface-950/90 via-surface-900/40 to-transparent pointer-events-none"></div>
             </figure>
 

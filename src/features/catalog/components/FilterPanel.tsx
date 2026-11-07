@@ -34,9 +34,11 @@ interface FilterPanelProps {
 const AccordionItem = ({ title, icon, isOpen, onClick, children, badgeCount }: { title: string; icon: any; isOpen: boolean; onClick: () => void; children: any; badgeCount?: number }) => {
     return (
         <div className={`collapse collapse-arrow bg-base-200/50 mb-2 border border-base-300 ${isOpen ? 'collapse-open' : 'collapse-close'}`}>
-            <div 
-                className="collapse-title flex items-center gap-3 cursor-pointer min-h-0 py-3 pl-3"
+            <button
+                type="button"
+                className="collapse-title flex w-full items-center gap-3 cursor-pointer min-h-0 py-3 pl-3 text-left"
                 onClick={onClick}
+                aria-expanded={isOpen}
             >
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${isOpen ? 'bg-accent-teal-dark text-white' : 'bg-transparent text-base-content/70'}`}>
                     <FontAwesomeIcon icon={icon} className="text-sm" />
@@ -46,12 +48,12 @@ const AccordionItem = ({ title, icon, isOpen, onClick, children, badgeCount }: {
                         {title}
                     </span>
                     {badgeCount !== undefined && badgeCount > 0 && !isOpen && (
-                        <span className="text-[10px] text-accent font-bold mt-1">
+                        <span className="text-xs text-accent font-bold mt-1">
                             {badgeCount} {badgeCount === 1 ? 'seleccionado' : 'seleccionados'}
                         </span>
                     )}
                 </div>
-            </div>
+            </button>
 
             <div className="collapse-content">
                 {children}
@@ -78,21 +80,20 @@ const FilterList = ({ items, selectedItems, onToggleItem, category, onClear }: {
                 {items.sort().map(item => {
                     const isSelected = selectedItems.includes(item);
                     return (
-                        <div
+                        <label
                             key={item}
-                            onClick={() => onToggleItem(category, item)}
-                            className={`px-3 py-2 rounded-xl cursor-pointer flex items-center justify-between group/item transition-colors ${isSelected ? 'bg-accent/10 border border-accent/20' : 'hover:bg-base-300 border border-transparent'}`}
+                            className={`px-3 py-2 min-h-11 rounded-xl cursor-pointer flex items-center justify-between group/item transition-colors ${isSelected ? 'bg-accent/10 border border-accent/20' : 'hover:bg-base-300 border border-transparent'}`}
                         >
                             <span className={`text-sm font-medium transition-colors ${isSelected ? 'text-accent font-bold' : 'text-base-content/70 group-hover/item:text-base-content'}`}>
                                 {item}
                             </span>
-                            <input 
-                                type="checkbox" 
+                            <input
+                                type="checkbox"
                                 className="checkbox checkbox-accent checkbox-sm"
                                 checked={isSelected}
-                                readOnly
+                                onChange={() => onToggleItem(category, item)}
                             />
-                        </div>
+                        </label>
                     );
                 })}
             </div>
@@ -172,8 +173,9 @@ const YearRangeInputs = ({ minYear, maxYear, yearRange, onYearRangeChange }: { m
                     onKeyDown={handleKeyDown}
                     className="input input-bordered w-full text-center font-bold"
                     placeholder={String(minYear)}
+                    aria-label="Año mínimo"
                 />
-                <div className="absolute -top-2 left-3 bg-base-200 px-2 text-[10px] text-base-content/60 font-bold uppercase tracking-wider group-focus-within:text-accent transition-colors">Desde</div>
+                <div className="absolute -top-2 left-3 bg-base-200 px-2 text-xs text-base-content/70 font-bold uppercase tracking-wider group-focus-within:text-accent transition-colors">Desde</div>
             </div>
             <div className="relative group">
                 <input
@@ -184,8 +186,9 @@ const YearRangeInputs = ({ minYear, maxYear, yearRange, onYearRangeChange }: { m
                     onKeyDown={handleKeyDown}
                     className="input input-bordered w-full text-center font-bold"
                     placeholder={String(maxYear)}
+                    aria-label="Año máximo"
                 />
-                <div className="absolute -top-2 left-3 bg-base-200 px-2 text-[10px] text-base-content/60 font-bold uppercase tracking-wider group-focus-within:text-accent transition-colors">Hasta</div>
+                <div className="absolute -top-2 left-3 bg-base-200 px-2 text-xs text-base-content/70 font-bold uppercase tracking-wider group-focus-within:text-accent transition-colors">Hasta</div>
             </div>
         </div>
     );

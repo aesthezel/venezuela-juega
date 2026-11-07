@@ -13,6 +13,12 @@
         <lastmod>2026-11-07</lastmod>
     </url>
     <url>
+        <loc>https://venezuelajuega.com/docs</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+        <lastmod>2026-11-07</lastmod>
+    </url>
+    <url>
         <loc>https://venezuelajuega.com/calendar</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
@@ -2153,5 +2159,11 @@
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
         <lastmod>2026-11-07</lastmod>
+    </url>
+    <url>
+        <loc>https://venezuelajuega.com/docs/sapi-registro-propiedad-intelectual-venezuela</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <lastmod>2026-11-05</lastmod>
     </url>
 </urlset>
